@@ -1,5 +1,5 @@
-<%@ page import="vn.edu.hcmuaf.bean.Products" %>
-<%@ page import="vn.edu.hcmuaf.service.ProductDao" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductDao" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
