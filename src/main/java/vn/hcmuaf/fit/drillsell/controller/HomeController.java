@@ -26,10 +26,7 @@ public class HomeController {
         return allHomeProds;
     }
 
-    public String getFormattedUnitPrice(Products product) {
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        return currencyFormat.format(product.getUnitPrice() * 1000);
-    }
+
 
     public static void main(String[] args) {
         System.out.println(ProductService.getInstance().showProd()
