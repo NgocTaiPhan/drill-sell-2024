@@ -1,8 +1,13 @@
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.bean.ProductDetails" %>
 <%@ page import="java.util.Optional" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.controller.DetailContronller" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
+<%
+   List<Products> allProduct = (List<Products>) request.getAttribute("detail");
+%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
@@ -291,14 +296,14 @@
             </div><!-- /.sidebar -->
 
 
-            <%
-                List<Optional<ProductDetails>> allDetails = (List<Optional<ProductDetails>>) request.getAttribute("loadProductDetail");
-                if (allDetails != null && !allDetails.isEmpty()) {
-                    Optional<ProductDetails> productDetails = allDetails.get(0);
-                    if (productDetails.isPresent()) {
-            %>
-            <div class='col-md-9'>
 
+            <div class='col-md-9'>
+                <%
+                    if (allProduct != null) {
+                        for (Products p : allProduct) {
+                            HomeController homeController = new HomeController();
+                            String formattedPrice = homeController.getFormattedUnitPrice(p);
+                %>
                 <div class="detail-block">
                     <div class="row  wow fadeInUp">
 
@@ -311,7 +316,7 @@
                                         <a data-lightbox="image-1" data-title="Gallery"
                                            href="#">
                                             <img class="img-responsive" alt="Mô tả sản phẩm"
-                                                 src="<%= productDetails.get().getImage()%>"
+                                                 src="<%= p.getImage()%>"
                                             >
                                         </a>
                                     </div>
@@ -322,7 +327,7 @@
                         </div><!-- /.gallery-holder -->
                         <div class='col-sm-6 col-md-7 product-info-block'>
                             <div class="product-info">
-                                <h1 class="name"><%= productDetails.get().getProductName() %>
+                                <h1 class="name"><%= p.getProductName()%>
                                 </h1>
 
                                 <div class="rating-reviews m-t-20">
@@ -347,7 +352,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="stock-box">
-                                                <span class="value"> <%= productDetails.get().getStatuss()%>  Còn</span>
+                                                <span class="value"> Còn: <%=  p.getStatuss()  %></span>
                                             </div>
                                         </div>
                                     </div>
@@ -360,14 +365,9 @@
                                 <div class="price-container info-container m-t-20">
                                     <div class="row">
 
-                                        <%
-                                            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                            String formattedPrice = currencyFormat.format(productDetails.get().getUnitPrice() * 1000);
-                                            request.setAttribute("formattedUnitPrice", formattedPrice);
-                                        %>
                                         <div class="col-sm-6">
                                             <div class="price-box">
-                                                <span class="price"><%= request.getAttribute("formattedUnitPrice") %></span>
+                                                <span class="price"><%=formattedPrice%></span>
                                             </div>
                                         </div>
 
@@ -380,11 +380,11 @@
 
 
                                         <div class="col-sm-7">
-                                            <a href="cart?productId=<%=productDetails.get().getProductId()%>" class="btn btn-danger" style="margin-bottom: 10px"><i
+                                            <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
 
-                                            <a href="cart?productId=<%=productDetails.get().getProductId()%>"
+                                            <a href="cart?productId=<%=p.getProductId()%>"
                                                methods="get" id="addToCartBtn" class="btn btn-primary">
                                                 <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng
                                             </a>
@@ -425,6 +425,7 @@
                             <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
                                 <li class="active"><a data-toggle="tab" href="#description">Mô tả sản phẩm</a></li>
                                 <li><a data-toggle="tab" href="#specifications">Thông số kỹ thuật</a></li>
+
                                 <li><a data-toggle="tab" href="#reviews">Đánh giá</a></li>
                             </ul><!-- /.nav-tabs #product-tabs -->
                         </div>
@@ -434,12 +435,13 @@
 
                                 <div id="description" class="tab-pane in active">
                                     <div class="product-tab">
-                                        <p class="text"><%= productDetails.get().getDescrible()%>
+                                        <p class="text">
+                                            <%= p.getDescrible()%>
                                         </p>
                                     </div>
                                 </div><!-- /.tab-pane -->
                                 <div id="specifications" class="tab-pane in ">
-                                    <%= productDetails.get().getSpecifications()%>
+                                    <%= p.getSpecifions()%>
 
                                 </div><!-- /.tab-pane -->
 
@@ -528,9 +530,13 @@
                         </div><!-- /.col -->
                     </div><!-- /.row -->
                 </div><!-- /.product-tabs -->
+                <%
+                        }
+                    }
+                %>
+
             </div><!-- /.col -->
-            <%}%>
-            <%}%>
+
         </div><!-- /.row -->
 
     </div><!-- /.container -->
