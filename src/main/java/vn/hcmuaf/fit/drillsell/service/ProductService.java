@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class ProductService {
     private static ProductService instance;
 
-    private ProductService() {
+    public ProductService() {
     }
 
     public static ProductService getInstance() {
@@ -22,7 +22,7 @@ public class ProductService {
         return instance;
     }
 
-    public  List<Products> showProd() {
+    public static   List<Products> showProd() {
             return DbConnector.me().get().withHandle(handle -> {
                 return handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions FROM products ORDER BY RAND()")
                         .mapToBean(Products.class)
@@ -41,7 +41,7 @@ public class ProductService {
         });
     }
 
-    public  List<Products> getProductsByCategory(int categoryId) {
+    public static List<Products> getProductsByCategory(int categoryId) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions  FROM products WHERE categoryId =? LIMIT 12;")
                     .bind(0, categoryId)
@@ -66,6 +66,18 @@ public class ProductService {
         });
     }
 
+    public  List<Products> detailProduct(int productId){
+        return  DbConnector.me().get().withHandle(handle -> {
+            return  handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions " +
+                            "FROM products" +
+                    " WHERE productId =:productId")
+                    .bind("productId", productId)
+                    .mapToBean(Products.class)
+                    .list();
+        });
+    }
+
+
 
     public String getFormattedUnitPrice(Products product) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
@@ -85,7 +97,9 @@ public class ProductService {
     public static void main(String[] args) {
 //            System.out.println(ProductService.getProductsByCategory(2));
 //        System.out.println(ProductService.getAccessory());
-//        System.out.println(ProductService.showProd());
+//        getProductsByCategory(2);
+
+
     }
 
     public List<ProductCategorys> getAllCategory() {
