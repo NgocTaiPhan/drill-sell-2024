@@ -51,12 +51,12 @@
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/scripts.js"></script>
     <script src="assets/js/my-js/footermenu.js"></script>
-    <%@ page import="vn.edu.hcmuaf.bean.Product" %>
+    <%@ page import="vn.hcmuaf.fit.drillsell.bean.Product" %>
     <%@ page import="java.util.List" %>
-    <%@ page import="vn.edu.hcmuaf.service.ProductService" %>
+    <%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
     <%@ page import="java.util.List" %>
-    <%@ page import="vn.edu.hcmuaf.bean.Products" %>
-    <%@ page import="vn.edu.hcmuaf.service.NewProduct" %>
+    <%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+    <%@ page import="vn.hcmuaf.fit.drillsell.service.NewProduct" %>
     <%@ page import="java.io.PrintWriter" %>
 
 

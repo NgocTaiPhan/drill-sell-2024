@@ -1,13 +1,12 @@
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    HttpSession sesion = (HttpSession) request.getSession();
 
-    List<Products> products = (List<Products>) sesion.getAttribute("product-list-by-producer");
+    List<Products> products = (List<Products>) request.getAttribute("product-list");
 %>
 <html lang="vi">
 <head>
@@ -631,6 +630,8 @@
                 <section class="section featured-product wow fadeInUp">
                     <h3 class="section-title">Sản phẩm</h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
+
+<%--                        Load products by category--%>
                         <%
                             int productsPerRow = 4;
                             if (products != null && !products.isEmpty()) {

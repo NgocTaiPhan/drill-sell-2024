@@ -1,7 +1,7 @@
-<%@ page import="vn.edu.hcmuaf.bean.CheckOut" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.CheckOut" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.*" %>
-<%@ page import="vn.edu.hcmuaf.bean.Cart" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="vi">
 <head>

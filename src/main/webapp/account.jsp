@@ -1,4 +1,4 @@
-<%@ page import="vn.edu.hcmuaf.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 
