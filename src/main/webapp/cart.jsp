@@ -3,7 +3,7 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Cart" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.CartItem" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="vi">
 <head>
@@ -288,12 +288,12 @@
                             </thead>
                             <tbody>
                             <%
-                                Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
+                                Map<Integer, CartItem> cartMap = (Map<Integer, CartItem>) session.getAttribute("cart");
                                 if (cartMap != null && !cartMap.isEmpty()) {
                                     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    Set<Map.Entry<Integer, Cart>> entrySet = cartMap.entrySet();
-                                    for (Map.Entry<Integer, Cart> entry : entrySet) {
-                                        Cart cart = entry.getValue();
+                                    Set<Map.Entry<Integer, CartItem>> entrySet = cartMap.entrySet();
+                                    for (Map.Entry<Integer, CartItem> entry : entrySet) {
+                                        CartItem cart = entry.getValue();
                                         String formattedUnitPrice = currencyFormat.format(cart.getUnitPrice() * 1000);
                                         String formattedTotalPrice = currencyFormat.format(cart.getTotalPrice() * 1000);
                                         request.setAttribute("formattedUnitPrice", formattedUnitPrice);
@@ -301,10 +301,13 @@
                             %>
                             <tr>
 
-                                <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
+                                <td class="li-product-remove">
+                                    <a href="removeFromCart?productId=<%=cart.getProductId()%>">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </td>
                                 <td class="sub">
                                     <input type="checkbox" id="checkbox_<%= cart.getProductId() %>">
-
                                 </td>
 
                                 <td class="li-product-thumbnail"><a href="#"><img  height="100px" width="100px"
@@ -317,15 +320,13 @@
                                         class="amount"><%= request.getAttribute("formattedUnitPrice") %></span></td>
                                 <div id="errorMessage" style="color: red;"></div>
                                 <td class="quantity">
-                                    <button class="minus-button" type="button" onclick="decreaseQuantity(<%= cart.getProductId() %>)">-</button>
+                                    <button class="minus-button" type="button" onclick="decrementQuantity(<%= cart.getProductId() %>)">-</button>
                                     <div class="cart-plus-minus">
-                                        <input id="quantityInput_<%= cart.getProductId() %>" class="cart-plus-minus-box"
-                                               value="<%= cart.getQuantity()%>">
-
+                                        <input id="quantity_input_<%= cart.getProductId() %>" class="cart-plus-minus-box" value="<%= cart.getQuantity()%>">
                                     </div>
-                                    <button class="plus-button" type="button" onclick="increaseQuantity(<%= cart.getProductId() %>)">+</button>
-
+                                    <button class="plus-button" type="button" onclick="incrementQuantity(<%= cart.getProductId() %>, <%= cart.getStatuss() %>)">+</button>
                                 </td>
+
 
                                 <style>
                                     .quantity {
@@ -344,118 +345,75 @@
 
                                 </style>
 
+
+
+
                                 <script>
-                                    function decreaseQuantity(productId) {
-                                        var currentQuantity = parseInt($("#quantityInput_" + productId).val()); // Lấy giá trị hiện tại
-                                        if (currentQuantity > 1) { // Kiểm tra nếu số lượng hiện tại lớn hơn 1
-                                            $("#quantityInput_" + productId).val(currentQuantity - 1); // Giảm số lượng đi 1
+                                    function incrementQuantity(productId, quantityLimit) {
+                                        var inputElement = document.getElementById('quantity_input_' + productId);
+                                        var currentQuantity = parseInt(inputElement.value, 10);
+                                        var errorMessageElement = document.getElementById('errorMessage');
+
+                                        if (currentQuantity < quantityLimit) {
+                                            inputElement.value = currentQuantity + 1;
+                                            updateCartItem(productId);
+                                            errorMessageElement.innerText = ''; // Clear any previous error message
+                                        } else {
+                                            errorMessageElement.innerText = 'Sản phẩm chỉ còn tối đa ' + quantityLimit + ' cái';
                                         }
                                     }
-                                    function increaseQuantity(productId) {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "cart",
-                                            data: {productId: productId, quantity: 0},
-                                            success: function(response) {
-                                                // Cập nhật trang cart.jsp nếu cần
-                                                window.location.reload();
-                                            },
-                                            error: function(xhr, status, error) {
-                                                console.error("Error:", error);
-                                            }
-                                        });
+
+                                    function decrementQuantity(productId) {
+                                        var inputElement = document.getElementById('quantity_input_' + productId);
+                                        var currentQuantity = parseInt(inputElement.value, 10);
+                                        if (currentQuantity > 1) {
+                                            inputElement.value = currentQuantity - 1;
+                                            updateCartItem(productId);
+                                        }
                                     }
+
+                                    function updateCartItem(productId) {
+                                        var quantityInput = document.getElementById('quantity_input_' + productId);
+                                        var quantity = parseInt(quantityInput.value, 10);
+
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.open('GET', 'cart?productId=' + productId + '&quantity=' + quantity, true);
+                                        xhr.onreadystatechange = function () {
+                                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                                if (xhr.status === 200) {
+                                                    // Update the subtotal and total amount on the client side if necessary
+                                                    // You may choose to update these values based on the response from the server
+                                                    updateSubtotal(productId, quantity);
+                                                } else {
+                                                    console.error('Error updating cart:', xhr.statusText);
+                                                }
+                                            }
+                                        };
+                                        xhr.send();
+                                    }
+
+                                    function updateSubtotal(productId, quantity) {
+                                        var subtotalElement = document.getElementById('subtotal_' + productId);
+                                        var unitPrice = parseFloat('<%= cart.getUnitPrice() * 1000 %>');
+                                        var subtotal = unitPrice * quantity;
+                                        subtotalElement.innerText = formatCurrency(subtotal);
+                                    }
+
+
+                                    // Function to format currency with thousand separators
+                                    function formatCurrency(value) {
+                                        // Use toLocaleString to add commas as thousand separators
+                                        return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                                    }
+
 
                                 </script>
 
 
-<%--                                <script>--%>
-<%--                                    function proceedToPayment() {--%>
-
-<%--                                        var selectedProducts = getSelectedProducts();--%>
-<%--                                        window.location.href = 'checkOut?selectedProducts='  + selectedProducts.join(',');--%>
-<%--                                    }--%>
-
-<%--                                    function getSelectedProducts() {--%>
-<%--                                        var selectedProducts = [];--%>
-<%--                                        var checkboxes = document.querySelectorAll('[id^="checkbox_"]:checked');--%>
-<%--                                        checkboxes.forEach(function (checkbox) {--%>
-<%--                                            selectedProducts.push(checkbox.id.split('_')[1]);--%>
-<%--                                        });--%>
-<%--                                        return selectedProducts;--%>
-<%--                                    }--%>
-
-<%--                                    function updateCartItem(productId) {--%>
-<%--                                        var quantityInput = document.getElementById('quantityInput_' + productId);--%>
-<%--                                        var subtotalElement = document.getElementById('subtotal_' + productId);--%>
-<%--                                        var totalAmountElement = document.getElementById('totalAmount');  // Assuming you have an element with id 'totalAmount'--%>
-
-<%--                                        // Your existing updateCartItem logic--%>
-
-<%--                                        // Recalculate the subtotal based on the updated quantity--%>
-<%--                                        var unitPrice = parseFloat('<%= cart.getUnitPrice() * 1000 %>');--%>
-<%--                                        var quantity = parseInt(quantityInput.value, 10);--%>
-<%--                                        var subtotal = unitPrice * quantity;--%>
-
-<%--                                        // Update the displayed subtotal on the client side with formatted currency--%>
-<%--                                        subtotalElement.innerText = formatCurrency(subtotal);--%>
-
-<%--                                        // Recalculate the totalAmount based on all subtotals--%>
-<%--                                        updateTotalAmount();--%>
-<%--                                    }--%>
-<%--                                    function updateTotalAmount() {--%>
-<%--                                        var totalAmount = 0;--%>
-
-<%--                                        // Lấy tất cả các thẻ span có id bắt đầu bằng "subtotal_"--%>
-<%--                                        var subtotalElements = document.querySelectorAll('[id^="subtotal_"]');--%>
-
-<%--                                        // Duyệt qua mỗi thẻ span và cộng giá trị của nó vào tổng tiền--%>
-<%--                                        subtotalElements.forEach(function (element) {--%>
-<%--                                            totalAmount += parseFloat(element.innerText.replace(/\D/g, '')) || 0;--%>
-<%--                                        });--%>
-
-<%--                                        // Hiển thị tổng tiền trong thẻ span có id là "totalAmount"--%>
-<%--                                        document.getElementById('totalAmount').innerText = formatCurrency(totalAmount);--%>
-<%--                                    }--%>
-
-<%--                                    // Function to format currency with thousand separators--%>
-<%--                                    function formatCurrency(value) {--%>
-<%--                                        // Use toLocaleString to add commas as thousand separators--%>
-<%--                                        return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });--%>
-<%--                                    }--%>
-<%--                                    function decrementQuantity(productId) {--%>
-<%--                                        var inputElement = document.getElementById('quantityInput_' + productId);--%>
-<%--                                        var currentQuantity = parseInt(inputElement.value, 10);--%>
-<%--                                        if (currentQuantity > 1) {--%>
-<%--                                            inputElement.value = currentQuantity - 1;--%>
-<%--                                            updateCartItem(productId);--%>
-<%--                                        }--%>
-<%--                                    }--%>
-
-
-
-<%--                                    function incrementQuantity(productId) {--%>
-<%--                                        var inputElement = document.getElementById('quantityInput_' + productId);--%>
-<%--                                        var currentQuantity = parseInt(inputElement.value, 10);--%>
-<%--                                        var quantityLimit = <%= cart.getStatuss()%>;--%>
-<%--                                        var errorMessageElement = document.getElementById('errorMessage');--%>
-
-<%--                                        if (currentQuantity < quantityLimit) {--%>
-<%--                                            inputElement.value = currentQuantity + 1;--%>
-<%--                                            updateCartItem(productId);--%>
-<%--                                            errorMessageElement.innerText = ''; // Clear any previous error message--%>
-<%--                                        } else {--%>
-<%--                                            errorMessageElement.innerText = 'Sản phẩm chỉ còn tối đa ' + quantityLimit + ' cái';--%>
-<%--                                        }--%>
-<%--                                    }--%>
-
-
-<%--                                </script>--%>
-
                                 <td class="product-subtotal">
-                                                                        <span id="subtotal_<%= cart.getProductId() %>" class="amount">
-                                                                     <%= request.getAttribute("tatolPrice") %>
-                                                                                </span>
+                                    <span id="subtotal_<%= cart.getProductId() %>" class="amount">
+                                        <%= request.getAttribute("tatolPrice") %>
+                                    </span>
                                 </td>
 
                             </tr>

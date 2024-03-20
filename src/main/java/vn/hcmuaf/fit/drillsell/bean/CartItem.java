@@ -1,6 +1,6 @@
 package vn.hcmuaf.fit.drillsell.bean;
 
-public class Cart {
+public class CartItem {
     private int quantity, statuss;
     private double totalPrice;
     private int productId;
@@ -10,12 +10,12 @@ public class Cart {
 
 
 
-    public Cart() {
+    public CartItem() {
     }
 
 
 
-    public Cart(int quantity, int statuss, double totalPrice, int productId, String image, String productName, double unitPrice) {
+    public CartItem(int quantity, int statuss, double totalPrice, int productId, String image, String productName, double unitPrice) {
         this.quantity = quantity;
         this.statuss = statuss;
         this.totalPrice = totalPrice;

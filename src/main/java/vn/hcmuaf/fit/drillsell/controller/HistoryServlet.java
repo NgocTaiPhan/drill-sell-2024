@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Cart;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.bean.CartItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class HistoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
+        Map<Integer, CartItem> cartMap = (Map<Integer, CartItem>) session.getAttribute("cart");
 
         if (cartMap == null || cartMap.isEmpty()) {
             request.getRequestDispatcher("order.jsp").forward(request, response);
@@ -32,7 +31,7 @@ public class HistoryServlet extends HttpServlet {
         String[] selectedProducts = selectedProductsParam != null ? selectedProductsParam.split(",") : new String[0];
 
         // Khởi tạo selectedCartList
-        List<Cart> selectedCartList = new ArrayList<>();
+        List<CartItem> selectedCartList = new ArrayList<>();
 
         if (selectedProducts != null && selectedProducts.length > 0) {
             selectedCartList = getSelectedCartItems(cartMap, selectedProducts);
@@ -55,8 +54,8 @@ public class HistoryServlet extends HttpServlet {
     }
 
 
-    private List<Cart> getSelectedCartItems(Map<Integer, Cart> cartMap, String[] selectedProducts) {
-        List<Cart> selectedCartList = new ArrayList<>();
+    private List<CartItem> getSelectedCartItems(Map<Integer, CartItem> cartMap, String[] selectedProducts) {
+        List<CartItem> selectedCartList = new ArrayList<>();
         for (String productIdString : selectedProducts) {
             if (!productIdString.isEmpty()) {
                 try {

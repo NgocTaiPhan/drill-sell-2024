@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Cart;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.bean.CartItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class CheckOutController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
+        Map<Integer, CartItem> cartMap = (Map<Integer, CartItem>) session.getAttribute("cart");
 
         if (cartMap == null || cartMap.isEmpty()) {
             response.sendRedirect("cart.jsp");
@@ -33,7 +32,7 @@ public class CheckOutController extends HttpServlet {
         String[] selectedProducts = selectedProductsParam != null ? selectedProductsParam.split(",") : new String[0];
 
         if (selectedProducts != null && selectedProducts.length > 0) {
-            List<Cart> detailedCartList = getSelectedCartItems(cartMap, selectedProducts);
+            List<CartItem> detailedCartList = getSelectedCartItems(cartMap, selectedProducts);
             session.setAttribute("detailedCartList", detailedCartList);
 
 
@@ -45,8 +44,8 @@ public class CheckOutController extends HttpServlet {
     }
 
     // Thêm phương thức sau đây vào servlet của bạn
-    private List<Cart> getSelectedCartItems(Map<Integer, Cart> cartMap, String[] selectedProducts) {
-        List<Cart> selectedCartList = new ArrayList<>();
+    private List<CartItem> getSelectedCartItems(Map<Integer, CartItem> cartMap, String[] selectedProducts) {
+        List<CartItem> selectedCartList = new ArrayList<>();
         for (String productIdString : selectedProducts) {
             if (!productIdString.isEmpty()) {
                 try {

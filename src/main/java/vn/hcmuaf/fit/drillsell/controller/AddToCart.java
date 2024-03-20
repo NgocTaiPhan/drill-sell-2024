@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Cart;
+import vn.hcmuaf.fit.drillsell.bean.CartItem;
 import vn.hcmuaf.fit.drillsell.service.CartService;
 
 @WebServlet("/cart")
@@ -26,30 +26,40 @@ public class AddToCart extends HttpServlet {
 
         // Lấy số lượng từ request parameter (thêm kiểm tra null để tránh lỗi)
         String quantityParam = request.getParameter("quantity");
-        int quantity = (quantityParam != null) ? Integer.parseInt(quantityParam) : 1;
-
+        int quantity = (quantityParam != null) ? Integer.parseInt(quantityParam) : 1 ;
+        double amount;
         // Lấy hoặc tạo giỏ hàng từ session
         HttpSession session = request.getSession();
-        Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
+        Map<Integer, CartItem> cartMap = (Map<Integer, CartItem>) session.getAttribute("cart");
         if (cartMap == null) {
             cartMap = new HashMap<>();
             session.setAttribute("cart", cartMap);
         }
-
-        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        Cart existingCartItem = cartMap.get(productId);
-        if (existingCartItem != null) {
-            // Nếu có, tăng số lượng
-            existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
-            existingCartItem.setTotalPrice(existingCartItem.getUnitPrice() * existingCartItem.getQuantity());
+        // Thay đổi cách cập nhật giỏ hàng trong phương thức doGet
+        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+        if (cartMap.containsKey(productId)) {
+            // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
+            CartItem item = cartMap.get(productId);
+            item.setQuantity(item.getQuantity() + 1);
+            cartMap.put(productId, item); // Cập nhật lại thông tin sản phẩm trong giỏ hàng
         } else {
-            // Nếu chưa có, thêm sản phẩm vào giỏ hàng
-            List<Cart> cartItems = CartService.getProductById(productId);
-            Cart cartItem = cartItems.get(0);
-            cartMap.put(productId, cartItem);
+            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, thêm mới
+            List<CartItem> cartItems = CartService.getProductById(productId);
+            if (!cartItems.isEmpty()) {
+                CartItem cartItem = cartItems.get(0); // Lấy sản phẩm đầu tiên từ danh sách
+                cartMap.put(productId, cartItem);
+            }
         }
 
         // Chuyển hướng đến trang cart.jsp
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
+    }
+
+
+
 }
