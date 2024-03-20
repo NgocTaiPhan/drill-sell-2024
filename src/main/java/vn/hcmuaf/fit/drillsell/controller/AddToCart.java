@@ -2,15 +2,16 @@ package vn.hcmuaf.fit.drillsell.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import vn.hcmuaf.fit.drillsell.bean.Cart;
 import vn.hcmuaf.fit.drillsell.service.CartService;
 
@@ -27,35 +28,28 @@ public class AddToCart extends HttpServlet {
         String quantityParam = request.getParameter("quantity");
         int quantity = (quantityParam != null) ? Integer.parseInt(quantityParam) : 1;
 
-        // Lấy thông tin sản phẩm từ CartService
-        Cart cartItem = CartService.getProductById(productId).get(0);
-
-        // Lấy session từ request
+        // Lấy hoặc tạo giỏ hàng từ session
         HttpSession session = request.getSession();
-
-        // Lấy giỏ hàng từ session, hoặc tạo mới nếu chưa có
         Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
         if (cartMap == null) {
             cartMap = new HashMap<>();
+            session.setAttribute("cart", cartMap);
         }
 
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        if (cartMap.containsKey(productId)) {
+        Cart existingCartItem = cartMap.get(productId);
+        if (existingCartItem != null) {
             // Nếu có, tăng số lượng
-            Cart existingCartItem = cartMap.get(productId);
             existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
-        }
-        else {
+            existingCartItem.setTotalPrice(existingCartItem.getUnitPrice() * existingCartItem.getQuantity());
+        } else {
             // Nếu chưa có, thêm sản phẩm vào giỏ hàng
+            List<Cart> cartItems = CartService.getProductById(productId);
+            Cart cartItem = cartItems.get(0);
             cartMap.put(productId, cartItem);
         }
 
-
-        // Cập nhật giỏ hàng trong session
-        session.setAttribute("cart", cartMap);
-        response.sendRedirect("cart.jsp");
-
-
-
+        // Chuyển hướng đến trang cart.jsp
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 }
