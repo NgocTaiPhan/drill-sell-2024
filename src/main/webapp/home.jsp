@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page import="java.io.PrintWriter" %>
@@ -6,15 +5,15 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
 
 
 <%
     HttpSession sesion = (HttpSession) request.getSession();
+    ProductService prodsService = ProductService.getInstance();
 
-    HomeController homeCtroller = new HomeController();
-    List<List<Products>> showProducts = homeCtroller.getAllProducts();
-
-
+    List<Products> bestSellerProducts = prodsService.showProd();
 %>
 <html lang="vi">
 <head>
@@ -214,26 +213,16 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>
-                                            Máy khoan pin</a>
+                                        <%for (ProductCategorys pc : prodsService.getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
+                                        <%}%>
 
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy
-                                            khoan cầm tay </a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy
-                                            khoan mini</a>
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy
-                                            khoan động lực</a>
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>
-                                            Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
@@ -531,18 +520,12 @@
                         <div class="tag-list">
                             <!-- JSP Code -->
 
-                            <a class="item" href="load-by-producer?producer=Bosh">Bosh</a>
-                            <a class="item" href="load-by-producer?producer=Makute">Makute</a>
-                            <a class="item" href="load-by-producer?producer=DeWalt">DeWalt</a>
-                            <a class="item" href="load-by-producer?producer=Milwaukee">Milwaukee</a>
-                            <a class="item" href="load-by-producer?producer=Tolsen">Tolsen</a>
-                            <a class="item" href="load-by-producer?producer=Classic">Classic</a>
-                            <a class="item" href="load-by-producer?producer=Sasuke">Sasuke</a>
-                            <a class="item" href="load-by-producer?producer=Huynhdai">Huynhdai</a>
-                            <a class="item" href="load-by-producer?producer=Oshima">Oshima</a>
-                            <a class="item" href="load-by-producer?producer=Gomes">Gomes</a>
-                            
+                            <%for (String producerName : ProductService.getInstance().getAllProducers()) {%>
+                            <a class="item"
+                               href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
+                            </a>
 
+                            <%}%>
                             <!-- /.tag-list -->
                         </div>
                         <!-- /.sidebar-widget-body -->
@@ -630,117 +613,117 @@
                     <!-- /.info-boxes-inner -->
 
                 </div>
+
+
                 <!-- /.info-boxes -->
                 <!-- ============================================== INFO BOXES : END ============================================== -->
-
-
                 <!-- ============================================== BEST SELLER ============================================== -->
-
-                <div class="best-deal wow fadeInUp outer-bottom-xs">
-                    <h3 class="section-title point ">Bán chạy</h3>
-                    <div class="sidebar-widget-body outer-top-xs">
-                        <div class="owl-carousel best-seller custom-carousel owl-theme outer-top-xs">
-
-
-                            <%
-
-                                List<Products> bestSellerProducts = showProducts.get(0);
-                                for (Products p : bestSellerProducts) {
-                                    String formattedPrice = homeCtroller.getFormattedUnitPrice(p);
+<%--            Bán chạy--%>
+<%--                <div class="best-deal wow fadeInUp outer-bottom-xs">--%>
+<%--                    <h3 class="section-title point ">Bán chạy</h3>--%>
+<%--                    <div class="sidebar-widget-body outer-top-xs">--%>
+<%--                        <div class="owl-carousel best-seller custom-carousel owl-theme outer-top-xs">--%>
 
 
-                            %>
-                            <div class="item">
-                                <div class="products best-product">
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a
-                                                                href="detail?productId=<%= p.getProductId()%>"
-                                                                methods="get"> <img width="95px"
-                                                                                    height="95px"
-                                                                                    src="<%=p.getImage()%>"
-                                                                                    alt="Ảnh sản phẩm">
-                                                        </a>
-                                                        </div>
-                                                        <!-- /.image -->
+<%--                            <%--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col2 col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a
-                                                                href="detail?productId=<%= p.getProductId()%>"
-                                                                methods="get"><%=p.getProductName()%>
-                                                        </a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> <%=formattedPrice%> </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
-
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
-
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a
-                                                                href="detail?productId=<%= p.getProductId()%>"
-                                                                methods="get"> <img width="95px"
-                                                                                    height="95px"
-                                                                                    src="<%=p.getImage()%>"
-                                                                                    alt="Ảnh sản phẩm">
-                                                        </a>
-                                                        </div>
+<%--                                List<Products> bestSellerProducts = showProducts.get(0);--%>
+<%--                                for (Products p : bestSellerProducts) {--%>
+<%--                                    String formattedPrice = homeCtroller.getFormattedUnitPrice(p);--%>
 
 
-                                                    </div>
+<%--                            %>--%>
+<%--                            <div class="item">--%>
+<%--                                <div class="products best-product">--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a--%>
+<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+<%--                                                                methods="get"> <img width="95px"--%>
+<%--                                                                                    height="95px"--%>
+<%--                                                                                    src="<%=p.getImage()%>"--%>
+<%--                                                                                    alt="Ảnh sản phẩm">--%>
+<%--                                                        </a>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col2 col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a
-                                                                href="detail?productId=<%= p.getProductId()%>"
-                                                                methods="get"><%=p.getProductName()%>
-                                                        </a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> <%=formattedPrice%> </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col2 col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a--%>
+<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+<%--                                                                methods="get"><%=p.getProductName()%>--%>
+<%--                                                        </a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> <%=formattedPrice%> </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <%}%>
+<%--                                    </div>--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a--%>
+<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+<%--                                                                methods="get"> <img width="95px"--%>
+<%--                                                                                    height="95px"--%>
+<%--                                                                                    src="<%=p.getImage()%>"--%>
+<%--                                                                                    alt="Ảnh sản phẩm">--%>
+<%--                                                        </a>--%>
+<%--                                                        </div>--%>
 
 
-                        </div>
-                    </div>
-                    <!-- /.sidebar-widget-body -->
-                </div>
+<%--                                                    </div>--%>
+
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col2 col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a--%>
+<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+<%--                                                                methods="get"><%=p.getProductName()%>--%>
+<%--                                                        </a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> <%=formattedPrice%> </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
+
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
+
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                            <%}%>--%>
+
+
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                    <!-- /.sidebar-widget-body -->--%>
+<%--                </div>--%>
                 <div class="wide-banners wow fadeInUp outer-bottom-xs">
                     <div class="row">
                         <div class="col-md-7 col-sm-7">
@@ -772,10 +755,9 @@
 
 
                         <%
-
-                            List<Products> products = showProducts.get(0);
-                            for (Products p : products) {
-                                String formattedPrice = homeCtroller.getFormattedUnitPrice(p);
+                            List<Products> listProds = prodsService.showProd();
+                            for (Products p : listProds) {
+                                String formattedPrice = prodsService.getFormattedUnitPrice(p);
 
                         %>
 
@@ -820,10 +802,9 @@
                     </div>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
                         <%
-
-                            List<Products> products1 = showProducts.get(1);
-                            for (Products p : products1) {
-                                String formattedPrice = homeCtroller.getFormattedUnitPrice(p);
+                            List<Products> subListProds = prodsService.showProd();
+                            for (Products p : subListProds) {
+                                String formattedPrice = prodsService.getFormattedUnitPrice(p);
 
                         %>
                         <div class="item item-carousel">
@@ -891,10 +872,9 @@
                     <h3 class="section-title">Phụ kiện</h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
                         <%
-
-                            List<Products> accessory = showProducts.get(2);
+                            List<Products> accessory = prodsService.getAccessory();
                             for (Products a : accessory) {
-                                String formattedPrice = homeCtroller.getFormattedUnitPrice(a);
+                                String formattedPrice = prodsService.getFormattedUnitPrice(a);
                         %>
                         <div class="item item-carousel">
                             <div class="products">
@@ -1076,29 +1056,29 @@
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
     <div class="social-button-content">
-        <a href="tel:0353933224" class="call-icon" rel="nofollow">
+        <a href="012345678" class="call-icon" rel="nofollow">
             <i class="fa fa-whatsapp" aria-hidden="true"></i>
             <div class="animated alo-circle"></div>
             <div class="animated alo-circle-fill"></div>
-            <span>Hotline: 035 393 3224</span>
+            <span>Hotline: 012345678</span>
         </a>
-        <a href="sms:0353933224" class="sms">
+        <a href="012345678" class="sms">
             <i class="fa fa-weixin" aria-hidden="true"></i>
             <div class="animated alo-circle"></div>
             <div class="animated alo-circle-fill"></div>
-            <span>SMS: 035 393 3224</span>
+            <span>SMS: 012345678</span>
         </a>
-        <a href="https://www.facebook.com/Ngocthang.net/" class="mes">
+        <a href="" class="mes">
             <i class="fa fa-facebook-square" aria-hidden="true"></i>
             <div class="animated alo-circle"></div>
             <div class="animated alo-circle-fill"></div>
             <span>Nhắn tin Facebook</span>
         </a>
-        <a href="http://zalo.me/0353933224" class="zalo">
+        <a href="http://zalo.me" class="zalo">
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
             <div class="animated alo-circle"></div>
             <div class="animated alo-circle-fill"></div>
-            <span>Zalo: 035.393.3224</span>
+            <span>Zalo</span>
         </a>
     </div>
     <a href="#" class="user-support">

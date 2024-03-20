@@ -5,9 +5,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    HttpSession sesion = (HttpSession) request.getSession();
+    String label = request.getParameter("label");
 
-    List<Products> products = (List<Products>) sesion.getAttribute("product-list-by-producer");
+
+
+    List<Products> products = (List<Products>) request.getAttribute("product-list");
+
 %>
 <html lang="vi">
 <head>
@@ -21,7 +24,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="icon" href="assets/images/logo.png" type="image/png">
-    <title>Sản phẩm</title>
+    <title><%=label%>
+    </title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
     <!-- Customizable CSS -->
@@ -629,8 +633,11 @@
                     <!-- /.row -->
                 </div>
                 <section class="section featured-product wow fadeInUp">
-                    <h3 class="section-title">Sản phẩm</h3>
+                    <h3 class="section-title"><%=label%>
+                    </h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
+
+                        <%--                        Load products by category--%>
                         <%
                             int productsPerRow = 4;
                             if (products != null && !products.isEmpty()) {
@@ -641,17 +648,23 @@
                         %>
                         <div class="product">
                             <div class="product-image">
-                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px" width="189px" src="<%=p.getImage()%>" alt="Ảnh sản phẩm"></a></div>
+                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px"
+                                                                                                         width="189px"
+                                                                                                         src="<%=p.getImage()%>"
+                                                                                                         alt="Ảnh sản phẩm"></a>
+                                </div>
                                 <!-- /.image -->
                             </div>
                             <!-- /.product-image -->
 
                             <div class="product-info text-left">
-                                <h3 class="name"><a href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%></a></h3>
+                                <h3 class="name"><a
+                                        href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%>
+                                </a></h3>
                                 <div class="rating rateit-small"></div>
                                 <div class="description"></div>
                                 <div class="product-price">
-                                    <span  class="price"> <%=formattedPrice%></span>
+                                    <span class="price"> <%=formattedPrice%></span>
                                 </div>
                                 <!-- /.product-price -->
                             </div>
