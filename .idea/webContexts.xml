@@ -6,7 +6,11 @@
         <entry key="file://$PROJECT_DIR$/Drill_Sell/src/main/webapp/EditProduct.jsp" value="file://$PROJECT_DIR$/Drill_Sell/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/Drill_Sell/src/main/webapp/managerproduct.jsp" value="file://$PROJECT_DIR$/Drill_Sell/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/home.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+
         <entry key="file://$PROJECT_DIR$/src/main/webapp/product-filter.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+
       </map>
     </option>
   </component>

@@ -140,7 +140,7 @@ public class EmailService {
 
         // Gửi email
         Transport.send(message);
-        System.out.println("success");
+        System.out.println("success");System.out.println("success");System.out.println("success");System.out.println("success");
     }
 }
 
