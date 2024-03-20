@@ -1,3 +1,4 @@
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>

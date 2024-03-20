@@ -1,6 +1,6 @@
 <%@ page import="org.jboss.weld.context.http.Http" %>
-<%@ page import="vn.edu.hcmuaf.bean.User" %>
-<%@ page import="vn.edu.hcmuaf.controller.register.RegisterController" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.controller.register.RegisterController" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

@@ -117,7 +117,7 @@ public class EmailService {
 
         // Tạo đối tượng Authenticator
         String username = "drillsellgroup25@gmail.com";
-        String password = "ajkjgjezaadiajtc"; // Replace with your App Password
+        String password = "ajkjgjezaadiajtc"; 
 
         Authenticator auth = new Authenticator() {
             @Override
@@ -134,7 +134,7 @@ public class EmailService {
 
         // Thiết lập các thuộc tính của MimeMessage
         message.setFrom(new InternetAddress(username));
-//        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse());
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("drillsellgroup25@gmail.com"));
         message.setSubject("Subject");
         message.setText("Body");
 

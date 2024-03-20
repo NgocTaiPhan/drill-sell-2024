@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.service;
 
+import vn.hcmuaf.fit.drillsell.bean.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.bean.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
@@ -32,7 +33,7 @@ public class ProductService {
     public  List<Products> getAccessory() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("\n" +
-                            "SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions \n" +
+                            "SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions  \n" +
                             "FROM products " + //Thêm khoảng trắng sau "products"
                             "WHERE categoryId IN (6, 7, 8) ORDER BY RAND()")
                     .mapToBean(Products.class)
@@ -78,6 +79,17 @@ public class ProductService {
 
 
 
+    public String getFormattedUnitPrice(Products product) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormat.format(product.getUnitPrice() * 1000);
+    }
+    public List<String> getAllProducers() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT DISTINCT nameProducer FROM products")
+                    .mapTo(String.class)
+                    .list();
+        });
+    }
 
 
 
@@ -88,6 +100,14 @@ public class ProductService {
 //        getProductsByCategory(2);
 
 
+    }
+
+    public List<ProductCategorys> getAllCategory() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT id , nameCategory FROM product_categorys")
+                    .mapToBean(ProductCategorys.class)
+                    .list();
+        });
     }
 
 }
