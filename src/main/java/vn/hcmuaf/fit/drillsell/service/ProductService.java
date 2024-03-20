@@ -68,10 +68,6 @@ public class ProductService {
 
 
 
-    public static void main(String[] args) {
-//            System.out.println(ProductService.getProductsByCategory(2));
-//        System.out.println(ProductService.getAccessory());
-//        System.out.println(ProductService.showProd());
-    }
+
 
 }
