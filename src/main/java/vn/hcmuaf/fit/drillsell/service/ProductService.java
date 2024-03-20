@@ -94,13 +94,6 @@ public class ProductService {
 
 
 
-    public static void main(String[] args) {
-//            System.out.println(ProductService.getProductsByCategory(2));
-//        System.out.println(ProductService.getAccessory());
-//        getProductsByCategory(2);
-
-
-    }
 
     public List<ProductCategorys> getAllCategory() {
         return DbConnector.me().get().withHandle(handle -> {
@@ -110,4 +103,17 @@ public class ProductService {
         });
     }
 
+    public String getNameCategoryById(int categoryId) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT nameCategory FROM product_categorys WHERE id = :categoryId")
+                    .bind("categoryId", categoryId)
+                    .mapTo(String.class)
+                    .findOne()
+                    .orElse(null);
+        });
+    }
+
+    public static void main(String[] args) {
+        System.out.println(ProductService.getInstance().getNameCategoryById(6));
+    }
 }
