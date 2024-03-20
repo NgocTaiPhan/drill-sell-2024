@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.category;
 
+import org.w3c.dom.ls.LSOutput;
 import vn.hcmuaf.fit.drillsell.bean.Products;
 import vn.hcmuaf.fit.drillsell.service.ProductService;
 
@@ -19,16 +20,21 @@ public class LoadProdsByCategory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String prName = request.getParameter("producer-name");
         String cateId = request.getParameter("category-id");
-        List<Products> prodsList = null;
 
         if (cateId != null && !cateId.isEmpty()) {
             int categoryId = Integer.parseInt(cateId);
-            prodsList = ProductService.getInstance().getProductsByCategory(categoryId);
+            ProductService productService = ProductService.getInstance();
+            List<Products> prodsList = productService.getProductsByCategory(categoryId);
+            String label = productService.getNameCategoryById(categoryId);
+            request.setAttribute("product-list", prodsList);
+            request.setAttribute("label", label);
         } else if (prName != null && !prName.isEmpty()) {
-            prodsList = ProductService.getInstance().getProductByProducer(prName);
+            ProductService productService = ProductService.getInstance();
+            List<Products> prodsList = productService.getProductByProducer(prName);
+            request.setAttribute("product-list", prodsList);
+            request.setAttribute("label", prName);
         }
 
-        request.setAttribute("product-list", prodsList);
         request.getRequestDispatcher("product-filter.jsp").forward(request, response);
     }
 
@@ -37,4 +43,5 @@ public class LoadProdsByCategory extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
+
 }
