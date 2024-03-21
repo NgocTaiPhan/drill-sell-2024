@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @WebServlet(name = "RegisterController", value = "/register")
@@ -28,6 +30,7 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
 
 
         // Lấy các thông tin từ form
@@ -42,7 +45,12 @@ public class RegisterController extends HttpServlet {
         String agreeToTerms = request.getParameter("agree-to-terms");
         String gender = request.getParameter("gender");
 
-
+//        Trả dữ liệu đã nhập cho người dùng khi nhập
+        session.setAttribute("fullName",fullName);
+        session.setAttribute("birthDate",birthDate);
+        session.setAttribute("phoneNumber",phoneNumber);
+        session.setAttribute("email",email);
+        session.setAttribute("username",username);
 
 
         // Kiểm tra các điều kiện lỗi
@@ -51,10 +59,13 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-fullname");
             return;
         }
+
+//            DateTimeFormatter formatter = DateTimeFormatter
         if (birthDate == null || birthDate.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-birthday");
             return;
         } else {
+
 //            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate inputDate = LocalDate.parse(birthDate);
 
@@ -70,10 +81,12 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-address");
             return;
         }
+        session.setAttribute("address",address);
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-phone");
             return;
         } else {
+
             if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
                 response.sendRedirect("login.jsp?notify=invalid-phone");
                 return;
@@ -84,6 +97,7 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-email");
             return;
         } else {
+
             if (!email.matches("^[a-zA-Z0-9_+&*-/=?\\^\\s{|}]+@[a-zA-Z0-9-]+\\.[a-zA-Z]+$")) {
                 response.sendRedirect("login.jsp?notify=invalid-email");
                 return;
@@ -93,6 +107,7 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-username");
             return;
         } else {
+
             if (!UserService.getInstance().isUsernameDuplicate(username)) {
                 response.sendRedirect("login.jsp?notify=duplicate-acc");
 
@@ -119,12 +134,10 @@ public class RegisterController extends HttpServlet {
         response.sendRedirect("login.jsp?notify=register-success");
 //        request.setAttribute("email-for-mail", email);
         String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
-        HttpSession session = request.getSession();
         User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode, false, false);
 //        session.setAttribute("confirmation", user);
         UserService.getInstance().addUser(user);
         EmailService.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
-
 
 
 //        response.sendRedirect("user-service/input-code.jsp");

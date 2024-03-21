@@ -20,21 +20,22 @@ public class LoadProdsByCategory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String prName = request.getParameter("producer-name");
         String cateId = request.getParameter("category-id");
+        ProductService productService = ProductService.getInstance();
+        List<Products> prodsList = null;
+        String label = null;
 
+      if (prName != null && !prName.isEmpty()) {
+            prodsList = productService.getProductByProducer(prName);
+            label = prName;
+        }
         if (cateId != null && !cateId.isEmpty()) {
             int categoryId = Integer.parseInt(cateId);
-            ProductService productService = ProductService.getInstance();
-            List<Products> prodsList = productService.getProductsByCategory(categoryId);
-            String label = productService.getNameCategoryById(categoryId);
-            request.setAttribute("product-list", prodsList);
-            request.setAttribute("label", label);
-        } else if (prName != null && !prName.isEmpty()) {
-            ProductService productService = ProductService.getInstance();
-            List<Products> prodsList = productService.getProductByProducer(prName);
-            request.setAttribute("product-list", prodsList);
-            request.setAttribute("label", prName);
+            prodsList = productService.getProductsByCategory(categoryId);
+            label = ProductService.getInstance().getNameCategoryById(categoryId);
         }
-
+        System.out.println(label);
+        request.setAttribute("product-list", prodsList);
+        request.setAttribute("label", label);
         request.getRequestDispatcher("product-filter.jsp").forward(request, response);
     }
 

@@ -1,5 +1,4 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductDao" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -29,8 +28,8 @@
         <input type="number" name="unitPrice" step="0.01" value="<%= productToEdit.getUnitPrice() %>" required>
     </div>
     <div>
-        <%--@declare id="producerid"--%><label for="producerId">Mã nhà sản xuất:</label>
-        <input type="number" name="producerId" value="<%= productToEdit.getProducerId() %>" required>
+        <%--@declare id="producerid"--%><label for="producerId">Tên nhà sản xuất:</label>
+        <input type="text" name="producerName" value="<%= productToEdit.getNameProducer() %>" required>
     </div>
     <div>
         <%--@declare id="categoryid"--%><label for="categoryId">Mã danh mục:</label>

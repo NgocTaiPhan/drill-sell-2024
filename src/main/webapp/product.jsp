@@ -1,8 +1,16 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+
+
+%>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +23,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="icon" href="assets/images/logo.png" type="image/png">
-    <title>Sản phẩm</title>
+    <title>Sản phẩm
+    </title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
     <!-- Customizable CSS -->
@@ -52,9 +61,6 @@
 </head>
 
 <body class="cnt-home">
-
-<% List<List<Products>> allProduct = (List<List<Products>>) request.getAttribute("loadProduct");
-%>
 <!-- ============================================== HEADER ============================================== -->
 <header class="header-style-1 ">
 
@@ -64,11 +70,18 @@
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>Tài khoản</a></li>
+                        <% User u = (User) session.getAttribute("auth");
+                            if (u != null) { %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i><%=u.getFullname()%>
+                        </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
+                        <li><a href="<%=request.getContextPath()%>/logout"><i
+                                class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
+                        <%} else {%>
+
                         <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
+                        <%}%>
                     </ul>
                 </div>
 
@@ -158,7 +171,6 @@
                                 <%--                                </div>--%>
 
 
-
                             </div>
                         </a>
 
@@ -193,36 +205,33 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product"
-                                                               methods="post"></i>Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>
-                                            Máy khoan pin</a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy
-                                            khoan động lực</a>
-
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy
-                                            khoan cầm tay gia đình</a>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy
-                                            khoan mini</a>
+                                        <%}%>
 
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>
-                                            Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lí Sản phẩm</a></li>
+                                <%
+                                    }
+                                %>
 
 
                             </ul>
@@ -268,42 +277,17 @@
                     <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Máy khoan</div>
                     <nav class="yamm megamenu-horizontal">
                         <ul class="nav">
-                            <li class="nav-bg-class"><a href="<%= request.getContextPath() %>/battery_drill"
-                                                        methods="post"></i>Máy khoan pin</a>
+
+                            <%
+                                List<ProductCategorys> allCate = ProductService.getInstance().getAllCategory();
+                                for (ProductCategorys pc : allCate) {%>
+                            <li class="nav-bg-class">
+                                <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>">
+                                    <%=pc.getNameCategory()%>
+                                </a>
 
                             </li>
-                            <li class="nav-bg-class"><a href="<%= request.getContextPath() %>/movers"
-                                                        methods="post"></i>Máy khoan động lực</a>
-
-                            </li>
-
-                            <li class="nav-bg-class"><a href="<%= request.getContextPath() %>/hand_drill"
-                                                        methods="post"></i>Máy khoan cầm tay gia đình</a>
-
-                            </li>
-                            <li class="nav-bg-class"><a href="<%= request.getContextPath() %>/mini_drill"
-                                                        methods="post"></i>Máy khoan mini</a>
-
-                            </li>
-                            <li class="nav-bg-class"><a href="<%= request.getContextPath() %>/hammer_drill"
-                                                        methods="post"></i>Máy khoan bê tông, Máy khoan búa</a>
-
-                            </li>
-
-                            <li class="">
-                                <a href="accessory.jsp" class="dropdown-med" data-toggle="dropdown">Phụ kiện máy khoan
-                                    <b
-                                            class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<%= request.getContextPath() %>/z_battery" methods="post"></i> Pin máy
-                                        khoan</a></li>
-                                    <li><a href="<%= request.getContextPath() %>/z_charger" methods="post"></i> Sạc pin
-                                        máy khoan</a></li>
-                                    <li><a href="<%= request.getContextPath() %>/z_countersink" methods="post"></i>Mũi
-                                        khoan</a></li>
-                                </ul>
-                            </li>
-
+                            <%}%>
 
                         </ul>
                         <!-- /.nav -->
@@ -317,28 +301,20 @@
                 <!-- ============================================== SPECIAL DEALS ============================================== -->
 
                 <div class="sidebar-widget outer-bottom-small wow fadeInUp">
-                    <h3 class="section-title">Ưu đãi sản phẩm</h3>
+                    <h3 class="section-title">Ưu đãi</h3>
                     <div class="sidebar-widget-body outer-top-xs">
                         <div class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">
 
                             <div class="item">
                                 <div class="products special-product">
-                                    <%
-
-                                        List<Products> products4 = allProduct.get(3);
-                                        for (Products p : products4) {
-                                            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                            String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
-                                            request.setAttribute("formattedUnitPrice", formattedPrice);
-                                    %>
                                     <div class="product">
                                         <div class="product-micro">
                                             <div class="row product-micro-row">
                                                 <div class="col col-xs-5">
                                                     <div class="product-image">
-                                                        <div class="image"><a href="detail?productId=<%=p.getProductId()%>"> <img
-                                                                src="<%=p.getImage()%>"
-                                                                alt="Ảnh sản phẩm"></a>
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/best-seller/may-khoan-van-vit-dung-pin-12v-bosch-gsr-120-li-gen-ii-06019g80l1-g.jpg"
+                                                                alt="Ảnh sản phẩm"> </a>
                                                         </div>
                                                         <!-- /.image -->
 
@@ -348,13 +324,13 @@
                                                 <!-- /.col -->
                                                 <div class="col col-xs-7">
                                                     <div class="product-info">
-                                                        <h3 class="name"><a href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName() %>
-                                                        </a>
-                                                        </h3>
+                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V
+                                                            Bosch GSR 120-LI GEN II</a></h3>
                                                         <div class="rating rateit-small"></div>
-                                                        <div class="product-price">
-                                                            <span class="price"><%= request.getAttribute("formattedUnitPrice") %></span>
+                                                        <div class="product-price"><span
+                                                                class="price"> 1.599.000đ </span>
                                                         </div>
+                                                        <!-- /.product-price -->
 
                                                     </div>
                                                 </div>
@@ -365,12 +341,186 @@
                                         <!-- /.product-micro -->
 
                                     </div>
-                                    <%}%>
+                                    <div class="product">
+                                        <div class="product-micro">
+                                            <div class="row product-micro-row">
+                                                <div class="col col-xs-5">
+                                                    <div class="product-image">
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/normal/may-khoan-van-vit-dung-pin-12v-sencan-d511210-sl.jpg"
+                                                                alt="Ảnh sản phẩm"> </a>
+                                                        </div>
+                                                        <!-- /.image -->
 
+                                                    </div>
+                                                    <!-- /.product-image -->
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col col-xs-7">
+                                                    <div class="product-info">
+                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V
+                                                            Sencan D511210</a></h3>
+                                                        <div class="rating rateit-small"></div>
+                                                        <div class="product-price"><span
+                                                                class="price"> 999.000đ </span>
+                                                        </div>
+                                                        <!-- /.product-price -->
 
+                                                    </div>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.product-micro-row -->
+                                        </div>
+                                        <!-- /.product-micro -->
+
+                                    </div>
+                                    <div class="product">
+                                        <div class="product-micro">
+                                            <div class="row product-micro-row">
+                                                <div class="col col-xs-5">
+                                                    <div class="product-image">
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"
+                                                                alt="Ảnh sản phẩm"> </a>
+                                                        </div>
+                                                        <!-- /.image -->
+
+                                                    </div>
+                                                    <!-- /.product-image -->
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col col-xs-7">
+                                                    <div class="product-info">
+                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
+                                                            -
+                                                            06012281K1</a></h3>
+                                                        <div class="rating rateit-small"></div>
+                                                        <div class="product-price"><span
+                                                                class="price"> 1.399.000đ </span>
+                                                        </div>
+                                                        <!-- /.product-price -->
+                                                    </div>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.product-micro-row -->
+                                        </div>
+                                        <!-- /.product-micro -->
+
+                                    </div>
                                 </div>
                             </div>
+                            <div class="item">
+                                <div class="products special-product">
+                                    <div class="product">
+                                        <div class="product-micro">
+                                            <div class="row product-micro-row">
+                                                <div class="col col-xs-5">
+                                                    <div class="product-image">
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/best-seller/pin-bosch-12v-2-0ah-g.jpg"
+                                                                alt="images">
+                                                            <div class="zoom-overlay"></div>
+                                                        </a></div>
+                                                        <!-- /.image -->
 
+                                                    </div>
+                                                    <!-- /.product-image -->
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col col-xs-7">
+                                                    <div class="product-info">
+                                                        <h3 class="name"><a href="#">
+                                                            Pin Bosch 12V 2.0Ah 1600A00F6X (1607A350C5)</a></h3>
+                                                        <div class="rating rateit-small"></div>
+                                                        <div class="product-price"><span
+                                                                class="price"> 599.000đ </span>
+                                                        </div>
+                                                        <!-- /.product-price -->
+
+                                                    </div>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.product-micro-row -->
+                                        </div>
+                                        <!-- /.product-micro -->
+
+                                    </div>
+                                    <div class="product">
+                                        <div class="product-micro">
+                                            <div class="row product-micro-row">
+                                                <div class="col col-xs-5">
+                                                    <div class="product-image">
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/normal/may-khoan-dong-luc-bosch-gsb-13-re.jpg"
+                                                                alt="Ảnh sản phẩm">
+                                                            <div class="zoom-overlay"></div>
+                                                        </a></div>
+                                                        <!-- /.image -->
+
+                                                    </div>
+                                                    <!-- /.product-image -->
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col col-xs-7">
+                                                    <div class="product-info">
+                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
+                                                            -
+                                                            06012281K1</a></h3>
+                                                        <div class="rating rateit-small"></div>
+                                                        <div class="product-price"><span
+                                                                class="price"> 1.599.000đ </span>
+                                                        </div>
+                                                        <!-- /.product-price -->
+
+                                                    </div>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.product-micro-row -->
+                                        </div>
+                                        <!-- /.product-micro -->
+
+                                    </div>
+                                    <div class="product">
+                                        <div class="product-micro">
+                                            <div class="row product-micro-row">
+                                                <div class="col col-xs-5">
+                                                    <div class="product-image">
+                                                        <div class="image"><a href="#"> <img
+                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"
+                                                                alt="image">
+                                                        </a></div>
+                                                        <!-- /.image -->
+
+                                                    </div>
+                                                    <!-- /.product-image -->
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col col-xs-7">
+                                                    <div class="product-info">
+                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
+                                                            -
+                                                            06012281K1</a></h3>
+                                                        <div class="rating rateit-small"></div>
+                                                        <div class="product-price"><span
+                                                                class="price"> 1.599.000đ </span>
+                                                        </div>
+                                                        <!-- /.product-price -->
+
+                                                    </div>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.product-micro-row -->
+                                        </div>
+                                        <!-- /.product-micro -->
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /.sidebar-widget-body -->
@@ -384,196 +534,120 @@
                     <div class="sidebar-widget-body outer-top-xs">
                         <div class="tag-list">
                             <!-- JSP Code -->
-                            <form id="producerForm" action="producers" method="get">
-                                <input type="hidden" id="producerInput" name="producer" value=""/>
-                                <input type="hidden" id="prInput" name="pr" value=""/>
-                            </form>
-                            <a class="item" href="#" onclick="submitForm(1, 'Bosh')">Bosh</a>
-                            <a class="item" href="#" onclick="submitForm(2, 'Makute')">Makute</a>
-                            <a class="item" href="#" onclick="submitForm(3, 'DeWalt')">DeWalt</a>
-                            <a class="item" href="#" onclick="submitForm(4, 'Milwaukee')">Milwaukee</a>
-                            <a class="item" href="#" onclick="submitForm(5, 'Tolsen')">Tolsen</a>
-                            <a class="item" href="#" onclick="submitForm(6, 'Classic')">Classic</a>
-                            <a class="item" href="#" onclick="submitForm(7, 'Sasuke')">Sasuke</a>
-                            <a class="item" href="#" onclick="submitForm(8, 'Huynhdai')">Huynhdai</a>
-                            <a class="item" href="#" onclick="submitForm(9, 'Oshima')">Oshima</a>
-                            <a class="item" href="#" onclick="submitForm(10, 'Gomes')">Gomes</a>
 
-                            <script>
-                                // Function to set producer value and pr value, and submit the form
-                                function submitForm(prValue, producerName) {
-                                    // Set the pr value in the hidden input field
-                                    document.getElementById('prInput').value = prValue;
+                            <%for (String producerName : ProductService.getInstance().getAllProducers()) {%>
+                            <a class="item" style="text-transform: uppercase"
+                               href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
+                            </a>
 
-                                    // Set the producer value in the hidden input field
-                                    document.getElementById('producerInput').value = producerName;
-                                    console.log(producerName);
-
-                                    // Submit the form
-                                    document.getElementById('producerForm').submit();
-                                }
-                            </script>
-
+                            <%}%>
                             <!-- /.tag-list -->
                         </div>
                         <!-- /.sidebar-widget-body -->
                     </div>
                 </div>
                 <!-- /.sidebar-widget -->
+                <!-- ============================================== PRODUCT TAGS : END ============================================== -->
                 <div class="home-banner"><img src="assets/images/banners/LHS-banner.jpg" alt="Image"></div>
                 <div class="home-banner"><img src="assets/images/banners/banner-canva.png" alt="Image"
                                               style="width: 270px"></div>
             </div>
-            <Style>
-                .product-info h5 a {
-                    color: dimgray;
-                }
-            </Style>
+            <!-- /.sidemenu-holder -->
+            <!-- ============================================== SIDEBAR : END ============================================== -->
 
+
+            <!-- ============================================== CONTENT ============================================== -->
             <div class='col-md-9'>
-                <div class="search-result-container ">
-                    <section class="section featured-product wow fadeInUp">
-                        <h3 class="section-title">Sản phẩm</h3>
-                        <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
-                            <%
-                                List<Products> products = allProduct.get(0);
-                                for (Products p : products) {
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
-                                    request.setAttribute("formattedUnitPrice", formattedPrice);
-                            %>
-                            <div class="products">
-                                <div class="product">
-                                    <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img
-                                                height="189px" width="189px"
-                                                src="<%=p.getImage()%>"
-                                                alt="Ảnh sản phẩm"></a></div>
+                <!-- ========================================== SECTION – HERO ========================================= -->
 
-
-                                    </div>
-
-
-                                    <div class="product-info text-left">
-                                        <h5><a href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%>
-                                        </a>
-                                        </h5>
-                                        <div class="rating rateit-small"></div>
-                                        <div class="description"></div>
-                                        <div class="product-price">
-                                            <span class="price"><%= request.getAttribute("formattedUnitPrice") %></span>
-                                        </div>
-
-
-                                    </div>
-
-
+                <div id="category" class="category-carousel hidden-xs">
+                    <div class="item">
+                        <div class="image"><img src="assets/images/banners/cat-banner-1.jpg" alt="Ảnh sản phẩm"
+                                                class="img-responsive"></div>
+                        <div class="container-fluid">
+                            <div class="caption vertical-top text-left">
+                                <h1 class="big-text"> Sốc</h1>
+                                <div class="excerpt hidden-sm hidden-md"> Giảm đến 49%</div>
+                                <div class="excerpt-normal hidden-sm hidden-md"> Dành cho những sản phẩm bán chạy
                                 </div>
-
-
                             </div>
-                            <%}%>
+                            <!-- /.caption -->
                         </div>
-                        <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
-                            <%
-
-                                List<Products> products1 = allProduct.get(1);
-                                for (Products p : products1) {
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
-                                    request.setAttribute("formattedUnitPrice1", formattedPrice);
-                            %>
-                            <div class="products">
-                                <div class="product">
-                                    <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img
-                                                height="189px" width="189px"
-                                                src="<%=p.getImage()%>"
-                                                alt="Ảnh sản phẩm"></a></div>
-
-
-                                    </div>
-
-
-                                    <div class="product-info text-left">
-                                        <h3 class="name"><a
-                                                href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName() %>
-                                        </a>
-                                        </h3>
-                                        <div class="rating rateit-small"></div>
-                                        <div class="description"></div>
-                                        <div class="product-price">
-                                            <span class="price"><%= request.getAttribute("formattedUnitPrice1") %></span>
-                                        </div>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
-                            <%}%>
-
-
-                            <!-- /.products -->
-                        </div>
-
-                        <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
-                            <%
-
-                                List<Products> products2 = allProduct.get(2);
-                                for (Products p : products2) {
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
-                                    request.setAttribute("formattedUnitPrice2", formattedPrice);
-                            %>
-                            <div class="products">
-                                <div class="product">
-                                    <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img
-                                                height="189px" width="189px"
-                                                src="<%=p.getImage()%>"
-                                                alt="Ảnh sản phẩm"></a></div>
-                                        <!-- /.image -->
-
-
-                                    </div>
-                                    <!-- /.product-image -->
-
-                                    <div class="product-info text-left">
-                                        <h3 class="name"><a
-                                                href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName() %>
-                                        </a>
-                                        </h3>
-                                        <div class="rating rateit-small"></div>
-                                        <div class="description"></div>
-                                        <div class="product-price">
-                                            <span class="price"><%= request.getAttribute("formattedUnitPrice2") %></span>
-                                        </div>
-                                        <!-- /.product-price -->
-
-                                    </div>
-                                    <!-- /.product-info -->
-
-                                    <!-- /.cart -->
-                                </div>
-                                <!-- /.product -->
-
-                            </div>
-                            <%}%>
-
-
-                            <!-- /.products -->
-                        </div>
-
-                    </section>
-
-
-                    <!-- /.filters-container -->
-
+                        <!-- /.container-fluid -->
+                    </div>
                 </div>
+
+
+                <div class="clearfix filters-container m-t-10">
+                    <div class="row">
+                        <div class="col col-sm-6 col-md-2">
+                            <div class="filter-tabs">
+                                <ul id="filter-tabs" class="nav nav-tabs nav-tab-box nav-tab-fa-icon">
+
+                                </ul>
+                            </div>
+                            <!-- /.filter-tabs -->
+                        </div>
+                        <!-- /.col -->
+
+
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <section class="section featured-product wow fadeInUp">
+                    <h3 class="section-title">Tất cả sản phẩm
+                    </h3>
+                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
+
+                        <%--                        Load products by category--%>
+                        <%
+                            List<Products> products = ProductService.getInstance().showProd();
+                            int productsPerRow = 4;
+                            if (products != null && !products.isEmpty()) {
+                                for (int i = 0; i < products.size(); i++) {
+                                    Products p = products.get(i);
+                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
+                        %>
+                        <div class="product">
+                            <div class="product-image">
+                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px"
+                                                                                                         width="189px"
+                                                                                                         src="<%=p.getImage()%>"
+                                                                                                         alt="Ảnh sản phẩm"></a>
+                                </div>
+                                <!-- /.image -->
+                            </div>
+                            <!-- /.product-image -->
+
+                            <div class="product-info text-left">
+                                <h3 class="name"><a
+                                        href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%>
+                                </a></h3>
+                                <div class="rating rateit-small"></div>
+                                <div class="description"></div>
+                                <div class="product-price">
+                                    <span class="price"> <%=formattedPrice%></span>
+                                </div>
+                                <!-- /.product-price -->
+                            </div>
+                            <!-- /.product-info -->
+                        </div>
+
+                        <%
+                            // Tăng biến đếm, nếu đạt đến số sản phẩm trên mỗi hàng, bắt đầu hàng mới
+                            if ((i + 1) % productsPerRow == 0) {
+                        %>
+                    </div>
+                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
+                        <%
+                                    }
+                                }
+                            }
+                        %>
+                    </div>
+                </section>
                 <!-- /.search-result-container -->
 
             </div>

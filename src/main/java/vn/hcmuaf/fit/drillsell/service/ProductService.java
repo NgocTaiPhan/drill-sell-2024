@@ -22,18 +22,18 @@ public class ProductService {
         return instance;
     }
 
-    public  List<Products> showProd() {
-            return DbConnector.me().get().withHandle(handle -> {
-                return handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions FROM products ORDER BY RAND()")
-                        .mapToBean(Products.class)
-                        .list();
-            });
+    public List<Products> showProd() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND()")
+                    .mapToBean(Products.class)
+                    .list();
+        });
     }
 
-    public  List<Products> getAccessory() {
+    public List<Products> getAccessory() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("\n" +
-                            "SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions  \n" +
+                            "SELECT productId, image, productName, unitPrice  \n" +
                             "FROM products " + //Thêm khoảng trắng sau "products"
                             "WHERE categoryId IN (6, 7, 8) ORDER BY RAND()")
                     .mapToBean(Products.class)
@@ -41,9 +41,9 @@ public class ProductService {
         });
     }
 
-    public  List<Products> getProductsByCategory(int categoryId) {
+    public List<Products> getProductsByCategory(int categoryId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions  FROM products WHERE categoryId =? LIMIT 12;")
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE categoryId =? LIMIT 12;")
                     .bind(0, categoryId)
                     .mapToBean(Products.class)
                     .collect(Collectors.toList());
@@ -51,11 +51,11 @@ public class ProductService {
 
     }
 
-    public  List<Products> getProductByProducer(String producerName) {
+    public List<Products> getProductByProducer(String producerName) {
 
         return DbConnector.me().get().withHandle(handle -> {
 
-            return handle.createQuery("SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions " +
+            return handle.createQuery("SELECT productId, image, productName, unitPrice " +
 
                             "FROM products\n" +
 
@@ -71,6 +71,7 @@ public class ProductService {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         return currencyFormat.format(product.getUnitPrice() * 1000);
     }
+
     public List<String> getAllProducers() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT DISTINCT nameProducer FROM products")
@@ -78,10 +79,6 @@ public class ProductService {
                     .list();
         });
     }
-
-
-
-
 
 
     public List<ProductCategorys> getAllCategory() {
@@ -103,6 +100,15 @@ public class ProductService {
     }
 
     public static void main(String[] args) {
-        System.out.println(ProductService.getInstance().getNameCategoryById(6));
+        System.out.println(ProductService.getInstance().getNameCategoryById(4));
+    }
+
+    public List<Products> showProductsLimited(int limit) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND() LIMIT :limit")
+                    .bind("limit", limit)
+                    .mapToBean(Products.class)
+                    .list();
+        });
     }
 }

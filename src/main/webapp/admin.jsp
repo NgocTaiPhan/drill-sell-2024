@@ -1,3 +1,9 @@
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.UserService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Product" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -98,8 +104,10 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown" name="name" placeholder="Tìm kiếm...">
-                                <a style="height: 44.5px;" class="search-button" href="#" onclick="searchProduct(event)"></a>
+                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                       name="name" placeholder="Tìm kiếm...">
+                                <a style="height: 44.5px;" class="search-button" href="#"
+                                   onclick="searchProduct(event)"></a>
 
 
                             </div>
@@ -144,7 +152,6 @@
                                 <%--                                </div>--%>
 
 
-
                             </div>
                         </a>
 
@@ -179,30 +186,33 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product" methods="post"></i>Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>Máy khoan pin</a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy khoan động lực</a>
-
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy khoan cầm tay gia đình</a>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy khoan mini</a>
+                                        <%}%>
 
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <%
+                                    }
+                                %>
 
 
                             </ul>
@@ -226,18 +236,26 @@
 
 </header>
 <div class="body-content outer-top-xs" id="top-banner-and-menu" style="font-size: medium">
-    <div class="container">
+    <div class="">
         <div class="row">
             <div class="product-tabs inner-bottom-xs  wow fadeInUp">
                 <div class="row">
-                    <div class="col-sm-3" style="white-space: nowrap">
-                        <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                    <div id="manager-label" class="col-sm-2">
+                        <ul id="product-tabs" class="nav">
                             <li class="active"><a data-toggle="tab" href="#users-management">Quản lý người dùng</a></li>
                             <li><a data-toggle="tab" href="#products-management">Quản lý sản phẩm</a>
                             </li>
                             <li><a data-toggle="tab" href="#statistics">Doanh thu</a></li>
                         </ul><!-- /.nav-tabs #product-tabs -->
                     </div>
+                    <style>
+                        #manager-label {
+                            white-space: nowrap;
+                            margin-left: 50px;
+                        }
+
+
+                    </style>
                     <div class="col-sm-9">
 
                         <div class="tab-content">
@@ -257,33 +275,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            <%for (User u : UserService.getInstance().showAll()) {%>
+
                                             <tr>
-                                                <td>1</td>
-                                                <td>John</td>
-                                                <td>example@gmail.com</td>
+                                                <td><%=u.getId()%>
+                                                </td>
+                                                <td><%=u.getFullname()%>
+                                                </td>
+                                                <td><%=u.getEmail()%>
+                                                </td>
                                                 <td>
                                                     <button class="btn btn-danger">Xóa</button>
                                                     <button class="btn btn-primary">Sửa</button>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Mary</td>
-                                                <td>example@gmail.com</td>
-                                                <td>
-                                                    <button class="btn btn-danger">Xóa</button>
-                                                    <button class="btn btn-primary">Sửa</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>July</td>
-                                                <td>example@gmail.com</td>
-                                                <td>
-                                                    <button class="btn btn-danger">Xóa</button>
-                                                    <button class="btn btn-primary">Sửa</button>
-                                                </td>
-                                            </tr>
+                                            <%}%>
+
                                             </tbody>
                                         </table>
 
@@ -299,50 +306,31 @@
                                         <tr>
                                             <th>Mã sản phẩm</th>
                                             <th>Tên sản phẩm</th>
-                                            <th>Ngày nhập</th>
+                                            <th>Giá</th>
                                             <th>Số lượng đã bán</th>
                                             <th>Số lượng còn lại</th>
                                             <th>Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <%for (Products p : ProductService.getInstance().showProd()) {%>
                                         <tr>
-                                            <td>1</td>
-                                            <td>Máy khoan động lực Bosch GSB 16 RE
-                                                -06012281K1
+                                            <td><%=p.getProductId()%>
                                             </td>
-                                            <td>01/01/2023</td>
+                                            <td><%=p.getProductName()%>
+                                            </td>
+                                            <td><%=ProductService.getInstance().getFormattedUnitPrice(p)%>
+                                            </td>
                                             <td>10</td>
-                                            <td>20</td>
+                                            <td><%=p.getStatuss()%>
+                                            </td>
                                             <td>
                                                 <button class="btn btn-danger">Xóa</button>
                                                 <button class="btn btn-primary">Sửa</button>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Pin Bosch 12V 2.0Ah 1600A00F6X (1607A350C5)</td>
-                                            <td>01/01/2023</td>
-                                            <td>10</td>
-                                            <td>20</td>
-                                            <td>
-                                                <button class="btn btn-danger">Xóa</button>
-                                                <button class="btn btn-primary">Sửa</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Máy khoan vặn vít dùng pin 12V
-                                                Bosch GSR 120-LI GEN II
-                                            </td>
-                                            <td>01/01/2023</td>
-                                            <td>10</td>
-                                            <td>20</td>
-                                            <td>
-                                                <button class="btn btn-danger">Xóa</button>
-                                                <button class="btn btn-primary">Sửa</button>
-                                            </td>
-                                        </tr>
+
+                                        <%}%>
                                         <tr>
                                             <td>Tổng</td>
                                             <td>3</td>
@@ -394,40 +382,8 @@
 </div>
 
 <!-- ============================================================= FOOTER : MENU============================================================= -->
-<div class="social-button">
-    <div class="social-button-content">
-      <a href="tel:0353933224" class="call-icon" rel="nofollow">
-        <i class="fa fa-whatsapp" aria-hidden="true"></i>
-        <div class="animated alo-circle"></div>
-        <div class="animated alo-circle-fill"></div>
-        <span>Hotline: 035 393 3224</span>
-      </a>
-      <a href="sms:0353933224" class="sms">
-        <i class="fa fa-weixin" aria-hidden="true"></i>
-        <div class="animated alo-circle"></div>
-        <div class="animated alo-circle-fill"></div>
-        <span>SMS: 035 393 3224</span>
-      </a>
-      <a href="https://www.facebook.com/Ngocthang.net/" class="mes">
-        <i class="fa fa-facebook-square" aria-hidden="true"></i>
-        <div class="animated alo-circle"></div>
-        <div class="animated alo-circle-fill"></div>
-        <span>Nhắn tin Facebook</span>
-      </a>
-      <a href="http://zalo.me/0353933224" class="zalo">
-        <i class="fa fa-commenting-o" aria-hidden="true"></i>
-        <div class="animated alo-circle"></div>
-        <div class="animated alo-circle-fill"></div>
-        <span>Zalo: 035.393.3224</span>
-      </a>
-    </div>
-    <a href="#" class="user-support">
-      <i class="fa fa-circle-o-notch" aria-hidden="true"></i>
-      <div class="animated alo-circle"></div>
-      <div class="animated alo-circle-fill"></div>
-    </a>
-  </div>
-  
+
+
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <!-- ============================================================= Backtop ============================================================= -->
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>

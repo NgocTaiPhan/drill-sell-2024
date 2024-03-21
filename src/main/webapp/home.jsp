@@ -208,12 +208,12 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product"
-                                                               methods="post">Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : prodsService.getAllCategory()) {%>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -231,7 +231,7 @@
                                     Boolean role = (Boolean) session.getAttribute("role-acc");
                                     if (role != null && role) {
                                 %>
-                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lí Sản phẩm</a></li>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
                                 <%
                                     }
                                 %>
@@ -521,7 +521,7 @@
                             <!-- JSP Code -->
 
                             <%for (String producerName : ProductService.getInstance().getAllProducers()) {%>
-                            <a class="item"
+                            <a class="item" style="text-transform: uppercase"
                                href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
                             </a>
 
