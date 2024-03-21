@@ -98,6 +98,7 @@ public class ProductService {
 
  
 
+
     public List<ProductCategorys> getAllCategory() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT id , nameCategory FROM product_categorys")
@@ -105,6 +106,7 @@ public class ProductService {
                     .list();
         });
     }
+
 
     public String getNameCategoryById(int categoryId) {
         return DbConnector.me().get().withHandle(handle -> {
