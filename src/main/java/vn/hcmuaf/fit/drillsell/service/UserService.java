@@ -8,6 +8,7 @@ import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.List;
 
 public class UserService {
 
@@ -104,22 +105,24 @@ public class UserService {
     }
 
     public static void main(String[] args) {
-        User newUser = new User();
-        newUser.setId(7);
-        newUser.setFullname("admin");
-        newUser.setAddress("VN");
-        newUser.setPhone("6565656");
-        newUser.setEmail("admin@gmail.com");
-        newUser.setUsername("admin");
-        newUser.setPasswords("admin");
-        newUser.setSex("Không");
-        newUser.setYearOfBirth("1990-02-15");
-        newUser.setVerificationCode("123456");
-        newUser.setVerified(true); // Đặt giá trị cho isVerified
-        newUser.setRoleUser(true); // Đặt giá trị cho isRoleUser
+//        User newUser = new User();
+//        newUser.setId(7);
+//        newUser.setFullname("admin");
+//        newUser.setAddress("VN");
+//        newUser.setPhone("6565656");
+//        newUser.setEmail("admin@gmail.com");
+//        newUser.setUsername("admin");
+//        newUser.setPasswords("admin");
+//        newUser.setSex("Không");
+//        newUser.setYearOfBirth("1990-02-15");
+//        newUser.setVerificationCode("123456");
+//        newUser.setVerified(true); // Đặt giá trị cho isVerified
+//        newUser.setRoleUser(true); // Đặt giá trị cho isRoleUser
 
         // Gọi phương thức addUser để thêm đối tượng User vào database
-        UserService.getInstance().addUser(newUser);
+//        UserService.getInstance().addUser(newUser);
+
+        System.out.println(UserService.getInstance().hashPassword("abc"));
     }
 
 
@@ -149,5 +152,13 @@ public class UserService {
                     .mapTo(String.class)
                     .one();
         }
+    }
+
+    public List<User> showAll() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users")
+                    .mapToBean(User.class)
+                    .list();
+        });
     }
 }

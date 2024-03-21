@@ -1,4 +1,6 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 
@@ -8,25 +10,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-          name="viewport">
-    <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <link href="assets/images/logo.png" rel="icon" type="image/png">
-    <title>Tài khoản</title>
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
 
-    <!--    Css tự viết-->
-    <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
-    <!--Css tự viết-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+    <title>Tài khoản
+    </title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
     <!-- Customizable CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-    <link href="assets/css/blue.css" rel="stylesheet">
-    <link href="assets/css/owl.carousel.css" rel="stylesheet">
-    <link href="assets/css/owl.transitions.css" rel="stylesheet">
-    <link href="assets/css/animate.min.css" rel="stylesheet">
-    <link href="assets/css/rateit.css" rel="stylesheet">
-    <link href="assets/css/bootstrap-select.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/blue.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/owl.transitions.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/rateit.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="assets/css/my-css/footermenu.css">
     <script src="assets/js/jquery-1.11.1.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
@@ -36,14 +40,14 @@
     <script src="assets/js/jquery.easing-1.3.min.js"></script>
     <script src="assets/js/bootstrap-slider.min.js"></script>
     <script src="assets/js/jquery.rateit.min.js"></script>
-    <script src="assets/js/lightbox.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="assets/js/lightbox.min.js"></script>
     <script src="assets/js/bootstrap-select.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/scripts.js"></script>
     <script src="assets/js/my-js/footermenu.js"></script>
 
     <!-- Icons/Glyphs -->
-    <link href="assets/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
 
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
@@ -185,34 +189,50 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product"
-                                                               methods="post">Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>
-                                            Máy khoan pin</a>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
+                                        <%}%>
 
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy
-                                            khoan cầm tay </a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy
-                                            khoan mini</a>
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy
-                                            khoan động lực</a>
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>
-                                            Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <%
+                                    }
+                                %>
+
+                                <%--                                <%--%>
+
+                                <%--                                    User user = (User) session.getAttribute("kh");--%>
+                                <%--                                    if (user != null) {--%>
+
+                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
+                                <%--                                                System.out.println("username: " + user.getUsername());--%>
+
+                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+                                <%--                                %>--%>
+                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+                                <%--                                <%--%>
+                                <%--                                                }--%>
+                                <%--                                            }--%>
+
+                                <%--                                %>--%>
 
 
                             </ul>

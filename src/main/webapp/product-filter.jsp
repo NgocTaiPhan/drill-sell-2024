@@ -2,11 +2,13 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String label = request.getParameter("label");
-
+    String label = (String) request.getAttribute("label");
 
 
     List<Products> products = (List<Products>) request.getAttribute("product-list");
@@ -71,11 +73,20 @@
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>Tài khoản</a></li>
+                        <%
+                            User u = (User) session.getAttribute("auth");
+                            if (u != null) {
+                        %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i><%=u.getFullname()%>
+                        </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
+                        <li><a href="<%=request.getContextPath()%>/logout"><i
+                                class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
+                        <%} else {%>
+
                         <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
+                        <%}%>
                     </ul>
                 </div>
 
@@ -199,36 +210,33 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product"
-                                                               methods="post"></i>Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>
-                                            Máy khoan pin</a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy
-                                            khoan động lực</a>
-
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy
-                                            khoan cầm tay gia đình</a>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy
-                                            khoan mini</a>
+                                        <%}%>
 
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>
-                                            Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lí Sản phẩm</a></li>
+                                <%
+                                    }
+                                %>
 
 
                             </ul>
@@ -256,7 +264,7 @@
         <div class="breadcrumb-inner">
             <ul class="list-inline list-unstyled">
                 <li><a href="home.jsp">Trang chủ</a></li>
-                <li class='active'>Sản phẩm</li>
+                <li class='active'><%=label%></li>
             </ul>
         </div><!-- /.breadcrumb-inner -->
     </div><!-- /.container -->
@@ -274,34 +282,17 @@
                     <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Máy khoan</div>
                     <nav class="yamm megamenu-horizontal">
                         <ul class="nav">
-                            <li class="nav-bg-class"><a href="battery_drill.jsp"></i>Máy khoan pin</a>
+
+                            <%
+                                List<ProductCategorys> allCate = ProductService.getInstance().getAllCategory();
+                                for (ProductCategorys pc : allCate) {%>
+                            <li class="nav-bg-class">
+                                <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>">
+                                    <%=pc.getNameCategory()%>
+                                </a>
 
                             </li>
-                            <li class="nav-bg-class"><a href="movers.jsp"></i>Máy khoan động lực</a>
-
-                            </li>
-                            <li class="nav-bg-class"><a href="hammer_drill.jsp"></i>Máy khoan bê tông, Máy khoan búa</a>
-
-                            </li>
-                            <li class="nav-bg-class"><a href="Hand_drill.jsp"></i>Máy khoan cầm tay gia đình</a>
-
-                            </li>
-                            <li class="nav-bg-class"><a href="mini_drill.jsp"></i>Máy khoan mini</a>
-
-                            </li>
-
-
-                            <li class="">
-                                <a href="#" class="dropdown-med" data-toggle="dropdown">Phụ kiện máy khoan <b
-                                        class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Pin máy khoan</a></li>
-                                    <li><a href="#">Sạc pin máy khoan</a></li>
-                                    <li><a href="#">Mũi khoan</a>
-                                    </li>
-                                </ul>
-                            </li>
-
+                            <%}%>
 
                         </ul>
                         <!-- /.nav -->
@@ -548,36 +539,13 @@
                     <div class="sidebar-widget-body outer-top-xs">
                         <div class="tag-list">
                             <!-- JSP Code -->
-                            <form id="producerForm" action="producers" method="get">
-                                <input type="hidden" id="producerInput" name="producer" value=""/>
-                                <input type="hidden" id="prInput" name="pr" value=""/>
-                            </form>
-                            <a class="item" href="#" onclick="submitForm(1, 'Bosh')">Bosh</a>
-                            <a class="item" href="#" onclick="submitForm(2, 'Makute')">Makute</a>
-                            <a class="item" href="#" onclick="submitForm(3, 'DeWalt')">DeWalt</a>
-                            <a class="item" href="#" onclick="submitForm(4, 'Milwaukee')">Milwaukee</a>
-                            <a class="item" href="#" onclick="submitForm(5, 'Tolsen')">Tolsen</a>
-                            <a class="item" href="#" onclick="submitForm(6, 'Classic')">Classic</a>
-                            <a class="item" href="#" onclick="submitForm(7, 'Sasuke')">Sasuke</a>
-                            <a class="item" href="#" onclick="submitForm(8, 'Huynhdai')">Huynhdai</a>
-                            <a class="item" href="#" onclick="submitForm(9, 'Oshima')">Oshima</a>
-                            <a class="item" href="#" onclick="submitForm(10, 'Gomes')">Gomes</a>
 
-                            <script>
-                                // Function to set producer value and pr value, and submit the form
-                                function submitForm(prValue, producerName) {
-                                    // Set the pr value in the hidden input field
-                                    document.getElementById('prInput').value = prValue;
+                            <%for (String producerName : ProductService.getInstance().getAllProducers()) {%>
+                            <a class="item" style="text-transform: uppercase"
+                               href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
+                            </a>
 
-                                    // Set the producer value in the hidden input field
-                                    document.getElementById('producerInput').value = producerName;
-                                    console.log(producerName);
-
-                                    // Submit the form
-                                    document.getElementById('producerForm').submit();
-                                }
-                            </script>
-
+                            <%}%>
                             <!-- /.tag-list -->
                         </div>
                         <!-- /.sidebar-widget-body -->

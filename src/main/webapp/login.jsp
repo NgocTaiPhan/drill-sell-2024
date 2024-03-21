@@ -2,38 +2,18 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.register.RegisterController" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.sql.Date" %>
+<%@ page import="java.text.ParseException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     User auth = (User) session.getAttribute("auth");
     Boolean loginSuccess = (Boolean) request.getAttribute("loginSuccess");
-//    String birthDate = request.get,
-//            address = "",
-//            phoneNumber = "",
-//            email = "",
-//
-//            username = "",
-//            fullName = "";
 
 
-//    Map<String, String> registerFormValue = null;
-//    registerFormValue.put("fullName", fullName);
-//    registerFormValue.put("birthDate", birthDate);
-//    registerFormValue.put("address", address);
-//    registerFormValue.put("phoneNumber", phoneNumber);
-//    registerFormValue.put("email", email);
-//    registerFormValue.put("username", username);
-//    if (request.getAttribute("registerFormValue") != null) {
-//        registerFormValue = (Map<String, String>) request.getAttribute("registerFormValue");
-//    }
 
 
-  String fullName = request.getAttribute("full-name") != null ? (String) request.getAttribute("full-name") : "";
-  String birthDate = request.getAttribute("birth-date") != null ? (String) request.getAttribute("birth-date") : "";
-  String address = request.getAttribute("address") != null ? (String) request.getAttribute("address") : "";
-  String phoneNumber = request.getAttribute("phone-number") != null ? (String) request.getAttribute("phone-number") : "";
-  String email = request.getAttribute("email") != null ? (String) request.getAttribute("email") : "";
-  String username = request.getAttribute("username") != null ? (String) request.getAttribute("username") : "";
 
   
   
@@ -139,19 +119,31 @@
 
                 </div>
                 <!-- Sign-in -->
-                <%
-                    //                    if (!registerFormValue.isEmpty()) {
-//                        birthDate = registerFormValue.get("birthDate");
-//                        address = registerFormValue.get("address");
-//                        phoneNumber = registerFormValue.get("phoneNumber");
-//                        email = registerFormValue.get("email");
-//                        username = registerFormValue.get("username");
-//                        fullName = registerFormValue.get("fullName");
-//                    }
+             <%
+                 // Lấy các thông tin từ form
+                 String fullName = session.getAttribute("fullName") != null ? (String) session.getAttribute("fullName") : "";
+
+                 String address = session.getAttribute("address") != null ? (String) session.getAttribute("address") : "";
+                 String phoneNumber = session.getAttribute("phoneNumber") != null ? (String) session.getAttribute("phoneNumber") : "";
+                 String email = session.getAttribute("email") != null ? (String) session.getAttribute("email") : "";
+                 String username = session.getAttribute("username") != null ? (String) session.getAttribute("username") : "";
+
+                 String birthDate = (String) session.getAttribute("birthDate");
+                 Date sqlDate = null;
+
+                 if (birthDate != null && !birthDate.isEmpty()) {
+                     try {
+                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                         java.util.Date utilDate = sdf.parse(birthDate);
+                         sqlDate = new Date(utilDate.getTime());
+                     } catch (Exception e) {
+
+                     }
+                 }
 
 
-                %>
-                <!-- create a new account -->
+
+             %>
 
                 <div class="col-md-6 col-sm-6 create-new-account">
                     <h3 class="checkout-subtitle">Tạo tài khoản mới</h3>
@@ -173,7 +165,7 @@
                                 <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="birth-date-register"
                                    name="birth-date-register"
-                                   type="date">
+                                   type="date" value="<%=sqlDate%>">
                         </div>
                         <div class="form-group ">
                             <label class="info-title" for="gender">Giới tính

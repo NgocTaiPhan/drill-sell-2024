@@ -3,7 +3,6 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="vi">
 <head>
@@ -200,36 +199,50 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product"
-                                                               methods="post"></i>Sản phẩm</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-
-                                        <li><a href="<%= request.getContextPath() %>/battery_drill" methods="post"></i>
-                                            Máy khoan pin</a>
-
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/movers" methods="post"></i>Máy
-                                            khoan động lực</a>
-
-                                        </li>
-
-                                        <li><a href="<%= request.getContextPath() %>/hand_drill" methods="post"></i>Máy
-                                            khoan cầm tay gia đình</a>
+                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
 
                                         </li>
-                                        <li><a href="<%= request.getContextPath() %>/mini_drill" methods="post"></i>Máy
-                                            khoan mini</a>
+                                        <%}%>
 
-                                        </li>
-                                        <li><a href="<%= request.getContextPath() %>/hammer_drill" methods="post"></i>
-                                            Máy khoan bê tông, Máy khoan búa</a>
-
-                                        </li>
                                     </ul>
                                 </li>
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <%
+                                    }
+                                %>
+
+                                <%--                                <%--%>
+
+                                <%--                                    User user = (User) session.getAttribute("kh");--%>
+                                <%--                                    if (user != null) {--%>
+
+                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
+                                <%--                                                System.out.println("username: " + user.getUsername());--%>
+
+                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+                                <%--                                %>--%>
+                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+                                <%--                                <%--%>
+                                <%--                                                }--%>
+                                <%--                                            }--%>
+
+                                <%--                                %>--%>
 
 
                             </ul>
