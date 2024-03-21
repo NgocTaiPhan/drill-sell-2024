@@ -3,8 +3,12 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ArrayList" %>
+
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+
+<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="vi">
 <head>
