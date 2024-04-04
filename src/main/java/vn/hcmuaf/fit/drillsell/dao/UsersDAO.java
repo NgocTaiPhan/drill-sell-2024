@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 
-public class UsersDAO extends AbsDAO<User>{
+public class UsersDAO {
 
     private static UsersDAO instance;
 
