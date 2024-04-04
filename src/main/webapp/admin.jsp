@@ -285,8 +285,7 @@
                                                 <td><%=u.getEmail()%>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger">Xóa</button>
-                                                    <button class="btn btn-primary">Sửa</button>
+                                                    <button class="btn btn-warning">Xem chi tiết</button>
                                                 </td>
                                             </tr>
                                             <%}%>
@@ -325,8 +324,7 @@
                                             <td><%=p.getStatuss()%>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger">Xóa</button>
-                                                <button class="btn btn-primary">Sửa</button>
+                                                <button class="btn btn-warning">Xem chi tiết</button>
                                             </td>
                                         </tr>
 
@@ -347,7 +345,13 @@
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
+<div class="modal">
 
+
+
+
+
+</div>
                             <div id="statistics" class="tab-pane">
                                 <div class="product-tag container">
 

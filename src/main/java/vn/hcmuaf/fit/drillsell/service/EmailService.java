@@ -6,6 +6,10 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import vn.hcmuaf.fit.drillsell.mail.MailProperties;
 
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
 import java.util.Properties;
 
 public class EmailService {
@@ -20,7 +24,7 @@ public class EmailService {
         prop.put("mail.smtp.auth", MailProperties.getAuth());
         prop.put("mail.smtp.starttls.enable", MailProperties.getTls());
         prop.put("mail.smtp.socketFactory.port", MailProperties.getPort());
-        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        prop.put("mail.smtp.socketFactory.class", "jakarta.net.ssl.SSLSocketFactory");
     }
 
     public static EmailService getInstance() {
@@ -109,11 +113,11 @@ public class EmailService {
         System.out.println( MailProperties.getUsername());
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "465");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 //        props.put("mail.smtp.socketFactory.port", "465");
-//        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//        props.put("mail.smtp.socketFactory.class", "jakarta.net.ssl.SSLSocketFactory");
 
         // Tạo đối tượng Authenticator
         String username = "drillsellgroup25@gmail.com";

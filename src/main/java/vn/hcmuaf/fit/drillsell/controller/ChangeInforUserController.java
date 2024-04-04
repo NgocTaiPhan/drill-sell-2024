@@ -1,13 +1,13 @@
 package vn.hcmuaf.fit.drillsell.controller;
 
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import vn.hcmuaf.fit.drillsell.bean.User;
 import vn.hcmuaf.fit.drillsell.service.UserService;
 
-import jakarta.servlet.*;
+import javax.servlet.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
