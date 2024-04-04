@@ -12,26 +12,25 @@ public class Products {
     private double unitPrice;
     private int categoryId;
     private String nameProducer;
-    private int statuss;
+    private int importQuantity;
     private String describle;
-    private Date dateAdd;
+    private Date importDate;
     private String specifions;
 
-    public Products(int productId, String image, String productName, double unitPrice, int categoryId, String nameProducer, int statuss, String describle, Date dateAdd, String specifions) {
+    public Products() {
+    }
 
+    public Products(int productId, String image, String productName, double unitPrice, int categoryId, String nameProducer, int importQuantity, String describle, Date importDate, String specifions) {
         this.productId = productId;
         this.image = image;
         this.productName = productName;
         this.unitPrice = unitPrice;
         this.categoryId = categoryId;
         this.nameProducer = nameProducer;
-        this.statuss = statuss;
+        this.importQuantity = importQuantity;
         this.describle = describle;
-        this.dateAdd = dateAdd;
+        this.importDate = importDate;
         this.specifions = specifions;
-    }
-
-    public Products() {
     }
 
     public int getProductId() {
@@ -82,12 +81,12 @@ public class Products {
         this.nameProducer = nameProducer;
     }
 
-    public int getStatuss() {
-        return statuss;
+    public int getImportQuantity() {
+        return importQuantity;
     }
 
-    public void setStatuss(int statuss) {
-        this.statuss = statuss;
+    public void setImportQuantity(int importQuantity) {
+        this.importQuantity = importQuantity;
     }
 
     public String getDescrible() {
@@ -98,12 +97,12 @@ public class Products {
         this.describle = describle;
     }
 
-    public Date getDateAdd() {
-        return dateAdd;
+    public Date getImportDate() {
+        return importDate;
     }
 
-    public void setDateAdd(Date dateAdd) {
-        this.dateAdd = dateAdd;
+    public void setImportDate(Date importDate) {
+        this.importDate = importDate;
     }
 
     public String getSpecifions() {
@@ -123,9 +122,9 @@ public class Products {
                 ", unitPrice=" + unitPrice +
                 ", categoryId=" + categoryId +
                 ", nameProducer='" + nameProducer + '\'' +
-                ", statuss=" + statuss +
+                ", importQuantity=" + importQuantity +
                 ", describle='" + describle + '\'' +
-                ", dateAdd=" + dateAdd +
+                ", importDate=" + importDate +
                 ", specifions='" + specifions + '\'' +
                 '}';
     }

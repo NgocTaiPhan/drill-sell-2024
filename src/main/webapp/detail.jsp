@@ -354,7 +354,7 @@
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="stock-box">
-                                                <span class="value"> Còn: <%=  p.getStatuss()  %></span>
+                                                <span class="value"> Còn: <%=  p.getImportQuantity() %></span>
                                             </div>
                                         </div>
                                     </div>
