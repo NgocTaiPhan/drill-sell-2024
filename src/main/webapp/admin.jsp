@@ -1,9 +1,9 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.service.UserService" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Product" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Product" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -191,7 +191,7 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -276,7 +276,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <%for (User u : UserService.getInstance().showAll()) {%>
+                                            <%for (User u : UsersDAO.getInstance().showAll()) {%>
 
                                             <tr>
                                                 <td><%=u.getId()%>
@@ -313,13 +313,13 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <%for (Products p : ProductService.getInstance().showProd()) {%>
+                                        <%for (Products p : ProductDAO.getInstance().showProd()) {%>
                                         <tr>
                                             <td><%=p.getProductId()%>
                                             </td>
                                             <td><%=p.getProductName()%>
                                             </td>
-                                            <td><%=ProductService.getInstance().getFormattedUnitPrice(p)%>
+                                            <td><%=ProductDAO.getInstance().getFormattedUnitPrice(p)%>
                                             </td>
                                             <td>10</td>
                                             <td><%=p.getStatuss()%>

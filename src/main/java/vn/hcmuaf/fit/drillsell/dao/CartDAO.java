@@ -1,15 +1,13 @@
-package vn.hcmuaf.fit.drillsell.service;
+package vn.hcmuaf.fit.drillsell.dao;
 
 
-import vn.hcmuaf.fit.drillsell.bean.Cart;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-public class CartService {
+public class CartDAO {
 
-    public static List<Cart> getProductById(int id) {
+    public static List<vn.hcmuaf.fit.drillsell.model.Cart> getProductById(int id) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT " +
                             "    products.image, " +
@@ -23,7 +21,7 @@ public class CartService {
                     .bind("id", id)  // Sửa tên tham số từ "productId" thành ":id"
                     .map((rs, ctx) -> {
                         // Tạo một đối tượng Cart với giá tiền đã được giảm
-                        Cart cart = new Cart();
+                        vn.hcmuaf.fit.drillsell.model.Cart cart = new vn.hcmuaf.fit.drillsell.model.Cart();
                         cart.setImage(rs.getString("image"));
                         cart.setProductName(rs.getString("productName"));
                         cart.setProductId(rs.getInt("productId"));

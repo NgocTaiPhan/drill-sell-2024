@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Cart;
-import vn.hcmuaf.fit.drillsell.service.CartService;
+
+import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 
 @WebServlet("/cart")
 public class AddToCart extends HttpServlet {
@@ -30,22 +30,22 @@ public class AddToCart extends HttpServlet {
 
         // Lấy hoặc tạo giỏ hàng từ session
         HttpSession session = request.getSession();
-        Map<Integer, Cart> cartMap = (Map<Integer, Cart>) session.getAttribute("cart");
+        Map<Integer, vn.hcmuaf.fit.drillsell.model.Cart> cartMap = (Map<Integer, vn.hcmuaf.fit.drillsell.model.Cart>) session.getAttribute("cart");
         if (cartMap == null) {
             cartMap = new HashMap<>();
             session.setAttribute("cart", cartMap);
         }
 
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        Cart existingCartItem = cartMap.get(productId);
+        vn.hcmuaf.fit.drillsell.model.Cart existingCartItem = cartMap.get(productId);
         if (existingCartItem != null) {
             // Nếu có, tăng số lượng
             existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
             existingCartItem.setTotalPrice(existingCartItem.getUnitPrice() * existingCartItem.getQuantity());
         } else {
             // Nếu chưa có, thêm sản phẩm vào giỏ hàng
-            List<Cart> cartItems = CartService.getProductById(productId);
-            Cart cartItem = cartItems.get(0);
+            List<vn.hcmuaf.fit.drillsell.model.Cart> cartItems = CartDAO.getProductById(productId);
+            vn.hcmuaf.fit.drillsell.model.Cart cartItem = cartItems.get(0);
             cartMap.put(productId, cartItem);
         }
 

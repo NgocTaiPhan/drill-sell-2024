@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.bean;
+package vn.hcmuaf.fit.drillsell.model;
 
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 

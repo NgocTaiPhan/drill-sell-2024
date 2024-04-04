@@ -1,5 +1,5 @@
 <%@ page import="org.jboss.weld.context.http.Http" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.register.RegisterController" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.text.SimpleDateFormat" %>

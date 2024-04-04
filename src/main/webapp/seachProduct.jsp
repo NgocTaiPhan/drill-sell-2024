@@ -1,13 +1,13 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ArrayList" %>
 
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="vi">
@@ -199,7 +199,7 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
