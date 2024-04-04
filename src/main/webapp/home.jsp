@@ -13,7 +13,6 @@
     HttpSession sesion = (HttpSession) request.getSession();
     ProductService prodsService = ProductService.getInstance();
 
-    List<Products> bestSellerProducts = prodsService.showProd();
 %>
 <html lang="vi">
 <head>
