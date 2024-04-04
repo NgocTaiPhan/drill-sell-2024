@@ -33,9 +33,9 @@ public class ProductService {
     public List<Products> getAccessory() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("\n" +
-                    "SELECT productId, image, productName, unitPrice  \n" +
-                    "FROM products " + // Thêm khoảng trắng sau "products"
-                    "WHERE categoryId IN (6, 7, 8) ORDER BY RAND()")
+                            "SELECT productId, image, productName, unitPrice  \n" +
+                            "FROM products " + // Thêm khoảng trắng sau "products"
+                            "WHERE categoryId IN (6, 7, 8) ORDER BY RAND()")
                     .mapToBean(Products.class)
                     .list(); // Thay thế collect(Collectors.toList()) bằng list()
         });
@@ -59,9 +59,9 @@ public class ProductService {
 
             return handle.createQuery("SELECT productId, image, productName, unitPrice " +
 
-                    "FROM products\n" +
+                            "FROM products\n" +
 
-                    "WHERE nameProducer = ?;\n")
+                            "WHERE nameProducer = ?;\n")
                     .bind(0, producerName)
                     .mapToBean(Products.class)
                     .list();
@@ -71,10 +71,10 @@ public class ProductService {
     public List<Products> detailProduct(int productId) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery(
-                    "SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions "
-                            +
-                            "FROM products" +
-                            " WHERE productId =:productId")
+                            "SELECT productId, image, productName, unitPrice, categoryId, nameProducer, statuss, describle, dateAdd, specifions "
+                                    +
+                                    "FROM products" +
+                                    " WHERE productId =:productId")
                     .bind("productId", productId)
                     .mapToBean(Products.class)
                     .list();
@@ -96,7 +96,7 @@ public class ProductService {
 
 
 
- 
+
 
 
     public List<ProductCategorys> getAllCategory() {
@@ -125,7 +125,7 @@ public class ProductService {
     public List<Products> showProductsLimited(int limit) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery(
-                    "SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND() LIMIT :limit")
+                            "SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND() LIMIT :limit")
                     .bind("limit", limit)
                     .mapToBean(Products.class)
                     .list();

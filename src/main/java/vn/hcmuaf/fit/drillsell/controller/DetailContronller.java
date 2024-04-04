@@ -18,7 +18,7 @@ public class DetailContronller extends HttpServlet {
     ProductService productService = new ProductService();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       int productId = Integer.parseInt(request.getParameter("productId"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
         List<Products> arr = productService.detailProduct(productId);
         request.setAttribute("detail", arr);
 

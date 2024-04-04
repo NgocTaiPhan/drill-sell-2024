@@ -5,8 +5,11 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.DetailContronller" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
 <%
    List<Products> allProduct = (List<Products>) request.getAttribute("detail");
+    ProductService prodsService = ProductService.getInstance();
+
 %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -301,8 +304,7 @@
                 <%
                     if (allProduct != null) {
                         for (Products p : allProduct) {
-                            HomeController homeController = new HomeController();
-                            String formattedPrice = homeController.getFormattedUnitPrice(p);
+                            String formattedPrice = prodsService.getFormattedUnitPrice(p);
                 %>
                 <div class="detail-block">
                     <div class="row  wow fadeInUp">
@@ -367,7 +369,7 @@
 
                                         <div class="col-sm-6">
                                             <div class="price-box">
-                                                <span class="price"><%=formattedPrice%></span>
+                                                <span class="price"><%= formattedPrice %></span>
                                             </div>
                                         </div>
 
