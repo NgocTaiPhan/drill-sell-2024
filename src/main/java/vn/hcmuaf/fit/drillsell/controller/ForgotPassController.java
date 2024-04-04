@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.service.EmailService;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import java.io.IOException;
 
@@ -26,9 +26,9 @@ public class ForgotPassController extends HttpServlet {
         String email = request.getParameter("email");
         HttpSession session = request.getSession();
         session.setAttribute("username-forgot-pass",username);
-        String vertifyCode = UserService.getInstance().getVerifyCode(username, email);
+        String vertifyCode = UsersDAO.getInstance().getVerifyCode(username, email);
         if (vertifyCode != null) {
-            EmailService.getInstance().sendMailOTP(email, "Lấy lại mật khẩu", vertifyCode);
+            EmailDAO.getInstance().sendMailOTP(email, "Lấy lại mật khẩu", vertifyCode);
         }
 
     }

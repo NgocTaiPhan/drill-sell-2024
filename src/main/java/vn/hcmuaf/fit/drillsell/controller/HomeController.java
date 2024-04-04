@@ -1,13 +1,11 @@
 package vn.hcmuaf.fit.drillsell.controller;
 
 
-import vn.hcmuaf.fit.drillsell.bean.Products;
-import vn.hcmuaf.fit.drillsell.service.ProductService;
+import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class HomeController {
 
@@ -20,16 +18,16 @@ public class HomeController {
 
     public List<List<Products>> getAllProducts() {
         List<List<Products>> allHomeProds = new ArrayList<>(); //Load tất cả sản phẩm ở home
-        allHomeProds.add(ProductService.getInstance().showProd());
-        allHomeProds.add(ProductService.getInstance().showProd());
-        allHomeProds.add(ProductService.getInstance().getAccessory());
+        allHomeProds.add(ProductDAO.getInstance().showProd());
+        allHomeProds.add(ProductDAO.getInstance().showProd());
+        allHomeProds.add(ProductDAO.getInstance().getAccessory());
         return allHomeProds;
     }
 
 
 
     public static void main(String[] args) {
-        System.out.println(ProductService.getInstance().showProd()
+        System.out.println(ProductDAO.getInstance().showProd()
         );
 
     }

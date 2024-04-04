@@ -1,10 +1,10 @@
 <%@ page import="java.util.List" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.User" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -215,7 +215,7 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductService.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -284,7 +284,7 @@
                         <ul class="nav">
 
                             <%
-                                List<ProductCategorys> allCate = ProductService.getInstance().getAllCategory();
+                                List<ProductCategorys> allCate = ProductDAO.getInstance().getAllCategory();
                                 for (ProductCategorys pc : allCate) {%>
                             <li class="nav-bg-class">
                                 <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>">
@@ -540,7 +540,7 @@
                         <div class="tag-list">
                             <!-- JSP Code -->
 
-                            <%for (String producerName : ProductService.getInstance().getAllProducers()) {%>
+                            <%for (String producerName : ProductDAO.getInstance().getAllProducers()) {%>
                             <a class="item" style="text-transform: uppercase"
                                href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
                             </a>

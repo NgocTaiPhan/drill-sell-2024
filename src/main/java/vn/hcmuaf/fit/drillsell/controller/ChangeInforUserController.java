@@ -4,8 +4,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import vn.hcmuaf.fit.drillsell.bean.User;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import javax.servlet.*;
 
@@ -113,7 +113,7 @@ doPost(request,response);
           response.sendRedirect("login.jsp?notify=null-username");
           return;
        }else{
-          if (!UserService.getInstance().isUsernameDuplicate(username)){
+          if (!UsersDAO.getInstance().isUsernameDuplicate(username)){
              response.sendRedirect("login.jsp?notify=duplicate-acc");
 
           }

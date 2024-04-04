@@ -3,12 +3,12 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.DetailContronller" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.service.ProductService" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%
    List<Products> allProduct = (List<Products>) request.getAttribute("detail");
-    ProductService prodsService = ProductService.getInstance();
+    ProductDAO prodsService = ProductDAO.getInstance();
 
 %>
 

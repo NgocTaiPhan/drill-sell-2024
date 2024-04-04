@@ -5,8 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import vn.hcmuaf.fit.drillsell.bean.Products;
-import vn.hcmuaf.fit.drillsell.service.SearchService;
+import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.dao.SearchDAO;
 
 
 import java.io.IOException;
@@ -14,17 +14,17 @@ import java.util.List;
 
 @WebServlet(name = "SeachProduct", value = "/seachProduct")
 public class SeachProduct extends HttpServlet {
-    private SearchService searchService;
+    private SearchDAO searchDAO;
 
     public SeachProduct() {
         super();
-        this.searchService = new SearchService();
+        this.searchDAO = new SearchDAO();
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String keyword = request.getParameter("name");
         // Simulate product search (replace this with your actual search logic)
-        List<Products> products = searchService.searchProductByName(keyword);
+        List<Products> products = searchDAO.searchProductByName(keyword);
         // Chuyển danh sách sản phẩm thành JSON
 
         request.setAttribute("loadProduct", products);

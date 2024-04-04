@@ -1,4 +1,4 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>

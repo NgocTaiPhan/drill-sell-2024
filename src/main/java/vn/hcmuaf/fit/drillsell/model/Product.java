@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.bean;
+package vn.hcmuaf.fit.drillsell.model;
 //chỉ cho 1 sp duy nhất
 public class Product {
     private int productId;

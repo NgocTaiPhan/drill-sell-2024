@@ -1,9 +1,9 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
 
-import vn.hcmuaf.fit.drillsell.bean.User;
-import vn.hcmuaf.fit.drillsell.service.EmailService;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @WebServlet(name = "RegisterController", value = "/register")
@@ -108,7 +106,7 @@ public class RegisterController extends HttpServlet {
             return;
         } else {
 
-            if (!UserService.getInstance().isUsernameDuplicate(username)) {
+            if (!UsersDAO.getInstance().isUsernameDuplicate(username)) {
                 response.sendRedirect("login.jsp?notify=duplicate-acc");
 
             }
@@ -136,8 +134,8 @@ public class RegisterController extends HttpServlet {
         String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode, false, false);
 //        session.setAttribute("confirmation", user);
-        UserService.getInstance().addUser(user);
-        EmailService.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+        UsersDAO.getInstance().addUser(user);
+        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
 
 
 //        response.sendRedirect("user-service/input-code.jsp");

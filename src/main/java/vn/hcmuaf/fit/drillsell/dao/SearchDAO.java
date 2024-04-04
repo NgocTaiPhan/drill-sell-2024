@@ -1,8 +1,8 @@
-package vn.hcmuaf.fit.drillsell.service;
-import vn.hcmuaf.fit.drillsell.bean.Products;
+package vn.hcmuaf.fit.drillsell.dao;
+import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import java.util.List;
-public class SearchService {
+public class SearchDAO {
     public static List<Products> searchProductByName(String input) {
         // Sử dụng try-with-resources để đảm bảo đóng tài nguyên tự động
         try (var handle = DbConnector.me().get().open()) {

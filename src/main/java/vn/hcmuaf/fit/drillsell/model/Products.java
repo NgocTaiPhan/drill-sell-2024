@@ -1,9 +1,7 @@
-package vn.hcmuaf.fit.drillsell.bean;
+package vn.hcmuaf.fit.drillsell.model;
 
 
 import java.sql.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Products {
     private int productId;

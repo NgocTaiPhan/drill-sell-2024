@@ -1,13 +1,11 @@
 package vn.hcmuaf.fit.drillsell.controller;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Cart;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.model.Cart;
 
 import java.util.Map;
 

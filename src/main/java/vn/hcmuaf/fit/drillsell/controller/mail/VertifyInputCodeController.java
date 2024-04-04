@@ -5,10 +5,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.User;
-import vn.hcmuaf.fit.drillsell.service.EmailService;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+
+import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
 
 import java.io.IOException;
 
@@ -25,7 +24,7 @@ public class VertifyInputCodeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String inputCode = request.getParameter("input-code");
         User user = (User) request.getAttribute("confirmation");
-        if (EmailService.getInstance().vertifyCode(user.getVerificationCode(), inputCode)) {
+        if (EmailDAO.getInstance().vertifyCode(user.getVerificationCode(), inputCode)) {
 
             response.sendRedirect("/user-service/change-pass.jsp");
         }
