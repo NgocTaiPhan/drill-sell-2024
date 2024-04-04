@@ -246,6 +246,7 @@
                             <li><a data-toggle="tab" href="#products-management">Quản lý sản phẩm</a>
                             </li>
                             <li><a data-toggle="tab" href="#statistics">Doanh thu</a></li>
+                            <li><a data-toggle="tab" href="#order-history">Lịch Sử Đặt Hàng</a></li>
                         </ul><!-- /.nav-tabs #product-tabs -->
                     </div>
                     <style>
@@ -375,7 +376,26 @@
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
+                            <div id="order-history" class="tab-pane">
+                                <div class="product-tag container">
 
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                        <tr>
+                                            <th>Người đặt hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Email</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Ghi chú</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+
+                                </div><!-- /.product-tab -->
+                            </div>
                         </div><!-- /.tab-content -->
                     </div><!-- /.col -->
                 </div><!-- /.row -->
