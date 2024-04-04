@@ -301,8 +301,9 @@
                 <%
                     if (allProduct != null) {
                         for (Products p : allProduct) {
-                            HomeController homeController = new HomeController();
-                            String formattedPrice = homeController.getFormattedUnitPrice(p);
+                            DetailContronller detailContronller = new DetailContronller();
+                            String formattedPrice =   detailContronller.getFormattedUnitPrice(p);
+
                 %>
                 <div class="detail-block">
                     <div class="row  wow fadeInUp">

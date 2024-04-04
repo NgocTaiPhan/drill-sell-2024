@@ -12,7 +12,6 @@
 <%
     HttpSession sesion = (HttpSession) request.getSession();
     ProductService prodsService = ProductService.getInstance();
-
     List<Products> bestSellerProducts = prodsService.showProd();
 %>
 <html lang="vi">
@@ -231,7 +230,7 @@
                                     Boolean role = (Boolean) session.getAttribute("role-acc");
                                     if (role != null && role) {
                                 %>
-                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lí Sản phẩm</a></li>
+                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lý Sản phẩm</a></li>
                                 <%
                                     }
                                 %>
