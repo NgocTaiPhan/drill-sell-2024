@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.User;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 
 import java.io.IOException;
@@ -46,8 +46,8 @@ public class LoginController extends HttpServlet {
 
         if (validInput(username, password)) {
 
-            UserService userService = UserService.getInstance();
-            User auth = userService.getUser(username, UserService.getInstance().hashPassword(password));
+            UsersDAO usersDAO = UsersDAO.getInstance();
+            User auth = usersDAO.getUser(username, UsersDAO.getInstance().hashPassword(password));
 
 
             if (auth != null) {

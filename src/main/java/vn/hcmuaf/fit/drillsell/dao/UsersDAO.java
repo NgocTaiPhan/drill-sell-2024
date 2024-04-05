@@ -1,8 +1,8 @@
-package vn.hcmuaf.fit.drillsell.service;
+package vn.hcmuaf.fit.drillsell.dao;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import vn.hcmuaf.fit.drillsell.bean.User;
+import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
 import java.security.MessageDigest;
@@ -10,15 +10,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 
-public class UserService {
+public class UsersDAO {
 
-    private static UserService instance;
+    private static UsersDAO instance;
 
-    private UserService() {
+    private UsersDAO() {
     }
 
-    public static UserService getInstance() {
-        if (instance == null) instance = new UserService();
+    public static UsersDAO getInstance() {
+        if (instance == null) instance = new UsersDAO();
         return instance;
     }
 
@@ -122,7 +122,7 @@ public class UserService {
         // Gọi phương thức addUser để thêm đối tượng User vào database
 //        UserService.getInstance().addUser(newUser);
 
-        System.out.println(UserService.getInstance().hashPassword("abc"));
+        System.out.println(UsersDAO.getInstance().hashPassword("abc"));
     }
 
 

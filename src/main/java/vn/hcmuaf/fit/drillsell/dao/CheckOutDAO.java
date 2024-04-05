@@ -1,12 +1,12 @@
-package vn.hcmuaf.fit.drillsell.service;
+package vn.hcmuaf.fit.drillsell.dao;
 
-import vn.hcmuaf.fit.drillsell.bean.Cart;
+import vn.hcmuaf.fit.drillsell.model.Cart;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class CheckOutService {
+public class CheckOutDAO {
     public static List<Cart> getProductById(int id) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT " +

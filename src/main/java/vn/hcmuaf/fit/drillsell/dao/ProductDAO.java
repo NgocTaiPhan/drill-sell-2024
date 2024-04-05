@@ -1,7 +1,7 @@
-package vn.hcmuaf.fit.drillsell.service;
+package vn.hcmuaf.fit.drillsell.dao;
 
-import vn.hcmuaf.fit.drillsell.bean.ProductCategorys;
-import vn.hcmuaf.fit.drillsell.bean.Products;
+import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
+import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
 import java.text.NumberFormat;
@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class ProductService {
-    private static ProductService instance;
+public class ProductDAO {
+    private static ProductDAO instance;
 
-    public ProductService() {
+    public ProductDAO() {
     }
 
-    public static ProductService getInstance() {
+    public static ProductDAO getInstance() {
         if (instance == null) {
-            instance = new ProductService();
+            instance = new ProductDAO();
         }
         return instance;
     }
@@ -119,7 +119,9 @@ public class ProductService {
     }
 
     public static void main(String[] args) {
-        System.out.println(detailProduct(1));
+
+        System.out.println(ProductDAO.getInstance().getNameCategoryById(4));
+
     }
 
     public List<Products> showProductsLimited(int limit) {

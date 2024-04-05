@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.bean;
+package vn.hcmuaf.fit.drillsell.model;
 
 public class Cart {
     private int quantity, statuss;

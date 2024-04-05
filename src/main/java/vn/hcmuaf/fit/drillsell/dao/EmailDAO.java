@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.service;
+package vn.hcmuaf.fit.drillsell.dao;
 
 
 import jakarta.mail.*;
@@ -8,11 +8,11 @@ import vn.hcmuaf.fit.drillsell.mail.MailProperties;
 
 import java.util.Properties;
 
-public class EmailService {
+public class EmailDAO {
 
     public final String LINK = "http://localhost:8080/Drill_Sell_war_exploded/user-service/input-code.jsp";
     private Properties prop = new Properties();
-    private static EmailService instance;
+    private static EmailDAO instance;
 
     {
         prop.put("mail.smtp.host", MailProperties.getHost());
@@ -23,8 +23,8 @@ public class EmailService {
         prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     }
 
-    public static EmailService getInstance() {
-        if (instance == null) instance = new EmailService();
+    public static EmailDAO getInstance() {
+        if (instance == null) instance = new EmailDAO();
         return instance;
     }
 

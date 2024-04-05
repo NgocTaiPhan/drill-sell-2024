@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.bean.Cart" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Cart" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.Map.Entry" %>

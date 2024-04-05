@@ -5,10 +5,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import vn.hcmuaf.fit.drillsell.bean.Products;
-import vn.hcmuaf.fit.drillsell.service.ProductService;
-import vn.hcmuaf.fit.drillsell.service.UserService;
+
+import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +24,7 @@ public class LoadProducer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pdName = request.getParameter("producer");
-        List<Products> listProd = ProductService.getInstance().getProductByProducer(pdName);
+        List<Products> listProd = ProductDAO.getInstance().getProductByProducer(pdName);
         request.setAttribute("list-prod", listProd);
         response.sendRedirect("product-filter.jsp");
     }

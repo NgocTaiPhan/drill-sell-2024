@@ -5,8 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import vn.hcmuaf.fit.drillsell.bean.Products;
-import vn.hcmuaf.fit.drillsell.service.ProductService;
+import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -15,11 +15,11 @@ import java.util.Locale;
 
 @WebServlet("/detail")
 public class DetailContronller extends HttpServlet {
-    ProductService productService = new ProductService();
+    ProductDAO productDAO = new ProductDAO();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int productId = Integer.parseInt(request.getParameter("productId"));
-        List<Products> arr = productService.detailProduct(productId);
+        List<Products> arr = productDAO.detailProduct(productId);
         request.setAttribute("detail", arr);
 
         request.getRequestDispatcher("detail.jsp").forward(request, response);
