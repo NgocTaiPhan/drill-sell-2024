@@ -49,6 +49,10 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
+
+    <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
 </head>
 <body>
 
@@ -266,7 +270,7 @@
                                     <div class="container">
 
 
-                                        <table class="table table-bordered ">
+                                        <table id="user-mn" class="table table-bordered table-striped">
                                             <thead style="text-align: center">
                                             <tr>
                                                 <th>ID</th>
@@ -301,8 +305,10 @@
                             <div id="products-management" class="tab-pane">
                                 <div class="product-tab container">
 
-                                    <table class="table table-bordered  " style="white-space: nowrap">
+                                    <table id="prod-mn" class="table table-bordered  table-striped"
+                                           style="white-space: nowrap">
                                         <thead>
+
                                         <tr>
                                             <th>Mã sản phẩm</th>
                                             <th>Tên sản phẩm</th>
@@ -330,33 +336,30 @@
                                         </tr>
 
                                         <%}%>
+
+                                        </tbody>
+                                        <tfoot>
                                         <tr>
                                             <td>Tổng</td>
-                                            <td>3</td>
                                             <td></td>
                                             <td></td>
+                                            <td>200</td>
                                             <td></td>
-                                            <td>
-                                                <a class="btn btn-danger" href="admin/insert-products.jsp">Thêm sản
-                                                    phẩm</a>
-                                            </td>
+                                            <td></td>
                                         </tr>
-                                        </tbody>
+                                        </tfoot>
                                     </table>
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
-<div class="modal">
+                            <div class="modal">
 
 
-
-
-
-</div>
+                            </div>
                             <div id="statistics" class="tab-pane">
                                 <div class="product-tag container">
 
-                                    <table class="table table-bordered ">
+                                    <table class="table table-bordered table-striped ">
                                         <thead>
                                         <tr>
                                             <th>Số lượng bán ra</th>
@@ -379,7 +382,7 @@
                             <div id="order-history" class="tab-pane">
                                 <div class="product-tag container">
 
-                                    <table class="table table-bordered ">
+                                    <table id="order-history-table" class="table table-bordered  table-striped">
                                         <thead>
                                         <tr>
                                             <th>Người đặt hàng</th>
@@ -414,4 +417,31 @@
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
 </body>
+<script>
+    let toolbar = document.createElement('div');
+    toolbar.innerHTML = '<b></b>';
+    let addProdBtn  = document.createElement('div')
+    addProdBtn.innerHTML = ' <a class="btn btn-danger" href="admin/insert-products.jsp">Thêm sản phẩm</a>'
+    $(document).ready(function () {
+        // $('#prod-mn, #user-mn,#order-history-table').dataTable();
+        // $('#prod-mn').DataTable()
+
+        new DataTable('#user-mn,#order-history-table', {
+            layout: {
+                topStart: toolbar,
+                bottomStart: toolbar
+            }
+        });
+        new DataTable('#prod-mn', {
+            layout: {
+                topStart: addProdBtn,
+                bottomStart: toolbar
+            }
+        });
+
+    });
+
+
+</script>
+
 </html>
