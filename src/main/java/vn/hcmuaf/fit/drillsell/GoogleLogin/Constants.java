@@ -1,17 +1,42 @@
 package vn.hcmuaf.fit.drillsell.GoogleLogin;
 
-public class Constants {
+import java.io.IOException;
+import java.util.Properties;
 
-//    public static String GOOGLE_CLIENT_ID = "151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com";
-//
-//    public static String GOOGLE_CLIENT_SECRET = "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";
-//
-//    public static String GOOGLE_REDIRECT_URI = "http://localhost:8080/LoginGoogle/LoginGoogleHandler";
-//
-//    public static String GOOGLE_LINK_GET_TOKEN = "https://accounts.google.com/o/oauth2/token";
-//
-//    public static String GOOGLE_LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
-//
-//    public static String GOOGLE_GRANT_TYPE = "authorization_code";
+public class Constants {
+    static Properties prop = new Properties();
+
+    static {
+        try {
+            prop.load(Constants.class.getClassLoader().getResourceAsStream("googlelogin.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getClientID() {
+        return prop.getProperty("GOOGLE_CLIENT_ID");
+    }
+
+    public static String getClientSecret() {
+        return prop.getProperty("GOOGLE_CLIENT_SECRET");
+    }
+
+    public static String getRedirectURI() {
+        return prop.getProperty("GOOGLE_REDIRECT_URI");
+    }
+
+    public static String getLinkToken() {
+        return prop.getProperty("GOOGLE_LINK_GET_TOKEN");
+    }
+
+    public static String getUserInfor() {
+        return prop.getProperty("GOOGLE_LINK_GET_USER_INFO");
+    }
+
+    public static String getGrantType() {
+        return prop.getProperty("GOOGLE_GRANT_TYPE");
+    }
+
 
 }

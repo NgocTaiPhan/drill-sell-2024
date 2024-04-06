@@ -20,10 +20,11 @@ public class GoogleLogin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
+     *
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,11 +36,11 @@ public class GoogleLogin extends HttpServlet {
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token
-        String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
-                .bodyForm(Form.form().add("client_id", Constants.GOOGLE_CLIENT_ID)
-                        .add("client_secret", Constants.GOOGLE_CLIENT_SECRET)
-                        .add("redirect_uri", Constants.GOOGLE_REDIRECT_URI).add("code", code)
-                        .add("grant_type", Constants.GOOGLE_GRANT_TYPE).build())
+        String response = Request.Post(Constants.getLinkToken())
+                .bodyForm(Form.form().add("client_id", Constants.getClientID())
+                        .add("client_secret", Constants.getClientSecret())
+                        .add("redirect_uri", Constants.getRedirectURI()).add("code", code)
+                        .add("grant_type", Constants.getGrantType()).build())
                 .execute().returnContent().asString();
 
         JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
@@ -48,7 +49,7 @@ public class GoogleLogin extends HttpServlet {
     }
 
     public static UserGoogleDto getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
-        String link = Constants.GOOGLE_LINK_GET_USER_INFO + accessToken;
+        String link = Constants.getUserInfor() + accessToken;
         String response = Request.Get(link).execute().returnContent().asString();
 
         UserGoogleDto googlePojo = new Gson().fromJson(response, UserGoogleDto.class);
@@ -58,12 +59,14 @@ public class GoogleLogin extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the +
     // sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
+     *
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,10 +76,11 @@ public class GoogleLogin extends HttpServlet {
 
     /**
      * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
+     *
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -86,6 +90,7 @@ public class GoogleLogin extends HttpServlet {
 
     /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
