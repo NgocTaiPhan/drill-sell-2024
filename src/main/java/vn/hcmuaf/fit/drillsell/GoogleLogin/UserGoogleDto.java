@@ -1,6 +1,6 @@
-package vn.hcmuaf.fit.drillsell.model;
+package vn.hcmuaf.fit.drillsell.GoogleLogin;
 
-public class UserGoogleDTO {
+public class UserGoogleDto {
 
     private String id;
 
@@ -16,10 +16,10 @@ public class UserGoogleDTO {
 
     private String picture;
 
-    public UserGoogleDTO() {
+    public UserGoogleDto() {
     }
 
-    public UserGoogleDTO(String id, String email, boolean verified_email, String name, String given_name, String family_name, String picture) {
+    public UserGoogleDto(String id, String email, boolean verified_email, String name, String given_name, String family_name, String picture) {
         this.id = id;
         this.email = email;
         this.verified_email = verified_email;

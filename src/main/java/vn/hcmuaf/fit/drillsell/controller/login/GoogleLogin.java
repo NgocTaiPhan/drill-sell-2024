@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
-import vn.hcmuaf.fit.drillsell.GoogleLogin.GoogleLoginProperties;
-import vn.hcmuaf.fit.drillsell.model.UserGoogleDTO;
+import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
+import vn.hcmuaf.fit.drillsell.GoogleLogin.UserGoogleDto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,79 +17,80 @@ import java.io.IOException;
 
 @WebServlet(name = "GoogleLogin", urlPatterns = "/login-google")
 public class GoogleLogin extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     /**
-     * Xử lý cả yêu cầu HTTP GET và POST.
-     *
-     * @param request  servlet request
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * @param request servlet request
      * @param response servlet response
-     * @throws ServletException nếu có lỗi cụ thể của servlet
-     * @throws IOException      nếu có lỗi I/O
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
         String accessToken = getToken(code);
-        UserGoogleDTO user = getUserInfo(accessToken);
+        UserGoogleDto user = getUserInfo(accessToken);
         System.out.println(user);
     }
 
-    /**
-     * Lấy token từ mã authorization code.
-     *
-     * @param code mã authorization code
-     * @return token truy cập
-     * @throws ClientProtocolException nếu có lỗi giao thức HTTP
-     * @throws IOException            nếu có lỗi I/O
-     */
     public static String getToken(String code) throws ClientProtocolException, IOException {
-        String response = Request.Post(GoogleLoginProperties.getTokenLink())
-                .bodyForm(Form.form()
-                        .add("client_id", GoogleLoginProperties.getClientId())
-                        .add("client_secret", GoogleLoginProperties.getClientSecret())
-                        .add("redirect_uri", GoogleLoginProperties.getRedirectUri())
-                        .add("code", code)
-                        .add("grant_type", GoogleLoginProperties.getGrantType())
-                        .build())
+        // call api to get token
+        String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
+                .bodyForm(Form.form().add("client_id", Constants.GOOGLE_CLIENT_ID)
+                        .add("client_secret", Constants.GOOGLE_CLIENT_SECRET)
+                        .add("redirect_uri", Constants.GOOGLE_REDIRECT_URI).add("code", code)
+                        .add("grant_type", Constants.GOOGLE_GRANT_TYPE).build())
                 .execute().returnContent().asString();
 
         JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
-        String accessToken = jobj.get("access_token").getAsString();
+        String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
         return accessToken;
     }
 
-    /**
-     * Lấy thông tin người dùng từ token truy cập.
-     *
-     * @param accessToken token truy cập
-     * @return đối tượng UserGoogleDTO chứa thông tin người dùng
-     * @throws ClientProtocolException nếu có lỗi giao thức HTTP
-     * @throws IOException            nếu có lỗi I/O
-     */
-    public static UserGoogleDTO getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
-        String link = GoogleLoginProperties.getUserInfoLink() + accessToken;
+    public static UserGoogleDto getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
+        String link = Constants.GOOGLE_LINK_GET_USER_INFO + accessToken;
         String response = Request.Get(link).execute().returnContent().asString();
 
-        UserGoogleDTO googlePojo = new Gson().fromJson(response, UserGoogleDTO.class);
+        UserGoogleDto googlePojo = new Gson().fromJson(response, UserGoogleDto.class);
 
         return googlePojo;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the +
+    // sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    /**
+     * Returns a short description of the servlet.
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
-        return "Xử lý đăng nhập với Google";
-    }
+        return "Short description";
+    }// </editor-fold>
+
 }
