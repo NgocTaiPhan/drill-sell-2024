@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
-import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
-import vn.hcmuaf.fit.drillsell.GoogleLogin.UserGoogleDto;
+//import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
+//import vn.hcmuaf.fit.drillsell.GoogleLogin.UserGoogleDto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,32 +30,33 @@ public class GoogleLogin extends HttpServlet {
             throws ServletException, IOException {
         String code = request.getParameter("code");
         String accessToken = getToken(code);
-        UserGoogleDto user = getUserInfo(accessToken);
-        System.out.println(user);
+//        UserGoogleDto user = getUserInfo(accessToken);
+//        System.out.println(user);
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
         // call api to get token
-        String response = Request.Post(Constants.getLinkToken())
-                .bodyForm(Form.form().add("client_id", Constants.getClientID())
-                        .add("client_secret", Constants.getClientSecret())
-                        .add("redirect_uri", Constants.getRedirectURI()).add("code", code)
-                        .add("grant_type", Constants.getGrantType()).build())
-                .execute().returnContent().asString();
-
-        JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
-        String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
-        return accessToken;
+//        String response = Request.Post(Constants.getLinkToken())
+//                .bodyForm(Form.form().add("client_id", Constants.getClientID())
+//                        .add("client_secret", Constants.getClientSecret())
+//                        .add("redirect_uri", Constants.getRedirectURI()).add("code", code)
+//                        .add("grant_type", Constants.getGrantType()).build())
+//                .execute().returnContent().asString();
+//
+//        JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
+//        String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
+//        return accessToken;
+        return null;
     }
 
-    public static UserGoogleDto getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
-        String link = Constants.getUserInfor() + accessToken;
-        String response = Request.Get(link).execute().returnContent().asString();
-
-        UserGoogleDto googlePojo = new Gson().fromJson(response, UserGoogleDto.class);
-
-        return googlePojo;
-    }
+//    public static UserGoogleDto getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
+//        String link = Constants.getUserInfor() + accessToken;
+//        String response = Request.Get(link).execute().returnContent().asString();
+//
+//        UserGoogleDto googlePojo = new Gson().fromJson(response, UserGoogleDto.class);
+//
+//        return googlePojo;
+//    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the +
     // sign on the left to edit the code.">
