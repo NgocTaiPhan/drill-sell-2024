@@ -12,13 +12,6 @@
     Boolean loginSuccess = (Boolean) request.getAttribute("loginSuccess");
 
 
-
-
-
-  
-  
-
-
 %>
 
 <!doctype html>
@@ -109,41 +102,43 @@
                                 <input id="optionsRadios2" name="optionsRadios" type="radio" value="">Lưu đăng
                                 nhập
                             </label>
-                            <a class="forgot-password pull-right" href="user-service/forgot-pas.jsp">Quên mật khẩu?</a>
+                            <a class="forgot-password pull-right" href="./user-service/forgot-pas.jsp">Quên mật
+                                khẩu?</a>
                         </div>
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit"
                                value="Đăng nhập">
-                        <%--                        <script src="assets/js/my-js/login.js"></script>--%>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
+                            nhập với Google</a>
+
                     </form>
 
 
                 </div>
                 <!-- Sign-in -->
-             <%
-                 // Lấy các thông tin từ form
-                 String fullName = session.getAttribute("fullName") != null ? (String) session.getAttribute("fullName") : "";
+                <%
+                    // Lấy các thông tin từ form
+                    String fullName = session.getAttribute("fullName") != null ? (String) session.getAttribute("fullName") : "";
 
-                 String address = session.getAttribute("address") != null ? (String) session.getAttribute("address") : "";
-                 String phoneNumber = session.getAttribute("phoneNumber") != null ? (String) session.getAttribute("phoneNumber") : "";
-                 String email = session.getAttribute("email") != null ? (String) session.getAttribute("email") : "";
-                 String username = session.getAttribute("username") != null ? (String) session.getAttribute("username") : "";
+                    String address = session.getAttribute("address") != null ? (String) session.getAttribute("address") : "";
+                    String phoneNumber = session.getAttribute("phoneNumber") != null ? (String) session.getAttribute("phoneNumber") : "";
+                    String email = session.getAttribute("email") != null ? (String) session.getAttribute("email") : "";
+                    String username = session.getAttribute("username") != null ? (String) session.getAttribute("username") : "";
 
-                 String birthDate = (String) session.getAttribute("birthDate");
-                 Date sqlDate = null;
+                    String birthDate = (String) session.getAttribute("birthDate");
+                    Date sqlDate = null;
 
-                 if (birthDate != null && !birthDate.isEmpty()) {
-                     try {
-                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                         java.util.Date utilDate = sdf.parse(birthDate);
-                         sqlDate = new Date(utilDate.getTime());
-                     } catch (Exception e) {
+                    if (birthDate != null && !birthDate.isEmpty()) {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            java.util.Date utilDate = sdf.parse(birthDate);
+                            sqlDate = new Date(utilDate.getTime());
+                        } catch (Exception e) {
 
-                     }
-                 }
+                        }
+                    }
 
 
-
-             %>
+                %>
 
                 <div class="col-md-6 col-sm-6 create-new-account">
                     <h3 class="checkout-subtitle">Tạo tài khoản mới</h3>
