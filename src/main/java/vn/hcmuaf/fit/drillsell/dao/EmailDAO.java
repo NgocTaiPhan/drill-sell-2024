@@ -114,6 +114,7 @@ public class EmailDAO {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.trust","*");
         props.put("mail.smtp.starttls.enable", "true");
         String username = "phuonghuynh131415@gmail.com";
         String password = "pkgy kplq sjcn gwhu";
