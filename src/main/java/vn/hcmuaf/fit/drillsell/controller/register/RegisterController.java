@@ -57,24 +57,21 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-fullname");
             return;
         }
-
 //            DateTimeFormatter formatter = DateTimeFormatter
         if (birthDate == null || birthDate.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-birthday");
             return;
         } else {
-
 //            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate inputDate = LocalDate.parse(birthDate);
 
             // LocalDate.now() trả về ngày hiện tại
             if (inputDate.isAfter(LocalDate.now())) {
+
                 response.sendRedirect("login.jsp?notify=future-birthday");
                 return;
             }
-
         }
-
         if (address == null || address.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-address");
             return;
@@ -88,14 +85,12 @@ public class RegisterController extends HttpServlet {
             if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
                 response.sendRedirect("login.jsp?notify=invalid-phone");
                 return;
-
             }
         }
         if (email == null || email.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-email");
             return;
         } else {
-
             if (!email.matches("^[a-zA-Z0-9_+&*-/=?\\^\\s{|}]+@[a-zA-Z0-9-]+\\.[a-zA-Z]+$")) {
                 response.sendRedirect("login.jsp?notify=invalid-email");
                 return;
@@ -137,12 +132,9 @@ public class RegisterController extends HttpServlet {
         UsersDAO.getInstance().addUser(user);
         EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
 
-
-//        response.sendRedirect("user-service/input-code.jsp");
+        response.sendRedirect("user-service/input-code.jsp");
 
     }
 
 
 }
-
-

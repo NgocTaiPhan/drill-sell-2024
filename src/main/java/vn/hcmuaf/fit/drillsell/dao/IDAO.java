@@ -1,5 +1,7 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import java.util.List;
+
 public interface IDAO<T> {
 
 public int insert( T t );

@@ -1,12 +1,14 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
 
-import jakarta.mail.*;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import vn.hcmuaf.fit.drillsell.mail.MailProperties;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+
+import static javax.mail.Transport.send;
 
 public class EmailDAO {
 
@@ -20,7 +22,8 @@ public class EmailDAO {
         prop.put("mail.smtp.auth", MailProperties.getAuth());
         prop.put("mail.smtp.starttls.enable", MailProperties.getTls());
         prop.put("mail.smtp.socketFactory.port", MailProperties.getPort());
-        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+//        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        prop.put("mail.smtp.ssl.trust","*");
     }
 
     public static EmailDAO getInstance() {
@@ -56,7 +59,7 @@ public class EmailDAO {
 
             message.getSentDate();
             // Gửi email
-            Transport.send(message);
+            send(message);
             System.out.println("Done");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -92,7 +95,7 @@ public class EmailDAO {
 
             message.getSentDate();
             // Gửi email
-            Transport.send(message);
+            send(message);
             System.out.println("Done");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -112,12 +115,8 @@ public class EmailDAO {
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-//        props.put("mail.smtp.socketFactory.port", "465");
-//        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-
-        // Tạo đối tượng Authenticator
-        String username = "drillsellgroup25@gmail.com";
-        String password = "ajkjgjezaadiajtc"; 
+        String username = "phuonghuynh131415@gmail.com";
+        String password = "pkgy kplq sjcn gwhu";
 
         Authenticator auth = new Authenticator() {
             @Override
@@ -134,7 +133,7 @@ public class EmailDAO {
 
         // Thiết lập các thuộc tính của MimeMessage
         message.setFrom(new InternetAddress(username));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("drillsellgroup25@gmail.com"));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("21130149@st.hcmuaf.edu.vn"));
         message.setSubject("Subject");
         message.setText("Body");
 
