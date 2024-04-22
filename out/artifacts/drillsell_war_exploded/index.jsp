@@ -14,20 +14,18 @@
     App Starter Template
     http://www.templatemo.com/tm-492-app-starter
     -->
-    <link rel="stylesheet" href="./assets/for-intro-page/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/for-intro-page/css/animate.css">
-    <link rel="stylesheet" href="./assets/for-intro-page/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/animate.min.css">
+    <link rel="stylesheet" href="./assets/css/font-awesome.css">
 
-    <link rel="stylesheet" href="./assets/for-intro-page/css/magnific-popup.css">
 
-    <link rel="stylesheet" href="./assets/for-intro-page/css/owl.theme.css">
-    <link rel="stylesheet" href="./assets/for-intro-page/css/owl.carousel.css">
+    <link rel="stylesheet" href="./assets/css/owl.carousel.css">
 
     <link href='https://fonts.googleapis.com/css?family=Unica+One' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,700' rel='stylesheet' type='text/css'>
 
     <!-- Main css -->
-    <link rel="stylesheet" href="./assets/for-intro-page/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
 
 </head>
 
