@@ -149,33 +149,18 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
-
                     <div class="dropdown dropdown-cart">
-                        <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                        <a href="viewCart" class="dropdown-toggle lnk-cart">
                             <div class="items-cart-inner">
-                                <!-- Thêm một sự kiện nhấp chuột vào div -->
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-
-                                <!-- Bạn có thể đặt mã JavaScript ở phía dưới trang hoặc tách riêng thành một tệp JS -->
-                                <script>
-                                    function redirectToCart() {
-                                        // Thực hiện chuyển hướng đến trang s.jsp khi nhấp vào
-                                        window.location.href = 'cart.jsp';
-                                    }
-                                </script>
-
-
-                                <%--                                <div id="cartItemCount" class="basket-item-count">--%>
-                                <%--                                    <span id="cartItemCountValue" class="count">0</span>--%>
-                                <%--                                </div>--%>
-
-
                             </div>
                         </a>
-
                     </div>
+
+
+
                     <!-- /.dropdown-cart -->
 
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
