@@ -72,7 +72,7 @@ public class ProductDAO {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery(
                             "SELECT products.productId, products.image, products.unitPrice, products.productName, products.categoryId, products.nameProducer, repo.importQuantity, \n" +
-                                    "products.describle, repo.importDate, products.specifions\n" +
+                                    "products.describle, products.specifions\n" +
                                     "FROM products JOIN repo ON products.productId = repo.productId\n" +
                                     "WHERE products.productId = :productId\n")
                     .bind("productId", productId)
