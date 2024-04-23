@@ -88,7 +88,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
                     <!-- ============================================================= LOGO ============================================================= -->
                     <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
-                    <div class="logo-page"><a href="home.html"> <img
+                    <div class="logo-page"><a href="home.jsp"> <img
                             src="assets/images/logo.png" alt="logo"
                     > </a></div>
 
@@ -328,9 +328,9 @@
                                             <td><%=ProductDAO.getInstance().getFormattedUnitPrice(p)%>
                                             </td>
                                             <td>10</td>
+
                                             <td>
-<%--                                                <%=p.getStatuss()%>--%>
-                                            </td>
+                                               <%=p.getStatuss()%>
                                             <td>
                                                 <button class="btn btn-warning">Xem chi tiết</button>
                                             </td>

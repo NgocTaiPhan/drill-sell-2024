@@ -47,6 +47,7 @@ public class LoginController extends HttpServlet {
         if (validInput(username, password)) {
 
             UsersDAO usersDAO = UsersDAO.getInstance();
+            //Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
             User auth = usersDAO.getUser(username, UsersDAO.getInstance().hashPassword(password));
 
 
