@@ -15,7 +15,37 @@ public class CartDAO {
                     .list();
         });
     }
+    public static boolean updateQuantityHight(int productId) {
+        try {
+            return DbConnector.me().get().inTransaction(handle -> {
+                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity + 1 WHERE productId = :productId")
+                        .bind("productId", productId)
+                        .execute();
 
+                return rowsAffected > 0;
+            });
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateQuantityLow(int productId) {
+        try {
+            return DbConnector.me().get().inTransaction(handle -> {
+                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity - 1 WHERE productId = :productId AND quantity >1")
+                        .bind("productId", productId)
+                        .execute();
+
+                return rowsAffected > 0;
+            });
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static boolean insertCartItem(int productId) {
         try {
@@ -45,12 +75,15 @@ public class CartDAO {
                     return rowsAffected > 0;
                 }
             });
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // Xử lý ngoại lệ nếu có lỗi xảy ra
             e.printStackTrace();
             return false;
         }
     }
+
+
 
 
 
