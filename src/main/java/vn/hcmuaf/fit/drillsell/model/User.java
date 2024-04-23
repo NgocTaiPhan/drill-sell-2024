@@ -29,6 +29,8 @@ User {
         this.passwords = passwords;
     }
 
+
+
     public User(int id, String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
         this.id = id;
         this.fullname = fullname;

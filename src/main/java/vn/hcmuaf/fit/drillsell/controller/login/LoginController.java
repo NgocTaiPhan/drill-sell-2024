@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
@@ -42,7 +43,7 @@ public class LoginController extends HttpServlet {
         //Lấy username, pass nhập từ màn hình
         String username = request.getParameter("username-login");
         String password = request.getParameter("pass-login");
-        System.out.println(username+ password);
+        System.out.println(username + password);
 
         if (validInput(username, password)) {
 
@@ -54,31 +55,38 @@ public class LoginController extends HttpServlet {
             if (auth != null) {
                 HttpSession session = request.getSession();
                 String url = "login.jsp";
+                //Kiểm tra quyền của tài khoản
                 if (auth.isRoleUser()) {
-
+//admin
                     response.sendRedirect("login.jsp?notify=admin");
 
                 } else {
+                    //user
                     response.sendRedirect("login.jsp?notify=user");
 
                 }
+                //Lưu thông tin tài khoản và trạng thái "đã đăng nhập" vào session
                 session.setAttribute("auth", auth);
-//                session.setMaxInactiveInterval(30);
+                session.setAttribute("logged", true);
                 boolean isAdmin = false;
                 isAdmin = auth.isRoleUser();
                 session.setAttribute("role-acc", auth.isRoleUser());
 
             } else {
+                //Báo lỗi khi không tìm thấy thông tin đăng nhập
                 response.sendRedirect("login.jsp?notify=not-found-user-login");
             }
         } else {
+            //Báo lỗi khi người dùng chưa điền thông tin đăng nhập
             response.sendRedirect("login.jsp?notify=null-value-login");
         }
     }
 
+    //Thực hiện đăng xuất bằng remove các attribute
     public void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("auth");
+        session.removeAttribute("auth-google");
         response.sendRedirect("home.jsp");
     }
 
