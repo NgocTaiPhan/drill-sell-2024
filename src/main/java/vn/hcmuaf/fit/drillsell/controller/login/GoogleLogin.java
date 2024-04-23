@@ -6,15 +6,14 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
-import vn.hcmuaf.fit.drillsell.GoogleLogin.UserGoogleDto;
-//import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
-//import vn.hcmuaf.fit.drillsell.GoogleLogin.UserGoogleDto;
+import vn.hcmuaf.fit.drillsell.model.UserGoogleDto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "GoogleLogin", urlPatterns = "/login-google")
@@ -34,6 +33,10 @@ public class GoogleLogin extends HttpServlet {
         String accessToken = getToken(code);
         UserGoogleDto user = getUserInfo(accessToken);
         System.out.println(user);
+        HttpSession session = request.getSession();
+        session.setAttribute("auth-google",user);
+        session.setAttribute("logged", true);
+        response.sendRedirect("home.jsp");
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
@@ -58,7 +61,6 @@ public class GoogleLogin extends HttpServlet {
 
         return googlePojo;
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the +
     // sign on the left to edit the code.">
 
@@ -99,5 +101,6 @@ public class GoogleLogin extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }
