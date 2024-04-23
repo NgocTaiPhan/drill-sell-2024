@@ -7,6 +7,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% ProductDAO prodsService = ProductDAO.getInstance();%>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -120,7 +121,8 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" style="height: 44.5px" data-toggle="dropdown"
+                                <input id="searchInput" class="search-field dropdown-toggle" style="height: 44.5px"
+                                       data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
                                 <a style="height: 44.5px;" class="search-button" href="#"
                                    onclick="searchProduct(event)"></a>
@@ -303,7 +305,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <% for (Cart p: (List<Cart>) request.getAttribute("products")) {%>
+                            <%
+                                for (Cart p : (List<Cart>) request.getAttribute("products")) {
+                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
+                                    String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
+                            %>
                             <tr>
 
                                 <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
@@ -312,21 +319,54 @@
 
                                 </td>
 
-                                <td class="li-product-thumbnail"><a href="#"><img  height="100px" width="100px"
+                                <td class="li-product-thumbnail"><a href="#"><img height="100px" width="100px"
                                                                                   src="<%= p.getImage()%>"
                                                                                   alt="Li's Product Image"></a></td>
-                                <td class="li-product-name"><a href="#"><%= p.getProductName()%></a></td>
+                                <td class="li-product-name"><a href="#"><%= p.getProductName()%>
+                                </a></td>
                                 <td class="li-product-price"><span
-                                        class="amount"> <%= p.getUnitPrice()%></span></td>
+                                        class="amount"> <%= formattedPrice%></span></td>
                                 <div id="errorMessage" style="color: red;"></div>
                                 <td class="quantity">
-                                    <button class="minus-button" type="button" onclick="">-</button>
+                                    <button class="minus-button"  type="button" onclick="reduceQuantity(<%= p.getProductId()%>)">-</button>
                                     <div class="cart-plus-minus">
-                                        <input id="quantityInput" class="cart-plus-minus-box" value="<%= p.getQuantity()%>">
+                                        <input id="quantityInput" class="cart-plus-minus-box"
+                                               value="<%= p.getQuantity()%>">
 
                                     </div>
-                                    <button class="plus-button" type="button">+</button>
+                                    <button class="plus-button" type="button"
+                                            onclick="increaseQuantity(<%= p.getProductId()%>)">+
+                                    </button>
+                                    <script>
+                                        function increaseQuantity(productId) {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "UpdateQuantityHight",
+                                            data: {productId: productId},
+                                            success: function (response) {
+                                              location.reload();
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Lỗi: " + error);
+                                            }
+                                        });
+                                    }
 
+                                    function reduceQuantity(productId){
+                                        $.ajax({
+                                           type: "POST",
+                                           url: "updateQuantityLow",
+                                           data: {productId: productId},
+                                           success:function (response){
+                                               location.reload();
+                                           } ,
+                                            error: function (xhr, status, error) {
+                                                console.error("Lỗi: " + error);
+                                            }
+                                        });
+                                    }
+
+                                    </script>
                                 </td>
 
                                 <style>
@@ -340,22 +380,20 @@
                                         display: inline-block;
                                         text-align: center;
                                     }
-                                    .quantity .cart-plus-minus-box{
+
+                                    .quantity .cart-plus-minus-box {
                                         margin-left: 10px;
                                     }
 
                                 </style>
 
 
-
-
-
                                 <td class="product-subtotal">
-                                    <span id="subtotal" class="amount"><%= p.getTotalPrice()%></span>
+                                    <span id="subtotal" class="amount"><%= formattedAmount%></span>
                                 </td>
 
                             </tr>
-<%}%>
+                            <%}%>
 
                             </tbody>
                         </table>
@@ -363,7 +401,7 @@
                     </div>
 
                     <div class="cart-page-total">
-                        <a class="checkOut" href="#"  >Thanh toán</a>
+                        <a class="checkOut" href="#">Thanh toán</a>
 
                     </div>
 

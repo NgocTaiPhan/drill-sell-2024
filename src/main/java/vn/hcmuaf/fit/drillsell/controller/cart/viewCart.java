@@ -15,8 +15,15 @@ import java.util.List;
 public class viewCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Forward to doPost method to handle POST requests as well
+        doPost(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Cart> products = CartDAO.selectProduct();
         request.setAttribute("products", products);
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 }
+

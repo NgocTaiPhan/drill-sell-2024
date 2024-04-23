@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.model.Cart;
 
+import static java.lang.System.out;
+
 @WebServlet("/cart")
 public class AddToCart extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private String jsonResponse;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,13 +42,14 @@ public class AddToCart extends HttpServlet {
 //        List<Cart> carts = CartDAO.getCartByUserId(userId);
         boolean insertProduct = CartDAO.insertCartItem(productId);
 
-        // Kiểm tra kết quả sau khi thêm sản phẩm vào giỏ hàng
         if (insertProduct) {
-            List<Cart> products = CartDAO.selectProduct();
-            request.setAttribute("products", products);
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
+            request.getRequestDispatcher("detail.jsp").forward(request, response);
+
         } else {
+            // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng, có thể gửi thông báo lỗi cho người dùng hoặc xử lý theo cách khác tùy thuộc vào yêu cầu của bạn
             response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
+        }
         }
 
 
@@ -58,4 +62,4 @@ public class AddToCart extends HttpServlet {
 
 
 
-}
+

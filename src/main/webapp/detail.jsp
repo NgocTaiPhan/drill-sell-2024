@@ -385,11 +385,14 @@
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
+<%--                                            <a href="#" onclick="addToCart(<%=p.getProductId()%>)" class="btn btn-primary">--%>
+<%--                                                <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng--%>
+<%--                                            </a>--%>
 
-                                            <a href="cart?productId=<%=p.getProductId()%>"
-                                               methods="get" id="addToCartBtn" class="btn btn-primary">
+                                            <a href="cart?productId=<%=p.getProductId()%>" class="btn btn-primary">
                                                 <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng
                                             </a>
+
                                         </div>
 
 
