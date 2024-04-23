@@ -38,5 +38,7 @@ public class Constants {
         return prop.getProperty("GOOGLE_GRANT_TYPE");
     }
 
-
+    public static void main(String[] args) {
+        System.out.println(getClientID());
+    }
 }

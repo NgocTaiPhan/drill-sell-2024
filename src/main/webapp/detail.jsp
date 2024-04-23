@@ -7,7 +7,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%
-   List<Products> allProduct = (List<Products>) request.getAttribute("detail");
+    List<Products> allProduct = (List<Products>) request.getAttribute("detail");
     ProductDAO prodsService = ProductDAO.getInstance();
 
 %>
@@ -146,7 +146,8 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" style="height: 44.5px;" data-toggle="dropdown"
+                                <input id="searchInput" class="search-field dropdown-toggle" style="height: 44.5px;"
+                                       data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
                                 <a style="height: 44.5px;" class="search-button" href="#"
                                    onclick="searchProduct(event)"></a>
@@ -176,23 +177,24 @@
                     <div class="dropdown dropdown-cart">
                         <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <!-- Thêm một sự kiện nhấp chuột vào div -->
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-
-                                <!-- Bạn có thể đặt mã JavaScript ở phía dưới trang hoặc tách riêng thành một tệp JS -->
                                 <script>
                                     function redirectToCart() {
-                                        // Thực hiện chuyển hướng đến trang s.jsp khi nhấp vào
+
+                                        <% if (!(boolean) session.getAttribute("logged")) { %>
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Bạn chưa đăng nhập',
+                                            text: 'Vui lòng đăng nhập để tiếp tục!',
+                                            confirmButtonText: 'Đồng ý'
+                                        });
+                                        <% } else { %>
                                         window.location.href = 'cart.jsp';
+                                        <% } %>
                                     }
                                 </script>
-
-
-<%--                                <div id="cartItemCount" class="basket-item-count">--%>
-<%--                                    <span id="cartItemCountValue" class="count">0</span>--%>
-<%--                                </div>--%>
 
 
                             </div>
@@ -299,7 +301,6 @@
             </div><!-- /.sidebar -->
 
 
-
             <div class='col-md-9'>
                 <%
                     if (allProduct != null) {
@@ -399,24 +400,25 @@
                                     </div><!-- /.row -->
                                 </div><!-- /.quantity-container -->
 
-                            <Style>
-                                .col-sm-7{
-                                    display: flex;
-                                    text-align: center;
-                                }
-                                .col-sm-7 .btn
-                                {
-                                    display: inline-block;
-                                    margin-left: 15px;
-                                    font-size: 16px;
-                                }
-                                .col-sm-7 #addToCartBtn{
-                                    border-radius: 5px;
-                                    height: 40px;
+                                <Style>
+                                    .col-sm-7 {
+                                        display: flex;
+                                        text-align: center;
+                                    }
 
-                                }
+                                    .col-sm-7 .btn {
+                                        display: inline-block;
+                                        margin-left: 15px;
+                                        font-size: 16px;
+                                    }
 
-                            </Style>
+                                    .col-sm-7 #addToCartBtn {
+                                        border-radius: 5px;
+                                        height: 40px;
+
+                                    }
+
+                                </Style>
                             </div><!-- /.product-info -->
                         </div><!-- /.col-sm-7 -->
 
