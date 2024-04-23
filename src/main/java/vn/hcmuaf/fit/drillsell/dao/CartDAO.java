@@ -1,46 +1,75 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
-
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
+import vn.hcmuaf.fit.drillsell.model.Cart;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CartDAO {
-
-    public static List<vn.hcmuaf.fit.drillsell.model.Cart> getProductById(int id) {
+    public static List<Cart> selectProduct() {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT " +
-                            "    products.image, " +
-                            "    products.productName, " +
-                            "    products.productId, " +
-                            "    products.statuss, " +
-                            "    products.unitPrice, " +
-                            "    COUNT(*) as quantity " + // Chuyển vị trí của COUNT(*) xuống dòng mới
-                            "FROM  products " +
-                            "WHERE products.productId = :id ") // Sửa tên tham số từ "productId" thành ":id"
-                    .bind("id", id)  // Sửa tên tham số từ "productId" thành ":id"
-                    .map((rs, ctx) -> {
-                        // Tạo một đối tượng Cart với giá tiền đã được giảm
-                        vn.hcmuaf.fit.drillsell.model.Cart cart = new vn.hcmuaf.fit.drillsell.model.Cart();
-                        cart.setImage(rs.getString("image"));
-                        cart.setProductName(rs.getString("productName"));
-                        cart.setProductId(rs.getInt("productId"));
-                        cart.setUnitPrice(rs.getDouble("unitPrice"));
-                        cart.setStatuss(rs.getInt("statuss"));
-                        // Lấy giá trị quantity từ kết quả truy vấn
-                        int quantity = rs.getInt("quantity");
-                        double totalPrice = cart.getUnitPrice() * quantity;
-                        cart.setQuantity(quantity);
-                        cart.setTotalPrice(totalPrice);
-
-                        return cart;
-                    })
+            return handle.createQuery("SELECT cart.cartId, products.productId, products.productName, products.unitPrice, cart.quantity, products.image, (products.unitPrice * cart.quantity) AS totalPrice\n" +
+                            "FROM products JOIN cart ON products.productId = cart.productId")
+                    .mapToBean(Cart.class)
                     .list();
         });
     }
 
 
+    public static boolean insertCartItem(int productId) {
+        try {
+            return DbConnector.me().get().inTransaction(handle -> {
+                // Thực hiện truy vấn SQL để kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+                Optional<Cart> existingCartItem = handle.createQuery("SELECT * FROM cart WHERE productId = :productId")
+                        .bind("productId", productId)
+                        .mapToBean(Cart.class)
+                        .findOne();
+
+                // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
+                if (existingCartItem.isPresent()) {
+                    int newQuantity = existingCartItem.get().getQuantity() + 1;
+
+                    int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = :quantity WHERE productId = :productId")
+                            .bind("quantity", newQuantity)
+                            .bind("productId", productId)
+                            .execute();
+
+                    return rowsAffected > 0;
+                } else {
+                    // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
+                    int rowsAffected = handle.createUpdate("INSERT INTO cart (productId, quantity) VALUES (:productId, 1)")
+                            .bind("productId", productId)
+                            .execute();
+
+                    return rowsAffected > 0;
+                }
+            });
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
-        System.out.println(getProductById(1));
+//        System.out.println(getProductCart());
+//            System.out.println(getCartByUserId(1));
+//        insertCartItem(85);
+        System.out.println(selectProduct());
     }
 }
+
+
+ 
+
+
+

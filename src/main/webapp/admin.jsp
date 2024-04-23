@@ -357,8 +357,9 @@
                                             <td><%=ProductDAO.getInstance().getFormattedUnitPrice(p)%>
                                             </td>
                                             <td>10</td>
-<%--                                            <td><%=p.getStatuss()%>--%>
-                                            </td>
+
+                                            <td>
+                                               <%=p.getStatuss()%>
                                             <td>
                                                 <button class="btn btn-warning">Xem chi tiết</button>
                                             </td>
