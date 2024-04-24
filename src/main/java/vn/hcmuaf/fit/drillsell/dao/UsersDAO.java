@@ -35,7 +35,7 @@ public class UsersDAO {
         }
     }
 
-    public  String hashPassword(String password) {
+    public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(password.getBytes());
@@ -161,5 +161,29 @@ public class UsersDAO {
                     .mapToBean(User.class)
                     .list();
         });
+    }
+
+    public User getUserById(int id) {
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    public User getUserByUserName(String username) {
+        String query = "SELECT id, fullname, email, username FROM users WHERE username = ?  ";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, username)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
     }
 }

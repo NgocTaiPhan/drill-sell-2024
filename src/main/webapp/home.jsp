@@ -248,6 +248,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
 
                                 <%
+
+
+                                    //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
                                     Boolean role = (Boolean) session.getAttribute("role-acc");
                                     if (role != null && role) {
                                 %>

@@ -26,7 +26,11 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <!--    Css tự viết-->
+<%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--%>
+<%--    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--%>
+<%--    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>--%>
+<%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>--%>
+<%--    <!--    Css tự viết-->--%>
     <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
     <!--Css tự viết-->
     <!-- Customizable CSS -->
@@ -102,12 +106,14 @@
                                 <input id="optionsRadios2" name="optionsRadios" type="radio" value="">Lưu đăng
                                 nhập
                             </label>
-                            <a class="forgot-password pull-right" href="./user-service/forgot-pas.jsp">Quên mật
-                                khẩu?</a>
+                            <a href="#" class="pull-right " data-toggle="modal" data-target="#forgot-pass">
+                                Quên mật khẩu
+                            </a>
                         </div>
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit"
                                value="Đăng nhập">
-                        <a class="btn btn-primary" href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
+                        <a class="btn btn-primary"
+                           href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
 
                     </form>
@@ -207,7 +213,7 @@
                             <label class="info-title" for="password-register">Mật khẩu <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="password-register"
                                    type="password" name="password-register"
-                            value="<%=password%>">
+                                   value="<%=password%>">
 
 
                         </div>
@@ -257,5 +263,47 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 " rel="stylesheet">
 
 </body>
+
+
+<!-- The modal -->
+<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="modalLabelSmall">Điền thông tin để lấy lại mật khẩu</h5>
+            </div>
+
+            <div class="modal-body">
+                <form action="forgot-pas" method="post">
+
+
+                    <label for="input-email">Email</label>
+                    <input name="input-email" type="text" id="input-email" class="form-control"
+                           aria-describedby="help-input-email" placeholder="Nhập email">
+
+                    <label for="input-username">Tên đăng nhập</label>
+                    <input name="input-username" type="text" id="input-username" class="form-control"
+                           aria-describedby="help-input-username" placeholder="Nhập tên đăng nhập">
+
+                    <label for="submit-forgot-pass"></label>
+                    <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"
+                           aria-describedby="help-input-username"
+                           value="Gửi">
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<%--Modal nhập mã OTP--%>
+
+<!-- Modal nhập OTP -->
+
 
 </html>

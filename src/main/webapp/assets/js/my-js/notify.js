@@ -1,7 +1,3 @@
-
-
-
-
 window.onload = function () {
     var urlParams = new URLSearchParams(window.location.search);
     var errorParam = urlParams.get("notify");
@@ -34,7 +30,6 @@ window.onload = function () {
         case "null-address":
             handleErrorMessage(errorParam, "Hãy nhập địa chỉ");
             break;
-
 
 
         case "null-phone":
@@ -76,10 +71,11 @@ window.onload = function () {
         case "invalid-username":
             handleErrorMessage(errorParam, "Tên đăng nhập không hợp lệ");
             break;
-        case "invalid-password":
-            handleErrorMessage(errorParam, "Mật khẩu không hợp lệ");
-            break;
-
+        // case "invalid-pass":
+        //     handleErrorMessage(errorParam, "Mật khẩu phải từ 8 kí tự. Bao gồm chữ hoa, chữ thường và số");
+        //     break;
+        case "invalid-pass":
+            handleErrorMessage(errorParam, "Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
         case "pass-not-match":
             handleErrorMessage(errorParam, "Mật khẩu không khớp");
             break;
@@ -101,6 +97,9 @@ window.onload = function () {
             }).then((result) => {
                 window.location.href = "login.jsp";
             });
+        case"send-otp-success":
+
+            $('#otpModal').modal('show');
         case"admin":
             Swal.fire({
                 icon: "success",
