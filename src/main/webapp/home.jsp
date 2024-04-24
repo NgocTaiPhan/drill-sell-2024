@@ -161,7 +161,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
                     <div class="dropdown dropdown-cart">
-                        <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+
+                        <a href="cart.jsp" class="dropdown-toggle lnk-cart">
+
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>

@@ -396,55 +396,55 @@
 </div>
 <%--end them sp--%>
 
-<% List<Products> latestProducts = new NewProduct().getLatestProducts(5); %>
-<%
-    if (latestProducts != null && !latestProducts.isEmpty()) {
-%>
-<table>
-    <thead>
-    <tr>
-        <th>Xóa</th>
-        <th>Mã sản phẩm</th>
-        <th>Tên sản phẩm</th>
-        <th>Giá</th>
-        <th>Mã nhà sản xuất</th>
-        <th>Mã danh mục</th>
-        <th>Hình ảnh</th>
-        <th>Sửa</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% for (Products products : latestProducts) { %>
-    <tr class="product-row">
-        <td>
-            <form action="remove" method="post">
-                <input type="hidden" name="productId" value="<%= products.getProductId() %>">
-                <button type="submit">Xóa</button>
-            </form>
-        </td>
-        <td class="product-id"><%= products.getProductId() %></td>
-        <td class="product-name"><%= products.getProductName() %></td>
-        <td class="product-price"><%= products.getUnitPrice() %></td>
-        <td class="producer-id"><%= products.getProducerId() %></td>
-        <td class="category-id"><%= products.getCategoryId() %></td>
-        <td class="product-image">
-            <img src="<%= products.getImage() %>" alt="Product Image" class="product-image" width="100" height="100">
-        </td>
-        <td>
-            <a href="<%=request.getContextPath()%>/edit?productId=<%=products.getProductId()%>">Sửa</a>
-        </td>
+<%--<% List<Products> latestProducts = new NewProduct().getLatestProducts(5); %>--%>
+<%--<%--%>
+<%--    if (latestProducts != null && !latestProducts.isEmpty()) {--%>
+<%--%>--%>
+<%--<table>--%>
+<%--    <thead>--%>
+<%--    <tr>--%>
+<%--        <th>Xóa</th>--%>
+<%--        <th>Mã sản phẩm</th>--%>
+<%--        <th>Tên sản phẩm</th>--%>
+<%--        <th>Giá</th>--%>
+<%--        <th>Mã nhà sản xuất</th>--%>
+<%--        <th>Mã danh mục</th>--%>
+<%--        <th>Hình ảnh</th>--%>
+<%--        <th>Sửa</th>--%>
+<%--    </tr>--%>
+<%--    </thead>--%>
+<%--    <tbody>--%>
+<%--    <% for (Products products : latestProducts) { %>--%>
+<%--    <tr class="product-row">--%>
+<%--        <td>--%>
+<%--            <form action="remove" method="post">--%>
+<%--                <input type="hidden" name="productId" value="<%= products.getProductId() %>">--%>
+<%--                <button type="submit">Xóa</button>--%>
+<%--            </form>--%>
+<%--        </td>--%>
+<%--        <td class="product-id"><%= products.getProductId() %></td>--%>
+<%--        <td class="product-name"><%= products.getProductName() %></td>--%>
+<%--        <td class="product-price"><%= products.getUnitPrice() %></td>--%>
+<%--        <td class="producer-id"><%= products.getProducerId() %></td>--%>
+<%--        <td class="category-id"><%= products.getCategoryId() %></td>--%>
+<%--        <td class="product-image">--%>
+<%--            <img src="<%= products.getImage() %>" alt="Product Image" class="product-image" width="100" height="100">--%>
+<%--        </td>--%>
+<%--        <td>--%>
+<%--            <a href="<%=request.getContextPath()%>/edit?productId=<%=products.getProductId()%>">Sửa</a>--%>
+<%--        </td>--%>
 
-    </tr>
-    <% } %>
-    </tbody>
-</table>
-<%
-    } else {
-%>
-<p> Không có sản phẩm nào </p>
-<%
-    }
-%>
+<%--    </tr>--%>
+<%--    <% } %>--%>
+<%--    </tbody>--%>
+<%--</table>--%>
+<%--<%--%>
+<%--    } else {--%>
+<%--%>--%>
+<%--<p> Không có sản phẩm nào </p>--%>
+<%--<%--%>
+<%--    }--%>
+<%--%>--%>
 
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
