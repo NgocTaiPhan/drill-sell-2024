@@ -74,13 +74,16 @@
                 <div class="cnt-account">
                     <ul class="list-unstyled">
                         <%
+                            // Lấy user hoặc usergooogle từ session
                             User u = (User) session.getAttribute("auth");
                             UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
-                            if ((boolean) session.getAttribute("logged")) { %>
+                            boolean logged = u != null || user != null;
+//                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
+                            if (logged) { %>
                         <li><a href="account.jsp"><i class="icon fa fa-user"></i>
                             <%= (u != null) ? u.getFullname() : user.getName() %>
                         </a></li>
-                        <li><a href="card.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                        <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
                         <li><a href="<%=request.getContextPath()%>/logout"><i
                                 class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
@@ -154,30 +157,37 @@
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
                     <div class="dropdown dropdown-cart">
-                        <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
                                 <script>
+                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
                                     function redirectToCart() {
 
-                                        <% if (!(boolean) session.getAttribute("logged")) { %>
+                                        <% if (!logged) { %>
                                         Swal.fire({
-                                            icon: 'error',
-                                            title: 'Bạn chưa đăng nhập',
-                                            text: 'Vui lòng đăng nhập để tiếp tục!',
-                                            confirmButtonText: 'Đồng ý'
+                                            title: "Bạn chưa đăng nhập",
+                                            icon: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonText: "Đăng nhập",
+                                            cancelButtonText: `Để sau`
+                                        }).then((result) => {
+                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+                                            if (result.isConfirmed) {
+                                                window.location.href = 'login.jsp';
+                                            }
                                         });
                                         <% } else { %>
-                                        window.location.href = 'cart.jsp';
+                                        window.location.href = '/viewCart';
                                         <% } %>
                                     }
                                 </script>
 
 
                             </div>
-                        </a>
+                        </div>
 
                     </div>
                     <!-- /.dropdown-cart -->
