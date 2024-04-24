@@ -6,26 +6,26 @@ public class UserGoogleDto {
 
     private String email;
 
-    private boolean verified_email;
+    private boolean verifiedEmail;
 
     private String name;
 
-    private String given_name;
+    private String givenName;
 
-    private String family_name;
+    private String familyName;
 
     private String picture;
 
     public UserGoogleDto() {
     }
 
-    public UserGoogleDto(String id, String email, boolean verified_email, String name, String given_name, String family_name, String picture) {
+    public UserGoogleDto(String id, String email, boolean verifiedEmail, String name, String givenName, String familyName, String picture) {
         this.id = id;
         this.email = email;
-        this.verified_email = verified_email;
+        this.verifiedEmail = verifiedEmail;
         this.name = name;
-        this.given_name = given_name;
-        this.family_name = family_name;
+        this.givenName = givenName;
+        this.familyName = familyName;
         this.picture = picture;
     }
 
@@ -45,12 +45,12 @@ public class UserGoogleDto {
         this.email = email;
     }
 
-    public boolean isVerified_email() {
-        return verified_email;
+    public boolean isVerifiedEmail() {
+        return verifiedEmail;
     }
 
-    public void setVerified_email(boolean verified_email) {
-        this.verified_email = verified_email;
+    public void setVerifiedEmail(boolean verified_email) {
+        this.verifiedEmail = verified_email;
     }
 
     public String getName() {
@@ -61,20 +61,20 @@ public class UserGoogleDto {
         this.name = name;
     }
 
-    public String getGiven_name() {
-        return given_name;
+    public String getGivenName() {
+        return givenName;
     }
 
-    public void setGiven_name(String given_name) {
-        this.given_name = given_name;
+    public void setGivenName(String given_name) {
+        this.givenName = given_name;
     }
 
-    public String getFamily_name() {
-        return family_name;
+    public String getFamilyName() {
+        return familyName;
     }
 
-    public void setFamily_name(String family_name) {
-        this.family_name = family_name;
+    public void setFamilyName(String family_name) {
+        this.familyName = family_name;
     }
 
     public String getPicture() {
@@ -87,6 +87,14 @@ public class UserGoogleDto {
 
     @Override
     public String toString() {
-        return "UserGoogleDto{" + "id=" + id + ", email=" + email + ", verified_email=" + verified_email + ", name=" + name + ", given_name=" + given_name + ", family_name=" + family_name + ", picture=" + picture + '}';
+        return "UserGoogleDto{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", verifiedEmail=" + verifiedEmail +
+                ", name='" + name + '\'' +
+                ", givenName='" + givenName + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", picture='" + picture + '\'' +
+                '}';
     }
 }
