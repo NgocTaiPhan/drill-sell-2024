@@ -208,20 +208,7 @@
                             <input class="form-control unicase-form-control text-input" id="password-register"
                                    type="password" name="password-register">
                             value="<%=password%>">
-                                 <input type="password"
-                                                     class="form-control ${not empty requestScope.violations.passwordViolations
-                                                  ? 'is-invalid' : (not empty requestScope.values.password-register ? 'is-valid' : '')}"
-                                                     id="password-register"
-                                                    name="password-register"
-                                   value="${requestScope.values.password-register}">
-                            <c:if test="${not empty requestScope.violations.passwordViolations}">
-                                <div class="invalid-feedback">
-                                                      <ul class="list-unstyled">
-                                                          <c:forEach var="violation" items="${requestScope.violations.passwordViolations}">
-                                                             <li>${violation}</li></c:forEach>
-                                                       </ul>
-                                </div>
-                                               </c:if>
+                                 
 
                         </div>
                         <div class="form-group">
