@@ -6,6 +6,9 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%
     List<Products> allProduct = (List<Products>) request.getAttribute("detail");
     ProductDAO prodsService = ProductDAO.getInstance();
