@@ -150,7 +150,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
                     <div class="dropdown dropdown-cart">
-                        <a href="viewCart" class="dropdown-toggle lnk-cart">
+                        <a href="cart.jsp" class="dropdown-toggle lnk-cart">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>

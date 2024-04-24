@@ -6,8 +6,12 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% ProductDAO prodsService = ProductDAO.getInstance();%>
+<% ProductDAO prodsService = ProductDAO.getInstance();
+    List<Cart> cart =  CartDAO.selectProduct();
+%>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -306,14 +310,14 @@
                             </thead>
                             <tbody>
                             <%
-                                for (Cart p : (List<Cart>) request.getAttribute("products")) {
+                                for (Cart p : cart) {
                                     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                     String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
                                     String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
                             %>
                             <tr>
 
-                                <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
+                                <td class="li-product-remove"><a href="#" onclick="deleteCartProduct(<%= p.getProductId()%>)"><i class="fa fa-times"></i></a></td>
                                 <td class="sub">
                                     <input type="checkbox" id="checkbox">
 
@@ -352,6 +356,7 @@
                                         });
                                     }
 
+
                                     function reduceQuantity(productId){
                                         $.ajax({
                                            type: "POST",
@@ -364,6 +369,20 @@
                                                 console.error("Lỗi: " + error);
                                             }
                                         });
+                                    }
+
+                                    function deleteCartProduct(productId){
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "deleteCartProduct",
+                                                data:{productId: productId},
+                                                success: function (response){
+                                                    location.reload();
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error("Lỗi: " + error);
+                                                }
+                                            });
                                     }
 
                                     </script>
