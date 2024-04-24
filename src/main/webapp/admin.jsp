@@ -316,14 +316,14 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <%for (User u : UsersDAO.getInstance().showAll()) {%>
+                                            <%for (User u1 : UsersDAO.getInstance().showAll()) {%>
 
                                             <tr>
-                                                <td><%=u.getId()%>
+                                                <td><%=u1.getId()%>
                                                 </td>
-                                                <td><%=u.getFullname()%>
+                                                <td><%=u1.getFullname()%>
                                                 </td>
-                                                <td><%=u.getEmail()%>
+                                                <td><%=u1.getEmail()%>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-warning">Xem chi tiết</button>
@@ -366,7 +366,7 @@
                                             <td>10</td>
 
                                             <td>
-                                               <%=p.getStatuss()%>
+<%--                                               <%=p.getStatuss()%>--%>
                                             <td>
                                                 <button class="btn btn-warning">Xem chi tiết</button>
                                             </td>

@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import jakarta.ws.rs.DELETE;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Cart;
 
@@ -10,7 +11,7 @@ public class CartDAO {
     public static List<Cart> selectProduct() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT cart.cartId, products.productId, products.productName, products.unitPrice, cart.quantity, products.image, (products.unitPrice * cart.quantity) AS totalPrice\n" +
-                            "FROM products JOIN cart ON products.productId = cart.productId")
+                            "FROM products JOIN cart ON products.productId = cart.productId  ")
                     .mapToBean(Cart.class)
                     .list();
         });
@@ -84,7 +85,19 @@ public class CartDAO {
     }
 
 
-
+public static boolean delete(int productId){
+        return DbConnector.me().get().inTransaction(handle -> {
+            try{
+                int deleteProduct = handle.createUpdate("DELETE FROM cart WHERE productId = :productId ")
+                        .bind("productId", productId)
+                        .execute();
+                return deleteProduct > 0;
+            }catch (Exception e ){
+                e.printStackTrace();
+                return false;
+            }
+        });
+}
 
 
 
