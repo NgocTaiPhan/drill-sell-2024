@@ -1,15 +1,16 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.ArrayList" %>
 
-<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%List<Products> searchResults = (List<Products>) request.getAttribute("loadProduct");%>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -58,20 +59,25 @@
 <header class="header-style-1 ">
 
     <!-- ============================================== TOP MENU ============================================== -->
-
-    <%
-        List<Products> searchResults = (List<Products>) request.getAttribute("loadProduct");
-    %>
     <div class="top-bar animate-dropdown">
         <div class="container">
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>Tài khoản</a></li>
-                        <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                        <%
+                            User u = (User) session.getAttribute("auth");
+                            vn.hcmuaf.fit.drillsell.model.UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+                            if ((boolean) session.getAttribute("logged")) { %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                            <%= (u != null) ? u.getFullname() : user.getName() %>
+                        </a></li>
+                        <li><a href="card.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
+                        <li><a href="<%=request.getContextPath()%>/logout"><i
+                                class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
+                        <% } else { %>
                         <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
+                        <% } %>
                     </ul>
                 </div>
 
@@ -111,53 +117,54 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown" name="name" placeholder="Tìm kiếm...">
-                                <a style="height: 44.5px;" class="search-button" href="#" onclick="searchProduct(event)"></a>
+                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                       name="name" placeholder="Tìm kiếm...">
+                                <a style="height: 44.5px;" class="search-button" href="#"
+                                   onclick="searchProduct(event)"></a>
 
 
                             </div>
                         </form>
 
                     </div>
+                    <script>
+                        function searchProduct(event) {
+                            event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
+                            var keyword = document.getElementById("searchInput").value;
+
+                            // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
+                            window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
+                        }
+                    </script>
                     <!-- /.search-area -->
                     <!-- ============================================================= SEARCH AREA : END ============================================================= -->
                 </div>
                 <!-- /.top-search-holder -->
-                <script>
-                    function searchProduct(event) {
-                        event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
-                        var keyword = document.getElementById("searchInput").value;
-
-                        // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
-                        window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
-                    }
-                </script>
-                <!-- /.top-search-holder -->
-
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
+
                     <div class="dropdown dropdown-cart">
                         <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <!-- Thêm một sự kiện nhấp chuột vào div -->
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-
-                                <!-- Bạn có thể đặt mã JavaScript ở phía dưới trang hoặc tách riêng thành một tệp JS -->
                                 <script>
                                     function redirectToCart() {
-                                        // Thực hiện chuyển hướng đến trang s.jsp khi nhấp vào
+
+                                        <% if (!(boolean) session.getAttribute("logged")) { %>
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Bạn chưa đăng nhập',
+                                            text: 'Vui lòng đăng nhập để tiếp tục!',
+                                            confirmButtonText: 'Đồng ý'
+                                        });
+                                        <% } else { %>
                                         window.location.href = 'cart.jsp';
+                                        <% } %>
                                     }
                                 </script>
-
-
-                                <%--                                <div id="cartItemCount" class="basket-item-count">--%>
-                                <%--                                    <span id="cartItemCountValue" class="count">0</span>--%>
-                                <%--                                </div>--%>
-
 
 
                             </div>
@@ -165,6 +172,7 @@
 
                     </div>
                     <!-- /.dropdown-cart -->
+
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
                 <!-- /.top-cart-row -->
@@ -182,7 +190,7 @@
         <div class="container">
             <div class="yamm navbar navbar-default" role="navigation">
                 <!--                <div class="navbar-header">-->
-                <!--                    <button data-target="detail.htmlmc-horizontal-menu-collapse" data-toggle="collapse"-->
+                <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
                 <!--                            class="navbar-toggle collapsed"-->
                 <!--                            type="button">-->
                 <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
@@ -404,17 +412,23 @@
                         %>
                         <div class="product">
                             <div class="product-image">
-                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px" width="189px" src="<%=p.getImage()%>" alt="Ảnh sản phẩm"></a></div>
+                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px"
+                                                                                                         width="189px"
+                                                                                                         src="<%=p.getImage()%>"
+                                                                                                         alt="Ảnh sản phẩm"></a>
+                                </div>
                                 <!-- /.image -->
                             </div>
                             <!-- /.product-image -->
 
                             <div class="product-info text-left">
-                                <h3 class="name"><a href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%></a></h3>
+                                <h3 class="name"><a
+                                        href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%>
+                                </a></h3>
                                 <div class="rating rateit-small"></div>
                                 <div class="description"></div>
                                 <div class="product-price">
-                                    <span  class="price"> <%=formattedPrice%></span>
+                                    <span class="price"> <%=formattedPrice%></span>
                                 </div>
                                 <!-- /.product-price -->
                             </div>
@@ -428,8 +442,8 @@
                     </div>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
                         <%
+                                    }
                                 }
-                            }
                             }
                         %>
                     </div>
@@ -439,7 +453,7 @@
 
 
         </div>
-     
+
     </div>
 
 

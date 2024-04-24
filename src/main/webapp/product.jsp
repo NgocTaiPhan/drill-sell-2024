@@ -5,6 +5,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -70,18 +71,20 @@
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-                        <% User u = (User) session.getAttribute("auth");
-                            if (u != null) { %>
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i><%=u.getFullname()%>
+                        <%
+                            User u = (User) session.getAttribute("auth");
+                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+                            if ((boolean) session.getAttribute("logged")) { %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                            <%= (u != null) ? u.getFullname() : user.getName() %>
                         </a></li>
-                        <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                        <li><a href="card.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
                         <li><a href="<%=request.getContextPath()%>/logout"><i
                                 class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
-                        <%} else {%>
-
+                        <% } else { %>
                         <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
-                        <%}%>
+                        <% } %>
                     </ul>
                 </div>
 
@@ -131,44 +134,44 @@
                         </form>
 
                     </div>
+                    <script>
+                        function searchProduct(event) {
+                            event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
+                            var keyword = document.getElementById("searchInput").value;
+
+                            // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
+                            window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
+                        }
+                    </script>
                     <!-- /.search-area -->
                     <!-- ============================================================= SEARCH AREA : END ============================================================= -->
                 </div>
                 <!-- /.top-search-holder -->
-                <script>
-                    function searchProduct(event) {
-                        event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
-                        var keyword = document.getElementById("searchInput").value;
-
-                        // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
-                        window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
-                    }
-                </script>
-                <!-- /.top-search-holder -->
-
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
+
                     <div class="dropdown dropdown-cart">
                         <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <!-- Thêm một sự kiện nhấp chuột vào div -->
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-
-                                <!-- Bạn có thể đặt mã JavaScript ở phía dưới trang hoặc tách riêng thành một tệp JS -->
                                 <script>
                                     function redirectToCart() {
-                                        // Thực hiện chuyển hướng đến trang s.jsp khi nhấp vào
+
+                                        <% if (!(boolean) session.getAttribute("logged")) { %>
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Bạn chưa đăng nhập',
+                                            text: 'Vui lòng đăng nhập để tiếp tục!',
+                                            confirmButtonText: 'Đồng ý'
+                                        });
+                                        <% } else { %>
                                         window.location.href = 'cart.jsp';
+                                        <% } %>
                                     }
                                 </script>
-
-
-                                <%--                                <div id="cartItemCount" class="basket-item-count">--%>
-                                <%--                                    <span id="cartItemCountValue" class="count">0</span>--%>
-                                <%--                                </div>--%>
 
 
                             </div>
@@ -176,6 +179,7 @@
 
                     </div>
                     <!-- /.dropdown-cart -->
+
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
                 <!-- /.top-cart-row -->
@@ -228,10 +232,27 @@
                                     Boolean role = (Boolean) session.getAttribute("role-acc");
                                     if (role != null && role) {
                                 %>
-                                <li class="active yamm-fw"><a href="managerproduct.jsp">Quản lí Sản phẩm</a></li>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
                                 <%
                                     }
                                 %>
+
+                                <%--                                <%--%>
+
+                                <%--                                    User user = (User) session.getAttribute("kh");--%>
+                                <%--                                    if (user != null) {--%>
+
+                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
+                                <%--                                                System.out.println("username: " + user.getUsername());--%>
+
+                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+                                <%--                                %>--%>
+                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+                                <%--                                <%--%>
+                                <%--                                                }--%>
+                                <%--                                            }--%>
+
+                                <%--                                %>--%>
 
 
                             </ul>

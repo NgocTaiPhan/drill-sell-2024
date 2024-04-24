@@ -1,17 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%@ page import="java.io.PrintWriter" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
+
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 
 
 <%
-    HttpSession sesion = (HttpSession) request.getSession();
     ProductDAO prodsService = ProductDAO.getInstance();
+
 
 %>
 <html lang="vi">
@@ -59,31 +59,41 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
+" rel="stylesheet">
+
 </head>
 
 <body class="cnt-home">
 <!-- ============================================== HEADER ============================================== -->
 <header class="header-style-1 ">
-    <%
-        User u = (User) session.getAttribute("auth");
-    %>
+
     <!-- ============================================== TOP MENU ============================================== -->
     <div class="top-bar animate-dropdown">
         <div class="container">
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-                        <%if (u != null) { %>
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i><%=u.getFullname()%>
+                        <%
+                            User u = (User) session.getAttribute("auth");
+                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+                            if ((boolean) session.getAttribute("logged")) { %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                            <%= (u != null) ? u.getFullname() : user.getName() %>
                         </a></li>
                         <li><a href="card.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
                         <li><a href="<%=request.getContextPath()%>/logout"><i
                                 class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
-                        <%} else {%>
-
+                        <% } else { %>
                         <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
-                        <%}%>
+                        <% } %>
                     </ul>
                 </div>
 
@@ -149,18 +159,36 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
+
                     <div class="dropdown dropdown-cart">
+
                         <a href="cart.jsp" class="dropdown-toggle lnk-cart">
+
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon">
+                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
+                                <script>
+                                    function redirectToCart() {
+
+                                        <% if (!(boolean) session.getAttribute("logged")) { %>
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Bạn chưa đăng nhập',
+                                            text: 'Vui lòng đăng nhập để tiếp tục!',
+                                            confirmButtonText: 'Đồng ý'
+                                        });
+                                        <% } else { %>
+                                        window.location.href = 'cart.jsp';
+                                        <% } %>
+                                    }
+                                </script>
+
+
                             </div>
                         </a>
+
                     </div>
-
-
-
                     <!-- /.dropdown-cart -->
 
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
@@ -602,112 +630,112 @@
                 <!-- /.info-boxes -->
                 <!-- ============================================== INFO BOXES : END ============================================== -->
                 <!-- ============================================== BEST SELLER ============================================== -->
-<%--            Bán chạy--%>
-<%--                <div class="best-deal wow fadeInUp outer-bottom-xs">--%>
-<%--                    <h3 class="section-title point ">Bán chạy</h3>--%>
-<%--                    <div class="sidebar-widget-body outer-top-xs">--%>
-<%--                        <div class="owl-carousel best-seller custom-carousel owl-theme outer-top-xs">--%>
+                <%--            Bán chạy--%>
+                <%--                <div class="best-deal wow fadeInUp outer-bottom-xs">--%>
+                <%--                    <h3 class="section-title point ">Bán chạy</h3>--%>
+                <%--                    <div class="sidebar-widget-body outer-top-xs">--%>
+                <%--                        <div class="owl-carousel best-seller custom-carousel owl-theme outer-top-xs">--%>
 
 
-<%--                            <%--%>
+                <%--                            <%--%>
 
-<%--                                List<Products> bestSellerProducts = showProducts.get(0);--%>
-<%--                                for (Products p : bestSellerProducts) {--%>
-<%--                                    String formattedPrice = homeCtroller.getFormattedUnitPrice(p);--%>
-
-
-<%--                            %>--%>
-<%--                            <div class="item">--%>
-<%--                                <div class="products best-product">--%>
-<%--                                    <div class="product">--%>
-<%--                                        <div class="product-micro">--%>
-<%--                                            <div class="row product-micro-row">--%>
-<%--                                                <div class="col col-xs-5">--%>
-<%--                                                    <div class="product-image">--%>
-<%--                                                        <div class="image"><a--%>
-<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-<%--                                                                methods="get"> <img width="95px"--%>
-<%--                                                                                    height="95px"--%>
-<%--                                                                                    src="<%=p.getImage()%>"--%>
-<%--                                                                                    alt="Ảnh sản phẩm">--%>
-<%--                                                        </a>--%>
-<%--                                                        </div>--%>
-<%--                                                        <!-- /.image -->--%>
-
-<%--                                                    </div>--%>
-<%--                                                    <!-- /.product-image -->--%>
-<%--                                                </div>--%>
-<%--                                                <!-- /.col -->--%>
-<%--                                                <div class="col2 col-xs-7">--%>
-<%--                                                    <div class="product-info">--%>
-<%--                                                        <h3 class="name"><a--%>
-<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-<%--                                                                methods="get"><%=p.getProductName()%>--%>
-<%--                                                        </a></h3>--%>
-<%--                                                        <div class="rating rateit-small"></div>--%>
-<%--                                                        <div class="product-price"><span--%>
-<%--                                                                class="price"> <%=formattedPrice%> </span>--%>
-<%--                                                        </div>--%>
-<%--                                                        <!-- /.product-price -->--%>
-
-<%--                                                    </div>--%>
-<%--                                                </div>--%>
-<%--                                                <!-- /.col -->--%>
-<%--                                            </div>--%>
-<%--                                            <!-- /.product-micro-row -->--%>
-<%--                                        </div>--%>
-<%--                                        <!-- /.product-micro -->--%>
-
-<%--                                    </div>--%>
-<%--                                    <div class="product">--%>
-<%--                                        <div class="product-micro">--%>
-<%--                                            <div class="row product-micro-row">--%>
-<%--                                                <div class="col col-xs-5">--%>
-<%--                                                    <div class="product-image">--%>
-<%--                                                        <div class="image"><a--%>
-<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-<%--                                                                methods="get"> <img width="95px"--%>
-<%--                                                                                    height="95px"--%>
-<%--                                                                                    src="<%=p.getImage()%>"--%>
-<%--                                                                                    alt="Ảnh sản phẩm">--%>
-<%--                                                        </a>--%>
-<%--                                                        </div>--%>
+                <%--                                List<Products> bestSellerProducts = showProducts.get(0);--%>
+                <%--                                for (Products p : bestSellerProducts) {--%>
+                <%--                                    String formattedPrice = homeCtroller.getFormattedUnitPrice(p);--%>
 
 
-<%--                                                    </div>--%>
+                <%--                            %>--%>
+                <%--                            <div class="item">--%>
+                <%--                                <div class="products best-product">--%>
+                <%--                                    <div class="product">--%>
+                <%--                                        <div class="product-micro">--%>
+                <%--                                            <div class="row product-micro-row">--%>
+                <%--                                                <div class="col col-xs-5">--%>
+                <%--                                                    <div class="product-image">--%>
+                <%--                                                        <div class="image"><a--%>
+                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+                <%--                                                                methods="get"> <img width="95px"--%>
+                <%--                                                                                    height="95px"--%>
+                <%--                                                                                    src="<%=p.getImage()%>"--%>
+                <%--                                                                                    alt="Ảnh sản phẩm">--%>
+                <%--                                                        </a>--%>
+                <%--                                                        </div>--%>
+                <%--                                                        <!-- /.image -->--%>
 
-<%--                                                </div>--%>
-<%--                                                <!-- /.col -->--%>
-<%--                                                <div class="col2 col-xs-7">--%>
-<%--                                                    <div class="product-info">--%>
-<%--                                                        <h3 class="name"><a--%>
-<%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-<%--                                                                methods="get"><%=p.getProductName()%>--%>
-<%--                                                        </a></h3>--%>
-<%--                                                        <div class="rating rateit-small"></div>--%>
-<%--                                                        <div class="product-price"><span--%>
-<%--                                                                class="price"> <%=formattedPrice%> </span>--%>
-<%--                                                        </div>--%>
-<%--                                                        <!-- /.product-price -->--%>
+                <%--                                                    </div>--%>
+                <%--                                                    <!-- /.product-image -->--%>
+                <%--                                                </div>--%>
+                <%--                                                <!-- /.col -->--%>
+                <%--                                                <div class="col2 col-xs-7">--%>
+                <%--                                                    <div class="product-info">--%>
+                <%--                                                        <h3 class="name"><a--%>
+                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+                <%--                                                                methods="get"><%=p.getProductName()%>--%>
+                <%--                                                        </a></h3>--%>
+                <%--                                                        <div class="rating rateit-small"></div>--%>
+                <%--                                                        <div class="product-price"><span--%>
+                <%--                                                                class="price"> <%=formattedPrice%> </span>--%>
+                <%--                                                        </div>--%>
+                <%--                                                        <!-- /.product-price -->--%>
 
-<%--                                                    </div>--%>
-<%--                                                </div>--%>
-<%--                                                <!-- /.col -->--%>
-<%--                                            </div>--%>
-<%--                                            <!-- /.product-micro-row -->--%>
-<%--                                        </div>--%>
-<%--                                        <!-- /.product-micro -->--%>
+                <%--                                                    </div>--%>
+                <%--                                                </div>--%>
+                <%--                                                <!-- /.col -->--%>
+                <%--                                            </div>--%>
+                <%--                                            <!-- /.product-micro-row -->--%>
+                <%--                                        </div>--%>
+                <%--                                        <!-- /.product-micro -->--%>
 
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <%}%>--%>
+                <%--                                    </div>--%>
+                <%--                                    <div class="product">--%>
+                <%--                                        <div class="product-micro">--%>
+                <%--                                            <div class="row product-micro-row">--%>
+                <%--                                                <div class="col col-xs-5">--%>
+                <%--                                                    <div class="product-image">--%>
+                <%--                                                        <div class="image"><a--%>
+                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+                <%--                                                                methods="get"> <img width="95px"--%>
+                <%--                                                                                    height="95px"--%>
+                <%--                                                                                    src="<%=p.getImage()%>"--%>
+                <%--                                                                                    alt="Ảnh sản phẩm">--%>
+                <%--                                                        </a>--%>
+                <%--                                                        </div>--%>
 
 
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                    <!-- /.sidebar-widget-body -->--%>
-<%--                </div>--%>
+                <%--                                                    </div>--%>
+
+                <%--                                                </div>--%>
+                <%--                                                <!-- /.col -->--%>
+                <%--                                                <div class="col2 col-xs-7">--%>
+                <%--                                                    <div class="product-info">--%>
+                <%--                                                        <h3 class="name"><a--%>
+                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
+                <%--                                                                methods="get"><%=p.getProductName()%>--%>
+                <%--                                                        </a></h3>--%>
+                <%--                                                        <div class="rating rateit-small"></div>--%>
+                <%--                                                        <div class="product-price"><span--%>
+                <%--                                                                class="price"> <%=formattedPrice%> </span>--%>
+                <%--                                                        </div>--%>
+                <%--                                                        <!-- /.product-price -->--%>
+
+                <%--                                                    </div>--%>
+                <%--                                                </div>--%>
+                <%--                                                <!-- /.col -->--%>
+                <%--                                            </div>--%>
+                <%--                                            <!-- /.product-micro-row -->--%>
+                <%--                                        </div>--%>
+                <%--                                        <!-- /.product-micro -->--%>
+
+                <%--                                    </div>--%>
+                <%--                                </div>--%>
+                <%--                            </div>--%>
+                <%--                            <%}%>--%>
+
+
+                <%--                        </div>--%>
+                <%--                    </div>--%>
+                <%--                    <!-- /.sidebar-widget-body -->--%>
+                <%--                </div>--%>
                 <div class="wide-banners wow fadeInUp outer-bottom-xs">
                     <div class="row">
                         <div class="col-md-7 col-sm-7">
@@ -1077,6 +1105,7 @@
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
+<script src="assets/js/my-js/notify.js"></script>
 
 
 </body>
