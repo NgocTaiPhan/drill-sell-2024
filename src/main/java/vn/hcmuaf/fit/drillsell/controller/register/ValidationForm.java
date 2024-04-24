@@ -96,7 +96,7 @@ public class ValidationForm {
             return false;
         } else {
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-                response.sendRedirect("login.jsp?notify=invalid-password");
+                response.sendRedirect("login.jsp?notify=invalid-pass");
                 return false;
             }
         }
