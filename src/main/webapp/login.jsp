@@ -206,9 +206,9 @@
                         <div class="form-group">
                             <label class="info-title" for="password-register">Mật khẩu <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="password-register"
-                                   type="password" name="password-register">
+                                   type="password" name="password-register"
                             value="<%=password%>">
-                                 
+
 
                         </div>
                         <div class="form-group">

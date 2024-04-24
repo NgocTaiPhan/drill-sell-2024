@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
-
-
 import java.io.IOException;
 
 @WebServlet(name = "ChangePassController", value = "/change-pass")
