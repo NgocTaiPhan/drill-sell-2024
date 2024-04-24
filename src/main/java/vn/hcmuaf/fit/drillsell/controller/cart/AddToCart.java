@@ -10,32 +10,38 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import vn.hcmuaf.fit.drillsell.controller.login.Login;
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Cart;
+import vn.hcmuaf.fit.drillsell.model.User;
 
 import static java.lang.System.out;
 
 @WebServlet("/cart")
 public class AddToCart extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private String jsonResponse;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIdParam = request.getParameter("productId");
-        String userIdParam = request.getParameter("userId");
-
-        // Kiểm tra xem userIdParam có null hoặc rỗng không trước khi chuyển đổi
-        if (userIdParam == null || userIdParam.isEmpty()) {
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
+        if (user == null) {
             response.getWriter().write("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-            return; // Dừng xử lý tiếp theo
+            return;
         }
 
-        int productId = Integer.parseInt(productIdParam);
-        Integer userId = Integer.parseInt(userIdParam);
+        String userIdParam = String.valueOf(user.getId()); // Lấy userId từ thông tin người dùng trong session
 
-        boolean insertProduct = CartDAO.insertCartItem(productId, userId);
+        // Xử lý thêm sản phẩm vào giỏ hàng
+        int productId = Integer.parseInt(productIdParam);
+        int userId = Integer.parseInt(userIdParam);
+
+        boolean insertProduct = CartDAO.insertCartItem(userId, productId);
 
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
@@ -45,8 +51,6 @@ public class AddToCart extends HttpServlet {
             response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
         }
     }
-
-
 
 }
 
