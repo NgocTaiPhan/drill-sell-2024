@@ -26,19 +26,26 @@ public class AddToCart extends HttpServlet {
         String productIdParam = request.getParameter("productId");
         String userIdParam = request.getParameter("userId");
 
-        int productId = Integer.parseInt(productIdParam);
+        // Kiểm tra xem userIdParam có null hoặc rỗng không trước khi chuyển đổi
+        if (userIdParam == null || userIdParam.isEmpty()) {
+            response.getWriter().write("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+            return; // Dừng xử lý tiếp theo
+        }
 
-        boolean insertProduct = CartDAO.insertCartItem(productId);
+        int productId = Integer.parseInt(productIdParam);
+        Integer userId = Integer.parseInt(userIdParam);
+
+        boolean insertProduct = CartDAO.insertCartItem(productId, userId);
 
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
             request.getRequestDispatcher("/detail").forward(request, response);
-
         } else {
-            // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng, có thể gửi thông báo lỗi cho người dùng hoặc xử lý theo cách khác tùy thuộc vào yêu cầu của bạn
+            // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng, gửi thông báo lỗi cho người dùng
             response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
         }
     }
+
 
 
 }

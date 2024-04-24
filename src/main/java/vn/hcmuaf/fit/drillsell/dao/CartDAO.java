@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class CartDAO {
-    public static List<Cart> selectProduct() {
+    public static List<Cart> selectProduct(int userId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT cart.cartId, products.productId, products.productName, products.unitPrice, cart.quantity, products.image, (products.unitPrice * cart.quantity) AS totalPrice\n" +
-                            "FROM products JOIN cart ON products.productId = cart.productId  ")
+            return handle.createQuery("SELECT cart.userId, cart.cartId, products.productId, products.productName, products.unitPrice, cart.quantity, products.image, (products.unitPrice * cart.quantity) AS totalPrice\n" +
+                            "FROM products JOIN cart ON products.productId = cart.productId \n" +
+                            "\t\t\t\t\t\t\tJOIN users ON cart.userId = users.id\n" +
+                            "WHERE cart.userId = :userId")
+                    .bind("userId", userId)
                     .mapToBean(Cart.class)
                     .list();
         });
@@ -48,12 +51,13 @@ public class CartDAO {
         }
     }
 
-    public static boolean insertCartItem(int productId) {
+    public static boolean insertCartItem(int userId, int productId) {
         try {
             return DbConnector.me().get().inTransaction(handle -> {
                 // Thực hiện truy vấn SQL để kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-                Optional<Cart> existingCartItem = handle.createQuery("SELECT * FROM cart WHERE productId = :productId")
+                Optional<Cart> existingCartItem = handle.createQuery("SELECT * FROM cart WHERE productId = :productId AND userId = :userId ")
                         .bind("productId", productId)
+                        .bind("userId", userId)
                         .mapToBean(Cart.class)
                         .findOne();
 
@@ -69,15 +73,15 @@ public class CartDAO {
                     return rowsAffected > 0;
                 } else {
                     // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
-                    int rowsAffected = handle.createUpdate("INSERT INTO cart (productId, quantity) VALUES (:productId, 1)")
+                    int rowsAffected = handle.createUpdate("INSERT INTO cart (userId, productId, quantity) VALUES (:userId, :productId, 1)")
+                            .bind("userId", userId)
                             .bind("productId", productId)
                             .execute();
 
                     return rowsAffected > 0;
                 }
             });
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Xử lý ngoại lệ nếu có lỗi xảy ra
             e.printStackTrace();
             return false;
@@ -85,7 +89,8 @@ public class CartDAO {
     }
 
 
-public static boolean delete(int productId){
+
+    public static boolean delete(int productId){
         return DbConnector.me().get().inTransaction(handle -> {
             try{
                 int deleteProduct = handle.createUpdate("DELETE FROM cart WHERE productId = :productId ")
@@ -109,8 +114,8 @@ public static boolean delete(int productId){
     public static void main(String[] args) {
 //        System.out.println(getProductCart());
 //            System.out.println(getCartByUserId(1));
-//        insertCartItem(85);
-        System.out.println(selectProduct());
+        insertCartItem(2, 95);
+        System.out.println(selectProduct(2));
     }
 }
 
