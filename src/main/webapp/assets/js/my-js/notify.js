@@ -72,6 +72,9 @@ window.onload = function () {
         case "invalid-username":
             handleErrorMessage(errorParam, "Tên đăng nhập không hợp lệ");
             break;
+        case "invalid-password":
+            handleErrorMessage(errorParam, "Mật khẩu không hợp lệ");
+            break;
 
         case "pass-not-match":
             handleErrorMessage(errorParam, "Mật khẩu không khớp");
