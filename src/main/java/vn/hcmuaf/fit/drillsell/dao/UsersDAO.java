@@ -123,6 +123,7 @@ public class UsersDAO {
 //        UserService.getInstance().addUser(newUser);
 
         System.out.println(UsersDAO.getInstance().hashPassword("abc"));
+
     }
 
 

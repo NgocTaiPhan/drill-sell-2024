@@ -212,7 +212,7 @@
                                             }
                                         });
                                         <% } else { %>
-                                        window.location.href = '/viewCart';
+                                        window.location.href = 'cart.jsp';
                                         <% } %>
                                     }
                                 </script>
