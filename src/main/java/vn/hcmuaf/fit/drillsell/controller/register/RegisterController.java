@@ -51,6 +51,7 @@ public class RegisterController extends HttpServlet {
         session.setAttribute("username",username);
 
 
+
         // Kiểm tra các điều kiện lỗi
         // Nếu có lỗi, chuyển hướng với tham số error
         if (fullName == null || fullName.trim().isEmpty()) {
@@ -91,7 +92,7 @@ public class RegisterController extends HttpServlet {
             response.sendRedirect("login.jsp?notify=null-email");
             return;
         } else {
-            if (!email.matches("^[a-zA-Z0-9_+&*-/=?\\^\\s{|}]+@[a-zA-Z0-9-]+\\.[a-zA-Z]+$")) {
+            if (!email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$")) {
                 response.sendRedirect("login.jsp?notify=invalid-email");
                 return;
             }
@@ -109,6 +110,11 @@ public class RegisterController extends HttpServlet {
         if (password == null || password.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-pass");
             return;
+        } else {
+            if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
+                response.sendRedirect("login.jsp?notify=invalid-pass");
+                return;
+            }
         }
         if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
             response.sendRedirect("login.jsp?notify=null-cfpass");
@@ -118,6 +124,7 @@ public class RegisterController extends HttpServlet {
                 response.sendRedirect("login.jsp?notify=pass-not-match");
                 return;
             }
+
         }
         if (agreeToTerms == null
                 || !agreeToTerms.equals("on")) {
@@ -138,3 +145,4 @@ public class RegisterController extends HttpServlet {
 
 
 }
+

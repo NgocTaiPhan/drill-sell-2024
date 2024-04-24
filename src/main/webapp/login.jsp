@@ -123,7 +123,7 @@
                     String phoneNumber = session.getAttribute("phoneNumber") != null ? (String) session.getAttribute("phoneNumber") : "";
                     String email = session.getAttribute("email") != null ? (String) session.getAttribute("email") : "";
                     String username = session.getAttribute("username") != null ? (String) session.getAttribute("username") : "";
-
+                    String password = session.getAttribute("password") != null ? (String) session.getAttribute("password") : "";
                     String birthDate = (String) session.getAttribute("birthDate");
                     Date sqlDate = null;
 
@@ -191,19 +191,38 @@
                         <div class="form-group">
                             <label class="info-title" for="email-register">Địa chỉ email <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="email-register"
-                                   type="text" name="email-register" value="<%=email%>">
+                                   type="text" name="email-register"
+                                   value="<%=email%>">
+
                         </div>
                         <h4>Thông tin tài khoản</h4>
                         <div class="form-group">
 
                             <label class="info-title" for="username-register">Tên đăng nhập <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="username-register"
-                                   type="text" name="username-register" value="<%=username%>">
+                                   type="text" name="username-register"
+                                   value="<%=username%>">
                         </div>
                         <div class="form-group">
                             <label class="info-title" for="password-register">Mật khẩu <span>*</span></label>
                             <input class="form-control unicase-form-control text-input" id="password-register"
                                    type="password" name="password-register">
+                            value="<%=password%>">
+                                 <input type="password"
+                                                     class="form-control ${not empty requestScope.violations.passwordViolations
+                                                  ? 'is-invalid' : (not empty requestScope.values.password-register ? 'is-valid' : '')}"
+                                                     id="password-register"
+                                                    name="password-register"
+                                   value="${requestScope.values.password-register}">
+                            <c:if test="${not empty requestScope.violations.passwordViolations}">
+                                <div class="invalid-feedback">
+                                                      <ul class="list-unstyled">
+                                                          <c:forEach var="violation" items="${requestScope.violations.passwordViolations}">
+                                                             <li>${violation}</li></c:forEach>
+                                                       </ul>
+                                </div>
+                                               </c:if>
+
                         </div>
                         <div class="form-group">
                             <label class="info-title" for="confirm-password-register">Nhập lại mật khẩu
