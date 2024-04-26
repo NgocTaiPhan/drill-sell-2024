@@ -106,13 +106,20 @@
                                 khẩu?</a>
                         </div>
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit"
-                               value="Đăng nhập">
+                               value="Đăng nhập" onclick="">
                         <a class="btn btn-primary" href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
 
                     </form>
 
+<%--                    <script>--%>
+<%--                        document.getElementById("login-form").addEventListener("submit", function(event) {--%>
+<%--                            event.preventDefault(); // Prevent the default form submission--%>
 
+<%--                            // Perform your custom action here, for example, redirecting to the servlet URL--%>
+<%--                            window.location.href = "log";--%>
+<%--                        });--%>
+<%--                    </script>--%>
                 </div>
                 <!-- Sign-in -->
                 <%

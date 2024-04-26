@@ -11,14 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import vn.hcmuaf.fit.drillsell.controller.login.Login;
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
-import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
-import vn.hcmuaf.fit.drillsell.model.Cart;
 import vn.hcmuaf.fit.drillsell.model.User;
 
-import static java.lang.System.out;
 
 @WebServlet("/cart")
 public class AddToCart extends HttpServlet {
@@ -27,6 +22,7 @@ public class AddToCart extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIdParam = request.getParameter("productId");
+        String cartIdParam = request.getParameter("cartId");
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
@@ -40,8 +36,12 @@ public class AddToCart extends HttpServlet {
         // Xử lý thêm sản phẩm vào giỏ hàng
         int productId = Integer.parseInt(productIdParam);
         int userId = Integer.parseInt(userIdParam);
+        int cartId = Integer.parseInt(cartIdParam);
 
         boolean insertProduct = CartDAO.insertCartItem(userId, productId);
+
+        boolean logCart = CartDAO.insertLogCart(userId, cartId);
+
 
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp

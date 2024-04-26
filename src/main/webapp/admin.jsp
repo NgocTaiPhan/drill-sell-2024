@@ -237,22 +237,22 @@
                                     }
                                 %>
 
-                                <%--                                <%--%>
+<%--                                                                <%--%>
 
-                                <%--                                    User user = (User) session.getAttribute("kh");--%>
-                                <%--                                    if (user != null) {--%>
+<%--                                                                    User user = (User) session.getAttribute("kh");--%>
+<%--                                                                    if (user != null) {--%>
 
-                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
-                                <%--                                                System.out.println("username: " + user.getUsername());--%>
+<%--                                                                                System.out.println("boxsell: " + user.getboxsell());--%>
+<%--                                                                                System.out.println("username: " + user.getUsername());--%>
 
-                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
-                                <%--                                %>--%>
-                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
-                                <%--                                <%--%>
-                                <%--                                                }--%>
-                                <%--                                            }--%>
+<%--                                                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+<%--                                                                %>--%>
+<%--                                                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+<%--                                                                <%--%>
+<%--                                                                                }--%>
+<%--                                                                            }--%>
 
-                                <%--                                %>--%>
+<%--                                                                %>--%>
 
 
                             </ul>
