@@ -38,6 +38,7 @@ public class UsersDAO {
         }
     }
 
+
     public User getUserByUsername(String username) {
 
         String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users WHERE username = ?";
@@ -53,8 +54,8 @@ public class UsersDAO {
     }
 
 
+    public String hashPassword(String password) {
 
-    public  String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(password.getBytes());
@@ -181,6 +182,18 @@ public class UsersDAO {
         });
     }
 
+
+    public User getUserById(int id) {
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
 
 
 }

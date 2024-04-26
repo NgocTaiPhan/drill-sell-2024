@@ -13,8 +13,12 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% ProductDAO prodsService = ProductDAO.getInstance();
-    List<Cart> cart =  CartDAO.selectProduct();
+<%
+    User u = (User) session.getAttribute("auth");
+    UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+    ProductDAO prodsService = ProductDAO.getInstance();
+
+    List<Cart> listCartItem = CartDAO.selectProduct(u.getId());
 %>
 
 <html lang="vi">
@@ -88,8 +92,7 @@
                     <ul class="list-unstyled">
                         <%
                             // Lấy user hoặc usergooogle từ session
-                            User u = (User) session.getAttribute("auth");
-                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+
                             boolean logged = u != null || user != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
@@ -107,7 +110,7 @@
                 </div>
 
 
-                <!-- /.cnt-cart -->
+                <!-- /.cnt-listCartItem -->
                 <div class="clearfix"></div>
             </div>
             <!-- /.header-top-inner -->
@@ -203,11 +206,11 @@
                         </div>
 
                     </div>
-                    <!-- /.dropdown-cart -->
+                    <!-- /.dropdown-listCartItem -->
 
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
-                <!-- /.top-cart-row -->
+                <!-- /.top-listCartItem-row -->
             </div>
             <!-- /.row -->
 
@@ -336,14 +339,16 @@
                             </thead>
                             <tbody>
                             <%
-                                for (Cart p : cart) {
+                                for (Cart p : listCartItem) {
                                     NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
                                     String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
                                     String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
                             %>
                             <tr>
 
-                                <td class="li-product-remove"><a href="#" onclick="deleteCartProduct(<%= p.getProductId()%>)"><i class="fa fa-times"></i></a></td>
+                                <td class="li-product-remove"><a href="#"
+                                                                 onclick="deleteCartProduct(<%= p.getProductId()%>)"><i
+                                        class="fa fa-times"></i></a></td>
                                 <td class="sub">
                                     <input type="checkbox" id="checkbox">
 
@@ -358,7 +363,9 @@
                                         class="amount"> <%= formattedPrice%></span></td>
                                 <div id="errorMessage" style="color: red;"></div>
                                 <td class="quantity">
-                                    <button class="minus-button"  type="button" onclick="reduceQuantity(<%= p.getProductId()%>)">-</button>
+                                    <button class="minus-button" type="button"
+                                            onclick="reduceQuantity(<%= p.getProductId()%>)">-
+                                    </button>
                                     <div class="cart-plus-minus">
                                         <input id="quantityInput" class="cart-plus-minus-box"
                                                value="<%= p.getQuantity()%>">
@@ -369,47 +376,47 @@
                                     </button>
                                     <script>
                                         function increaseQuantity(productId) {
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "UpdateQuantityHight",
-                                            data: {productId: productId},
-                                            success: function (response) {
-                                              location.reload();
-                                            },
-                                            error: function (xhr, status, error) {
-                                                console.error("Lỗi: " + error);
-                                            }
-                                        });
-                                    }
-
-
-                                    function reduceQuantity(productId){
-                                        $.ajax({
-                                           type: "POST",
-                                           url: "updateQuantityLow",
-                                           data: {productId: productId},
-                                           success:function (response){
-                                               location.reload();
-                                           } ,
-                                            error: function (xhr, status, error) {
-                                                console.error("Lỗi: " + error);
-                                            }
-                                        });
-                                    }
-
-                                    function deleteCartProduct(productId){
                                             $.ajax({
                                                 type: "POST",
-                                                url: "deleteCartProduct",
-                                                data:{productId: productId},
-                                                success: function (response){
+                                                url: "UpdateQuantityHight",
+                                                data: {productId: productId},
+                                                success: function (response) {
                                                     location.reload();
                                                 },
                                                 error: function (xhr, status, error) {
                                                     console.error("Lỗi: " + error);
                                                 }
                                             });
-                                    }
+                                        }
+
+
+                                        function reduceQuantity(productId) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "updateQuantityLow",
+                                                data: {productId: productId},
+                                                success: function (response) {
+                                                    location.reload();
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error("Lỗi: " + error);
+                                                }
+                                            });
+                                        }
+
+                                        function deleteCartProduct(productId) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "deleteCartProduct",
+                                                data: {productId: productId},
+                                                success: function (response) {
+                                                    location.reload();
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error("Lỗi: " + error);
+                                                }
+                                            });
+                                        }
 
                                     </script>
                                 </td>

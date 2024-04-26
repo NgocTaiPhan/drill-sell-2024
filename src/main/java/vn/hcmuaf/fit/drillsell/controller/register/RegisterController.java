@@ -18,7 +18,6 @@ import java.util.UUID;
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
@@ -44,102 +43,27 @@ public class RegisterController extends HttpServlet {
         String gender = request.getParameter("gender");
 
 //        Trả dữ liệu đã nhập cho người dùng khi nhập
-        session.setAttribute("fullName",fullName);
-        session.setAttribute("birthDate",birthDate);
-        session.setAttribute("phoneNumber",phoneNumber);
-        session.setAttribute("email",email);
-        session.setAttribute("username",username);
+        session.setAttribute("fullName", fullName);
+        session.setAttribute("birthDate", birthDate);
+        session.setAttribute("phoneNumber", phoneNumber);
+        session.setAttribute("email", email);
+        session.setAttribute("username", username);
 
+//Kiểm tra form đăng kí có hợp lệ không
+        if (!ValidationForm.validationForm(fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, response, session)) {
+            return; // Return if validation fails
+        }
 
-
-        // Kiểm tra các điều kiện lỗi
-        // Nếu có lỗi, chuyển hướng với tham số error
-        if (fullName == null || fullName.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-fullname");
-            return;
-        }
-//            DateTimeFormatter formatter = DateTimeFormatter
-        if (birthDate == null || birthDate.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-birthday");
-            return;
-        } else {
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate inputDate = LocalDate.parse(birthDate);
-
-            // LocalDate.now() trả về ngày hiện tại
-            if (inputDate.isAfter(LocalDate.now())) {
-
-                response.sendRedirect("login.jsp?notify=future-birthday");
-                return;
-            }
-        }
-        if (address == null || address.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-address");
-            return;
-        }
-        session.setAttribute("address",address);
-        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-phone");
-            return;
-        } else {
-
-            if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
-                response.sendRedirect("login.jsp?notify=invalid-phone");
-                return;
-            }
-        }
-        if (email == null || email.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-email");
-            return;
-        } else {
-            if (!email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$")) {
-                response.sendRedirect("login.jsp?notify=invalid-email");
-                return;
-            }
-        }
-        if (username == null || username.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-username");
-            return;
-        } else {
-
-            if (!UsersDAO.getInstance().isUsernameDuplicate(username)) {
-                response.sendRedirect("login.jsp?notify=duplicate-acc");
-
-            }
-        }
-        if (password == null || password.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-pass");
-            return;
-        } else {
-            if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-                response.sendRedirect("login.jsp?notify=invalid-pass");
-                return;
-            }
-        }
-        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-cfpass");
-            return;
-        } else {
-            if (!password.equals(confirmPassword)) {
-                response.sendRedirect("login.jsp?notify=pass-not-match");
-                return;
-            }
-
-        }
-        if (agreeToTerms == null
-                || !agreeToTerms.equals("on")) {
-            response.sendRedirect("login.jsp?notify=null-agree");
-            return;
-        }
         response.sendRedirect("login.jsp?notify=register-success");
-//        request.setAttribute("email-for-mail", email);
-        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
-        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode, false, false);
-//        session.setAttribute("confirmation", user);
-        UsersDAO.getInstance().addUser(user);
-        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
 
-        response.sendRedirect("user-service/input-code.jsp");
+
+        //        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+//        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode, false, false);
+////        session.setAttribute("confirmation", user);
+//        UsersDAO.getInstance().addUser(user);
+//        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+//
+//        response.sendRedirect("user-service/input-code.jsp");
 
     }
 

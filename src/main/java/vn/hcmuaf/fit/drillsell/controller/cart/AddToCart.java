@@ -21,35 +21,23 @@ public class AddToCart extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String productIdParam = request.getParameter("productId");
-        String cartIdParam = request.getParameter("cartId");
+
+        int productId = Integer.parseInt(request.getParameter("productId"));
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
-        if (user == null) {
-            response.getWriter().write("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-            return;
-        }
-
-        String userIdParam = String.valueOf(user.getId()); // Lấy userId từ thông tin người dùng trong session
-
-        // Xử lý thêm sản phẩm vào giỏ hàng
-        int productId = Integer.parseInt(productIdParam);
-        int userId = Integer.parseInt(userIdParam);
-        int cartId = Integer.parseInt(cartIdParam);
-
-        boolean insertProduct = CartDAO.insertCartItem(userId, productId);
-
+        if (user != null && productId != 0) {
         boolean logCart = CartDAO.insertLogCart(userId, cartId);
-
-
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
             request.getRequestDispatcher("/detail").forward(request, response);
+            CartDAO.insertCartItem(user.getId(), productId);//Trả về boolean
+            response.sendRedirect("cart.jsp");
         } else {
-            // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng, gửi thông báo lỗi cho người dùng
-            response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
+
         }
+
+
     }
 
 }

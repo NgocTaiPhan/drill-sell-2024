@@ -53,6 +53,7 @@
 </head>
 <body>
 
+
 <header class="header-style-1 ">
 
     <!-- ============================================== TOP MENU ============================================== -->
@@ -275,6 +276,7 @@
     <!-- ============================================== NAVBAR : END ============================================== -->
 
 </header>
+
 <div class="body-content outer-top-xs" id="top-banner-and-menu" style="font-size: medium">
     <div class="">
         <div class="row">
@@ -316,23 +318,243 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <%for (User u1 : UsersDAO.getInstance().showAll()) {%>
+                                            <%
+                                                User userInfor;
 
+                                                for (User us : UsersDAO.getInstance().showAll()) {%>
                                             <tr>
-                                                <td><%=u1.getId()%>
+                                                <td><%=us.getId()%>
                                                 </td>
-                                                <td><%=u1.getFullname()%>
+                                                <td><%=us.getFullname()%>
                                                 </td>
-                                                <td><%=u1.getEmail()%>
+                                                <td><%=us.getEmail()%>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-warning">Xem chi tiết</button>
+                                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                                            data-target="#user-infor"
+                                                    >Xem chi tiết
+                                                    </button>
+                                                    <%--Thẻ input trung gian để lưu id của người dùng sau đó load qua modal--%>
+                                                    <%--                                                    <input type="hidden" id="userIdInput" name="userId"/>--%>
+                                                    <%--                                                    <script !src="">--%>
+
+
+                                                    <%--                                                        function showUserInfor(id) {--%>
+                                                    <%--                                                            // Lưu id người dùng vào thẻ input--%>
+                                                    <%--                                                            document.getElementById("userIdInput").value = parseInt(id);--%>
+
+                                                    <%--                                                        }--%>
+                                                    <%--                                                    </script>--%>
                                                 </td>
                                             </tr>
                                             <%}%>
 
                                             </tbody>
                                         </table>
+
+
+                                        <!-- The modal -->
+                                        <div class="modal fade" id="user-infor" tabindex="-1" role="dialog"
+                                             aria-labelledby="modalLabelLarge" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <h4 class="modal-title" id="">Thông tin người dùng</h4>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="container">
+                                                            <%--                                                        <%--%>
+                                                            <%--                                                            String userIdStr = request.getParameter("userId");--%>
+                                                            <%--                                                            int userId = userIdStr != null ? Integer.parseInt(userIdStr) : -1;--%>
+                                                            <%--                                                            User u = UsersDAO.getInstance().getUserById(userId);--%>
+                                                            <%--                                                        %>--%>
+                                                            <div class="col-sm-9">
+
+                                                                <div class="tab-content">
+
+                                                                    <div id="profile" class="tab-pane in active">
+                                                                        <div class="product-tab">
+                                                                            <div class="container">
+
+
+                                                                                <table class="table table-border">
+                                                                                    <thead>
+
+                                                                                    <tr>
+                                                                                        <td>Tên khách hàng:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getFullname()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Tên đăng nhập:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getUsername()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Email:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getEmail()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Giới tính:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getSex()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Ngày sinh:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getYearOfBirth()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Địa chỉ:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getAddress()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Số điện thoại:</td>
+                                                                                        <td>
+
+                                                                                            <%--                                                                                        <%=u.getPhone()%>--%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <%--                                                                                        <a class="btn btn-primary"--%>
+                                                                                            <%--                                                                                           href="#change-infor">Thay đổi--%>
+                                                                                            <%--                                                                                            thông--%>
+                                                                                            <%--                                                                                            tin--%>
+                                                                                            <%--                                                                                        </a>--%>
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <%--                                                                                        <%request.setAttribute("username-forgot-pass", u.getUsername());%>--%>
+                                                                                            <%--                                                                                        <a href="<%=request.getContextPath()%>/user-service/change-pass.jsp?"--%>
+                                                                                            <%--                                                                                           class="btn btn-primary">Đổi--%>
+                                                                                            <%--                                                                                            mật khẩu</a>--%>
+                                                                                        </td>
+                                                                                    </tr>
+
+                                                                                </table>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div><!-- /.tab-pane -->
+                                                                    <div id="change-infor" class="tab-pane">
+                                                                        <div class="product-tab">
+                                                                            <div class="container">
+
+                                                                                <form action="change-infor-user"
+                                                                                      method="get">
+                                                                                    <table class="table table-border">
+                                                                                        <thead>
+
+                                                                                        <tr>
+                                                                                            <td>Tên khách hàng:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-fullname"--%>
+                                                                                                <%--                                                                                                   value=" <%=u.getFullname()%>">--%>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Tên đăng nhập:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-username"--%>
+                                                                                                <%--                                                                                                   value=" <%=u.getUsername()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Email:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-email"--%>
+                                                                                                <%--                                                                                                   value=" <%=u.getEmail()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Giới tính:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-phone"--%>
+                                                                                                <%--                                                                                                   value="<%=u.getSex()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Ngày sinh:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="date"--%>
+                                                                                                <%--                                                                                                   name="input-date"--%>
+                                                                                                <%--                                                                                                   value=" <%=u.getYearOfBirth()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>Địa chỉ:</td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-address"--%>
+                                                                                                <%--                                                                                                   value="<%=u.getAddress()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                Số điện thoại:
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <%--                                                                                            <input type="text"--%>
+                                                                                                <%--                                                                                                   name="input-phone"--%>
+                                                                                                <%--                                                                                                   value="<%=u.getPhone()%>">--%>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <input class="btn btn-primary"
+                                                                                                       value="Thay đổi">
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                    </table>
+
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div><!-- /.tab-content -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -366,13 +588,16 @@
                                             <td>10</td>
 
                                             <td>
-<%--                                               <%=p.getStatuss()%>--%>
+                                                <%--                                               <%=p.getStatuss()%>--%>
                                             <td>
-                                                <button class="btn btn-warning">Xem chi tiết</button>
+                                                <button type="button" class="btn btn-info" data-toggle="modal"
+                                                        data-target="#prods-infor">Xem chi tiết
+                                                </button>
                                             </td>
                                         </tr>
 
                                         <%}%>
+
 
                                         </tbody>
                                         <tfoot>
@@ -386,6 +611,7 @@
                                         </tr>
                                         </tfoot>
                                     </table>
+
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
@@ -457,8 +683,8 @@
 <script>
     let toolbar = document.createElement('div');
     toolbar.innerHTML = '<b></b>';
-    let addProdBtn  = document.createElement('div')
-    addProdBtn.innerHTML = ' <a class="btn btn-danger" href="admin/insert-products.jsp">Thêm sản phẩm</a>'
+    let addProdBtn = document.createElement('div')
+    addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
     $(document).ready(function () {
         // $('#prod-mn, #user-mn,#order-history-table').dataTable();
         // $('#prod-mn').DataTable()
@@ -481,4 +707,315 @@
 
 </script>
 
+<%--Modal dùng đẻ hiển thị cửa sổ popup thêm sản phẩm--%>
+<div class="modal fade" id="add-product" tabindex="-1" role="dialog" aria-labelledby="modalLabelLarge"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabelLarge">Thêm sản phẩm</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-md-6 col-sm-6 center-block">
+                    <h2>Thêm sản phẩm</h2>
+                    <form action="add-product" method="post" enctype="multipart/form-data">
+                        <div class="form-group" style="margin: 0 auto">
+                            <img width="200px" height="200px" src="" id="loadProdsImg" class="img-thumbnail"
+                                 alt="Ảnh sản phẩm">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imageUrl">Ảnh sản phẩm</label>
+                            <input type="hidden" id="imageUrl" name="imageUrl">
+                            <button type="button" id="chooseImageBtn">Chọn ảnh từ CKFinder</button>
+                        </div>
+
+                        <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+                        <script>
+                            const imageUrlInput = document.getElementById("imageUrl");
+                            const loadProdsImg = document.getElementById("loadProdsImg");
+                            const chooseImageBtn = document.getElementById("chooseImageBtn");
+
+                            chooseImageBtn.addEventListener("click", () => {
+                                // Open CKFinder with image selection and resizing capabilities
+                                CKFinder.popup({
+                                    chooseFiles: true,
+                                    width: 800,
+                                    height: 600,
+                                    resourceType: 'Images', // Restrict to images only
+                                    onInit: function (finder) {
+                                        finder.on('files:choose', function (evt) {
+                                            const file = evt.data.files.first();
+
+                                            // Check if a file is actually selected
+                                            if (file) {
+                                                const imageUrl = file.getUrl();
+                                                loadProdsImg.src = imageUrl;
+                                                imageUrlInput.value = imageUrl;
+                                            } else {
+                                                console.warn('No image selected from CKFinder.');
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        </script>
+
+                        <div class="form-group">
+                            <label for="productID">Mã sản phẩm</label>
+                            <input type="text" class="form-control" id="productID" name="productID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productName">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="productName" name="productName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Mô tả</label>
+                            <textarea class="form-control" id="productDescription" name="productDescription" rows="3"
+                                      required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Giá bán</label>
+                            <input type="number" class="form-control" id="productPrice" name="productPrice" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productQuality">Số lượng</label>
+                            <input type="number" class="form-control" id="productQuality" name="productQuality"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer_id">Nhà sản xuất</label>
+                            <select class="form-control" id="manufacturer_id" name="manufacturer_id">
+                                <option value="">Chọn nhà sản xuất</option>
+                                <option value="1">Công ty A</option>
+                                <option value="2">Công ty B</option>
+                                <option value="3">Công ty C</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category_id">Danh mục sản phẩm</label>
+                            <select class="form-control" id="category_id" name="category_id">
+                                <option value="">Chọn danh mục sản phẩm</option>
+                                <option value="1">Danh mục 1</option>
+                                <option value="2">Danh mục 2</option>
+                                <option value="3">Danh mục 3</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<%--Modal hiển thị chi tiết sản phẩm--%>
+<div class="modal fade" id="prods-infor" tabindex="-1" role="dialog"
+     aria-labelledby="modalLabelLarge" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="prods-detail">Chi tiết sản phẩm</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container">
+                    <%--                                                        <%--%>
+                    <%--                                                            String userIdStr = request.getParameter("userId");--%>
+                    <%--                                                            int userId = userIdStr != null ? Integer.parseInt(userIdStr) : -1;--%>
+                    <%--                                                            User u = UsersDAO.getInstance().getUserById(userId);--%>
+                    <%--                                                        %>--%>
+                    <div class="col-sm-9">
+
+                        <div class="tab-content">
+
+                            <div class="tab-pane in">
+                                <div class="product-tab">
+                                    <div class="container">
+
+
+                                        <table class="table table-border">
+                                            <thead>
+
+                                            <tr>
+                                                <td>Tên khách hàng:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getFullname()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tên đăng nhập:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getUsername()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getEmail()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Giới tính:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getSex()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ngày sinh:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getYearOfBirth()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Địa chỉ:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getAddress()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Số điện thoại:</td>
+                                                <td>
+
+                                                    <%--                                                                                        <%=u.getPhone()%>--%>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <%--                                                                                        <a class="btn btn-primary"--%>
+                                                    <%--                                                                                           href="#change-infor">Thay đổi--%>
+                                                    <%--                                                                                            thông--%>
+                                                    <%--                                                                                            tin--%>
+                                                    <%--                                                                                        </a>--%>
+
+                                                </td>
+                                                <td>
+                                                    <%--                                                                                        <%request.setAttribute("username-forgot-pass", u.getUsername());%>--%>
+                                                    <%--                                                                                        <a href="<%=request.getContextPath()%>/user-service/change-pass.jsp?"--%>
+                                                    <%--                                                                                           class="btn btn-primary">Đổi--%>
+                                                    <%--                                                                                            mật khẩu</a>--%>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+
+                                    </div>
+                                </div>
+                            </div><!-- /.tab-pane -->
+                            <div class="tab-pane">
+                                <div class="product-tab">
+                                    <div class="container">
+
+                                        <form action="change-infor-user"
+                                              method="get">
+                                            <table class="table table-border">
+                                                <thead>
+
+                                                <tr>
+                                                    <td>Tên khách hàng:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-fullname"--%>
+                                                        <%--                                                                                                   value=" <%=u.getFullname()%>">--%>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên đăng nhập:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-username"--%>
+                                                        <%--                                                                                                   value=" <%=u.getUsername()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-email"--%>
+                                                        <%--                                                                                                   value=" <%=u.getEmail()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Giới tính:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-phone"--%>
+                                                        <%--                                                                                                   value="<%=u.getSex()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ngày sinh:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="date"--%>
+                                                        <%--                                                                                                   name="input-date"--%>
+                                                        <%--                                                                                                   value=" <%=u.getYearOfBirth()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Địa chỉ:</td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-address"--%>
+                                                        <%--                                                                                                   value="<%=u.getAddress()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Số điện thoại:
+                                                    </td>
+                                                    <td>
+                                                        <%--                                                                                            <input type="text"--%>
+                                                        <%--                                                                                                   name="input-phone"--%>
+                                                        <%--                                                                                                   value="<%=u.getPhone()%>">--%>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <input class="btn btn-primary"
+                                                               value="Thay đổi">
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div><!-- /.tab-content -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 </html>
