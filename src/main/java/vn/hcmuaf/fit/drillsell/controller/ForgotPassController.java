@@ -44,7 +44,7 @@ public class ForgotPassController extends HttpServlet {
     }
 
     private void checkUserName(String username, HttpServletResponse resp) throws IOException {
-        if (UsersDAO.getInstance().getUserByUserName(username) == null) {
+        if (UsersDAO.getInstance().getUserByUsername(username) == null) {
             resp.sendRedirect("login.jsp?#");
         }
     }

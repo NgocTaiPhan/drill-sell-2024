@@ -110,7 +110,7 @@
                                 Quên mật khẩu
                             </a>
                         </div>
-                        <input class="btn-upper btn btn-primary checkout-page-button" type="submit"
+                        <input class="btn-upper btn btn-primary checkout-page-button" type="submit">
 
                         <a class="btn btn-primary"
                            href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
