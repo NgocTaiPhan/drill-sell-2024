@@ -2,13 +2,16 @@ package vn.hcmuaf.fit.drillsell.dao;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
+import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
+import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public class UsersDAO {
 
@@ -35,7 +38,24 @@ public class UsersDAO {
         }
     }
 
+
+    public User getUserByUsername(String username) {
+
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users WHERE username = ?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, username)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+    }
+
+
     public String hashPassword(String password) {
+
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(password.getBytes());
@@ -121,8 +141,7 @@ public class UsersDAO {
 
         // Gọi phương thức addUser để thêm đối tượng User vào database
 //        UserService.getInstance().addUser(newUser);
-
-        System.out.println(UsersDAO.getInstance().hashPassword("abc"));
+//        System.out.println(UsersDAO.getInstance().hashPassword("abc"));
 
     }
 
@@ -163,6 +182,7 @@ public class UsersDAO {
         });
     }
 
+
     public User getUserById(int id) {
         String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -175,15 +195,6 @@ public class UsersDAO {
         }
     }
 
-    public User getUserByUserName(String username) {
-        String query = "SELECT id, fullname, email, username FROM users WHERE username = ?  ";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery(query)
-                    .bind(0, username)
-                    .mapToBean(User.class)
-                    .findFirst()
-                    .orElse(null);
-        }
-    }
+
 }
+

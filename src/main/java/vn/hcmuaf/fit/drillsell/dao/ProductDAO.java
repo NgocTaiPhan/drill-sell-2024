@@ -71,9 +71,9 @@ public class ProductDAO {
     public static List<Products> detailProduct(int productId) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery(
-                            "SELECT products.productId, products.image, products.unitPrice, products.productName, products.categoryId, products.nameProducer, repo.importQuantity, \n" +
+                            "SELECT products.productId, products.image, products.unitPrice, products.productName, products.categoryId, products.nameProducer," +
                                     "products.describle, products.specifions\n" +
-                                    "FROM products JOIN repo ON products.productId = repo.productId\n" +
+                                    "FROM products " +
                                     "WHERE products.productId = :productId\n")
                     .bind("productId", productId)
                     .mapToBean(Products.class)
@@ -135,4 +135,8 @@ public class ProductDAO {
     }
 
 
+
+    public static void showSaleProduct(){
+
+    }
 }
