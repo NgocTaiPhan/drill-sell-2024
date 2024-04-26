@@ -19,11 +19,12 @@ public class CartDAO {
                     .list();
         });
     }
-    public static boolean updateQuantityHight(int productId) {
+    public static boolean updateQuantityHight(int userId, int productId) {
         try {
             return DbConnector.me().get().inTransaction(handle -> {
-                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity + 1 WHERE productId = :productId")
+                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity + 1 WHERE productId = :productId AND userId = :userId")
                         .bind("productId", productId)
+                        .bind("userId", userId)
                         .execute();
 
                 return rowsAffected > 0;
@@ -35,11 +36,12 @@ public class CartDAO {
         }
     }
 
-    public static boolean updateQuantityLow(int productId) {
+    public static boolean updateQuantityLow(int userId, int productId) {
         try {
             return DbConnector.me().get().inTransaction(handle -> {
-                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity - 1 WHERE productId = :productId AND quantity >1")
+                int rowsAffected = handle.createUpdate("UPDATE cart SET quantity = quantity - 1 WHERE productId = :productId AND quantity > 1 AND userId = :userId")
                         .bind("productId", productId)
+                        .bind("userId", userId)
                         .execute();
 
                 return rowsAffected > 0;
@@ -50,6 +52,7 @@ public class CartDAO {
             return false;
         }
     }
+
 
     public static boolean insertCartItem(int userId, int productId) {
         try {
@@ -90,11 +93,12 @@ public class CartDAO {
 
 
 
-    public static boolean delete(int productId){
+    public static boolean delete(int userId, int productId){
         return DbConnector.me().get().inTransaction(handle -> {
             try{
-                int deleteProduct = handle.createUpdate("DELETE FROM cart WHERE productId = :productId ")
+                int deleteProduct = handle.createUpdate("DELETE FROM cart WHERE userId = :userId AND productId = :productId ")
                         .bind("productId", productId)
+                        .bind("userId", userId)
                         .execute();
                 return deleteProduct > 0;
             }catch (Exception e ){
