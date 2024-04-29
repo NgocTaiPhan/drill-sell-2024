@@ -122,7 +122,7 @@ public class UsersDAO {
         // Gọi phương thức addUser để thêm đối tượng User vào database
 //        UserService.getInstance().addUser(newUser);
 
-        System.out.println(UsersDAO.getInstance().hashPassword("abc"));
+        System.out.println(UsersDAO.getInstance().hashPassword("123"));
 
     }
 

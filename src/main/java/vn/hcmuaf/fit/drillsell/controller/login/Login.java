@@ -14,6 +14,7 @@ public class Login {
         //Lấy username, pass nhập từ màn hình
         String username = request.getParameter("username-login");
         String password = request.getParameter("pass-login");
+        boolean logged = false;
         System.out.println(username + password);
 
         if (validInput(username, password)) {
@@ -22,7 +23,7 @@ public class Login {
             //Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
             User auth = usersDAO.getUser(username, UsersDAO.getInstance().hashPassword(password));
 
-
+            logged = true;
             if (auth != null) {
                 HttpSession session = request.getSession();
                 String url = "login.jsp";
@@ -38,9 +39,7 @@ public class Login {
                 }
                 //Lưu thông tin tài khoản và trạng thái "đã đăng nhập" vào session
                 session.setAttribute("auth", auth);
-                session.setAttribute("logged", true);
-                boolean isAdmin = false;
-                isAdmin = auth.isRoleUser();
+                session.setAttribute("logged", logged);
                 session.setAttribute("role-acc", auth.isRoleUser());
 
             } else {
@@ -52,6 +51,7 @@ public class Login {
             response.sendRedirect("login.jsp?notify=null-value-login");
         }
     }
+
     public static boolean validInput(String username, String password) {
         return username != null && password != null && !username.isEmpty() && !password.isEmpty();
     }

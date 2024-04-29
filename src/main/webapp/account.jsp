@@ -18,39 +18,11 @@
     <link rel="icon" href="assets/images/logo.png" type="image/png">
     <title>Tài khoản
     </title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
-    <!-- Customizable CSS -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/blue.css">
-    <link rel="stylesheet" href="assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="assets/css/owl.transitions.css">
-    <link rel="stylesheet" href="assets/css/animate.min.css">
-    <link rel="stylesheet" href="assets/css/rateit.css">
-    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="assets/css/my-css/footermenu.css">
-    <script src="assets/js/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/bootstrap-hover-dropdown.min.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/echo.min.js"></script>
-    <script src="assets/js/jquery.easing-1.3.min.js"></script>
-    <script src="assets/js/bootstrap-slider.min.js"></script>
-    <script src="assets/js/jquery.rateit.min.js"></script>
-    <script type="text/javascript" src="assets/js/lightbox.min.js"></script>
-    <script src="assets/js/bootstrap-select.min.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/scripts.js"></script>
-    <script src="assets/js/my-js/footermenu.js"></script>
 
     <!-- Icons/Glyphs -->
-    <link rel="stylesheet" href="assets/css/font-awesome.css">
 
-    <!-- Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
-          rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
 <header class="header-style-1 ">
@@ -127,15 +99,6 @@
                         </form>
 
                     </div>
-                    <script>
-                        function searchProduct(event) {
-                            event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
-                            var keyword = document.getElementById("searchInput").value;
-
-                            // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
-                            window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
-                        }
-                    </script>
                     <!-- /.search-area -->
                     <!-- ============================================================= SEARCH AREA : END ============================================================= -->
                 </div>
@@ -355,7 +318,9 @@
                                                     tin</a></td>
                                                 <td>
                                                     <%request.setAttribute("username-forgot-pass", u.getUsername());%>
-                                                    <a href="<%=request.getContextPath()%>/user-service/change-pass.jsp?"
+                                                    <%--Chèn giá trị forgot-pass = 0 vào khi bấm thẻ a để kiểm tra.
+                                                    Nếu bằng 0 thì nghĩa là người muôn thay đổi mật khẩu khi vẫn nhớ mật khẩu--%>
+                                                    <a href="<%=request.getContextPath()%>/change-pass.jsp?forgot-pass=0"
                                                        class="btn btn-primary">Đổi mật khẩu</a>
                                                 </td>
                                             </tr>

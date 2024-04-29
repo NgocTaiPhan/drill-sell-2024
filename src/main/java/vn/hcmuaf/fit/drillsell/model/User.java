@@ -30,7 +30,6 @@ User {
     }
 
 
-
     public User(int id, String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
         this.id = id;
         this.fullname = fullname;
@@ -56,6 +55,19 @@ User {
         this.isVerified = isVerified;
         this.roleUser = roleUser;
     }
+
+    public User(String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.username = username;
+        this.passwords = passwords;
+        this.sex = sex;
+        this.yearOfBirth = yearOfBirth;
+
+    }
+
 
     public int getId() {
         return id;

@@ -10,24 +10,30 @@ public class Products {
     private double unitPrice;
     private int categoryId;
     private String nameProducer;
-    private int importQuantity;
     private String describle;
-    private Date importDate;
     private String specifions;
 
     public Products() {
     }
 
-    public Products(int productId, String image, String productName, double unitPrice, int categoryId, String nameProducer, int importQuantity, String describle, Date importDate, String specifions) {
+    public Products(String image, String productName, double unitPrice, int categoryId, String nameProducer, String describle, String specifions) {
+        this.image = image;
+        this.productName = productName;
+        this.unitPrice = unitPrice;
+        this.categoryId = categoryId;
+        this.nameProducer = nameProducer;
+        this.describle = describle;
+        this.specifions = specifions;
+    }
+
+    public Products(int productId, String image, String productName, double unitPrice, int categoryId, String nameProducer, String describle, String specifions) {
         this.productId = productId;
         this.image = image;
         this.productName = productName;
         this.unitPrice = unitPrice;
         this.categoryId = categoryId;
         this.nameProducer = nameProducer;
-        this.importQuantity = importQuantity;
         this.describle = describle;
-        this.importDate = importDate;
         this.specifions = specifions;
     }
 
@@ -79,14 +85,6 @@ public class Products {
         this.nameProducer = nameProducer;
     }
 
-    public int getImportQuantity() {
-        return importQuantity;
-    }
-
-    public void setImportQuantity(int importQuantity) {
-        this.importQuantity = importQuantity;
-    }
-
     public String getDescrible() {
         return describle;
     }
@@ -95,35 +93,11 @@ public class Products {
         this.describle = describle;
     }
 
-    public Date getImportDate() {
-        return importDate;
-    }
-
-    public void setImportDate(Date importDate) {
-        this.importDate = importDate;
-    }
-
     public String getSpecifions() {
         return specifions;
     }
 
     public void setSpecifions(String specifions) {
         this.specifions = specifions;
-    }
-
-    @Override
-    public String toString() {
-        return "Products{" +
-                "productId=" + productId +
-                ", image='" + image + '\'' +
-                ", productName='" + productName + '\'' +
-                ", unitPrice=" + unitPrice +
-                ", categoryId=" + categoryId +
-                ", nameProducer='" + nameProducer + '\'' +
-                ", importQuantity=" + importQuantity +
-                ", describle='" + describle + '\'' +
-                ", importDate=" + importDate +
-                ", specifions='" + specifions + '\'' +
-                '}';
     }
 }
