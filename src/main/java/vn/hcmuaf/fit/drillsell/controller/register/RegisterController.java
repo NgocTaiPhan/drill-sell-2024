@@ -41,19 +41,16 @@ public class RegisterController extends HttpServlet {
         String confirmPassword = request.getParameter("confirm-password-register");
         String agreeToTerms = request.getParameter("agree-to-terms");
         String gender = request.getParameter("gender");
-
-//        Trả dữ liệu đã nhập cho người dùng khi nhập
-        session.setAttribute("fullName", fullName);
-        session.setAttribute("birthDate", birthDate);
-        session.setAttribute("phoneNumber", phoneNumber);
-        session.setAttribute("email", email);
-        session.setAttribute("username", username);
-
-//Kiểm tra form đăng kí có hợp lệ không
+//Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
+        User userRegister = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate);
+        session.setAttribute("user-register", userRegister);
+//Kiểm tra valid form
         if (!ValidationForm.validationForm(fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, response, session)) {
-            return; // Return if validation fails
+            return;
         }
 
+//        Xóa user khỏi session sau khi check valid để tối ưu bộ nhớ
+        session.removeAttribute("user-register");
         response.sendRedirect("login.jsp?notify=register-success");
 
 

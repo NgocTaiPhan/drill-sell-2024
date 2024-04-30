@@ -2,6 +2,41 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    Boolean role = (Boolean) session.getAttribute("role-acc");
+    Boolean logged = (Boolean) session.getAttribute("logged");
+%>
+<script>
+    const role = <%= role != null ? role : false %>;
+    const logged = <%= logged != null ? logged : false %>;
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!logged) {
+            Swal.fire({
+                title: "Vui lòng đăng nhập với tài khoản quản trị để tiếp tục",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Đăng nhập",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.jsp';
+                }
+            });
+        } else if (!role) {
+            Swal.fire({
+                title: "Bạn không có quyền truy cập vào trang quản trị",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Về trang chủ",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'home.jsp';
+                }
+            });
+        }
+    });
+</script>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,15 +72,6 @@
     <script src="assets/js/scripts.js"></script>
     <script src="assets/js/my-js/footermenu.js"></script>
 
-
-    <!-- Icons/Glyphs ==============================================================================================-->
-    <link rel="stylesheet" href="assets/css/font-awesome.css">
-
-    <!-- Fonts =========================================================================================================-->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
-          rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
 
@@ -284,11 +310,19 @@
                 <div class="row">
                     <div id="manager-label" class="col-sm-2">
                         <ul id="product-tabs" class="nav">
-                            <li class="active"><a data-toggle="tab" href="#users-management">Quản lý người dùng</a></li>
-                            <li><a data-toggle="tab" href="#products-management">Quản lý sản phẩm</a>
+                            <li class="active">
+                                <%--Tạo các thẻ liên kết đến các chức năng trong admin thông qua id của thẻ đó  --%>
+                                <a data-toggle="tab" class="table-striped" href="#users-management">Quản lý người
+                                    dùng</a></li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#products-management">Quản lý sản
+                                    phẩm</a>
                             </li>
-                            <li><a data-toggle="tab" href="#statistics">Doanh thu</a></li>
-                            <li><a data-toggle="tab" href="#order-history">Lịch Sử Đặt Hàng</a></li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#statistics">Doanh thu</a></li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#order-history">Lịch Sử Đặt Hàng</a>
+                            </li>
                         </ul><!-- /.nav-tabs #product-tabs -->
                     </div>
                     <style>
@@ -297,8 +331,14 @@
                             margin-left: 50px;
                         }
 
+                        .tab {
+                            font-weight: bold;
+                        }
+
 
                     </style>
+
+                    <%--                    Thẻ quản lý người dùng--%>
                     <div class="col-sm-9">
 
                         <div class="tab-content">
@@ -319,6 +359,8 @@
                                             </thead>
                                             <tbody>
                                             <%
+
+                                                //                                                Load toàn bộ thông tin của người dùng trong db
                                                 User userInfor;
 
                                                 for (User us : UsersDAO.getInstance().showAll()) {%>
@@ -353,7 +395,7 @@
                                         </table>
 
 
-                                        <!-- The modal -->
+                                        <%--                                    Modal xem chi tiết thông tin của 1 người dùng cụ thể--%>
                                         <div class="modal fade" id="user-infor" tabindex="-1" role="dialog"
                                              aria-labelledby="modalLabelLarge" aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
@@ -559,7 +601,7 @@
                                     </div>
                                 </div>
                             </div><!-- /.tab-pane -->
-
+                            <%--Thẻ xem toàn bộ sản phẩm lấy từ db--%>
                             <div id="products-management" class="tab-pane">
                                 <div class="product-tab container">
 
@@ -684,17 +726,21 @@
     let toolbar = document.createElement('div');
     toolbar.innerHTML = '<b></b>';
     let addProdBtn = document.createElement('div')
+    // Tạo nút thêm sản phẩm để khi nhấp vào sẽ xuất hiện cửa sổ pop-up
     addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
     $(document).ready(function () {
-        // $('#prod-mn, #user-mn,#order-history-table').dataTable();
-        // $('#prod-mn').DataTable()
 
+
+        // Viết các hàm tạo datamodel
+
+        // Áp dụng datatable cho bảng Quản lý người dùng và Lịch sử đơn hàng với trên và dưới của bảng là 1 thẻ div rỗng
         new DataTable('#user-mn,#order-history-table', {
             layout: {
                 topStart: toolbar,
                 bottomStart: toolbar
             }
         });
+        // Áp dụng datatable cho bảng Quản lý sản phẩm với top là nút Thêm sản phẩm
         new DataTable('#prod-mn', {
             layout: {
                 topStart: addProdBtn,
@@ -766,10 +812,7 @@
                             });
                         </script>
 
-                        <div class="form-group">
-                            <label for="productID">Mã sản phẩm</label>
-                            <input type="text" class="form-control" id="productID" name="productID" required>
-                        </div>
+
                         <div class="form-group">
                             <label for="productName">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" name="productName" required>
@@ -832,11 +875,6 @@
 
             <div class="modal-body">
                 <div class="container">
-                    <%--                                                        <%--%>
-                    <%--                                                            String userIdStr = request.getParameter("userId");--%>
-                    <%--                                                            int userId = userIdStr != null ? Integer.parseInt(userIdStr) : -1;--%>
-                    <%--                                                            User u = UsersDAO.getInstance().getUserById(userId);--%>
-                    <%--                                                        %>--%>
                     <div class="col-sm-9">
 
                         <div class="tab-content">

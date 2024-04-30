@@ -1,15 +1,10 @@
-<%@ page import="org.jboss.weld.context.http.Http" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.controller.register.RegisterController" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.sql.Date" %>
-<%@ page import="java.text.ParseException" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
     User auth = (User) session.getAttribute("auth");
-    Boolean loginSuccess = (Boolean) request.getAttribute("loginSuccess");
 
 
 %>
@@ -26,11 +21,11 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
 
-<%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--%>
-<%--    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--%>
-<%--    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>--%>
-<%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>--%>
-<%--    <!--    Css tự viết-->--%>
+    <%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--%>
+    <%--    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--%>
+    <%--    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>--%>
+    <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>--%>
+    <%--    <!--    Css tự viết-->--%>
     <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
     <!--Css tự viết-->
     <!-- Customizable CSS -->
@@ -130,29 +125,30 @@
                 </div>
                 <!-- Sign-in -->
                 <%
-                    // Lấy các thông tin từ form
-                    String fullName = session.getAttribute("fullName") != null ? (String) session.getAttribute("fullName") : "";
+                    // Retrieve the user object from the session, handling null cases
+                    User user = (User) session.getAttribute("user-register");
+                    String fullName = user != null ? user.getFullname() : "";
+                    String address = user != null ? user.getAddress() : "";
+                    String phoneNumber = user != null ? user.getPhone() : "";
+                    String email = user != null ? user.getEmail() : "";
+                    String username = user != null ? user.getUsername() : "";
+                    String password = ""; // Consider security implications, potentially use a placeholder
+                    String birthDate = user != null ? user.getYearOfBirth() : "";
 
-                    String address = session.getAttribute("address") != null ? (String) session.getAttribute("address") : "";
-                    String phoneNumber = session.getAttribute("phoneNumber") != null ? (String) session.getAttribute("phoneNumber") : "";
-                    String email = session.getAttribute("email") != null ? (String) session.getAttribute("email") : "";
-                    String username = session.getAttribute("username") != null ? (String) session.getAttribute("username") : "";
-                    String password = session.getAttribute("password") != null ? (String) session.getAttribute("password") : "";
-                    String birthDate = (String) session.getAttribute("birthDate");
+                    // Handle birthDate and sqlDate conversion with null checks and error handling
                     Date sqlDate = null;
-
                     if (birthDate != null && !birthDate.isEmpty()) {
                         try {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             java.util.Date utilDate = sdf.parse(birthDate);
                             sqlDate = new Date(utilDate.getTime());
                         } catch (Exception e) {
-
+                            // Handle parsing exception (e.g., log the error)
+//                            System.err.println("Error parsing birthDate: " + e.getMessage());
                         }
                     }
-
-
                 %>
+
 
                 <div class="col-md-6 col-sm-6 create-new-account">
                     <h3 class="checkout-subtitle">Tạo tài khoản mới</h3>
@@ -287,7 +283,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
             </div>
 
             <div class="modal-body">
-                <form action="forgot-pas" method="post">
+                <form action="forgot-pas?forgot-pass=1" method="post">
 
 
                     <label for="input-email">Email</label>
