@@ -105,7 +105,7 @@
                                 Quên mật khẩu
                             </a>
                         </div>
-                        <input class="btn-upper btn btn-primary checkout-page-button" type="submit">
+                        <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
                            href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
@@ -114,14 +114,14 @@
 
                     </form>
 
-<%--                    <script>--%>
-<%--                        document.getElementById("login-form").addEventListener("submit", function(event) {--%>
-<%--                            event.preventDefault(); // Prevent the default form submission--%>
+                    <%--                    <script>--%>
+                    <%--                        document.getElementById("login-form").addEventListener("submit", function(event) {--%>
+                    <%--                            event.preventDefault(); // Prevent the default form submission--%>
 
-<%--                            // Perform your custom action here, for example, redirecting to the servlet URL--%>
-<%--                            window.location.href = "log";--%>
-<%--                        });--%>
-<%--                    </script>--%>
+                    <%--                            // Perform your custom action here, for example, redirecting to the servlet URL--%>
+                    <%--                            window.location.href = "log";--%>
+                    <%--                        });--%>
+                    <%--                    </script>--%>
                 </div>
                 <!-- Sign-in -->
                 <%
@@ -297,7 +297,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <label for="submit-forgot-pass"></label>
                     <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"
                            aria-describedby="help-input-username"
-                           value="Gửi">
+                           value="Gửi ">
                 </form>
 
             </div>
