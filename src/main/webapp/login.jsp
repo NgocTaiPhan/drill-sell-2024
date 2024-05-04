@@ -71,6 +71,7 @@
 <div><a href="./home.jsp">
     <button class="button-back-home " role="button">Quay về trang chủ</button>
 </a></div>
+<input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
 
 
 <div class="body-content">
@@ -135,7 +136,6 @@
                     String password = ""; // Consider security implications, potentially use a placeholder
                     String birthDate = user != null ? user.getYearOfBirth() : "";
 
-                    // Handle birthDate and sqlDate conversion with null checks and error handling
                     Date sqlDate = null;
                     if (birthDate != null && !birthDate.isEmpty()) {
                         try {
@@ -154,7 +154,7 @@
                     <h3 class="checkout-subtitle">Tạo tài khoản mới</h3>
                     <p class="text title-tag-line"> Nhập thông tin bên dưới để tạo tài khoản mới</p>
                     <form class="register-form outer-top-xs" role="form" id="register-form" action="register"
-                          method="POST">
+                          method="post">
                         <h4>Thông tin người dùng</h4>
 
                         <div class="form-group">
@@ -257,14 +257,12 @@
 <!-- ============================================================= Backtop ============================================================= -->
 
 
-</script>
-<script src="assets/js/my-js/notify.js"></script>
-<script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
-"></script>
-<link href="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
-" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+        integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+      integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
 
 </body>
 
@@ -308,6 +306,144 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 <%--Modal nhập mã OTP--%>
 
 <!-- Modal nhập OTP -->
+<script !src="">
 
+    var errorParam = document.getElementById("notify").getAttribute('value');
+
+    function handleErrorMessage(errorMessage) {
+        Swal.fire({
+            icon: "error",
+            title: "Đăng kí thất bại",
+            text: errorMessage,
+            confirmButtonText: "Đóng",
+        });
+    }
+
+    switch (errorParam) {
+        case "null-fullname":
+            handleErrorMessage("Hãy điền họ và tên");
+            break;
+
+        case "null-birthday":
+            handleErrorMessage("Hãy nhập ngày sinh");
+            break;
+
+
+        case "null-address":
+            handleErrorMessage("Hãy nhập địa chỉ");
+            break;
+
+
+        case "null-phone":
+            handleErrorMessage("Hãy nhập số điện thoại");
+            break;
+
+        case "null-email":
+            handleErrorMessage("Hãy nhập địa chỉ email");
+            break;
+
+        case "null-username":
+            handleErrorMessage("Hãy nhập tên đăng nhập");
+            break;
+
+        case "null-pass":
+            handleErrorMessage("Hãy nhập mật khẩu");
+            break;
+
+        case "null-cfpass":
+            handleErrorMessage("Hãy nhập lại mật khẩu");
+            break;
+
+        case "null-agree":
+            handleErrorMessage("Hãy đồng ý với điều khoản của chúng tôi.");
+            break;
+
+        case "future-birthday":
+            handleErrorMessage("Ngày sinh không được lớn hơn ngày hiện tại");
+            break;
+
+        case "invalid-phone":
+            handleErrorMessage("Số điện thoại không hợp lệ");
+            break;
+
+        case "invalid-email":
+            handleErrorMessage("Email không hợp lệ");
+            break;
+
+        case "invalid-username":
+            handleErrorMessage("Tên đăng nhập không hợp lệ");
+            break;
+        // case "invalid-pass":
+        //     handleErrorMessage( "Mật khẩu phải từ 8 kí tự. Bao gồm chữ hoa, chữ thường và số");
+        //     break;
+        case "invalid-pass":
+            handleErrorMessage("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
+        case "pass-not-match":
+            handleErrorMessage("Mật khẩu không khớp");
+            break;
+        case "not-found-user-login":
+            handleErrorMessage("Không tìm thấy tài khoản");
+            break;
+        case "null-value-login":
+            handleErrorMessage("Không được để trống tên tài khoản và mật khẩu");
+            break;
+        case "duplicate-acc":
+            handleErrorMessage("Tên đăng nhập đã tồn tại");
+            break;
+        case"register-success":
+            Swal.fire({
+                icon: "success",
+                title: "Đăng kí thành công",
+                text: "Hãy xác nhận email và đăng nhập!",
+                confirmButtonText: "Đóng",
+            }).then((result) => {
+                window.location.href = "login.jsp";
+            });
+        case"send-otp-success":
+
+        case"admin":
+            Swal.fire({
+                icon: "success",
+                title: "Đăng nhập với quyền quản trị",
+                text: "Chào mừng",
+                confirmButtonText: "Đóng",
+            }).then((result) => {
+                window.location.href = "home.jsp";
+            });
+        case"user":
+            Swal.fire({
+                icon: "success",
+                title: "Đăng nhập thành công",
+                text: "Chào mừng",
+                confirmButtonText: "Đóng",
+            }).then((result) => {
+                window.location.href = "home.jsp";
+            });
+        case"vertified":
+            Swal.fire({
+                icon: "success",
+                title: "Xác thực thành công",
+                text: "Chào mừng",
+                confirmButtonText: "Đóng",
+            }).then((result) => {
+                window.location.href = "home.jsp";
+            });
+
+        default:
+
+
+        // break;
+
+
+    }
+
+
+</script>
 
 </html>
+<%
+    //Xóa dữ liệu sao khi đã refill vào form đăng kí
+    session.removeAttribute("user-register");
+//    session.removeAttribute("notify");
+
+%>
