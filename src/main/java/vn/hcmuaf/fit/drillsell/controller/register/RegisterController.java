@@ -2,8 +2,6 @@ package vn.hcmuaf.fit.drillsell.controller.register;
 
 
 import vn.hcmuaf.fit.drillsell.model.User;
-import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
-import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,18 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.UUID;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -41,17 +38,16 @@ public class RegisterController extends HttpServlet {
         String confirmPassword = request.getParameter("confirm-password-register");
         String agreeToTerms = request.getParameter("agree-to-terms");
         String gender = request.getParameter("gender");
+
 //Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
         User userRegister = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate);
         session.setAttribute("user-register", userRegister);
-//Kiểm tra valid form
-        if (!ValidationForm.validationForm(fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, response, session)) {
-            return;
-        }
+
+
+        ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
 
 //        Xóa user khỏi session sau khi check valid để tối ưu bộ nhớ
         session.removeAttribute("user-register");
-        response.sendRedirect("login.jsp?notify=register-success");
 
 
         //        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
@@ -63,6 +59,9 @@ public class RegisterController extends HttpServlet {
 //        response.sendRedirect("user-service/input-code.jsp");
 
     }
+
+
+  
 
 
 }
