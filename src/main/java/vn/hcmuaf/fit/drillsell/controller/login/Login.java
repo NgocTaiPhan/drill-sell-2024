@@ -53,11 +53,16 @@ public class Login {
                 if (user != null) {
                     // Lấy userId của người dùng từ dữ liệu
                     log.setUserId(user.getId());
+
+
+
                 } else {
                     // Nếu không tìm thấy người dùng, gán userId là 0
                     log.setUserId(0);
+
                 }
                 LogDAO.inserLoginFalse(log);
+                LogDAO.checkLogin(log);
 
                 // Chuyển hướng khi không tìm thấy thông tin người dùng
                 response.sendRedirect("login.jsp?notify=not-found-user-login");

@@ -1,6 +1,8 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -288,7 +290,7 @@
                             <li><a data-toggle="tab" href="#products-management">Quản lý sản phẩm</a>
                             </li>
                             <li><a data-toggle="tab" href="#statistics">Doanh thu</a></li>
-                            <li><a data-toggle="tab" href="#order-history">Lịch Sử Đặt Hàng</a></li>
+                            <li><a data-toggle="tab" href="#order-history">Quản lý đơn hàng</a></li>
                         </ul><!-- /.nav-tabs #product-tabs -->
                     </div>
                     <style>
@@ -642,26 +644,47 @@
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
+
                             <div id="order-history" class="tab-pane">
+                                <form action="#" method="post">
                                 <div class="product-tag container">
 
                                     <table id="order-history-table" class="table table-bordered  table-striped">
                                         <thead>
                                         <tr>
                                             <th>Người đặt hàng</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Số lượng</th>
                                             <th>Địa chỉ</th>
-                                            <th>Email</th>
                                             <th>Số điện thoại</th>
-                                            <th>Ghi chú</th>
-
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <% List<Order> viewOrder = OrderDAO.showOrder();
+                                        for(Order s: viewOrder){
+                                        %>
+                                        <tr>
+                                            <td><%= s.getNameCustom()%></td>
+                                            <td><%= s.getProductName()%></td>
+                                            <td><%= s.getQuantity()%></td>
+                                            <td><%= s.getAddress()%></td>
+                                            <td><%= s.getPhone()%></td>
+                                            <td><%= s.getStauss()%></td>
+                                            <td>
+                                                <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">
+                                                <input type="submit" value="sửa">
+                                            </td>
+                                        </tr>
+                                        <%}%>
                                         </tbody>
                                     </table>
 
                                 </div><!-- /.product-tab -->
+                                </form>
                             </div>
+
                         </div><!-- /.tab-content -->
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -704,6 +727,22 @@
 
     });
 
+    $(document).ready(function (){
+        $('.delete').click(function (e){
+            var deleteOrder = $(this);
+            var idOrder = $(this).data('id');
+            $.ajax({
+                type: "post",
+                url: "deleteList?id=" + idOrder,
+                success: function (response){
+                    deleteOrder.closest('tr').remove();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error", error);
+                }
+            });
+        })
+    })
 
 </script>
 
