@@ -108,21 +108,11 @@ public class CartDAO {
         });
 }
 
-public static boolean insertLogCart(int userId, int cartId){
-        return DbConnector.me().get().inTransaction(handle -> {
-           try{
-               int row = handle.createUpdate("INSERT INTO logCart(userId, cartId, stauss) VALUES (:userId, :cartId, 'update')")
-                       .bind("userId", userId)
-                       .bind("cartId", cartId)
-                       .execute();
-               return row>0;
-           }
-           catch (Exception e){
-               e.printStackTrace();
-               return false;
-           }
-        });
-}
+
+
+
+
+
 
 
 
@@ -134,7 +124,6 @@ public static boolean insertLogCart(int userId, int cartId){
 //            System.out.println(getCartByUserId(1));
 //        insertCartItem(2, 95);
 //        System.out.println(selectProduct(2));
-        insertLogCart(2, 20);
     }
 }
 

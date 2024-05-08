@@ -41,7 +41,23 @@ public class Login {
                 session.setAttribute("auth", auth);
                 session.setAttribute("logged", logged);
                 session.setAttribute("role-acc", auth.isRoleUser());
+            } else {
+                User user = UsersDAO.getInstance().getUserByUsername(username);
+                // Ghi nhật ký đăng nhập thất bại trước khi chuyển hướng
+                Log log = new Log();
+                if (user != null) {
+                    // Lấy userId của người dùng từ dữ liệu
+                    log.setUserId(user.getId());
 
+
+
+                } else {
+                    // Nếu không tìm thấy người dùng, gán userId là 0
+                    log.setUserId(0);
+
+                }
+                LogDAO.inserLoginFalse(log);
+                LogDAO.checkLogin(log);
             } else {
                 //Báo lỗi khi không tìm thấy thông tin đăng nhập
                 response.sendRedirect("login.jsp?notify=not-found-user-login");

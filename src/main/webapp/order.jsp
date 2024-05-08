@@ -2,7 +2,11 @@
 <%@ page import="java.util.*" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    List<CheckOut> checkOuts = (List<CheckOut>) request.getAttribute("checkOut");
+%>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -322,40 +326,34 @@
             <tbody>
 
             <%
-                List<Cart> detailedCartList = (List<Cart>) session.getAttribute("detailedCartList");
-                double totalAmount = 0;
-                if (detailedCartList != null && !detailedCartList.isEmpty()) {
-                    for (Cart cart : detailedCartList) {
-                        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                        String formattedPrice = currencyFormat.format(cart.getUnitPrice() * 1000);
+                if (checkOuts != null) {
+                    for (CheckOut s : checkOuts) {
+
+
             %>
             <tr>
                 <td class="li-product-thumbnail">
-                    <a href="#"><img src="<%= cart.getImage() %>"></a>
+                    <a href="#"><img src="<%= s.getProductName() %>"></a>
                 </td>
                 <td class="li-product-price">
-                    <span class="amount"><%= formattedPrice %></span>
+                    <span class="amount"><%= s.getUnitPrice() %></span>
                 </td>
                 <td class="quantity">
                     <div class="cart-plus-minus">
-                        <input class="cart-plus-minus-box" id="quantityInput_<%= cart.getProductId() %>"
-                               value="<%= cart.getQuantity()%>"
-                               onchange="updateCartItem(<%= cart.getProductId() %>)">
+                        <input class="cart-plus-minus-box"
+                               value="<%= s.getQuantity()%>">
                     </div>
                 </td>
                 <td class="product-subtotal">
-                    <span class="amount" id="subtotal_<%= cart.getProductId() %>">
-                        <%= currencyFormat.format(cart.getTotalPrice() * 1000) %>
+                    <span class="amount">
+                        <%=s.getTotalPrice()%>
                     </span>
                 </td>
 
             </tr>
-
-
             <%
-                        totalAmount += cart.getTotalPrice() * 1000;
-                    } // End of the for loop
-                } // End of the if condition
+                    }
+                }
             %>
 
             </tbody>
@@ -365,11 +363,11 @@
                 <table>
                     <tr>
                         <td colspan="5"><label>Tổng tiền đơn hàng: </label></td>
-                        <td><span id="totalAmount" style="padding-left: 5px"><%= (totalAmount) %></span></td>
+                        <%--                        <td><span id="totalAmount" style="padding-left: 5px"><%= checkOut.getSumTotalPrice() += checkOut.getTotalPrice() %></span></td>--%>
                     </tr>
                 </table>
                 <a>
-                    <button onclick="f()" class="order">Đặt hàng</button>
+                    <button  class="order">Đặt hàng</button>
                 </a>
             </div>
         </div>
@@ -379,7 +377,11 @@
 
 
 </div>
+<script>
 
+
+
+</script>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
     <div class="social-button-content">
