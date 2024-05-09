@@ -241,92 +241,97 @@
             </div>
 
             <div class="modal-body">
-                <div class="col-md-6 col-sm-6 center-block">
-                    <h2>Thêm sản phẩm</h2>
-                    <form action="add-product" method="post" enctype="multipart/form-data">
-                        <div class="form-group" style="margin: 0 auto">
-                            <img width="200px" height="200px" src="" id="loadProdsImg" class="img-thumbnail"
-                                 alt="Ảnh sản phẩm">
-                        </div>
 
-                        <div class="form-group">
-                            <label for="imageUrl">Ảnh sản phẩm</label>
-                            <input type="hidden" id="imageUrl" name="imageUrl">
-                            <button type="button" id="chooseImageBtn">Chọn ảnh từ CKFinder</button>
-                        </div>
+                <div class="container">
+                    <div class="col-md-6 col-sm-6 center-block">
+                        <h2>Thêm sản phẩm</h2>
+                        <form action="add-product" method="post" enctype="multipart/form-data">
+                            <div class="form-group" style="margin: 0 auto">
+                                <img width="200px" height="200px" src="" id="loadProdsImg" class="img-thumbnail"
+                                     alt="Ảnh sản phẩm">
+                            </div>
 
-                        <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-                        <script>
-                            const imageUrlInput = document.getElementById("imageUrl");
-                            const loadProdsImg = document.getElementById("loadProdsImg");
-                            const chooseImageBtn = document.getElementById("chooseImageBtn");
+                            <div class="form-group">
+                                <label for="imageUrl">Ảnh sản phẩm</label>
+                                <input type="hidden" id="imageUrl" name="imageUrl">
+                                <button type="button" id="chooseImageBtn">Chọn ảnh từ CKFinder</button>
+                            </div>
 
-                            chooseImageBtn.addEventListener("click", () => {
-                                // Open CKFinder with image selection and resizing capabilities
-                                CKFinder.popup({
-                                    chooseFiles: true,
-                                    width: 800,
-                                    height: 600,
-                                    resourceType: 'Images', // Restrict to images only
-                                    onInit: function (finder) {
-                                        finder.on('files:choose', function (evt) {
-                                            const file = evt.data.files.first();
+                            <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+                            <script>
+                                const imageUrlInput = document.getElementById("imageUrl");
+                                const loadProdsImg = document.getElementById("loadProdsImg");
+                                const chooseImageBtn = document.getElementById("chooseImageBtn");
 
-                                            // Check if a file is actually selected
-                                            if (file) {
-                                                const imageUrl = file.getUrl();
-                                                loadProdsImg.src = imageUrl;
-                                                imageUrlInput.value = imageUrl;
-                                            } else {
-                                                console.warn('No image selected from CKFinder.');
-                                            }
-                                        });
-                                    }
+                                chooseImageBtn.addEventListener("click", () => {
+                                    // Open CKFinder with image selection and resizing capabilities
+                                    CKFinder.popup({
+                                        chooseFiles: true,
+                                        width: 800,
+                                        height: 600,
+                                        resourceType: 'Images', // Restrict to images only
+                                        onInit: function (finder) {
+                                            finder.on('files:choose', function (evt) {
+                                                const file = evt.data.files.first();
+
+                                                // Check if a file is actually selected
+                                                if (file) {
+                                                    const imageUrl = file.getUrl();
+                                                    loadProdsImg.src = imageUrl;
+                                                    imageUrlInput.value = imageUrl;
+                                                } else {
+                                                    console.warn('No image selected from CKFinder.');
+                                                }
+                                            });
+                                        }
+                                    });
                                 });
-                            });
-                        </script>
+                            </script>
 
 
-                        <div class="form-group">
-                            <label for="productName">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productName" name="productName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="productDescription">Mô tả</label>
-                            <textarea class="form-control" id="productDescription" name="productDescription" rows="3"
-                                      required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="productPrice">Giá bán</label>
-                            <input type="number" class="form-control" id="productPrice" name="productPrice" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="productQuality">Số lượng</label>
-                            <input type="number" class="form-control" id="productQuality" name="productQuality"
-                                   required>
-                        </div>
-                        <div class="form-group">
-                            <label for="manufacturer_id">Nhà sản xuất</label>
-                            <select class="form-control" id="manufacturer_id" name="manufacturer_id">
-                                <option value="">Chọn nhà sản xuất</option>
-                                <option value="1">Công ty A</option>
-                                <option value="2">Công ty B</option>
-                                <option value="3">Công ty C</option>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="productName">Tên sản phẩm</label>
+                                <input type="text" class="form-control" id="productName" name="productName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productDescription">Mô tả</label>
+                                <textarea class="form-control" id="productDescription" name="productDescription"
+                                          rows="3"
+                                          required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Giá bán</label>
+                                <input type="number" class="form-control" id="productPrice" name="productPrice"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productQuality">Số lượng</label>
+                                <input type="number" class="form-control" id="productQuality" name="productQuality"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="manufacturer_id">Nhà sản xuất</label>
+                                <select class="form-control" id="manufacturer_id" name="manufacturer_id">
+                                    <option value="">Chọn nhà sản xuất</option>
+                                    <option value="1">Công ty A</option>
+                                    <option value="2">Công ty B</option>
+                                    <option value="3">Công ty C</option>
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="category_id">Danh mục sản phẩm</label>
-                            <select class="form-control" id="category_id" name="category_id">
-                                <option value="">Chọn danh mục sản phẩm</option>
-                                <option value="1">Danh mục 1</option>
-                                <option value="2">Danh mục 2</option>
-                                <option value="3">Danh mục 3</option>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="category_id">Danh mục sản phẩm</label>
+                                <select class="form-control" id="category_id" name="category_id">
+                                    <option value="">Chọn danh mục sản phẩm</option>
+                                    <option value="1">Danh mục 1</option>
+                                    <option value="2">Danh mục 2</option>
+                                    <option value="3">Danh mục 3</option>
+                                </select>
+                            </div>
 
-                        <button type="submit" class="btn btn-primary">Thêm</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

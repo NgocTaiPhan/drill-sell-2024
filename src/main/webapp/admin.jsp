@@ -4,41 +4,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-//    Boolean role = (Boolean) session.getAttribute("role-acc");
-//    Boolean logged = (Boolean) session.getAttribute("logged");
-%>
-<%--<script>--%>
-<%--    const role = <%= role != null ? role : false %>;--%>
-<%--    const logged = <%= logged != null ? logged : false %>;--%>
-<%--    document.addEventListener('DOMContentLoaded', function () {--%>
-<%--        if (!logged) {--%>
-<%--            Swal.fire({--%>
-<%--                title: "Vui lòng đăng nhập với tài khoản quản trị để tiếp tục",--%>
-<%--                icon: "warning",--%>
-<%--                showCancelButton: true,--%>
-<%--                confirmButtonText: "Đăng nhập",--%>
-<%--            }).then((result) => {--%>
-<%--                if (result.isConfirmed) {--%>
-<%--                    window.location.href = 'login.jsp';--%>
-<%--                }--%>
-<%--            });--%>
-<%--        } else if (!role) {--%>
-<%--            Swal.fire({--%>
-<%--                title: "Bạn không có quyền truy cập vào trang quản trị",--%>
-<%--                icon: "warning",--%>
-<%--                showCancelButton: true,--%>
-<%--                confirmButtonText: "Về trang chủ",--%>
-<%--            }).then((result) => {--%>
-<%--                if (result.isConfirmed) {--%>
-<%--                    window.location.href = 'home.jsp';--%>
-<%--                }--%>
-<%--            });--%>
-<%--        }--%>
-<%--    });--%>
-<%--</script>--%>
-
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -266,22 +231,22 @@
                                     }
                                 %>
 
-<%--                                                                <%--%>
+                                <%--                                                                <%--%>
 
-<%--                                                                    User user = (User) session.getAttribute("kh");--%>
-<%--                                                                    if (user != null) {--%>
+                                <%--                                                                    User user = (User) session.getAttribute("kh");--%>
+                                <%--                                                                    if (user != null) {--%>
 
-<%--                                                                                System.out.println("boxsell: " + user.getboxsell());--%>
-<%--                                                                                System.out.println("username: " + user.getUsername());--%>
+                                <%--                                                                                System.out.println("boxsell: " + user.getboxsell());--%>
+                                <%--                                                                                System.out.println("username: " + user.getUsername());--%>
 
-<%--                                                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
-<%--                                                                %>--%>
-<%--                                                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
-<%--                                                                <%--%>
-<%--                                                                                }--%>
-<%--                                                                            }--%>
+                                <%--                                                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+                                <%--                                                                %>--%>
+                                <%--                                                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+                                <%--                                                                <%--%>
+                                <%--                                                                                }--%>
+                                <%--                                                                            }--%>
 
-<%--                                                                %>--%>
+                                <%--                                                                %>--%>
 
 
                             </ul>
@@ -681,41 +646,48 @@
 
                             <div id="order-history" class="tab-pane">
                                 <form action="#" method="post">
-                                <div class="product-tag container">
+                                    <div class="product-tag container">
 
-                                    <table id="order-history-table" class="table table-bordered  table-striped">
-                                        <thead>
-                                        <tr>
-                                            <th>Người đặt hàng</th>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Số lượng</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <% List<Order> viewOrder = OrderDAO.showOrder();
-                                        for(Order s: viewOrder){
-                                        %>
-                                        <tr>
-                                            <td><%= s.getNameCustom()%></td>
-                                            <td><%= s.getProductName()%></td>
-                                            <td><%= s.getQuantity()%></td>
-                                            <td><%= s.getAddress()%></td>
-                                            <td><%= s.getPhone()%></td>
-                                            <td><%= s.getStauss()%></td>
-                                            <td>
-                                                <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">
-                                                <input type="submit" value="sửa">
-                                            </td>
-                                        </tr>
-                                        <%}%>
-                                        </tbody>
-                                    </table>
+                                        <table id="order-history-table" class="table table-bordered  table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Người đặt hàng</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Số điện thoại</th>
+                                                <th>Trạng thái</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <% List<Order> viewOrder = OrderDAO.showOrder();
+                                                for (Order s : viewOrder) {
+                                            %>
+                                            <tr>
+                                                <td><%= s.getNameCustom()%>
+                                                </td>
+                                                <td><%= s.getProductName()%>
+                                                </td>
+                                                <td><%= s.getQuantity()%>
+                                                </td>
+                                                <td><%= s.getAddress()%>
+                                                </td>
+                                                <td><%= s.getPhone()%>
+                                                </td>
+                                                <td><%= s.getStauss()%>
+                                                </td>
+                                                <td>
+                                                    <input class="delete" type="submit" data-id="<%= s.getId()%>"
+                                                           value="Xóa">
+                                                    <input type="submit" value="sửa">
+                                                </td>
+                                            </tr>
+                                            <%}%>
+                                            </tbody>
+                                        </table>
 
-                                </div><!-- /.product-tab -->
+                                    </div><!-- /.product-tab -->
                                 </form>
                             </div>
 
@@ -765,14 +737,14 @@
 
     });
 
-    $(document).ready(function (){
-        $('.delete').click(function (e){
+    $(document).ready(function () {
+        $('.delete').click(function (e) {
             var deleteOrder = $(this);
             var idOrder = $(this).data('id');
             $.ajax({
                 type: "post",
                 url: "deleteList?id=" + idOrder,
-                success: function (response){
+                success: function (response) {
                     deleteOrder.closest('tr').remove();
                 },
                 error: function (xhr, status, error) {

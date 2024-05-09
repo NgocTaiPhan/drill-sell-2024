@@ -1,3 +1,6 @@
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -141,19 +144,37 @@
                                 <table id="order-history-table" class="table table-striped">
                                     <thead>
                                     <th>Người đặt hàng</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
                                     <th>Địa chỉ</th>
-                                    <th>Email</th>
                                     <th>Số điện thoại</th>
-                                    <th>Ghi chú</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                     </thead>
                                     <tbody>
+                                    <% List<Order> viewOrder = OrderDAO.showOrder();
+                                        for (Order s : viewOrder) {
+                                    %>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                        <td>Oud-Turnhout</td>
+                                        <td><%= s.getNameCustom()%>
+                                        </td>
+                                        <td><%= s.getProductName()%>
+                                        </td>
+                                        <td><%= s.getQuantity()%>
+                                        </td>
+                                        <td><%= s.getAddress()%>
+                                        </td>
+                                        <td><%= s.getPhone()%>
+                                        </td>
+                                        <td><%= s.getStauss()%>
+                                        </td>
+                                        <td>
+                                            <input class="delete" type="submit" data-id="<%= s.getId()%>"
+                                                   value="Xóa">
+                                            <input type="submit" value="sửa">
+                                        </td>
                                     </tr>
+                                    <%}%>
 
                                     </tbody>
                                 </table>
