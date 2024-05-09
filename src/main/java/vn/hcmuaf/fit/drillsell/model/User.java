@@ -68,6 +68,17 @@ User {
 
     }
 
+    public User(String fullname, String address, String phone, String email, String username, String passwords, String gender, String yearOfBirth, String verificationCode) {
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.username = username;
+        this.passwords = passwords;
+        this.sex = gender;
+        this.yearOfBirth = yearOfBirth;
+        this.verificationCode = verificationCode;
+    }
 
     public int getId() {
         return id;
