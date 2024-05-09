@@ -279,7 +279,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
             </div>
 
             <div class="modal-body">
-                <form action="forgot-pas" method="post">
+                <form action="forgot-pas?forgot-pass=1" method="post">
 
 
                     <label for="input-email">Email</label>
@@ -293,7 +293,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <label for="submit-forgot-pass"></label>
                     <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"
                            aria-describedby="help-input-username"
-                           value="Gửi">
+                           value="Gửi ">
                 </form>
 
             </div>

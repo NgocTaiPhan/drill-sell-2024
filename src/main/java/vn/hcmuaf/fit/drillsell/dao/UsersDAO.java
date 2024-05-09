@@ -105,24 +105,8 @@ public class UsersDAO {
     }
 
     public static void main(String[] args) {
-//        User newUser = new User();
-//        newUser.setId(7);
-//        newUser.setFullname("admin");
-//        newUser.setAddress("VN");
-//        newUser.setPhone("6565656");
-//        newUser.setEmail("admin@gmail.com");
-//        newUser.setUsername("admin");
-//        newUser.setPasswords("admin");
-//        newUser.setSex("Không");
-//        newUser.setYearOfBirth("1990-02-15");
-//        newUser.setVerificationCode("123456");
-//        newUser.setVerified(true); // Đặt giá trị cho isVerified
-//        newUser.setRoleUser(true); // Đặt giá trị cho isRoleUser
 
-        // Gọi phương thức addUser để thêm đối tượng User vào database
-//        UserService.getInstance().addUser(newUser);
-
-        System.out.println(UsersDAO.getInstance().hashPassword("abc"));
+        System.out.println(UsersDAO.getInstance().getVerifyCode("tai","phuonghuynh131415@gmail.com"));
 
     }
 
@@ -186,4 +170,6 @@ public class UsersDAO {
                     .orElse(null);
         }
     }
+
+
 }

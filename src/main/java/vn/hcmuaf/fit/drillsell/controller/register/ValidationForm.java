@@ -92,11 +92,11 @@ public class ValidationForm {
 
     public static boolean checkPassword(String password, HttpServletResponse response) throws IOException {
         if (password == null || password.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-pass");
+            response.sendRedirect("login.jsp?notify=null-password");
             return false;
         } else {
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-                response.sendRedirect("login.jsp?notify=invalid-pass");
+                response.sendRedirect("login.jsp?notify=invalid-password");
                 return false;
             }
         }
