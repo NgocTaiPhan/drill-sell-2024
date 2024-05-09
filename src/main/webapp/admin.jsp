@@ -62,7 +62,7 @@
                             boolean logged = u != null || user != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                        <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
                             <%= (u != null) ? u.getFullname() : user.getName() %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>

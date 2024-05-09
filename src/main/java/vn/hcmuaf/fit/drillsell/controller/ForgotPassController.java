@@ -12,7 +12,6 @@ import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "ForgotPassController", value = "/forgot-pas")
 public class ForgotPassController extends HttpServlet {
