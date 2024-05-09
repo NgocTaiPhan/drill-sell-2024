@@ -30,7 +30,7 @@ public class VertifyInputCodeController extends HttpServlet {
         HttpSession session = request.getSession();
         User u = (User) session.getAttribute("user-forgot-pass");
         if (inputCode.equals(UsersDAO.getInstance().getVerifyCode(u.getUsername(),u.getEmail()))) {
-            response.sendRedirect("change-pass.jsp");
+            response.sendRedirect("change-pass.jsp?forgot-pass=1");
         }
 
 

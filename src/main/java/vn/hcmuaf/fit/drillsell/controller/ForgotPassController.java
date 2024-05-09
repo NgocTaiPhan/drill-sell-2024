@@ -23,6 +23,9 @@ public class ForgotPassController extends HttpServlet {
         String username = request.getParameter("input-username");
         String email = request.getParameter("input-email");
         HttpSession session = request.getSession();
+
+
+        //Tạo user và set usename and email
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
