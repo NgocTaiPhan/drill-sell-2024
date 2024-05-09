@@ -85,7 +85,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                             boolean logged = u != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                        <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
                             <%= (u != null) ? u.getFullname() : "" %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
