@@ -11,8 +11,8 @@ public class Logout {
         HttpSession session = request.getSession();
         session.removeAttribute("auth");
         session.removeAttribute("auth-google");
-        session.removeAttribute("logged");
-        session.removeAttribute("role-acc");
+        session.removeAttribute("notify");
+        session.invalidate();
         response.sendRedirect("home.jsp");
     }
 }

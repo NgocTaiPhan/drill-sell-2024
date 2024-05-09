@@ -305,90 +305,97 @@
 </div>
 <%--Modal nhập mã OTP--%>
 
-<!-- Modal nhập OTP -->
 <script !src="">
 
-    var errorParam = document.getElementById("notify").getAttribute('value');
+    var valueNotify = document.getElementById("notify").getAttribute('value');
+    // alert(valueNotify);
 
-    function handleErrorMessage(errorMessage) {
+    function errorRegister(mess) {
         Swal.fire({
             icon: "error",
             title: "Đăng kí thất bại",
-            text: errorMessage,
+            text: mess,
             confirmButtonText: "Đóng",
+        });
+        <%session.removeAttribute("notify");%>
+
+    }
+
+    function errorLogin(mess) {
+        Swal.fire({
+            icon: "error",
+            title: "Đăng nhập thất bại",
+            text: mess,
+            confirmButtonText: "Đóng",
+        }).then((result) => {
+            <%session.removeAttribute("notify");%>
+            window.location.href = "login.jsp";
         });
     }
 
-    switch (errorParam) {
+    switch (valueNotify) {
+
+        // ---------------------------------Thông báo của phần đăng kí--------------------------------------
         case "null-fullname":
-            handleErrorMessage("Hãy điền họ và tên");
+            errorRegister("Hãy điền họ và tên");
             break;
 
         case "null-birthday":
-            handleErrorMessage("Hãy nhập ngày sinh");
+            errorRegister("Hãy nhập ngày sinh");
             break;
 
 
         case "null-address":
-            handleErrorMessage("Hãy nhập địa chỉ");
+            errorRegister("Hãy nhập địa chỉ");
             break;
 
 
         case "null-phone":
-            handleErrorMessage("Hãy nhập số điện thoại");
+            errorRegister("Hãy nhập số điện thoại");
             break;
 
         case "null-email":
-            handleErrorMessage("Hãy nhập địa chỉ email");
+            errorRegister("Hãy nhập địa chỉ email");
             break;
 
         case "null-username":
-            handleErrorMessage("Hãy nhập tên đăng nhập");
+            errorRegister("Hãy nhập tên đăng nhập");
             break;
 
         case "null-pass":
-            handleErrorMessage("Hãy nhập mật khẩu");
+            errorRegister("Hãy nhập mật khẩu");
             break;
 
         case "null-cfpass":
-            handleErrorMessage("Hãy nhập lại mật khẩu");
+            errorRegister("Hãy nhập lại mật khẩu");
             break;
 
         case "null-agree":
-            handleErrorMessage("Hãy đồng ý với điều khoản của chúng tôi.");
+            errorRegister("Hãy đồng ý với điều khoản của chúng tôi.");
             break;
 
         case "future-birthday":
-            handleErrorMessage("Ngày sinh không được lớn hơn ngày hiện tại");
+            errorRegister("Ngày sinh không được lớn hơn ngày hiện tại");
             break;
 
         case "invalid-phone":
-            handleErrorMessage("Số điện thoại không hợp lệ");
+            errorRegister("Số điện thoại không hợp lệ");
             break;
 
         case "invalid-email":
-            handleErrorMessage("Email không hợp lệ");
+            errorRegister("Email không hợp lệ");
             break;
 
         case "invalid-username":
-            handleErrorMessage("Tên đăng nhập không hợp lệ");
+            errorRegister("Tên đăng nhập không hợp lệ");
             break;
-        // case "invalid-pass":
-        //     handleErrorMessage( "Mật khẩu phải từ 8 kí tự. Bao gồm chữ hoa, chữ thường và số");
-        //     break;
         case "invalid-pass":
-            handleErrorMessage("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
+            errorRegister("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
         case "pass-not-match":
-            handleErrorMessage("Mật khẩu không khớp");
-            break;
-        case "not-found-user-login":
-            handleErrorMessage("Không tìm thấy tài khoản");
-            break;
-        case "null-value-login":
-            handleErrorMessage("Không được để trống tên tài khoản và mật khẩu");
+            errorRegister("Mật khẩu không khớp");
             break;
         case "duplicate-acc":
-            handleErrorMessage("Tên đăng nhập đã tồn tại");
+            errorRegister("Tên đăng nhập đã tồn tại");
             break;
         case"register-success":
             Swal.fire({
@@ -397,37 +404,39 @@
                 text: "Hãy xác nhận email và đăng nhập!",
                 confirmButtonText: "Đóng",
             }).then((result) => {
+                <%session.removeAttribute("notify");%>
                 window.location.href = "login.jsp";
             });
-        case"send-otp-success":
-
-        case"admin":
+        // ---------------------------------Thông báo của phần đăng kí--------------------------------------
+        // ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
+        case"admin-logged":
             Swal.fire({
                 icon: "success",
                 title: "Đăng nhập với quyền quản trị",
                 text: "Chào mừng",
                 confirmButtonText: "Đóng",
             }).then((result) => {
+                <%session.removeAttribute("notify");%>
                 window.location.href = "home.jsp";
             });
-        case"user":
+
+        case"user-logged":
             Swal.fire({
                 icon: "success",
                 title: "Đăng nhập thành công",
                 text: "Chào mừng",
                 confirmButtonText: "Đóng",
             }).then((result) => {
+                <%session.removeAttribute("notify");%>
                 window.location.href = "home.jsp";
             });
-        case"vertified":
-            Swal.fire({
-                icon: "success",
-                title: "Xác thực thành công",
-                text: "Chào mừng",
-                confirmButtonText: "Đóng",
-            }).then((result) => {
-                window.location.href = "home.jsp";
-            });
+        case "null-user-login":
+            errorLogin("Hãy nhập tên đăng nhập và mật khẩu!")
+            break;
+        case "not-found-user":
+            errorLogin("Không tìm thấy tài khoản!")
+            break;
+// ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
 
         default:
 
@@ -439,11 +448,6 @@
 
 
 </script>
+<!-- Modal nhập OTP -->
 
 </html>
-<%
-    //Xóa dữ liệu sao khi đã refill vào form đăng kí
-    session.removeAttribute("user-register");
-//    session.removeAttribute("notify");
-
-%>

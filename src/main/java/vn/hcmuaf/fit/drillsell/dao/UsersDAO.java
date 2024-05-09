@@ -41,7 +41,7 @@ public class UsersDAO {
 
     public User getUserByUsername(String username) {
 
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users WHERE username = ?";
+        String query = "SELECT id, username FROM users WHERE username = ?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)

@@ -21,7 +21,6 @@ public class Notify {
     public void sendNotify(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess) throws ServletException, IOException {
         session.setAttribute("notify", mess);
         System.out.println(mess);
-//        response.sendRedirect("login.jsp");
         request.getRequestDispatcher("login.jsp").forward(request, response);
 
     }

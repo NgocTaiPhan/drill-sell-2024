@@ -251,31 +251,14 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                                     //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
-                                    Boolean role = (Boolean) session.getAttribute("role-acc");
-                                    if (role != null && role) {
+                                    if (logged) {
+                                        if (u.isRoleUser()) {
                                 %>
                                 <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
                                 <%
+                                        }
                                     }
                                 %>
-
-                                <%--                                <%--%>
-
-                                <%--                                    User user = (User) session.getAttribute("kh");--%>
-                                <%--                                    if (user != null) {--%>
-
-                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
-                                <%--                                                System.out.println("username: " + user.getUsername());--%>
-
-                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
-                                <%--                                %>--%>
-                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
-                                <%--                                <%--%>
-                                <%--                                                }--%>
-                                <%--                                            }--%>
-
-                                <%--                                %>--%>
-
 
                             </ul>
                             <!-- /.navbar-nav -->
