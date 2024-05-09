@@ -1,6 +1,9 @@
 package vn.hcmuaf.fit.drillsell.controller.login;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.User;
 
 import javax.servlet.ServletException;
@@ -14,41 +17,40 @@ public class Login {
         //Lấy username, pass nhập từ màn hình
         String username = request.getParameter("username-login");
         String password = request.getParameter("pass-login");
+        HttpSession session = request.getSession();
+        Log log = new Log();
+
         boolean logged = false;
+
+        //In thông tin người dùng nhập hki đăng nhập
         System.out.println(username + password);
 
         if (validInput(username, password)) {
 
-            UsersDAO usersDAO = UsersDAO.getInstance();
             //Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
-            User auth = usersDAO.getUser(username, UsersDAO.getInstance().hashPassword(password));
+            User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
 
             logged = true;
-            if (auth != null) {
-                HttpSession session = request.getSession();
-                String url = "login.jsp";
+            System.out.println(auth.isRoleUser());
+//            Tìm thấy thông tin người dùng
+            if (auth != null) {//Nếu tìm thấy thông tin người dùng thì sẽ set userId trong log là id của người dùng
+                log.setUserId(auth.getId());
+                session.setAttribute("auth", auth);//Gửi thông tin tài khoản để  frontend xử lý
+                LogDAO.insertLoginTrue(log);//Ghi nhật ký đăng nhập thành công
                 //Kiểm tra quyền của tài khoản
-                if (auth.isRoleUser()) {
-//admin
-                    response.sendRedirect("login.jsp?notify=admin");
-
-                } else {
-                    //user
-                    response.sendRedirect("login.jsp?notify=user");
-
+                if (auth.isRoleUser()) {//Nếu là admin
+                    Notify.getInstance().sendNotify(request.getSession(), request, response, "admin-logged");
+                    return;
+                } else {// Nếu là user
+                    Notify.getInstance().sendNotify(request.getSession(), request, response, "user-logged");
+                    return;
                 }
-                //Lưu thông tin tài khoản và trạng thái "đã đăng nhập" vào session
-                session.setAttribute("auth", auth);
-                session.setAttribute("logged", logged);
-                session.setAttribute("role-acc", auth.isRoleUser());
             } else {
                 User user = UsersDAO.getInstance().getUserByUsername(username);
                 // Ghi nhật ký đăng nhập thất bại trước khi chuyển hướng
-                Log log = new Log();
                 if (user != null) {
                     // Lấy userId của người dùng từ dữ liệu
                     log.setUserId(user.getId());
-
 
 
                 } else {
@@ -58,13 +60,15 @@ public class Login {
                 }
                 LogDAO.inserLoginFalse(log);
                 LogDAO.checkLogin(log);
-            } else {
-                //Báo lỗi khi không tìm thấy thông tin đăng nhập
-                response.sendRedirect("login.jsp?notify=not-found-user-login");
             }
+            //Báo lỗi khi không tìm thấy thông tin đăng nhập
+            Notify.getInstance().sendNotify(request.getSession(), request, response, "not-found-user");
+            return;
+
         } else {
             //Báo lỗi khi người dùng chưa điền thông tin đăng nhập
-            response.sendRedirect("login.jsp?notify=null-value-login");
+            Notify.getInstance().sendNotify(session, request, response, "null-user-login");
+            return;
         }
     }
 
