@@ -74,12 +74,14 @@ public class ValidationForm {
         }
         //Kiểm tra mật khẩu
         if (password == null || password.trim().isEmpty()) {
+
             Notify.getInstance().sendNotify(session, request, response, "null-pass");
             return;
         } else {
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
                 Notify.getInstance().sendNotify(session, request, response, "invalid-pass");
                 return;
+
             }
         }
 //        Kiểm tra mật khẩu nhập lại

@@ -12,7 +12,7 @@ import static javax.mail.Transport.send;
 
 public class EmailDAO {
 
-    public final String LINK = "http://localhost:8080/Drill_Sell_war_exploded/user-service/input-code.jsp";
+    public final String LINK = "http://localhost:8080/input-code.jsp";
     private Properties prop = new Properties();
     private static EmailDAO instance;
 
@@ -68,12 +68,27 @@ public class EmailDAO {
         return true;
     }
     public boolean sendMailOTP(String to, String subject, String confirmationCode) {
-        Session session = Session.getInstance(prop, new Authenticator() {
+        System.out.println( MailProperties.getUsername());
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.trust","*");
+        props.put("mail.smtp.starttls.enable", "true");
+        String username = "phuonghuynh131415@gmail.com";
+        String password = "pkgy kplq sjcn gwhu";
+
+        Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(MailProperties.getUsername(), MailProperties.getPassword());
+                return new PasswordAuthentication(username, password);
             }
-        });
+        };
+
+        // Tạo đối tượng Session
+        Session session = Session.getInstance(props, auth);
+
+
 
         try {
             Message message = new MimeMessage(session);

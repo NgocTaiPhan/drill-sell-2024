@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.User;
 
 import java.io.IOException;
 
@@ -21,7 +22,8 @@ public class ChangePassController extends HttpServlet {
         String cfPass = request.getParameter("cf-pass");
         if (pass.equals(cfPass)) {
             HttpSession session = request.getSession();
-            UsersDAO.getInstance().changePassword((String) session.getAttribute("username-forgot-pass"), UsersDAO.getInstance().hashPassword(pass));
+            User u = (User) session.getAttribute("user-forgot-pass");
+          UsersDAO.getInstance().changePassword(u.getUsername(),UsersDAO.getInstance().hashPassword(pass));
             response.sendRedirect("login.jsp");
         }
     }
