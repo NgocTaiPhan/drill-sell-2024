@@ -123,29 +123,6 @@ public class UsersDAO {
                     .execute();
         }
     }
-
-    public static void main(String[] args) {
-//        User newUser = new User();
-//        newUser.setId(7);
-//        newUser.setFullname("admin");
-//        newUser.setAddress("VN");
-//        newUser.setPhone("6565656");
-//        newUser.setEmail("admin@gmail.com");
-//        newUser.setUsername("admin");
-//        newUser.setPasswords("admin");
-//        newUser.setSex("Không");
-//        newUser.setYearOfBirth("1990-02-15");
-//        newUser.setVerificationCode("123456");
-//        newUser.setVerified(true); // Đặt giá trị cho isVerified
-//        newUser.setRoleUser(true); // Đặt giá trị cho isRoleUser
-
-        // Gọi phương thức addUser để thêm đối tượng User vào database
-//        UserService.getInstance().addUser(newUser);
-
-
-    }
-
-
     public boolean isUsernameDuplicate(String username) {
         String selectQuery = "SELECT COUNT(*) FROM users WHERE username = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -195,6 +172,9 @@ public class UsersDAO {
         }
     }
 
+    public static void main(String[] args) {
+        System.out.println(UsersDAO.getInstance().hashPassword("Admin12345"));
+    }
 
 }
 

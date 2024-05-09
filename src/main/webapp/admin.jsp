@@ -3,38 +3,38 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    Boolean role = (Boolean) session.getAttribute("role-acc");
-    Boolean logged = (Boolean) session.getAttribute("logged");
+//    Boolean role = (Boolean) session.getAttribute("role-acc");
+//    Boolean logged = (Boolean) session.getAttribute("logged");
 %>
-<script>
-    const role = <%= role != null ? role : false %>;
-    const logged = <%= logged != null ? logged : false %>;
-    document.addEventListener('DOMContentLoaded', function () {
-        if (!logged) {
-            Swal.fire({
-                title: "Vui lòng đăng nhập với tài khoản quản trị để tiếp tục",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Đăng nhập",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'login.jsp';
-                }
-            });
-        } else if (!role) {
-            Swal.fire({
-                title: "Bạn không có quyền truy cập vào trang quản trị",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Về trang chủ",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'home.jsp';
-                }
-            });
-        }
-    });
-</script>
+<%--<script>--%>
+<%--    const role = <%= role != null ? role : false %>;--%>
+<%--    const logged = <%= logged != null ? logged : false %>;--%>
+<%--    document.addEventListener('DOMContentLoaded', function () {--%>
+<%--        if (!logged) {--%>
+<%--            Swal.fire({--%>
+<%--                title: "Vui lòng đăng nhập với tài khoản quản trị để tiếp tục",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonText: "Đăng nhập",--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    window.location.href = 'login.jsp';--%>
+<%--                }--%>
+<%--            });--%>
+<%--        } else if (!role) {--%>
+<%--            Swal.fire({--%>
+<%--                title: "Bạn không có quyền truy cập vào trang quản trị",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonText: "Về trang chủ",--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    window.location.href = 'home.jsp';--%>
+<%--                }--%>
+<%--            });--%>
+<%--        }--%>
+<%--    });--%>
+<%--</script>--%>
 
 
 <html lang="en">
@@ -376,17 +376,7 @@
                                                             data-target="#user-infor"
                                                     >Xem chi tiết
                                                     </button>
-                                                    <%--Thẻ input trung gian để lưu id của người dùng sau đó load qua modal--%>
-                                                    <%--                                                    <input type="hidden" id="userIdInput" name="userId"/>--%>
-                                                    <%--                                                    <script !src="">--%>
 
-
-                                                    <%--                                                        function showUserInfor(id) {--%>
-                                                    <%--                                                            // Lưu id người dùng vào thẻ input--%>
-                                                    <%--                                                            document.getElementById("userIdInput").value = parseInt(id);--%>
-
-                                                    <%--                                                        }--%>
-                                                    <%--                                                    </script>--%>
                                                 </td>
                                             </tr>
                                             <%}%>
