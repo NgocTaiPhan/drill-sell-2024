@@ -1,126 +1,104 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 
 public class ValidationForm {
-    public static boolean validationForm(String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, HttpServletResponse response, HttpSession session) throws IOException {
-        return checkFullName(fullName, response) &&
-                checkBirthDate(birthDate, response) &&
-                checkAddress(address, response, session) &&
-                checkPhoneNumber(phoneNumber, response) &&
-                checkEmail(email, response) &&
-                checkUsername(username, response) &&
-                checkPassword(password, response) &&
-                checkConfirmPassword(password, confirmPassword, response) &&
-                checkAgreeToTerms(agreeToTerms, response);
+    private static ValidationForm instance;
+
+
+    public static ValidationForm getInstance() {
+        if (instance == null) instance = new ValidationForm();
+        return instance;
     }
 
-    public static boolean checkFullName(String fullName, HttpServletResponse response) throws IOException {
+
+    public void validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response, String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, String gender) throws ServletException, IOException {
+
         if (fullName == null || fullName.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-fullname");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-fullname");
+            return;
         }
-        return true;
-    }
-
-    public static boolean checkBirthDate(String birthDate, HttpServletResponse response) throws IOException {
+//        else if (!fullName.matches(".\\d.")) {
+//            Notify.getInstance().registerNotify(session, request, response, "invalid-fullname");
+//            return;
+//        }
         if (birthDate == null || birthDate.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-birthday");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-birthday");
+            return;
         } else {
             LocalDate inputDate = LocalDate.parse(birthDate);
             if (inputDate.isAfter(LocalDate.now())) {
-                response.sendRedirect("login.jsp?notify=future-birthday");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "future-birthday");
+                return;
             }
-        }
-        return true;
-    }
 
-    public static boolean checkAddress(String address, HttpServletResponse response, HttpSession session) throws IOException {
+        }
         if (address == null || address.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-address");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-address");
+            return;
         }
-        session.setAttribute("address", address);
-        return true;
-    }
-
-    public static boolean checkPhoneNumber(String phoneNumber, HttpServletResponse response) throws IOException {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-phone");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-phone");
+            return;
         } else {
             if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
-                response.sendRedirect("login.jsp?notify=invalid-phone");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "invalid-phone");
+                return;
             }
         }
-        return true;
-    }
-
-    public static boolean checkEmail(String email, HttpServletResponse response) throws IOException {
         if (email == null || email.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-email");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-email");
+            return;
         } else {
             if (!email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$")) {
-                response.sendRedirect("login.jsp?notify=invalid-email");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "invalid-email");
+                return;
             }
         }
-        return true;
-    }
-
-    public static boolean checkUsername(String username, HttpServletResponse response) throws IOException {
         if (username == null || username.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-username");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-username");
+            return;
         } else {
             if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
-                response.sendRedirect("login.jsp?notify=duplicate-acc");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "duplicate-acc");
+                return;
             }
         }
-        return true;
-    }
-
-    public static boolean checkPassword(String password, HttpServletResponse response) throws IOException {
+        //Kiểm tra mật khẩu
         if (password == null || password.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-password");
-            return false;
+
+            Notify.getInstance().sendNotify(session, request, response, "null-pass");
+            return;
         } else {
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-                response.sendRedirect("login.jsp?notify=invalid-password");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "invalid-pass");
+                return;
+
             }
         }
-        return true;
-    }
-
-    public static boolean checkConfirmPassword(String password, String confirmPassword, HttpServletResponse response) throws IOException {
+//        Kiểm tra mật khẩu nhập lại
         if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            response.sendRedirect("login.jsp?notify=null-cfpass");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-cfpass");
+            return;
         } else {
             if (!password.equals(confirmPassword)) {
-                response.sendRedirect("login.jsp?notify=pass-not-match");
-                return false;
+                Notify.getInstance().sendNotify(session, request, response, "pass-not-match");
+                return;
             }
         }
-        return true;
-    }
-
-    public static boolean checkAgreeToTerms(String agreeToTerms, HttpServletResponse response) throws IOException {
         if (agreeToTerms == null || !agreeToTerms.equals("on")) {
-            response.sendRedirect("login.jsp?notify=null-agree");
-            return false;
+            Notify.getInstance().sendNotify(session, request, response, "null-agree");
+            return;
         }
-        return true;
+        Notify.getInstance().sendNotify(session, request, response, "register-success");
+
     }
 }

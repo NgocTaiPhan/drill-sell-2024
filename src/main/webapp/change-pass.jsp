@@ -23,8 +23,33 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+
+<%--Giao diện sẽ hiển thị dựa vào nơi truy cập của người dùng dựa trên giá trị "forgot-pass" :--%>
+<%--    + forgot-pass= 1. Nếu người dùng truy cập từ trang Đăng nhập và bấm quên mật khẩu.--%>
+<%--        - Thì sau khi thực hiện các bước quên mật khẩu, giao diện sẽ hiển thị ô nhập mật khẩu và nhập lại--%>
+<%--    + forgot-pass = 0. Nếu người dùng đã đăng nhập và muốn thay đổi mật khẩu thì giao diện sẽ là gồm: Nhập mật khẩu hiện tại, Mật khẩu mới va nhập lại--%>
+
 <div class="container w-25 center m-t-20">
     <form action="change-pass" method="post">
+        <%
+            String forgotPass = (String) request.getParameter("forgot-pass");
+            if (forgotPass.equals("0")) {
+
+
+        %>
+        <div class="mb-3">
+            <label for="oldPass" class="form-label">Nhập mật khẩu hiện tại</label>
+            <input name="old-pass" type="text" class="form-control" id="oldPass">
+        </div>
+        <div class="mb-3">
+            <label for="newPass" class="form-label">Nhập mật khẩu mới</label>
+            <input name="pass" type="text" class="form-control" id="newPass">
+        </div>
+        <div class="mb-3">
+            <label for="cfNewPass" class="form-label">Nhập lại mật khẩu mới</label>
+            <input name="cf-pass" type="text" class="form-control" id="cfNewPass">
+        </div>
+        <%} else {%>
 
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Nhập mật khẩu</label>
@@ -34,6 +59,7 @@
             <label for="exampleInputPassword2" class="form-label">Nhập lại</label>
             <input name="cf-pass" type="text" class="form-control" id="exampleInputPassword2">
         </div>
+        <%}%>
 
         <button type="submit" class="btn btn-primary">Xác nhận</button>
     </form>

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
@@ -37,6 +38,7 @@ public class LoginController extends HttpServlet {
         } else if (servletPath.equals("/login-google")) {
             LoginGoogle.loginGoogle(request,response);
         }
+
 
 
     }

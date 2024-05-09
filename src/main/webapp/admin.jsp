@@ -1,7 +1,44 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+//    Boolean role = (Boolean) session.getAttribute("role-acc");
+//    Boolean logged = (Boolean) session.getAttribute("logged");
+%>
+<%--<script>--%>
+<%--    const role = <%= role != null ? role : false %>;--%>
+<%--    const logged = <%= logged != null ? logged : false %>;--%>
+<%--    document.addEventListener('DOMContentLoaded', function () {--%>
+<%--        if (!logged) {--%>
+<%--            Swal.fire({--%>
+<%--                title: "Vui lòng đăng nhập với tài khoản quản trị để tiếp tục",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonText: "Đăng nhập",--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    window.location.href = 'login.jsp';--%>
+<%--                }--%>
+<%--            });--%>
+<%--        } else if (!role) {--%>
+<%--            Swal.fire({--%>
+<%--                title: "Bạn không có quyền truy cập vào trang quản trị",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonText: "Về trang chủ",--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    window.location.href = 'home.jsp';--%>
+<%--                }--%>
+<%--            });--%>
+<%--        }--%>
+<%--    });--%>
+<%--</script>--%>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,21 +75,235 @@
     <script src="assets/js/my-js/footermenu.js"></script>
 
 
-    <!-- Icons/Glyphs ==============================================================================================-->
-    <link rel="stylesheet" href="assets/css/font-awesome.css">
-
-    <!-- Fonts =========================================================================================================-->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
-          rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
 
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
 </head>
 <body>
 
+
+<header class="header-style-1 ">
+
+    <!-- ============================================== TOP MENU ============================================== -->
+    <div class="top-bar animate-dropdown">
+        <div class="container">
+            <div class="header-top-inner">
+                <div class="cnt-account">
+                    <ul class="list-unstyled">
+                        <%
+                            // Lấy user hoặc usergooogle từ session
+                            User u = (User) session.getAttribute("auth");
+                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+                            boolean logged = u != null || user != null;
+//                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
+                            if (logged) { %>
+                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
+                            <%= (u != null) ? u.getFullname() : user.getName() %>
+                        </a></li>
+                        <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
+                        <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
+                        <li><a href="<%=request.getContextPath()%>/logout"><i
+                                class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
+                        <% } else { %>
+                        <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+
+
+                <!-- /.cnt-cart -->
+                <div class="clearfix"></div>
+            </div>
+            <!-- /.header-top-inner -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /.header-top -->
+    <!-- ============================================== TOP MENU : END ============================================== -->
+    <div class="main-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
+                    <!-- ============================================================= LOGO ============================================================= -->
+                    <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
+                    <div class="logo-page"><a href="home.jsp"> <img
+                            src="assets/images/logo.png" alt="logo"
+                    > </a></div>
+
+
+                    <!-- /.logo -->
+                    <!-- ============================================================= LOGO : END ============================================================= -->
+                </div>
+                <!-- /.logo-holder -->
+                <div class="nameLogo">
+                    <h1 class="name">MÁY KHOAN</h1>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">
+                    <!-- /.contact-row -->
+                    <!-- ============================================================= SEARCH AREA ============================================================= -->
+                    <div class="search-area">
+                        <form action="seachProduct" method="get">
+                            <div class="control-group dropdown">
+                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                       name="name" placeholder="Tìm kiếm...">
+                                <a style="height: 44.5px;" class="search-button" href="#"
+                                   onclick="searchProduct(event)"></a>
+
+
+                            </div>
+                        </form>
+
+                    </div>
+                    <script>
+                        function searchProduct(event) {
+                            event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
+                            var keyword = document.getElementById("searchInput").value;
+
+                            // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
+                            window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
+                        }
+                    </script>
+                    <!-- /.search-area -->
+                    <!-- ============================================================= SEARCH AREA : END ============================================================= -->
+                </div>
+                <!-- /.top-search-holder -->
+
+                <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
+                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
+
+                    <div class="dropdown dropdown-cart">
+                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                            <div class="items-cart-inner">
+                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                    <i class="glyphicon glyphicon-shopping-cart"></i>
+                                </div>
+                                <script>
+                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
+                                    function redirectToCart() {
+
+                                        <% if (!logged) { %>
+                                        Swal.fire({
+                                            title: "Bạn chưa đăng nhập",
+                                            icon: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonText: "Đăng nhập",
+                                            cancelButtonText: `Để sau`
+                                        }).then((result) => {
+                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+                                            if (result.isConfirmed) {
+                                                window.location.href = 'login.jsp';
+                                            }
+                                        });
+                                        <% } else { %>
+                                        window.location.href = '/viewCart';
+                                        <% } %>
+                                    }
+                                </script>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.dropdown-cart -->
+
+                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
+                </div>
+                <!-- /.top-cart-row -->
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.main-header -->
+
+    <!-- ============================================== NAVBAR ============================================== -->
+    <div class="header-nav animate-dropdown">
+        <div class="container">
+            <div class="yamm navbar navbar-default" role="navigation">
+                <!--                <div class="navbar-header">-->
+                <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
+                <!--                            class="navbar-toggle collapsed"-->
+                <!--                            type="button">-->
+                <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
+                <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
+                <!--                </div>-->
+                <div class="nav-bg-class">
+                    <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
+                    >
+                        <div class="nav-outer">
+                            <ul class="nav navbar-nav">
+                                <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
+                                <li class="dropdown active  ">
+                                    <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
+                                    <ul class="dropdown-menu ">
+                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <li>
+                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                               methods="post"></i>
+                                                <%=pc.getNameCategory()%>
+                                            </a>
+
+                                        </li>
+                                        <%}%>
+
+                                    </ul>
+                                </li>
+                                <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                <%
+                                    Boolean role = (Boolean) session.getAttribute("role-acc");
+                                    if (role != null && role) {
+                                %>
+                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <%
+                                    }
+                                %>
+
+<%--                                                                <%--%>
+
+<%--                                                                    User user = (User) session.getAttribute("kh");--%>
+<%--                                                                    if (user != null) {--%>
+
+<%--                                                                                System.out.println("boxsell: " + user.getboxsell());--%>
+<%--                                                                                System.out.println("username: " + user.getUsername());--%>
+
+<%--                                                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
+<%--                                                                %>--%>
+<%--                                                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
+<%--                                                                <%--%>
+<%--                                                                                }--%>
+<%--                                                                            }--%>
+
+<%--                                                                %>--%>
+
+
+                            </ul>
+                            <!-- /.navbar-nav -->
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- /.nav-outer -->
+                    </div>
+                    <!-- /.navbar-collapse -->
+
+                </div>
+                <!-- /.nav-bg-class -->
+            </div>
+            <!-- /.navbar-default -->
+        </div>
+        <!-- /.container-class -->
+
+    </div>
+    <!-- /.header-nav -->
+    <!-- ============================================== NAVBAR : END ============================================== -->
+
+</header>
 
 <div class="body-content outer-top-xs" id="top-banner-and-menu" style="font-size: medium">
     <div class="">
@@ -61,11 +312,21 @@
                 <div class="row">
                     <div id="manager-label" class="col-sm-2">
                         <ul id="product-tabs" class="nav">
-                            <li class="active"><a data-toggle="tab" href="#users-management">Quản lý người dùng</a></li>
-                            <li><a data-toggle="tab" href="#products-management">Quản lý sản phẩm</a>
+                            <li class="active">
+                                <%--Tạo các thẻ liên kết đến các chức năng trong admin thông qua id của thẻ đó  --%>
+                                <a data-toggle="tab" class="table-striped" href="#users-management">Quản lý người
+                                    dùng</a></li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#products-management">Quản lý sản
+                                    phẩm</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#statistics">Doanh thu</a></li>
+                            <li>
+                                <a data-toggle="tab" class="table-striped" href="#order-history">Lịch Sử Đặt Hàng</a>
                             </li>
                             <li><a data-toggle="tab" href="#statistics">Doanh thu</a></li>
-                            <li><a data-toggle="tab" href="#order-history">Lịch Sử Đặt Hàng</a></li>
+                            <li><a data-toggle="tab" href="#order-history">Quản lý đơn hàng</a></li>
                         </ul><!-- /.nav-tabs #product-tabs -->
                     </div>
                     <style>
@@ -74,8 +335,14 @@
                             margin-left: 50px;
                         }
 
+                        .tab {
+                            font-weight: bold;
+                        }
+
 
                     </style>
+
+                    <%--                    Thẻ quản lý người dùng--%>
                     <div class="col-sm-9">
 
                         <div class="tab-content">
@@ -96,6 +363,8 @@
                                             </thead>
                                             <tbody>
                                             <%
+
+                                                //                                                Load toàn bộ thông tin của người dùng trong db
                                                 User userInfor;
 
                                                 for (User us : UsersDAO.getInstance().showAll()) {%>
@@ -111,17 +380,7 @@
                                                             data-target="#user-infor"
                                                     >Xem chi tiết
                                                     </button>
-                                                    <%--Thẻ input trung gian để lưu id của người dùng sau đó load qua modal--%>
-                                                    <%--                                                    <input type="hidden" id="userIdInput" name="userId"/>--%>
-                                                    <%--                                                    <script !src="">--%>
 
-
-                                                    <%--                                                        function showUserInfor(id) {--%>
-                                                    <%--                                                            // Lưu id người dùng vào thẻ input--%>
-                                                    <%--                                                            document.getElementById("userIdInput").value = parseInt(id);--%>
-
-                                                    <%--                                                        }--%>
-                                                    <%--                                                    </script>--%>
                                                 </td>
                                             </tr>
                                             <%}%>
@@ -130,7 +389,7 @@
                                         </table>
 
 
-                                        <!-- The modal -->
+                                        <%--                                    Modal xem chi tiết thông tin của 1 người dùng cụ thể--%>
                                         <div class="modal fade" id="user-infor" tabindex="-1" role="dialog"
                                              aria-labelledby="modalLabelLarge" aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
@@ -336,7 +595,7 @@
                                     </div>
                                 </div>
                             </div><!-- /.tab-pane -->
-
+                            <%--Thẻ xem toàn bộ sản phẩm lấy từ db--%>
                             <div id="products-management" class="tab-pane">
                                 <div class="product-tab container">
 
@@ -419,26 +678,47 @@
 
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
+
                             <div id="order-history" class="tab-pane">
+                                <form action="#" method="post">
                                 <div class="product-tag container">
 
                                     <table id="order-history-table" class="table table-bordered  table-striped">
                                         <thead>
                                         <tr>
                                             <th>Người đặt hàng</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Số lượng</th>
                                             <th>Địa chỉ</th>
-                                            <th>Email</th>
                                             <th>Số điện thoại</th>
-                                            <th>Ghi chú</th>
-
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <% List<Order> viewOrder = OrderDAO.showOrder();
+                                        for(Order s: viewOrder){
+                                        %>
+                                        <tr>
+                                            <td><%= s.getNameCustom()%></td>
+                                            <td><%= s.getProductName()%></td>
+                                            <td><%= s.getQuantity()%></td>
+                                            <td><%= s.getAddress()%></td>
+                                            <td><%= s.getPhone()%></td>
+                                            <td><%= s.getStauss()%></td>
+                                            <td>
+                                                <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">
+                                                <input type="submit" value="sửa">
+                                            </td>
+                                        </tr>
+                                        <%}%>
                                         </tbody>
                                     </table>
 
                                 </div><!-- /.product-tab -->
+                                </form>
                             </div>
+
                         </div><!-- /.tab-content -->
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -461,17 +741,21 @@
     let toolbar = document.createElement('div');
     toolbar.innerHTML = '<b></b>';
     let addProdBtn = document.createElement('div')
+    // Tạo nút thêm sản phẩm để khi nhấp vào sẽ xuất hiện cửa sổ pop-up
     addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
     $(document).ready(function () {
-        // $('#prod-mn, #user-mn,#order-history-table').dataTable();
-        // $('#prod-mn').DataTable()
 
+
+        // Viết các hàm tạo datamodel
+
+        // Áp dụng datatable cho bảng Quản lý người dùng và Lịch sử đơn hàng với trên và dưới của bảng là 1 thẻ div rỗng
         new DataTable('#user-mn,#order-history-table', {
             layout: {
                 topStart: toolbar,
                 bottomStart: toolbar
             }
         });
+        // Áp dụng datatable cho bảng Quản lý sản phẩm với top là nút Thêm sản phẩm
         new DataTable('#prod-mn', {
             layout: {
                 topStart: addProdBtn,
@@ -481,6 +765,22 @@
 
     });
 
+    $(document).ready(function (){
+        $('.delete').click(function (e){
+            var deleteOrder = $(this);
+            var idOrder = $(this).data('id');
+            $.ajax({
+                type: "post",
+                url: "deleteList?id=" + idOrder,
+                success: function (response){
+                    deleteOrder.closest('tr').remove();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error", error);
+                }
+            });
+        })
+    })
 
 </script>
 
@@ -543,10 +843,7 @@
                             });
                         </script>
 
-                        <div class="form-group">
-                            <label for="productID">Mã sản phẩm</label>
-                            <input type="text" class="form-control" id="productID" name="productID" required>
-                        </div>
+
                         <div class="form-group">
                             <label for="productName">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" name="productName" required>
@@ -609,11 +906,6 @@
 
             <div class="modal-body">
                 <div class="container">
-                    <%--                                                        <%--%>
-                    <%--                                                            String userIdStr = request.getParameter("userId");--%>
-                    <%--                                                            int userId = userIdStr != null ? Integer.parseInt(userIdStr) : -1;--%>
-                    <%--                                                            User u = UsersDAO.getInstance().getUserById(userId);--%>
-                    <%--                                                        %>--%>
                     <div class="col-sm-9">
 
                         <div class="tab-content">

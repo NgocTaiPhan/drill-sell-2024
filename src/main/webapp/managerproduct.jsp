@@ -56,7 +56,7 @@
     <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
     <%@ page import="java.util.List" %>
     <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
-    <%@ page import="vn.hcmuaf.fit.drillsell.dao.NewProduct" %>
+<%--    <%@ page import="vn.hcmuaf.fit.drillsell.dao.NewProduct" %>--%>
     <%@ page import="java.io.PrintWriter" %>
 
 

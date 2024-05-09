@@ -404,7 +404,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="stock-box">
-                                                <span class="value"> Còn: <%=  p.getImportQuantity() %></span>
+                                                <span class="value"> Còn:</span>
                                             </div>
                                         </div>
                                     </div>

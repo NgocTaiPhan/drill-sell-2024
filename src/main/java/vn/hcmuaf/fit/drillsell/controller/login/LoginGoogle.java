@@ -21,17 +21,19 @@ public class LoginGoogle {
             throws ServletException, IOException {
         // Lấy mã xác thực từ request
         String code = request.getParameter("code");
+        boolean logged = false;
 
         // Lấy access token từ mã xác thực
         String accessToken = getToken(code);
 
         // Lấy thông tin người dùng từ access token
         UserGoogleDto user = getUserInfo(accessToken);
+        logged = true;
         System.out.println(user.toString());
         // Lưu thông tin người dùng vào session
         HttpSession session = request.getSession();
         session.setAttribute("auth-google", user);
-        session.setAttribute("logged", true);
+        session.setAttribute("logged", logged);
 
         // Chuyển hướng đến trang chính sau khi đăng nhập thành công
         response.sendRedirect("home.jsp");
