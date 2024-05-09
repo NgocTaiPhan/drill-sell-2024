@@ -6,7 +6,6 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 
 
 <%
@@ -83,12 +82,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <%
                             // Lấy user hoặc usergooogle từ session
                             User u = (User) session.getAttribute("auth");
-                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
-                            boolean logged = u != null || user != null;
+                            boolean logged = u != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
                         <li><a href="account.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : user.getName() %>
+                            <%= (u != null) ? u.getFullname() : "" %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>

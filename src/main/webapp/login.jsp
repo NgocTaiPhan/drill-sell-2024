@@ -109,9 +109,9 @@
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
-                           href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
-
+                           href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
+
 
                     </form>
 
@@ -308,6 +308,7 @@
 <script !src="">
 
     var valueNotify = document.getElementById("notify").getAttribute('value');
+
     // alert(valueNotify);
 
     function errorRegister(mess) {
@@ -328,7 +329,7 @@
             text: mess,
             confirmButtonText: "Đóng",
         });
-            <%session.removeAttribute("notify");%>
+        <%session.removeAttribute("notify");%>
     }
 
     switch (valueNotify) {

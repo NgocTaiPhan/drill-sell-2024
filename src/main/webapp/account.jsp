@@ -1,7 +1,6 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html lang="en">
@@ -36,12 +35,11 @@
                         <%
                             // Lấy user hoặc usergooogle từ session
                             User u = (User) session.getAttribute("auth");
-                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
-                            boolean logged = u != null || user != null;
+                            boolean logged = u != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
                         <li><a href="account.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : user.getName() %>
+                            <%= (u != null) ? u.getFullname() : "" %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
@@ -99,6 +97,15 @@
                         </form>
 
                     </div>
+                    <script>
+                        function searchProduct(event) {
+                            event.preventDefault();  // Ngăn chặn hành vi mặc định của liên kết
+                            var keyword = document.getElementById("searchInput").value;
+
+                            // Chuyển hướng đến trang seachProduct.jsp với tham số tìm kiếm
+                            window.location.href = "seachProduct?name=" + encodeURIComponent(keyword);
+                        }
+                    </script>
                     <!-- /.search-area -->
                     <!-- ============================================================= SEARCH AREA : END ============================================================= -->
                 </div>
@@ -192,31 +199,17 @@
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
 
                                 <%
-                                    Boolean role = (Boolean) session.getAttribute("role-acc");
-                                    if (role != null && role) {
+
+
+                                    //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
+                                    if (logged) {
+                                        if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a href="/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
+                                        }
                                     }
                                 %>
-
-                                <%--                                <%--%>
-
-                                <%--                                    User user = (User) session.getAttribute("kh");--%>
-                                <%--                                    if (user != null) {--%>
-
-                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
-                                <%--                                                System.out.println("username: " + user.getUsername());--%>
-
-                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
-                                <%--                                %>--%>
-                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
-                                <%--                                <%--%>
-                                <%--                                                }--%>
-                                <%--                                            }--%>
-
-                                <%--                                %>--%>
-
 
                             </ul>
                             <!-- /.navbar-nav -->
