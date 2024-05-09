@@ -162,8 +162,10 @@
                                         <td><%=us.getEmail()%>
                                         </td>
                                         <td>
+
                                             <button type="button" class="btn btn-info" data-toggle="modal"
                                                     data-target="#user-infor"
+                                            <%--                                                    href="${pageContext.request.contextPath}/admin/userManager/detail?id=${user.id}"--%>
                                             >Xem chi tiết
                                             </button>
                                             <button type="button" class="btn btn-warning"
@@ -174,6 +176,24 @@
                                             </button>
 
                                         </td>
+<%--                                        <td class="text-center text-nowrap">--%>
+<%--                                            <a class="btn btn-primary me-2"--%>
+<%--                                               href="${pageContext.request.contextPath}/admin/userManager/detail?id=${user.id}"--%>
+<%--                                               role="button">--%>
+<%--                                                Xem--%>
+<%--                                            </a>--%>
+<%--                                            <a class="btn btn-success me-2"--%>
+<%--                                               href="${pageContext.request.contextPath}/admin/userManager/update?id=${user.id}"--%>
+<%--                                               role="button">--%>
+<%--                                                Sửa--%>
+<%--                                            </a>--%>
+<%--                                            <a class="btn btn-danger"--%>
+<%--                                               href="${pageContext.request.contextPath}/admin/userManager?action=delete&id=${user.id}"--%>
+<%--                                               role="button"--%>
+<%--                                               onclick="return confirm('Bạn có muốn xóa?')">--%>
+<%--                                                Xóa--%>
+<%--                                            </a>--%>
+<%--                                        </td>--%>
                                     </tr>
                                     <%}%>
 
