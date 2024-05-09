@@ -1,7 +1,9 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class ValidationForm {
+    public ValidationForm() {
+    }
+
     private static ValidationForm instance;
 
 
@@ -35,8 +41,10 @@ public class ValidationForm {
             return;
         } else {
             LocalDate inputDate = LocalDate.parse(birthDate);
-            if (inputDate.isAfter(LocalDate.now())) {
-                Notify.getInstance().sendNotify(session, request, response, "future-birthday");
+            LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
+
+            if (inputDate.isAfter(eighteenYearsAgo)) {
+                Notify.getInstance().sendNotify(session, request, response, "not-enough-18");
                 return;
             }
 
@@ -98,7 +106,14 @@ public class ValidationForm {
             Notify.getInstance().sendNotify(session, request, response, "null-agree");
             return;
         }
+        String cfCode = UUID.randomUUID().toString().substring(0, 6);
         Notify.getInstance().sendNotify(session, request, response, "register-success");
-
+        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, cfCode);
+//
+        UsersDAO.getInstance().addUser(user);
+        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", cfCode);
+        request.getRequestDispatcher("input-code.jsp").forward(request, response);
     }
+
+
 }

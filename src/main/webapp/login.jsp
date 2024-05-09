@@ -327,10 +327,8 @@
             title: "Đăng nhập thất bại",
             text: mess,
             confirmButtonText: "Đóng",
-        }).then((result) => {
-            <%session.removeAttribute("notify");%>
-            window.location.href = "login.jsp";
         });
+            <%session.removeAttribute("notify");%>
     }
 
     switch (valueNotify) {
@@ -374,8 +372,8 @@
             errorRegister("Hãy đồng ý với điều khoản của chúng tôi.");
             break;
 
-        case "future-birthday":
-            errorRegister("Ngày sinh không được lớn hơn ngày hiện tại");
+        case "not-enough-18":
+            errorRegister("Người dùng chưa đủ 18 tuổi.");
             break;
 
         case "invalid-phone":
