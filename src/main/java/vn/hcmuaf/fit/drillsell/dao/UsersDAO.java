@@ -123,6 +123,7 @@ public class UsersDAO {
                     .execute();
         }
     }
+
     public boolean isUsernameDuplicate(String username) {
         String selectQuery = "SELECT COUNT(*) FROM users WHERE username = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -175,6 +176,7 @@ public class UsersDAO {
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().hashPassword("Admin12345"));
     }
+
 
 }
 

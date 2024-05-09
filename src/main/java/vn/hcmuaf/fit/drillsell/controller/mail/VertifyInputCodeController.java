@@ -13,6 +13,8 @@ import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
 
 import java.io.IOException;
 
+import static vn.hcmuaf.fit.drillsell.db.Db.username;
+
 @WebServlet(name = "ConfirmRegistration", value = "/vertify-code")
 public class VertifyInputCodeController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -26,8 +28,8 @@ public class VertifyInputCodeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String inputCode = request.getParameter("otp");
         HttpSession session = request.getSession();
-        if (EmailDAO.getInstance().vertifyCode((String) session.getAttribute("vertificationCode"), inputCode)) {
-
+        User u = (User) session.getAttribute("user-forgot-pass");
+        if (inputCode.equals(UsersDAO.getInstance().getVerifyCode(u.getUsername(),u.getEmail()))) {
             response.sendRedirect("change-pass.jsp");
         }
 
