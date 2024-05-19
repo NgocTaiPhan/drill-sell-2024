@@ -26,7 +26,7 @@ public class UsersDAO {
     }
 
     public User getUser(String username, String password) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -67,7 +67,7 @@ public class UsersDAO {
     }
 
     public boolean addUser(User newUser) {
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             handle.createUpdate(insertQuery)
@@ -154,7 +154,7 @@ public class UsersDAO {
 
     public List<User> showAll() {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users")
+            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
                     .mapToBean(User.class)
                     .list();
         });
@@ -162,7 +162,7 @@ public class UsersDAO {
 
 
     public User getUserById(int id) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)

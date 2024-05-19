@@ -70,10 +70,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 </head>
 
 <body class="cnt-home">
-<!-- ============================================== HEADER ============================================== -->
 <header class="header-style-1 ">
 
-    <!-- ============================================== TOP MENU ============================================== -->
     <div class="top-bar animate-dropdown">
         <div class="container">
             <div class="header-top-inner">
@@ -252,7 +250,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     if (logged) {
                                         if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="/admin/dashboard.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
                                         }
                                     }
@@ -1053,6 +1051,28 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
             </div>
         </div>
 
+    </div>
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </footer>
 

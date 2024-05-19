@@ -610,6 +610,7 @@
                     </div>
                     <!-- /.row -->
                 </div>
+
                 <section class="section featured-product wow fadeInUp">
                     <h3 class="section-title">Tất cả sản phẩm
                     </h3>
@@ -663,6 +664,7 @@
                         %>
                     </div>
                 </section>
+
                 <!-- /.search-result-container -->
 
             </div>

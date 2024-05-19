@@ -148,12 +148,7 @@
                                     <th>Hành động</th>
                                     </thead>
                                     <tbody>
-                                    <%
-
-                                        //                                                Load toàn bộ thông tin của người dùng trong db
-                                        User userInfor;
-
-                                        for (User us : UsersDAO.getInstance().showAll()) {%>
+                                    <%for (User us : UsersDAO.getInstance().showAll()) {%>
                                     <tr>
                                         <td><%=us.getId()%>
                                         </td>

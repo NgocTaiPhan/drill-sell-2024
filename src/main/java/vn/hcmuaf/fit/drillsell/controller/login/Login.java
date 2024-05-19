@@ -30,10 +30,9 @@ public class Login {
             //Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
             User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
 
-            logged = true;
-            System.out.println(auth.isRoleUser());
 //            Tìm thấy thông tin người dùng
             if (auth != null) {//Nếu tìm thấy thông tin người dùng thì sẽ set userId trong log là id của người dùng
+                System.out.println(auth.isRoleUser());
                 log.setUserId(auth.getId());
                 session.setAttribute("auth", auth);//Gửi thông tin tài khoản để  frontend xử lý
                 LogDAO.insertLoginTrue(log);//Ghi nhật ký đăng nhập thành công
@@ -60,10 +59,11 @@ public class Login {
                 }
                 LogDAO.inserLoginFalse(log);
                 LogDAO.checkLogin(log);
+                Notify.getInstance().sendNotify(request.getSession(), request, response, "not-found-user");
+                return;
             }
             //Báo lỗi khi không tìm thấy thông tin đăng nhập
-            Notify.getInstance().sendNotify(request.getSession(), request, response, "not-found-user");
-            return;
+
 
         } else {
             //Báo lỗi khi người dùng chưa điền thông tin đăng nhập

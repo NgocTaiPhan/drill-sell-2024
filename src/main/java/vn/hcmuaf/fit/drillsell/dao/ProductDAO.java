@@ -5,6 +5,7 @@ import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -24,18 +25,23 @@ public class ProductDAO {
 
     public void addProduct(Products product) {
         DbConnector.me().get().useHandle(handle -> {
-            handle.createUpdate("INSERT INTO products (image, productName, unitPrice, categoryId, nameProducer, describle, specifions) " +
-                            "VALUES (:image, :productName, :unitPrice, :categoryId, :nameProducer, :describle, :specifions)")
-                    .bind("image", product.getImage())
-                    .bind("productName", product.getProductName())
-                    .bind("unitPrice", product.getUnitPrice())
-                    .bind("categoryId", product.getCategoryId())
-                    .bind("nameProducer", product.getNameProducer())
-                    .bind("describle", product.getDescrible())
-                    .bind("specifions", product.getSpecifions())
-                    .execute();
+            int rowsAffected = //Hoặc
+                    handle.createUpdate("INSERT INTO products ( image, productName, unitPrice, categoryId, nameProducer, describle, specifions) " +
+                                    "VALUES (:image, :productName, :unitPrice, :categoryId, :nameProducer, :describle, :specifions)")
+
+                            .bind("image", product.getImage())
+                            .bind("productName", product.getProductName())
+                            .bind("unitPrice", product.getUnitPrice())
+                            .bind("categoryId", product.getCategoryId())
+                            .bind("nameProducer", product.getNameProducer())
+                            .bind("describle", product.getDescrible())
+                            .bind("specifions", product.getSpecifions())
+                            .execute(); // <-- Lưu kết quả vào biến rowsAffected
+
+            System.out.println("Số dòng bị ảnh hưởng: " + rowsAffected);
         });
     }
+
 
     public List<Products> showProd() {
         return DbConnector.me().get().withHandle(handle -> {
@@ -147,8 +153,25 @@ public class ProductDAO {
     }
 
 
+    public static void showSaleProduct() {
 
-    public static void showSaleProduct(){
+    }
 
+    public List<Products> getProductsByPage(int limit, int offset) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products LIMIT :limit OFFSET :offset")
+                    .bind("limit", limit)
+                    .bind("offset", offset)
+                    .mapToBean(Products.class)
+                    .list();
+        });
+    }
+
+    public int getTotalProducts() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT COUNT(*) FROM products")
+                    .mapTo(Integer.class)
+                    .one();
+        });
     }
 }
