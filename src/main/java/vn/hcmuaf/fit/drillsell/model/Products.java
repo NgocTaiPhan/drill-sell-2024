@@ -100,4 +100,18 @@ public class Products {
     public void setSpecifions(String specifions) {
         this.specifions = specifions;
     }
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "productId=" + productId +
+                ", image='" + image + '\'' +
+                ", productName='" + productName + '\'' +
+                ", unitPrice=" + unitPrice +
+                ", categoryId=" + categoryId +
+                ", nameProducer='" + nameProducer + '\'' +
+                ", describle='" + describle + '\'' +
+                ", specifions='" + specifions + '\'' +
+                '}';
+    }
 }

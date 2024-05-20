@@ -6,7 +6,6 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -73,7 +72,7 @@
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
                         <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : "" %>
+                            <%= u.getFullname() %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
