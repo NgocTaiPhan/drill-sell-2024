@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.products;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
@@ -8,11 +9,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "AddProducts", value = "/add-products")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 100)
-public class AddProducts extends HttpServlet {
-    private String dataPath = "D:/Laptrinhweb/TTLTWeb_BD/src/main/webapp/Image";
-
+@WebServlet(name = "AddProds", value = "/add-product")
+public class AddProds extends HttpServlet {
+    String dataPath;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -48,6 +47,7 @@ public class AddProducts extends HttpServlet {
                 continue;
             }
 
+
             String imagePath = dataPath + "/" + productName + "_" + fileName;
             part.write(imagePath);
             product.setImage("Image/" + productName + "_" + fileName); // Cập nhật đường dẫn ảnh
@@ -58,7 +58,8 @@ public class AddProducts extends HttpServlet {
         productDAO.addProduct(product);
 
         // Chuyển hướng tới trang quản lý sản phẩm
-        request.getRequestDispatcher("admin/products-management.jsp").forward(request, response);
-    }
+//        Notify.getInstance().sendNotify(session, request, response, "add-prod-success", "products-management.jsp");
+        request.getRequestDispatcher("products-management.jsp").forward(request, response);
 
+    }
 }

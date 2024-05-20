@@ -23,12 +23,16 @@ public class LoadProdsByCategory extends HttpServlet {
         List<Products> prodsList = null;
         String label = null;
 
-      if (prName != null && !prName.isEmpty()) {
+        if (prName != null && !prName.isEmpty()) {
             prodsList = productDAO.getProductByProducer(prName);
             label = prName;
         }
         if (cateId != null && !cateId.isEmpty()) {
             int categoryId = Integer.parseInt(cateId);
+            if (categoryId == 9) {
+                prodsList = productDAO.getAccessory();
+                label = "Phụ kiện";
+            }
             prodsList = productDAO.getProductsByCategory(categoryId);
             label = ProductDAO.getInstance().getNameCategoryById(categoryId);
         }

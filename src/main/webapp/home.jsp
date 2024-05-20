@@ -211,13 +211,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
     <div class="header-nav animate-dropdown">
         <div class="container">
             <div class="yamm navbar navbar-default" role="navigation">
-                <!--                <div class="navbar-header">-->
-                <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                <!--                            class="navbar-toggle collapsed"-->
-                <!--                            type="button">-->
-                <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                <!--                </div>-->
+
                 <div class="nav-bg-class">
                     <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                     >
@@ -250,7 +244,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     if (logged) {
                                         if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a
+                                        href="${pageContext.request.contextPath}/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
                                         }
                                     }
@@ -284,238 +279,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
             <!-- ============================================== SIDEBAR ============================================== -->
             <div class="col-xs-12 col-sm-12 col-md-3 sidebar">
 
-
-                <%--                <div class="sidebar-widget outer-bottom-small wow fadeInUp">--%>
-                <%--                    <h3 class="section-title">Ưu đãi</h3>--%>
-                <%--                    <div class="sidebar-widget-body outer-top-xs">--%>
-                <%--                        <div class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">--%>
-
-                <%--                            <div class="item">--%>
-                <%--                                <div class="products special-product">--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="./detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/best-seller/may-khoan-van-vit-dung-pin-12v-bosch-gsr-120-li-gen-ii-06019g80l1-g.jpg"--%>
-                <%--                                                                alt="Ảnh sản phẩm"> </a>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">Máy khoan vặn vít dùng--%>
-                <%--                                                            pin 12V--%>
-                <%--                                                            Bosch GSR 120-LI GEN II</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 1.599.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/normal/may-khoan-van-vit-dung-pin-12v-sencan-d511210-sl.jpg"--%>
-                <%--                                                                alt="Ảnh sản phẩm"> </a>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">Máy khoan vặn vít dùng--%>
-                <%--                                                            pin 12V--%>
-                <%--                                                            Sencan D511210</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 999.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"--%>
-                <%--                                                                alt="Ảnh sản phẩm"> </a>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">Máy khoan động lực Bosch--%>
-                <%--                                                            GSB 16 RE--%>
-                <%--                                                            ---%>
-                <%--                                                            06012281K1</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 1.399.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                </div>--%>
-                <%--                            </div>--%>
-                <%--                            <div class="item">--%>
-                <%--                                <div class="products special-product">--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/best-seller/pin-bosch-12v-2-0ah-g.jpg"--%>
-                <%--                                                                alt="images">--%>
-                <%--                                                            <div class="zoom-overlay"></div>--%>
-                <%--                                                        </a></div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">--%>
-                <%--                                                            Pin Bosch 12V 2.0Ah 1600A00F6X (1607A350C5)</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 599.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/normal/may-khoan-dong-luc-bosch-gsb-13-re.jpg"--%>
-                <%--                                                                alt="Ảnh sản phẩm">--%>
-                <%--                                                            <div class="zoom-overlay"></div>--%>
-                <%--                                                        </a></div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">Máy khoan động lực Bosch--%>
-                <%--                                                            GSB 16 RE--%>
-                <%--                                                            ---%>
-                <%--                                                            06012281K1</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 1.599.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a href="detail.jsp"> <img--%>
-                <%--                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"--%>
-                <%--                                                                alt="image">--%>
-                <%--                                                        </a></div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a href="detail.jsp">Máy khoan động lực Bosch--%>
-                <%--                                                            GSB 16 RE--%>
-                <%--                                                            ---%>
-                <%--                                                            06012281K1</a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> 1.599.000đ </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                </div>--%>
-                <%--                            </div>--%>
-                <%--                        </div>--%>
-                <%--                    </div>--%>
-                <%--                    <!-- /.sidebar-widget-body -->--%>
-                <%--                </div>--%>
-                <!-- ============================================== PRODUCT TAGS ============================================== -->
                 <div class="sidebar-widget product-tag wow fadeInUp">
                     <h3 class="section-title">Nhà sản xuất</h3>
                     <div class="sidebar-widget-body outer-top-xs">
@@ -617,115 +380,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                 </div>
 
 
-                <!-- /.info-boxes -->
-                <!-- ============================================== INFO BOXES : END ============================================== -->
-                <!-- ============================================== BEST SELLER ============================================== -->
-                <%--            Bán chạy--%>
-                <%--                <div class="best-deal wow fadeInUp outer-bottom-xs">--%>
-                <%--                    <h3 class="section-title point ">Bán chạy</h3>--%>
-                <%--                    <div class="sidebar-widget-body outer-top-xs">--%>
-                <%--                        <div class="owl-carousel best-seller custom-carousel owl-theme outer-top-xs">--%>
-
-
-                <%--                            <%--%>
-
-                <%--                                List<Products> bestSellerProducts = showProducts.get(0);--%>
-                <%--                                for (Products p : bestSellerProducts) {--%>
-                <%--                                    String formattedPrice = homeCtroller.getFormattedUnitPrice(p);--%>
-
-
-                <%--                            %>--%>
-                <%--                            <div class="item">--%>
-                <%--                                <div class="products best-product">--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a--%>
-                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-                <%--                                                                methods="get"> <img width="95px"--%>
-                <%--                                                                                    height="95px"--%>
-                <%--                                                                                    src="<%=p.getImage()%>"--%>
-                <%--                                                                                    alt="Ảnh sản phẩm">--%>
-                <%--                                                        </a>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.image -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                    <!-- /.product-image -->--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col2 col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a--%>
-                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-                <%--                                                                methods="get"><%=p.getProductName()%>--%>
-                <%--                                                        </a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> <%=formattedPrice%> </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                    <div class="product">--%>
-                <%--                                        <div class="product-micro">--%>
-                <%--                                            <div class="row product-micro-row">--%>
-                <%--                                                <div class="col col-xs-5">--%>
-                <%--                                                    <div class="product-image">--%>
-                <%--                                                        <div class="image"><a--%>
-                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-                <%--                                                                methods="get"> <img width="95px"--%>
-                <%--                                                                                    height="95px"--%>
-                <%--                                                                                    src="<%=p.getImage()%>"--%>
-                <%--                                                                                    alt="Ảnh sản phẩm">--%>
-                <%--                                                        </a>--%>
-                <%--                                                        </div>--%>
-
-
-                <%--                                                    </div>--%>
-
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                                <div class="col2 col-xs-7">--%>
-                <%--                                                    <div class="product-info">--%>
-                <%--                                                        <h3 class="name"><a--%>
-                <%--                                                                href="detail?productId=<%= p.getProductId()%>"--%>
-                <%--                                                                methods="get"><%=p.getProductName()%>--%>
-                <%--                                                        </a></h3>--%>
-                <%--                                                        <div class="rating rateit-small"></div>--%>
-                <%--                                                        <div class="product-price"><span--%>
-                <%--                                                                class="price"> <%=formattedPrice%> </span>--%>
-                <%--                                                        </div>--%>
-                <%--                                                        <!-- /.product-price -->--%>
-
-                <%--                                                    </div>--%>
-                <%--                                                </div>--%>
-                <%--                                                <!-- /.col -->--%>
-                <%--                                            </div>--%>
-                <%--                                            <!-- /.product-micro-row -->--%>
-                <%--                                        </div>--%>
-                <%--                                        <!-- /.product-micro -->--%>
-
-                <%--                                    </div>--%>
-                <%--                                </div>--%>
-                <%--                            </div>--%>
-                <%--                            <%}%>--%>
-
-
-                <%--                        </div>--%>
-                <%--                    </div>--%>
-                <%--                    <!-- /.sidebar-widget-body -->--%>
-                <%--                </div>--%>
                 <div class="wide-banners wow fadeInUp outer-bottom-xs">
                     <div class="row">
                         <div class="col-md-7 col-sm-7">
@@ -752,7 +406,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                 <!-- /.wide-banners -->
 
                 <section class="section featured-product wow fadeInUp">
-                    <h3 class="section-title">Sản phẩm</h3>
+                    <h3 class="section-title"><a style="color: #fe0000" href="product.jsp">Sản phẩm</a></h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
 
 
@@ -802,67 +456,67 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <%}%>
 
                     </div>
-                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">
-                        <%
-                            List<Products> subListProds = prodsService.showProd();
-                            for (Products p : subListProds) {
-                                String formattedPrice = prodsService.getFormattedUnitPrice(p);
+                    <%--                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">--%>
+                    <%--                        <%--%>
+                    <%--                            List<Products> subListProds = prodsService.showProd();--%>
+                    <%--                            for (Products p : subListProds) {--%>
+                    <%--                                String formattedPrice = prodsService.getFormattedUnitPrice(p);--%>
 
-                        %>
-                        <div class="item item-carousel">
-                            <div class="products">
-                                <div class="product">
-                                    <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%= p.getProductId()%>"
-                                                              methods="get"><img height="189px" width="189px"
-                                                                                 src="<%=p.getImage()%>"
-                                                                                 alt="Ảnh sản phẩm"></a></div>
-                                        <!-- /.image -->
+                    <%--                        %>--%>
+                    <%--                        <div class="item item-carousel">--%>
+                    <%--                            <div class="products">--%>
+                    <%--                                <div class="product">--%>
+                    <%--                                    <div class="product-image">--%>
+                    <%--                                        <div class="image"><a href="detail?productId=<%= p.getProductId()%>"--%>
+                    <%--                                                              methods="get"><img height="189px" width="189px"--%>
+                    <%--                                                                                 src="<%=p.getImage()%>"--%>
+                    <%--                                                                                 alt="Ảnh sản phẩm"></a></div>--%>
+                    <%--                                        <!-- /.image -->--%>
 
-                                    </div>
-                                    <!-- /.product-image -->
+                    <%--                                    </div>--%>
+                    <%--                                    <!-- /.product-image -->--%>
 
-                                    <div class="product-info text-left">
-                                        <h3 class="name"><a href="detail?productId=<%= p.getProductId()%>"
-                                                            methods="get"><%=p.getProductName()%>
-                                        </a>
-                                        </h3>
-                                        <div class="rating rateit-small"></div>
-                                        <div class="description"></div>
-                                        <div class="product-price"><span
-                                                class="price"><%=formattedPrice%></span>
-                                        </div>
-                                        <!-- /.product-price -->
+                    <%--                                    <div class="product-info text-left">--%>
+                    <%--                                        <h3 class="name"><a href="detail?productId=<%= p.getProductId()%>"--%>
+                    <%--                                                            methods="get"><%=p.getProductName()%>--%>
+                    <%--                                        </a>--%>
+                    <%--                                        </h3>--%>
+                    <%--                                        <div class="rating rateit-small"></div>--%>
+                    <%--                                        <div class="description"></div>--%>
+                    <%--                                        <div class="product-price"><span--%>
+                    <%--                                                class="price"><%=formattedPrice%></span>--%>
+                    <%--                                        </div>--%>
+                    <%--                                        <!-- /.product-price -->--%>
 
-                                    </div>
-                                    <!-- /.product-info -->
+                    <%--                                    </div>--%>
+                    <%--                                    <!-- /.product-info -->--%>
 
-                                    <!-- /.cart -->
-                                </div>
-                                <!-- /.product -->
+                    <%--                                    <!-- /.cart -->--%>
+                    <%--                                </div>--%>
+                    <%--                                <!-- /.product -->--%>
 
-                            </div>
-                            <!-- /.products -->
-                        </div>
+                    <%--                            </div>--%>
+                    <%--                            <!-- /.products -->--%>
+                    <%--                        </div>--%>
 
-                        <%}%>
-                        <!-- /.item -->
-
-
-                        <!-- /.item -->
+                    <%--                        <%}%>--%>
+                    <%--                        <!-- /.item -->--%>
 
 
-                        <!-- /.item -->
+                    <%--                        <!-- /.item -->--%>
 
 
-                        <!-- /.item -->
+                    <%--                        <!-- /.item -->--%>
 
 
-                        <!-- /.item -->
+                    <%--                        <!-- /.item -->--%>
 
 
-                        <!-- /.item -->
-                    </div>
+                    <%--                        <!-- /.item -->--%>
+
+
+                    <%--                        <!-- /.item -->--%>
+                    <%--                    </div>--%>
 
                     <!-- /.home-owl-carousel -->
                 </section>
@@ -871,7 +525,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                 <section class="section featured-product wow fadeInUp">
-                    <h3 class="section-title">Phụ kiện</h3>
+                    <h3 class="section-title"><a style="color: #fe0000"
+                                                 href="<%= request.getContextPath() %>/load-by-category?category-id=9">Phụ
+                        kiện</a></h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
                         <%
                             List<Products> accessory = prodsService.getAccessory();

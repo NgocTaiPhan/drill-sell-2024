@@ -1,87 +1,91 @@
-var errorParam = document.getElementById("notify").getAttribute('value');
+var valueNotify = document.getElementById("notify").getAttribute('value');
 
-function handleErrorMessage(errorParam, errorMessage) {
+
+function errorRegister(mess) {
     Swal.fire({
         icon: "error",
-        title: "Thông tin không hợp lệ",
-        text: errorMessage,
+        title: "Đăng kí thất bại",
+        text: mess,
         confirmButtonText: "Đóng",
     });
+    // alert(mess)
+    // <%session.removeAttribute("notify");%>
+
 }
 
-switch (errorParam) {
+function errorLogin(mess) {
+    Swal.fire({
+        icon: "error",
+        title: "Đăng nhập thất bại",
+        text: mess,
+        confirmButtonText: "Đóng",
+    });
+    // <%session.removeAttribute("notify");%>
+}
+
+switch (valueNotify) {
+
+    // ---------------------------------Thông báo của phần đăng kí--------------------------------------
     case "null-fullname":
-        handleErrorMessage(errorParam, "Hãy điền họ và tên");
+        errorRegister("Hãy điền họ và tên");
         break;
 
     case "null-birthday":
-        handleErrorMessage(errorParam, "Hãy nhập ngày sinh");
+        errorRegister("Hãy nhập ngày sinh");
         break;
 
-    case "null-gender":
-        handleErrorMessage(errorParam, "Hãy chọn giới tính");
-        break;
 
     case "null-address":
-        handleErrorMessage(errorParam, "Hãy nhập địa chỉ");
+        errorRegister("Hãy nhập địa chỉ");
         break;
 
 
     case "null-phone":
-        handleErrorMessage(errorParam, "Hãy nhập số điện thoại");
+        errorRegister("Hãy nhập số điện thoại");
         break;
 
     case "null-email":
-        handleErrorMessage(errorParam, "Hãy nhập địa chỉ email");
+        errorRegister("Hãy nhập địa chỉ email");
         break;
 
     case "null-username":
-        handleErrorMessage(errorParam, "Hãy nhập tên đăng nhập");
+        errorRegister("Hãy nhập tên đăng nhập");
         break;
 
     case "null-pass":
-        handleErrorMessage(errorParam, "Hãy nhập mật khẩu");
+        errorRegister("Hãy nhập mật khẩu");
         break;
 
     case "null-cfpass":
-        handleErrorMessage(errorParam, "Hãy nhập lại mật khẩu");
+        errorRegister("Hãy nhập lại mật khẩu");
         break;
 
     case "null-agree":
-        handleErrorMessage(errorParam, "Hãy đồng ý với điều khoản của chúng tôi.");
+        errorRegister("Hãy đồng ý với điều khoản của chúng tôi.");
         break;
 
-    case "future-birthday":
-        handleErrorMessage(errorParam, "Ngày sinh không được lớn hơn ngày hiện tại");
+    case "not-enough-18":
+        errorRegister("Người dùng chưa đủ 18 tuổi.");
         break;
 
     case "invalid-phone":
-        handleErrorMessage(errorParam, "Số điện thoại không hợp lệ");
+        errorRegister("Số điện thoại không hợp lệ");
         break;
 
     case "invalid-email":
-        handleErrorMessage(errorParam, "Email không hợp lệ");
+        errorRegister("Email không hợp lệ");
         break;
 
     case "invalid-username":
-        handleErrorMessage(errorParam, "Tên đăng nhập không hợp lệ");
+        errorRegister("Tên đăng nhập không hợp lệ");
         break;
-    // case "invalid-pass":
-    //     handleErrorMessage(errorParam, "Mật khẩu phải từ 8 kí tự. Bao gồm chữ hoa, chữ thường và số");
-    //     break;
     case "invalid-pass":
-        handleErrorMessage(errorParam, "Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
+        errorRegister("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
     case "pass-not-match":
-        handleErrorMessage(errorParam, "Mật khẩu không khớp");
-        break;
-    case "not-found-user-login":
-        handleErrorMessage(errorParam, "Không tìm thấy tài khoản");
-        break;
-    case "null-value-login":
-        handleErrorMessage(errorParam, "Không được để trống tên tài khoản và mật khẩu");
+        errorRegister("Mật khẩu không khớp");
         break;
     case "duplicate-acc":
-        handleErrorMessage(errorParam, "Tên đăng nhập đã tồn tại");
+        errorRegister("Tên đăng nhập đã tồn tại");
         break;
     case"register-success":
         Swal.fire({
@@ -90,46 +94,68 @@ switch (errorParam) {
             text: "Hãy xác nhận email và đăng nhập!",
             confirmButtonText: "Đóng",
         }).then((result) => {
+            // <%session.removeAttribute("notify");%>
             window.location.href = "login.jsp";
         });
-    case"send-otp-success":
-
-    case"admin":
+    // ---------------------------------Thông báo của phần đăng kí--------------------------------------
+    // ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
+    case"admin-logged":
         Swal.fire({
             icon: "success",
             title: "Đăng nhập với quyền quản trị",
             text: "Chào mừng",
             confirmButtonText: "Đóng",
         }).then((result) => {
+            // <%session.removeAttribute("notify");%>
             window.location.href = "home.jsp";
         });
-    case"user":
+
+    case"user-logged":
         Swal.fire({
             icon: "success",
             title: "Đăng nhập thành công",
             text: "Chào mừng",
             confirmButtonText: "Đóng",
         }).then((result) => {
+            // <%session.removeAttribute("notify");%>
             window.location.href = "home.jsp";
         });
-    case"vertified":
+    case "null-user-login":
+        errorLogin("Hãy nhập tên đăng nhập và mật khẩu!")
+        break;
+    case "not-found-user":
+        errorLogin("Không tìm thấy tài khoản!")
+        break;
+// ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
+    case "add-prod-success":
         Swal.fire({
             icon: "success",
-            title: "Xác thực thành công",
-            text: "Chào mừng",
-            confirmButtonText: "Đóng",
+            title: "Thành công",
+            text: "Thêm sản phẩm thành công",
+            confirmButtonText: "OK",
         }).then((result) => {
-            window.location.href = "home.jsp";
+            // <%session.removeAttribute("notify");%>
+            window.location.href = "products-management.jsp";
         });
-
+    case"hide-success":
+        Swal.fire({
+            icon: "success",
+            title: "Ẩn thành công",
+            text: "Sản phẩm đã được ẩn",
+            confirmButtonText: "Đóng"
+        });
+    case"remove-success":
+        Swal.fire({
+            icon: "success",
+            title: "Xóa thành công",
+            text: "Sản phẩm đã được xóa",
+            confirmButtonText: "Đóng"
+        });
     default:
 
 
-        // break;
+    // break;
 
-    function checkAlert() {
-        handleErrorMessage(null, "Kiểm tra thông báo")
-    }
+
 }
-
 
