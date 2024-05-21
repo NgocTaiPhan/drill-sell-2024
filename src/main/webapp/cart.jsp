@@ -321,7 +321,7 @@
         <div class="row">
             <div class="col-12">
 
-                <form action="#">
+                <form action="checkOut" method="get">
 
                     <div class="table-content table-responsive">
 
@@ -351,8 +351,6 @@
                                         class="fa fa-times"></i></a></td>
                                 <td class="sub">
                                     <input type="checkbox" name="selectedProducts" value="<%= p.getProductId()%>">
-
-
                                 </td>
 
                                 <td class="li-product-thumbnail"><a href="#"><img height="100px" width="100px"
@@ -456,7 +454,7 @@
 
                     <div class="cart-page-total">
 <%--                        <a class="checkOut" href="checkOut?p=<%%>">Thanh toán</a>--%>
-    <button class="checkOut" type="button" onclick="checkOut()">Thanh toán</button>
+    <button class="checkOut" type="submit">Thanh toán</button>
 
 
                     </div>
@@ -468,19 +466,17 @@
     </div>
 </div>
 
-<script>
+<%--<script>--%>
+<%--    function checkOut() {--%>
+<%--        // Lấy giá trị của tham số p (nếu có)--%>
+<%--        var params = new URLSearchParams(window.location.search);--%>
+<%--        var productId = params.get('productId');--%>
 
-    function checkOut() {
-        // Lấy giá trị của tham số p (nếu có)
-        var params = new URLSearchParams(window.location.search);
-        var productId = params.get('productId');
+<%--        // Chuyển hướng đến trang checkOut với tham số p (nếu có)--%>
+<%--        window.location.href = 'checkOut?p=' + productId;--%>
+<%--    }--%>
+<%--</script>--%>
 
-        // Chuyển hướng đến trang checkOut với tham số p (nếu có)
-        window.location.href = 'checkOut?p=' + productId;
-    }
-
-
-</script>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
     <div class="social-button-content">

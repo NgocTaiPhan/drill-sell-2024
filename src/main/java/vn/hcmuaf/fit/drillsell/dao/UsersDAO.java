@@ -174,7 +174,7 @@ public class UsersDAO {
     }
 
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().hashPassword("Admin12345"));
+        System.out.println(UsersDAO.getInstance().hashPassword("hoaHoa@20052003"));
     }
 
 

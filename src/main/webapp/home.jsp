@@ -254,7 +254,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     if (logged) {
                                         if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a href="/drillsell_war/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
                                         }
                                     }

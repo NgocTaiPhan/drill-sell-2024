@@ -1,3 +1,6 @@
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -137,27 +140,39 @@
                                 <h4 class="title">Striped Table</h4>
                                 <p class="category">Here is a subtitle for this table</p>
                             </div>
+
                             <div class="content table-responsive table-full-width">
                                 <table id="order-history-table" class="table table-striped">
                                     <thead>
-                                    <th>Người đặt hàng</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Ghi chú</th>
+                                    <tr>
+                                        <th>Người đặt hàng</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
+                                    <% List<Order> viewOrder = OrderDAO.showOrder();
+                                        for(Order s: viewOrder){
+                                    %>
                                     <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                        <td>Oud-Turnhout</td>
+                                        <td><%= s.getNameCustom()%></td>
+                                        <td><%= s.getProductName()%></td>
+                                        <td><%= s.getQuantity()%></td>
+                                        <td><%= s.getAddress()%></td>
+                                        <td><%= s.getPhone()%></td>
+                                        <td><%= s.getStauss()%></td>
+                                        <td>
+                                            <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">
+                                            <input type="submit" value="sửa">
+                                        </td>
                                     </tr>
-
+                                    <%}%>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -207,7 +222,24 @@
 
 
 </body>
-<script src="../assets/js/my-js/admin.js"></script>
+<script src="../assets/js/my-js/admin.js">
+    $(document).ready(function (){
+        $('.delete').click(function (e){
+            var deleteOrder = $(this);
+            var idOrder = $(this).data('id');
+            $.ajax({
+                type: "post",
+                url: "deleteList?id=" + idOrder,
+                success: function (response){
+                    deleteOrder.closest('tr').remove();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error", error);
+                }
+            });
+        })
+    })
+</script>
 
 
 </html>

@@ -68,7 +68,7 @@ public class OrderDAO {
 //            order.setQuantity(7);
 //            order.setStauss("Đã xác nhận");
 //            System.out.println(updateOrder(order));
-            System.out.println(showOrder());
-
+//            System.out.println(showOrder());
+deleteOrder(3);
     }
 }

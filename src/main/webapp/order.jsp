@@ -5,7 +5,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<CheckOut> checkOuts = (List<CheckOut>) request.getAttribute("checkOut");
+    List<CheckOut> checkOuts = (List<CheckOut>) request.getAttribute("checkOuts");
 %>
 <html lang="vi">
 <head>
@@ -333,7 +333,7 @@
             %>
             <tr>
                 <td class="li-product-thumbnail">
-                    <a href="#"><img src="<%= s.getProductName() %>"></a>
+                    <a href="#"><%= s.getProductName()%></a>
                 </td>
                 <td class="li-product-price">
                     <span class="amount"><%= s.getUnitPrice() %></span>
