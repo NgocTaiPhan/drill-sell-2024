@@ -5,7 +5,6 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.model.UserGoogleDto" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -74,12 +73,11 @@
                         <%
                             // Lấy user hoặc usergooogle từ session
                             User u = (User) session.getAttribute("auth");
-                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
-                            boolean logged = u != null || user != null;
+                            boolean logged = u != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
-                        <li><a href="account.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : user.getName() %>
+                        <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
+                            <%= (u != null) ? u.getFullname() : "" %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
@@ -178,7 +176,7 @@
                                             }
                                         });
                                         <% } else { %>
-                                        window.location.href = '/viewCart';
+                                        window.location.href = 'cart.jsp';
                                         <% } %>
                                     }
                                 </script>
@@ -239,31 +237,17 @@
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
 
                                 <%
-                                    Boolean role = (Boolean) session.getAttribute("role-acc");
-                                    if (role != null && role) {
+
+
+                                    //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
+                                    if (logged) {
+                                        if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="admin.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a href="/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
+                                        }
                                     }
                                 %>
-
-                                <%--                                <%--%>
-
-                                <%--                                    User user = (User) session.getAttribute("kh");--%>
-                                <%--                                    if (user != null) {--%>
-
-                                <%--                                                System.out.println("boxsell: " + user.getboxsell());--%>
-                                <%--                                                System.out.println("username: " + user.getUsername());--%>
-
-                                <%--                                                if (user.getboxsell() != 0 && user.getUsername() != null) {--%>
-                                <%--                                %>--%>
-                                <%--                                <li class="active yamm-fw"><a href="manager">quản lí sp</a></li>--%>
-                                <%--                                <%--%>
-                                <%--                                                }--%>
-                                <%--                                            }--%>
-
-                                <%--                                %>--%>
-
 
                             </ul>
                             <!-- /.navbar-nav -->
@@ -331,231 +315,231 @@
 
                 <!-- ============================================== SPECIAL DEALS ============================================== -->
 
-                <div class="sidebar-widget outer-bottom-small wow fadeInUp">
-                    <h3 class="section-title">Ưu đãi</h3>
-                    <div class="sidebar-widget-body outer-top-xs">
-                        <div class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">
+<%--                <div class="sidebar-widget outer-bottom-small wow fadeInUp">--%>
+<%--                    <h3 class="section-title">Ưu đãi</h3>--%>
+<%--                    <div class="sidebar-widget-body outer-top-xs">--%>
+<%--                        <div class="owl-carousel sidebar-carousel special-offer custom-carousel owl-theme outer-top-xs">--%>
 
-                            <div class="item">
-                                <div class="products special-product">
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/best-seller/may-khoan-van-vit-dung-pin-12v-bosch-gsr-120-li-gen-ii-06019g80l1-g.jpg"
-                                                                alt="Ảnh sản phẩm"> </a>
-                                                        </div>
-                                                        <!-- /.image -->
+<%--                            <div class="item">--%>
+<%--                                <div class="products special-product">--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/best-seller/may-khoan-van-vit-dung-pin-12v-bosch-gsr-120-li-gen-ii-06019g80l1-g.jpg"--%>
+<%--                                                                alt="Ảnh sản phẩm"> </a>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V
-                                                            Bosch GSR 120-LI GEN II</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 1.599.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V--%>
+<%--                                                            Bosch GSR 120-LI GEN II</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 1.599.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/normal/may-khoan-van-vit-dung-pin-12v-sencan-d511210-sl.jpg"
-                                                                alt="Ảnh sản phẩm"> </a>
-                                                        </div>
-                                                        <!-- /.image -->
+<%--                                    </div>--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/normal/may-khoan-van-vit-dung-pin-12v-sencan-d511210-sl.jpg"--%>
+<%--                                                                alt="Ảnh sản phẩm"> </a>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V
-                                                            Sencan D511210</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 999.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">Máy khoan vặn vít dùng pin 12V--%>
+<%--                                                            Sencan D511210</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 999.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"
-                                                                alt="Ảnh sản phẩm"> </a>
-                                                        </div>
-                                                        <!-- /.image -->
+<%--                                    </div>--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"--%>
+<%--                                                                alt="Ảnh sản phẩm"> </a>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
-                                                            -
-                                                            06012281K1</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 1.399.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE--%>
+<%--                                                            ---%>
+<%--                                                            06012281K1</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 1.399.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="products special-product">
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/best-seller/pin-bosch-12v-2-0ah-g.jpg"
-                                                                alt="images">
-                                                            <div class="zoom-overlay"></div>
-                                                        </a></div>
-                                                        <!-- /.image -->
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                            <div class="item">--%>
+<%--                                <div class="products special-product">--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/best-seller/pin-bosch-12v-2-0ah-g.jpg"--%>
+<%--                                                                alt="images">--%>
+<%--                                                            <div class="zoom-overlay"></div>--%>
+<%--                                                        </a></div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">
-                                                            Pin Bosch 12V 2.0Ah 1600A00F6X (1607A350C5)</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 599.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">--%>
+<%--                                                            Pin Bosch 12V 2.0Ah 1600A00F6X (1607A350C5)</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 599.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/normal/may-khoan-dong-luc-bosch-gsb-13-re.jpg"
-                                                                alt="Ảnh sản phẩm">
-                                                            <div class="zoom-overlay"></div>
-                                                        </a></div>
-                                                        <!-- /.image -->
+<%--                                    </div>--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/normal/may-khoan-dong-luc-bosch-gsb-13-re.jpg"--%>
+<%--                                                                alt="Ảnh sản phẩm">--%>
+<%--                                                            <div class="zoom-overlay"></div>--%>
+<%--                                                        </a></div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
-                                                            -
-                                                            06012281K1</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 1.599.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE--%>
+<%--                                                            ---%>
+<%--                                                            06012281K1</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 1.599.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                    <div class="product">
-                                        <div class="product-micro">
-                                            <div class="row product-micro-row">
-                                                <div class="col col-xs-5">
-                                                    <div class="product-image">
-                                                        <div class="image"><a href="#"> <img
-                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"
-                                                                alt="image">
-                                                        </a></div>
-                                                        <!-- /.image -->
+<%--                                    </div>--%>
+<%--                                    <div class="product">--%>
+<%--                                        <div class="product-micro">--%>
+<%--                                            <div class="row product-micro-row">--%>
+<%--                                                <div class="col col-xs-5">--%>
+<%--                                                    <div class="product-image">--%>
+<%--                                                        <div class="image"><a href="#"> <img--%>
+<%--                                                                src="assets/images/products/power-drill/may-khoan-dong-luc-bosch-gsb-16-re-300.jpg"--%>
+<%--                                                                alt="image">--%>
+<%--                                                        </a></div>--%>
+<%--                                                        <!-- /.image -->--%>
 
-                                                    </div>
-                                                    <!-- /.product-image -->
-                                                </div>
-                                                <!-- /.col -->
-                                                <div class="col col-xs-7">
-                                                    <div class="product-info">
-                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE
-                                                            -
-                                                            06012281K1</a></h3>
-                                                        <div class="rating rateit-small"></div>
-                                                        <div class="product-price"><span
-                                                                class="price"> 1.599.000đ </span>
-                                                        </div>
-                                                        <!-- /.product-price -->
+<%--                                                    </div>--%>
+<%--                                                    <!-- /.product-image -->--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                                <div class="col col-xs-7">--%>
+<%--                                                    <div class="product-info">--%>
+<%--                                                        <h3 class="name"><a href="#">Máy khoan động lực Bosch GSB 16 RE--%>
+<%--                                                            ---%>
+<%--                                                            06012281K1</a></h3>--%>
+<%--                                                        <div class="rating rateit-small"></div>--%>
+<%--                                                        <div class="product-price"><span--%>
+<%--                                                                class="price"> 1.599.000đ </span>--%>
+<%--                                                        </div>--%>
+<%--                                                        <!-- /.product-price -->--%>
 
-                                                    </div>
-                                                </div>
-                                                <!-- /.col -->
-                                            </div>
-                                            <!-- /.product-micro-row -->
-                                        </div>
-                                        <!-- /.product-micro -->
+<%--                                                    </div>--%>
+<%--                                                </div>--%>
+<%--                                                <!-- /.col -->--%>
+<%--                                            </div>--%>
+<%--                                            <!-- /.product-micro-row -->--%>
+<%--                                        </div>--%>
+<%--                                        <!-- /.product-micro -->--%>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.sidebar-widget-body -->
-                </div>
+<%--                                    </div>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                    <!-- /.sidebar-widget-body -->--%>
+<%--                </div>--%>
                 <!-- /.sidebar-widget -->
                 <!-- ============================================== SPECIAL DEALS : END ============================================== -->
 
@@ -626,6 +610,7 @@
                     </div>
                     <!-- /.row -->
                 </div>
+
                 <section class="section featured-product wow fadeInUp">
                     <h3 class="section-title">Tất cả sản phẩm
                     </h3>
@@ -679,6 +664,7 @@
                         %>
                     </div>
                 </section>
+
                 <!-- /.search-result-container -->
 
             </div>

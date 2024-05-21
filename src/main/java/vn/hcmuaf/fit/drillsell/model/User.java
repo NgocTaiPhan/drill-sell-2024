@@ -20,8 +20,13 @@ User {
             verificationCode;
     private boolean isVerified, roleUser;
 
-
     public User() {
+    }
+
+    public User(String id, String name, String email) {
+//        this.id = Integer.parseInt(id);
+        this.fullname = name;
+        this.email = email;
     }
 
     public User(String username, String passwords) {
@@ -42,19 +47,7 @@ User {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public User(String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth, String verificationCode, boolean isVerified, boolean roleUser) {
-        this.fullname = fullname;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.username = username;
-        this.passwords = passwords;
-        this.sex = sex;
-        this.yearOfBirth = yearOfBirth;
-        this.verificationCode = verificationCode;
-        this.isVerified = isVerified;
-        this.roleUser = roleUser;
-    }
+
 
     public User(String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
         this.fullname = fullname;
@@ -68,6 +61,17 @@ User {
 
     }
 
+    public User(String fullname, String address, String phone, String email, String username, String passwords, String gender, String yearOfBirth, String verificationCode) {
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.username = username;
+        this.passwords = passwords;
+        this.sex = gender;
+        this.yearOfBirth = yearOfBirth;
+        this.verificationCode = verificationCode;
+    }
 
     public int getId() {
         return id;
