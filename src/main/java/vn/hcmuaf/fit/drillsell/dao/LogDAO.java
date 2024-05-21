@@ -54,17 +54,16 @@ public class LogDAO {
 
     public static boolean checkLogin(Log log) {
         return DbConnector.me().get().inTransaction(handle -> {
-            Optional<Log> re = handle.createQuery("SELECT userId, ip, COUNT(ip) AS SL\n" +
-                            "FROM log\n" +
-                            "WHERE timeLogin <= DATE_SUB(NOW(), INTERVAL 5 MINUTE) AND log.statuss = 'Login False'\n" +
-                            "GROUP BY userId, ip\n" +
+            Optional<Log> re = handle.createQuery("SELECT userId, ip, COUNT(ip) AS SL " +
+                            "FROM log " +
+                            "WHERE timeLogin >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) AND log.statuss = 'Login False' " +
+                            "GROUP BY userId, ip " +
                             "HAVING SL > 3 ")
                     .mapToBean(Log.class)
                     .findOne();
 
             if (re.isPresent()) {
                 try {
-//                    String level = "WARNING"
                     String ipAddress = InetAddress.getLocalHost().getHostAddress();
                     int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Login WARNING', :levels)")
                             .bind("userId", log.getUserId())
@@ -77,7 +76,7 @@ public class LogDAO {
                     return false;
                 }
             } else {
-                // Trả về false nếu không có người dùng nào có 3 lần đăng nhập thất bại trong 20 phút
+                // Trả về false nếu không có người dùng nào có 3 lần đăng nhập thất bại trong 5 phút
                 return false;
             }
         });

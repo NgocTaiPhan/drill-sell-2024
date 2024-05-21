@@ -1,6 +1,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+
 <%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -140,6 +141,7 @@
                                 <h4 class="title">Striped Table</h4>
                                 <p class="category">Here is a subtitle for this table</p>
                             </div>
+
                             <div class="content table-responsive table-full-width">
                                 <table id="order-history-table" class="table table-striped">
                                     <thead>
@@ -175,10 +177,8 @@
                                         </td>
                                     </tr>
                                     <%}%>
-
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -228,7 +228,24 @@
 
 
 </body>
-<script src="../assets/js/my-js/admin.js"></script>
+<script src="../assets/js/my-js/admin.js">
+    $(document).ready(function (){
+        $('.delete').click(function (e){
+            var deleteOrder = $(this);
+            var idOrder = $(this).data('id');
+            $.ajax({
+                type: "post",
+                url: "deleteList?id=" + idOrder,
+                success: function (response){
+                    deleteOrder.closest('tr').remove();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error", error);
+                }
+            });
+        })
+    })
+</script>
 
 
 </html>
