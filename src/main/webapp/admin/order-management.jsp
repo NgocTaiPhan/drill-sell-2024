@@ -57,7 +57,7 @@
                 </li>
 
                 <li>
-                    <a href="user-management.jsp">
+                    <a href="user-manager.jsp">
                         <i class="ti-user"></i>
                         <p>Quản lý người dùng</p>
                     </a>

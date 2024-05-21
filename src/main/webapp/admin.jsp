@@ -367,7 +367,7 @@
                                                 //                                                Load toàn bộ thông tin của người dùng trong db
                                                 User userInfor;
 
-                                                for (User us : UsersDAO.getInstance().showAll()) {%>
+                                                for (User us : UsersDAO.getInstance().showUser()) {%>
                                             <tr>
                                                 <td><%=us.getId()%>
                                                 </td>
