@@ -21,10 +21,6 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--%>
-    <%--    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--%>
-    <%--    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>--%>
-    <%--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>--%>
     <%--    <!--    Css tự viết-->--%>
     <link rel="stylesheet" href="assets/css/my-css/logo-page.css">
     <!--Css tự viết-->
@@ -109,9 +105,9 @@
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
-                           href="https://accounts.google.com/o/oauth2/auth?scope=profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
-
+                           href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
+
 
                     </form>
 
@@ -126,7 +122,7 @@
                 </div>
                 <!-- Sign-in -->
                 <%
-                    // Retrieve the user object from the session, handling null cases
+                    //Lấy dữ liệu từ session để điền lại form khi điền thông tin không hợp lệ
                     User user = (User) session.getAttribute("user-register");
                     String fullName = user != null ? user.getFullname() : "";
                     String address = user != null ? user.getAddress() : "";
@@ -232,7 +228,7 @@
                         <div class="form-group" style="white-space: nowrap;  ">
                             <input class=" form-checkbox-input" id="agree-to-terms" style="margin-right: 5px;"
                                    type="checkbox" name="agree-to-terms">
-                            <label class="info-title" for="agree-to-terms">Đồng ý với <a href="rules.jsp">điều
+                            <label class="info-title" for="agree-to-terms">Đồng ý với <a href="#">điều
                                 khoản</a> của chúng tôi
                                 <span>*</span></label>
                         </div>
@@ -305,149 +301,7 @@
 </div>
 <%--Modal nhập mã OTP--%>
 
-<script !src="">
-
-    var valueNotify = document.getElementById("notify").getAttribute('value');
-    // alert(valueNotify);
-
-    function errorRegister(mess) {
-        Swal.fire({
-            icon: "error",
-            title: "Đăng kí thất bại",
-            text: mess,
-            confirmButtonText: "Đóng",
-        });
-        <%session.removeAttribute("notify");%>
-
-    }
-
-    function errorLogin(mess) {
-        Swal.fire({
-            icon: "error",
-            title: "Đăng nhập thất bại",
-            text: mess,
-            confirmButtonText: "Đóng",
-        }).then((result) => {
-            <%session.removeAttribute("notify");%>
-            window.location.href = "login.jsp";
-        });
-    }
-
-    switch (valueNotify) {
-
-        // ---------------------------------Thông báo của phần đăng kí--------------------------------------
-        case "null-fullname":
-            errorRegister("Hãy điền họ và tên");
-            break;
-
-        case "null-birthday":
-            errorRegister("Hãy nhập ngày sinh");
-            break;
-
-
-        case "null-address":
-            errorRegister("Hãy nhập địa chỉ");
-            break;
-
-
-        case "null-phone":
-            errorRegister("Hãy nhập số điện thoại");
-            break;
-
-        case "null-email":
-            errorRegister("Hãy nhập địa chỉ email");
-            break;
-
-        case "null-username":
-            errorRegister("Hãy nhập tên đăng nhập");
-            break;
-
-        case "null-pass":
-            errorRegister("Hãy nhập mật khẩu");
-            break;
-
-        case "null-cfpass":
-            errorRegister("Hãy nhập lại mật khẩu");
-            break;
-
-        case "null-agree":
-            errorRegister("Hãy đồng ý với điều khoản của chúng tôi.");
-            break;
-
-        case "future-birthday":
-            errorRegister("Ngày sinh không được lớn hơn ngày hiện tại");
-            break;
-
-        case "invalid-phone":
-            errorRegister("Số điện thoại không hợp lệ");
-            break;
-
-        case "invalid-email":
-            errorRegister("Email không hợp lệ");
-            break;
-
-        case "invalid-username":
-            errorRegister("Tên đăng nhập không hợp lệ");
-            break;
-        case "invalid-pass":
-            errorRegister("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
-        case "pass-not-match":
-            errorRegister("Mật khẩu không khớp");
-            break;
-        case "duplicate-acc":
-            errorRegister("Tên đăng nhập đã tồn tại");
-            break;
-        case"register-success":
-            Swal.fire({
-                icon: "success",
-                title: "Đăng kí thành công",
-                text: "Hãy xác nhận email và đăng nhập!",
-                confirmButtonText: "Đóng",
-            }).then((result) => {
-                <%session.removeAttribute("notify");%>
-                window.location.href = "login.jsp";
-            });
-        // ---------------------------------Thông báo của phần đăng kí--------------------------------------
-        // ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
-        case"admin-logged":
-            Swal.fire({
-                icon: "success",
-                title: "Đăng nhập với quyền quản trị",
-                text: "Chào mừng",
-                confirmButtonText: "Đóng",
-            }).then((result) => {
-                <%session.removeAttribute("notify");%>
-                window.location.href = "home.jsp";
-            });
-
-        case"user-logged":
-            Swal.fire({
-                icon: "success",
-                title: "Đăng nhập thành công",
-                text: "Chào mừng",
-                confirmButtonText: "Đóng",
-            }).then((result) => {
-                <%session.removeAttribute("notify");%>
-                window.location.href = "home.jsp";
-            });
-        case "null-user-login":
-            errorLogin("Hãy nhập tên đăng nhập và mật khẩu!")
-            break;
-        case "not-found-user":
-            errorLogin("Không tìm thấy tài khoản!")
-            break;
-// ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
-
-        default:
-
-
-        // break;
-
-
-    }
-
-
-</script>
+<script src="assets/js/my-js/notify.js"></script>
 <!-- Modal nhập OTP -->
 
 </html>

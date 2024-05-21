@@ -12,12 +12,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-public class UsersDAO {
+public class UsersDAO implements IUserDAO{
+
 
     private static UsersDAO instance;
 
-    private UsersDAO() {
+    public UsersDAO() {
     }
 
     public static UsersDAO getInstance() {
@@ -26,7 +28,7 @@ public class UsersDAO {
     }
 
     public User getUser(String username, String password) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -67,7 +69,7 @@ public class UsersDAO {
     }
 
     public boolean addUser(User newUser) {
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             handle.createUpdate(insertQuery)
@@ -152,25 +154,12 @@ public class UsersDAO {
         }
     }
 
-    public List<User> showAll() {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users")
-                    .mapToBean(User.class)
-                    .list();
-        });
-    }
-
-
-    public User getUserById(int id) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery(query)
-                    .bind(0, id)
-                    .mapToBean(User.class)
-                    .findFirst()
-                    .orElse(null);
-        }
+    //   show toàn bộ người dùng trong quản lý người dùng
+    public List<User> showUser() {
+        String sql = "SELECT * FROM users";
+        return DbConnector.me().get().withHandle(handle -> handle
+                .createQuery(sql)
+                .mapToBean(User.class).list());
     }
 
     public static void main(String[] args) {

@@ -4,7 +4,9 @@ import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
+import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -22,10 +24,30 @@ public class ProductDAO {
         return instance;
     }
 
+    public void removeProduct(int pId) {
+        DbConnector.me().get().useHandle(handle -> {
+            handle.createUpdate("UPDATE products SET productStatus = 2 WHERE productId =:productId")
+                    .bind("productId", pId)
+                    .execute();
+        });
+    }
+
+    //Hàm sẽ thay đổi trạng thái sản phẩm trong db productStatus: 0 - Bình thường, 1 - Đã xóa, 2 - Ẩn, dựa trên id sản phẩm
+    public void changProductStatus(int productId, int status) {
+        DbConnector.me().get().useHandle(dbConnection -> {
+            dbConnection.createUpdate("UPDATE products SET productStatus = :productStatus WHERE productId = :productId")
+                    .bind("productStatus", status)
+                    .bind("productId", productId)
+                    .execute();
+            System.out.println("Sản phẩm " + productId + " thay đổi trạng thái thành : " + status);
+        });
+    }
+
     public void addProduct(Products product) {
         DbConnector.me().get().useHandle(handle -> {
-            handle.createUpdate("INSERT INTO products (image, productName, unitPrice, categoryId, nameProducer, describle, specifions) " +
+            handle.createUpdate("INSERT INTO products ( image, productName, unitPrice, categoryId, nameProducer, describle, specifions) " +
                             "VALUES (:image, :productName, :unitPrice, :categoryId, :nameProducer, :describle, :specifions)")
+
                     .bind("image", product.getImage())
                     .bind("productName", product.getProductName())
                     .bind("unitPrice", product.getUnitPrice())
@@ -34,12 +56,14 @@ public class ProductDAO {
                     .bind("describle", product.getDescrible())
                     .bind("specifions", product.getSpecifions())
                     .execute();
+            System.out.println("Đã thêm:  " + product);
         });
     }
 
+    //Lấy tất cả sản phẩm hiển thị cho người dùng với productStatus = 0 -Bình thường
     public List<Products> showProd() {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND()")
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE productStatus = 0")
                     .mapToBean(Products.class)
                     .list();
         });
@@ -47,20 +71,17 @@ public class ProductDAO {
 
     public List<Products> getAccessory() {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("\n" +
-                            "SELECT productId, image, productName, unitPrice  \n" +
-                            "FROM products " + // Thêm khoảng trắng sau "products"
-                            "WHERE categoryId IN (6, 7, 8) ORDER BY RAND()")
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE categoryId IN (6, 7, 8) AND productStatus = 0 ")
                     .mapToBean(Products.class)
                     .list(); // Thay thế collect(Collectors.toList()) bằng list()
         });
     }
 
 
-    public static List<Products> getProductsByCategory(int categoryId) {
+    public List<Products> getProductsByCategory(int categoryId) {
 
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE categoryId =? LIMIT 12;")
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE categoryId =? AND productStatus = 0")
                     .bind(0, categoryId)
                     .mapToBean(Products.class)
                     .collect(Collectors.toList());
@@ -72,11 +93,7 @@ public class ProductDAO {
 
         return DbConnector.me().get().withHandle(handle -> {
 
-            return handle.createQuery("SELECT productId, image, productName, unitPrice " +
-
-                            "FROM products\n" +
-
-                            "WHERE nameProducer = ?;\n")
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE nameProducer = ? AND productStatus = 0")
                     .bind(0, producerName)
                     .mapToBean(Products.class)
                     .list();
@@ -140,15 +157,25 @@ public class ProductDAO {
     }
 
     public static void main(String[] args) {
-        String url = "https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-6/440126657_398456923091637_5853396435464547150_n.jpg?stp=dst-jpg_p526x296&_nc_cat=1&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEJJRUZlrzZOSXBwpolFqLJk5m_P8h9lEGTmb8_yH2UQW-hYaoz7xhnW2Q1dT5qM0ZNnsjSkGWGOB9Slt7gJLWk&_nc_ohc=c67nylOzjJYAb6ddBM8&_nc_ht=scontent.fhan14-5.fna&oh=00_AfBldLM1Tzw2OqhAHPco5tZs-LoLvOGWTe4fHfs4MZyP4w&oe=663516D5";
-//        System.out.println(ProductDAO.getInstance().getNameCategoryById(4));
-        ProductDAO.getInstance().addProduct(new Products(url, "Máy khoan test", 1000, 2, "test", "test", "test"));
-
+        System.out.println(ProductDAO.getInstance().getAccessory());
     }
 
 
+    public List<Products> getProductsByPage(int limit, int offset) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products LIMIT :limit OFFSET :offset")
+                    .bind("limit", limit)
+                    .bind("offset", offset)
+                    .mapToBean(Products.class)
+                    .list();
+        });
+    }
 
-    public static void showSaleProduct(){
-
+    public int getTotalProducts() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT COUNT(*) FROM products")
+                    .mapTo(Integer.class)
+                    .one();
+        });
     }
 }

@@ -26,9 +26,10 @@ public class Login {
         if (validInput(username, password)) {
             // Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
             User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
+//            Tìm thấy thông tin người dùng
+            if (auth != null) {//Nếu tìm thấy thông tin người dùng thì sẽ set userId trong log là id của người dùng
+                System.out.println(auth.isRoleUser());
 
-            if (auth != null) {
-                // Nếu tìm thấy thông tin người dùng thì sẽ set userId trong log là id của người dùng
                 log.setUserId(auth.getId());
                 session.setAttribute("auth", auth); // Gửi thông tin tài khoản để frontend xử lý
                 LogDAO.insertLoginTrue(log); // Ghi nhật ký đăng nhập thành công
