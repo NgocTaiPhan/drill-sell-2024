@@ -154,25 +154,12 @@ public class UsersDAO implements IUserDAO{
         }
     }
 
-    public List<User> showAll() {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users")
-                    .mapToBean(User.class)
-                    .list();
-        });
-    }
-
-
-    public User getUserById(int id) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,isVerified,roleUser FROM users WHERE username = ? AND passwords = ?";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery(query)
-                    .bind(0, id)
-                    .mapToBean(User.class)
-                    .findFirst()
-                    .orElse(null);
-        }
+    //   show toàn bộ người dùng trong quản lý người dùng
+    public List<User> showUser() {
+        String sql = "SELECT * FROM users";
+        return DbConnector.me().get().withHandle(handle -> handle
+                .createQuery(sql)
+                .mapToBean(User.class).list());
     }
 
     public static void main(String[] args) {
