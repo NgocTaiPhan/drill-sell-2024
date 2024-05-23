@@ -175,6 +175,24 @@
                                                 }
                                             ],
                                         });
+                                        $('#user-mn tbody').on('click','button',function (){
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "deleteUser",
+                                                data : {id: id},
+                                                success: function (response){
+                                                    alert(response);
+                                                    table.ajax.reload();
+                                                },
+                                                error: function (xhr,status,error){
+                                                    alert("Error: "+error);
+                                                }
+                                            })
+                                        })
+
                                     })
                                 </script>
                             </div>

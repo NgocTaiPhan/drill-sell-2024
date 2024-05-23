@@ -3,6 +3,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.controller.login.LoginGoogle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 //    Boolean role = (Boolean) session.getAttribute("role-acc");
@@ -93,7 +94,7 @@
                         <%
                             // Lấy user hoặc usergooogle từ session
                             User u = (User) session.getAttribute("auth");
-                            UserGoogleDto user = (UserGoogleDto) session.getAttribute("auth-google");
+                            LoginGoogle.UserGoogleDto user = (LoginGoogle.UserGoogleDto) session.getAttribute("auth-google");
                             boolean logged = u != null || user != null;
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
@@ -662,7 +663,7 @@
                                         <thead>
                                         <tr>
                                             <th>Số lượng bán ra</th>
-                                            <th>Tổng doan thu</th>
+                                            <th>Tổng doanh thu</th>
 
                                         </tr>
                                         </thead>

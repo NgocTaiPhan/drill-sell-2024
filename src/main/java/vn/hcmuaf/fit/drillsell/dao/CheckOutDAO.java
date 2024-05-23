@@ -3,7 +3,7 @@ package vn.hcmuaf.fit.drillsell.dao;
 import vn.hcmuaf.fit.drillsell.model.Cart;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.CheckOut;
-import vn.hcmuaf.fit.drillsell.model.Product;
+//import vn.hcmuaf.fit.drillsell.model.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
