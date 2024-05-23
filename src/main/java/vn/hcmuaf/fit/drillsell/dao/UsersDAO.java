@@ -161,6 +161,23 @@ public class UsersDAO implements IUserDAO{
                 .createQuery(sql)
                 .mapToBean(User.class).list());
     }
+//        xóa người dùng trong quản lý ngươfi dùng dựa vào ID
+//    public User deleteUser(User user) {
+//        int id = user.getId();
+//     DbConnector.me().get().useHandle(handle -> {
+//         handle.execute("DELETE FROM users WHERE id = ?",id);
+//     });
+//     return user;
+//    }
+
+    public boolean deleteUser(int id) {
+        DbConnector.me().get().useHandle(handle -> {
+            handle.execute("DELETE FROM users WHERE id = ? ", id);
+        });
+
+
+        return true;
+    }
 
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().hashPassword("hoaHoa@20052003"));
