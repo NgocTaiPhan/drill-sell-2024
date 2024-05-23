@@ -44,16 +44,19 @@ table.table th, table.table td {
 }
 #informations{
     margin-left: 30px;
-    width: 250px;
+    width: 100px;
     height: 30px;
     border: #c3c3c3;
 }
 #address{
     margin-left: 15px;
-    width: 690px;
+    width: 200px; !important;
     height: 30px;
     border: #c3c3c3;
 
+}
+#address{
+    width: 200px;
 }
 .information button{
     margin-left: 15px;
