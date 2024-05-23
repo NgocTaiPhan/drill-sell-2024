@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.controller;
+package vn.hcmuaf.fit.drillsell.controller.order;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,17 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
-import vn.hcmuaf.fit.drillsell.model.Cart;
-import vn.hcmuaf.fit.drillsell.model.CheckOut;
+import vn.hcmuaf.fit.drillsell.model.Order;
+import vn.hcmuaf.fit.drillsell.model.OrderItem;
 import vn.hcmuaf.fit.drillsell.model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/checkOut")
-public class CheckOutController extends HttpServlet {
+public class viewOrder extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] selectedProducts = request.getParameterValues("selectedProducts");
@@ -35,7 +34,7 @@ public class CheckOutController extends HttpServlet {
 
         // Nếu user không null, tiếp tục xử lý
         int userId = user.getId();
-        List<CheckOut> checkOuts = new ArrayList<>();
+        List<OrderItem> checkOuts = new ArrayList<>();
         if (selectedProducts != null) {
             for (String productId : selectedProducts) {
                 checkOuts.addAll(CheckOutDAO.showProducts(userId, Integer.parseInt(productId)));

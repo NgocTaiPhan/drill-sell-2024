@@ -3,53 +3,36 @@ package vn.hcmuaf.fit.drillsell.model;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Order {
-    private int id;
-    private int cartId;
+    private int orderId;
     private int userId;
-    private int productId;
-    private String stauss;
-    @Nullable
-    private Timestamp timeOrder;
+    private String nameCustomer;
     private String phone;
-    private String nameCustom;
     private String address;
-    private String productName;
-    private double totalPrice;
-    private int quantity;
+    private String stauss;
+    private List<OrderItem> orderItems;
+
     public Order() {
     }
 
-    public Order(int id, int cartId, int userId, int productId, String stauss, @Nullable Timestamp timeOrder, String phone, String nameCustom, String address, String productName, double totalPrice, int quantity) {
-        this.id = id;
-        this.cartId = cartId;
+
+
+
+    public Order(int userId, String nameCustomer, String phone, String address) {
         this.userId = userId;
-        this.productId = productId;
-        this.stauss = stauss;
-        this.timeOrder = timeOrder;
+        this.nameCustomer = nameCustomer;
         this.phone = phone;
-        this.nameCustom = nameCustom;
         this.address = address;
-        this.productName = productName;
-        this.totalPrice = totalPrice;
-        this.quantity = quantity;
     }
 
-    public int getId() {
-        return id;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getUserId() {
@@ -60,28 +43,12 @@ public class Order {
         this.userId = userId;
     }
 
-    public int getProductId() {
-        return productId;
+    public String getName() {
+        return nameCustomer;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public String getStauss() {
-        return stauss;
-    }
-
-    public void setStauss(String stauss) {
-        this.stauss = stauss;
-    }
-
-    public Timestamp getTimeOrder() {
-        return timeOrder;
-    }
-
-    public void setTimeOrder(Timestamp timeOrder) {
-        this.timeOrder = timeOrder;
+    public void setName(String name) {
+        this.nameCustomer = name;
     }
 
     public String getPhone() {
@@ -92,14 +59,6 @@ public class Order {
         this.phone = phone;
     }
 
-    public String getNameCustom() {
-        return nameCustom;
-    }
-
-    public void setNameCustom(String nameCustom) {
-        this.nameCustom = nameCustom;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -108,45 +67,32 @@ public class Order {
         this.address = address;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getStauss() {
+        return stauss;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setStauss(String stauss) {
+        this.stauss = stauss;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + id +
-                ", cartId=" + cartId +
+                "orderId=" + orderId +
                 ", userId=" + userId +
-                ", productId=" + productId +
-                ", stauss='" + stauss + '\'' +
-                ", timeOrder=" + timeOrder +
+                ", name='" + nameCustomer + '\'' +
                 ", phone='" + phone + '\'' +
-                ", nameCustom='" + nameCustom + '\'' +
                 ", address='" + address + '\'' +
-                ", productName='" + productName + '\'' +
-                ", totalPrice=" + totalPrice +
-                ", quantity=" + quantity +
+                ", stauss='" + stauss + '\'' +
+                ", orderItems=" + orderItems +
                 '}';
     }
 }

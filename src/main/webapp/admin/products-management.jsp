@@ -133,18 +133,18 @@
                                             <button type="button" class="btn btn-info view-details" data-toggle="modal"
                                                     data-product-id="<%=p.getProductId()%>">Xem chi tiết
                                             </button>
-                                        <script !src="">
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const viewDetailButtons = document.querySelectorAll('.view-details');
-                                                viewDetailButtons.forEach(button => {
-                                                    button.addEventListener('click', function() {
-                                                        const productId = this.getAttribute('data-product-id');
-                                                        console.log('Product ID:', productId);
+                                            <script !src="">
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const viewDetailButtons = document.querySelectorAll('.view-details');
+                                                    viewDetailButtons.forEach(button => {
+                                                        button.addEventListener('click', function() {
+                                                            const productId = this.getAttribute('data-product-id');
+                                                            console.log('Product ID:', productId);
+                                                        });
                                                     });
                                                 });
-                                            });
 
-                                        </script>
+                                            </script>
                                             <button type="button" class="btn btn-warning"
                                             >Sửa
                                             </button>
