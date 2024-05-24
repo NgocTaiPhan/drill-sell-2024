@@ -67,7 +67,7 @@ public class LoginGoogle {
     }
 
     //Inner class để lưu thông tin người dùng khi đăng nhập bằng google
-    class UserGoogleDto {
+    public class UserGoogleDto {
 
         private String id;
 

@@ -1,6 +1,10 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.OrderItem" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -9,7 +13,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="assets/images/logo.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <title>Tài khoản</title>
+    <title>Đơn hàng của tôi</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
@@ -54,13 +58,6 @@
                         <p>Tài khoản</p>
                     </a>
                 </li>
-
-<%--                <li>--%>
-<%--                    <a href="#">--%>
-<%--                        <i class="ti-user"></i>--%>
-<%--                        <p>Lịch sử mua hàng</p>--%>
-<%--                    </a>--%>
-<%--                </li>--%>
                 <li>
                     <a href="<%= request.getContextPath()%>/viewOrderCustomer">
                         <i class="ti-check-box"></i>
@@ -148,138 +145,74 @@
             </div>
         </nav>
 
-
         <div class="content">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-4 col-md-5">
-                        <div class="card card-user">
-                            <div class="image">
-                                <img src="assets/img/background.jpg" alt="..."/>
-                            </div>
-                            <div class="content">
-                                <div class="author">
-                                    <img class="avatar border-white" src="../assets/img/faces/face-2.jpg" alt="..."/>
-                                    <h4 class="title"><%=u.getFullname()%><br/>
-                                        <a href="#"><small><%=u.getEmail()%>
-                                        </small></a>
-                                    </h4>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <div class="row">
-                                    <div class="col-md-3 col-md-offset-1">
-                                        <h5>12<br/><small>Tuổi tài khoản</small></h5>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>2<br/><small>Số đơn hàng</small></h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5>24<br/><small>Sản phẩm trong giỏ hàng</small></h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-8 col-md-7">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Thông tin tài khoản</h4>
-                            </div>
-                            <div class="content">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <label>Họ và tên</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="" value="<%=u.getFullname()%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Tên đăng nhập</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getUsername()%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="emailUser">Địa chi email</label>
-                                                <input id="emailUser" type="email" class="form-control border-input"
-                                                       disabled
-                                                       value="<%=u.getEmail()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Giới tính</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="First Name" value="<%=u.getSex()%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Ngày tháng năm sinh</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getYearOfBirth()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Địa chỉ</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="Home Address" value="<%=u.getAddress()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Số điện thoại</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getPhone()%>">
-                                            </div>
-                                        </div>
-                                        <%String typeAcc = u.isRoleUser() ? "Quản trị" : "Người dùng";%>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Loại tài khoản</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=typeAcc%>">
-                                            </div>
-                                        </div>
+                <form action="" method="get">
+                    <table id="myOrder" class="table table-bordered table-striped">
+                        <thead style="text-align: center">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            List<Order> orders = (List<Order>) request.getAttribute("viewOrderCustomer");
+                            if (orders != null) {
+                                for (Order order : orders) {
+                                    for (OrderItem item : order.getOrderItems()) {
 
 
-                                    </div>
+                        %>
+                        <tr>
+                            <input style="display: none" name="idItem" value="<%= item.getIdItem()%>" readonly>
+                            <td> <%= item.getIdItem() %></td>
+                            <td> <%= item.getProductName() %></td>
+                            <td> <%= item.getQuantity() %></td>
+                            <td> <%= item.getTotalPrice() %></td>
+<%--                            <td>--%>
+<%--                                <button id="detailButton" class="btn btn-info "--%>
+<%--                                        data-toggle="modal"--%>
+<%--                                        data-target="#user-infor">--%>
+<%--&lt;%&ndash;                                    /viewEdit?id=<%= s.getId() %>"&ndash;%&gt;--%>
+<%--                                   <a href="<%= request.getContextPath()%>/detailOrder?idItem=<%=item.getIdItem()%>"></a>--%>
+<%--                                </button>--%>
+
+<%--                            </td>--%>
+                            <td>
+                                <a href="<%= request.getContextPath()%>/detailOrder?idItem=<%=item.getIdItem()%>" class="btn btn-info" data-toggle="modal" data-target="#user-infor">
+                                    Xem chi tiết
+                                </a>
+                            </td>
 
 
-                                    <div class="text-center">
-                                        <a class="btn btn-warning btn-fill btn-wd">Đổi mật khẩu</a>
-                                        <a class="btn btn-info btn-fill btn-wd">Thay đổi thông tin
-                                        </a>
+                        </tr>
+                        <%
+                                }
+                            }
+                        } else {
+                        %>
+                        <tr>
+                            <td colspan="5" style="text-align: center">Không có đơn hàng nào</td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </form>
 
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
             </div>
         </div>
-
+        <style>
+            input{
+                border: none;
+                width: 200px;
+            }
+        </style>
 
         <footer class="footer">
             <div class="container-fluid">
@@ -318,6 +251,19 @@
 
 </body>
 
+<%--<script>--%>
+<%--    document.querySelectorAll(".btn-info").forEach(button => {--%>
+<%--        button.addEventListener("click", function() {--%>
+<%--            var orderId = this.getAttribute("data-orderid");--%>
+<%--            var productId = this.getAttribute("data-productid");--%>
+<%--            window.location.href = "detailOrder?orderId=" + orderId + "&productId=" + productId;--%>
+<%--        });--%>
+<%--    });--%>
+
+
+<%--</script>--%>
+
+
 <!--   Core JS Files   -->
 <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
@@ -339,5 +285,39 @@
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 <script src="assets/js/demo.js"></script>
+<script>
+    let toolbar = document.createElement('div');
+    toolbar.innerHTML = '<b></b>';
+    let addProdBtn = document.createElement('div')
+    // Tạo nút thêm sản phẩm để khi nhấp vào sẽ xuất hiện cửa sổ pop-up
+    addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
+    $(document).ready(function () {
+
+        new DataTable('#myOrder', {
+            layout: {
+                topStart: toolbar,
+                bottomStart: toolbar
+            }
+        });
+    });
+
+    // $(document).ready(function (){
+    //     $('.delete').click(function (e){
+    //         var deleteOrder = $(this);
+    //         var idOrder = $(this).data('id');
+    //         $.ajax({
+    //             type: "post",
+    //             url: "deleteList?id=" + idOrder,
+    //             success: function (response){
+    //                 deleteOrder.closest('tr').remove();
+    //             },
+    //             error: function (xhr, status, error) {
+    //                 console.error("Error", error);
+    //             }
+    //         });
+    //     })
+    // })
+
+</script>
 
 </html>
