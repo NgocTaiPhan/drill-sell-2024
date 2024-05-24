@@ -2,7 +2,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
 <%@ page import="java.util.List" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.controller.login.LoginGoogle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -680,45 +680,45 @@
                                 </div><!-- /.product-tab -->
                             </div><!-- /.tab-pane -->
 
-                            <div id="order-history" class="tab-pane">
-                                <form action="#" method="post">
-                                <div class="product-tag container">
+<%--                            <div id="order-history" class="tab-pane">--%>
+<%--                                <form action="#" method="post">--%>
+<%--                                <div class="product-tag container">--%>
 
-                                    <table id="order-history-table" class="table table-bordered  table-striped">
-                                        <thead>
-                                        <tr>
-                                            <th>Người đặt hàng</th>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Số lượng</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <% List<Order> viewOrder = OrderDAO.showOrder();
-                                        for(Order s: viewOrder){
-                                        %>
-                                        <tr>
-                                            <td><%= s.getNameCustom()%></td>
-                                            <td><%= s.getProductName()%></td>
-                                            <td><%= s.getQuantity()%></td>
-                                            <td><%= s.getAddress()%></td>
-                                            <td><%= s.getPhone()%></td>
-                                            <td><%= s.getStauss()%></td>
-                                            <td>
-                                                <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">
-                                                <input type="submit" value="sửa">
-                                            </td>
-                                        </tr>
-                                        <%}%>
-                                        </tbody>
-                                    </table>
+<%--                                    <table id="order-history-table" class="table table-bordered  table-striped">--%>
+<%--                                        <thead>--%>
+<%--                                        <tr>--%>
+<%--                                            <th>Người đặt hàng</th>--%>
+<%--                                            <th>Tên sản phẩm</th>--%>
+<%--                                            <th>Số lượng</th>--%>
+<%--                                            <th>Địa chỉ</th>--%>
+<%--                                            <th>Số điện thoại</th>--%>
+<%--                                            <th>Trạng thái</th>--%>
+<%--                                            <th>Hành động</th>--%>
+<%--                                        </tr>--%>
+<%--                                        </thead>--%>
+<%--                                        <tbody>--%>
+<%--                                        <% List<Order> viewOrder = CheckOutDAO.showOrder();--%>
+<%--                                        for(Order s: viewOrder){--%>
+<%--                                        %>--%>
+<%--                                        <tr>--%>
+<%--                                            <td><%= s.getNameCustom()%></td>--%>
+<%--                                            <td><%= s.getProductName()%></td>--%>
+<%--                                            <td><%= s.getQuantity()%></td>--%>
+<%--                                            <td><%= s.getAddress()%></td>--%>
+<%--                                            <td><%= s.getPhone()%></td>--%>
+<%--                                            <td><%= s.getStauss()%></td>--%>
+<%--                                            <td>--%>
+<%--                                                <input class="delete" type="submit" data-id="<%= s.getId()%>" value="Xóa">--%>
+<%--                                                <input type="submit" value="sửa">--%>
+<%--                                            </td>--%>
+<%--                                        </tr>--%>
+<%--                                        <%}%>--%>
+<%--                                        </tbody>--%>
+<%--                                    </table>--%>
 
-                                </div><!-- /.product-tab -->
-                                </form>
-                            </div>
+<%--                                </div><!-- /.product-tab -->--%>
+<%--                                </form>--%>
+<%--                            </div>--%>
 
                         </div><!-- /.tab-content -->
                     </div><!-- /.col -->

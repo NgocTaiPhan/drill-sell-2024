@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class OrderItem {
     private int orderId;
     private int productId;
-    private int cartId;
+    private int cartId, idItem;
     @Nullable
     private Timestamp timeOrder;
     private double unitPrice;
@@ -48,6 +48,14 @@ public class OrderItem {
 
     public void setCartId(int cartId) {
         this.cartId = cartId;
+    }
+
+    public int getIdItem() {
+        return idItem;
+    }
+
+    public void setIdItem(int idItem) {
+        this.idItem = idItem;
     }
 
     public Timestamp getTimeOrder() {
@@ -96,6 +104,7 @@ public class OrderItem {
                 "orderId=" + orderId +
                 ", productId=" + productId +
                 ", cartId=" + cartId +
+                ", idItem=" + idItem +
                 ", timeOrder=" + timeOrder +
                 ", unitPrice=" + unitPrice +
                 ", productName='" + productName + '\'' +

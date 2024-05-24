@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.order;
 
+import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
@@ -25,7 +26,6 @@ public class OrderController extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
 
-        // Lấy danh sách các sản phẩm từ request
         String[] quantities = request.getParameterValues("quantityInput");
         String[] cartIds = request.getParameterValues("cartId");
         String[] productIds = request.getParameterValues("productId");
@@ -40,10 +40,8 @@ public class OrderController extends HttpServlet {
         } else {
             List<Order> orders = new ArrayList<>();
 
-            // Tạo một đơn hàng mới
             Order order = new Order(userId, nameCustomer, phone, address);
 
-            // Thêm các sản phẩm vào đơn hàng
             List<OrderItem> orderItems = new ArrayList<>();
             for (int i = 0; i < productIds.length; i++) {
                 OrderItem orderItem = new OrderItem();
@@ -55,8 +53,8 @@ public class OrderController extends HttpServlet {
             order.setOrderItems(orderItems);
             orders.add(order);
 
-            // Gọi phương thức insertOrders với danh sách orders
             boolean insert = CheckOutDAO.insertOrders(orders);
+
             if (insert) {
                 response.getWriter().write("Đơn hàng đã được tạo thành công!");
             } else {

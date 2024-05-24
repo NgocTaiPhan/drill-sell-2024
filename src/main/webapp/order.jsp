@@ -1,4 +1,4 @@
-        <%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.*" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
@@ -324,8 +324,8 @@
                             String formattedAmount = currencyFormat.format(totalPrice);
                 %>
                 <tr>
-                   <input style="display: none" class="productId" name="productId" value="<%= s.getProductId()%>">
-                   <input style="display: none" class="cartId" name="cartId" value="<%= s.getCartId()%>">
+                    <input style="display: none" class="productId" name="productId" value="<%= s.getProductId()%>">
+                    <input style="display: none" class="cartId" name="cartId" value="<%= s.getCartId()%>">
                     <td style="display: none"><input class="orderId" name="orderId" value="<%=s.getOrderId()%>"></td>
                     <td class="li-product-thumbnail">
                         <input type="hidden" name="productName" value="<%= s.getProductName() %>">
