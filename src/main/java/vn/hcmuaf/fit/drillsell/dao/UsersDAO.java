@@ -55,7 +55,7 @@ public class UsersDAO implements IUserDAO{
 
     }
 
-
+//mã hóa mật khẩu
     public String hashPassword(String password) {
 
         try {
@@ -161,16 +161,9 @@ public class UsersDAO implements IUserDAO{
                 .createQuery(sql)
                 .mapToBean(User.class).list());
     }
-//        xóa người dùng trong quản lý ngươfi dùng dựa vào ID
-//    public User deleteUser(User user) {
-//        int id = user.getId();
-//     DbConnector.me().get().useHandle(handle -> {
-//         handle.execute("DELETE FROM users WHERE id = ?",id);
-//     });
-//     return user;
-//    }
 
-    public boolean deleteUser(int id) {
+//xóa người dùng dựa theo id
+    public boolean  deleteUser(int id) {
         DbConnector.me().get().useHandle(handle -> {
             handle.execute("DELETE FROM users WHERE id = ? ", id);
         });

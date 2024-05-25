@@ -21,15 +21,17 @@ public class DeleteUser extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idStr = req.getParameter("id");
         if (idStr != null ) {
-            int id = Integer.parseInt(idStr); // Chuyển đổi chuỗi thành số nguyên
+            // Chuyển đổi chuỗi thành số nguyên
+            int id = Integer.parseInt(idStr);
 
             IUserDAO userDao = new UsersDAO();
+//            xóa người dùng trong quản lý người dùng
             boolean deleted = userDao.deleteUser(id);
             if (deleted) {
                 resp.setContentType("text/plain");
                 resp.setCharacterEncoding("UTF-8");
                 resp.getWriter().write("Xóa người dùng thành công");
-//
+
 
 
 
