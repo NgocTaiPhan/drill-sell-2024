@@ -392,7 +392,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
                                             </div>
 
-
                                         </div>
 
 
@@ -570,5 +569,35 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <link rel="stylesheet" href="assets/css/my-css/detailPage.css">
 <script src="assets/js/my-js/notify.js"></script>
+<script src="assets/js/my-js/backtop.js"></script>
+<%
+    String loginRequired = request.getParameter("loginRequired");
+    if ("true".equals(loginRequired)) {
+%>
+
+
+<script>
+    Swal.fire({
+        title: "Bạn chưa đăng nhập",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Đăng nhập",
+        cancelButtonText: `Để sau`
+    }).then((result) => {
+
+        //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+        if (result.isConfirmed) {
+            window.location.href = 'login.jsp';
+        } else {
+            window.history.back();
+        }
+    });
+
+</script>
+
+
+<%
+    }
+%>
 </body>
 </html>

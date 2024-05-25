@@ -22,7 +22,7 @@ public class EmailDAO {
         prop.put("mail.smtp.auth", MailProperties.getAuth());
         prop.put("mail.smtp.starttls.enable", MailProperties.getTls());
         prop.put("mail.smtp.socketFactory.port", MailProperties.getPort());
-//        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+
         prop.put("mail.smtp.ssl.trust","*");
     }
 
@@ -73,6 +73,7 @@ public class EmailDAO {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
+//        sửa lỗi tls
         props.put("mail.smtp.ssl.trust","*");
         props.put("mail.smtp.starttls.enable", "true");
         String username = "phuonghuynh131415@gmail.com";
@@ -123,39 +124,6 @@ public class EmailDAO {
         return inputCode.equalsIgnoreCase(systemCode);
     }
 
-    public static void main(String[] args) throws MessagingException {
-        System.out.println( MailProperties.getUsername());
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.ssl.trust","*");
-        props.put("mail.smtp.starttls.enable", "true");
-        String username = "phuonghuynh131415@gmail.com";
-        String password = "pkgy kplq sjcn gwhu";
 
-        Authenticator auth = new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        };
-
-        // Tạo đối tượng Session
-        Session session = Session.getInstance(props, auth);
-
-        // Tạo đối tượng MimeMessage
-        MimeMessage message = new MimeMessage(session);
-
-        // Thiết lập các thuộc tính của MimeMessage
-        message.setFrom(new InternetAddress(username));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("21130149@st.hcmuaf.edu.vn"));
-        message.setSubject("Subject");
-        message.setText("Body");
-
-        // Gửi email
-        Transport.send(message);
-        System.out.println("success");
-    }
 }
 

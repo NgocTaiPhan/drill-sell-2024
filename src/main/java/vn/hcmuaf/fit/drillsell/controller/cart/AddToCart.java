@@ -28,7 +28,7 @@ public class AddToCart extends HttpServlet {
         User user = (User) session.getAttribute("auth");
         if (user == null) {
             Notify.getInstance().sendNotify(session, request, response, "not-logged");
-            response.sendRedirect("detail?productId=" + productIdParam);
+            response.sendRedirect("load-detail?productId=" + productIdParam);
             return;
         }
 

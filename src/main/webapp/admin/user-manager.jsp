@@ -1,20 +1,24 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
-
-<%@ page import="java.util.List" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!doctype html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8"/>
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../assets/images/logo.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <title>Quản lý đơn hàng</title>
+    <title>Quản lý người dùng</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.jqueryui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.js"></script>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
+
 
     <!-- Bootstrap core CSS     -->
     <link href="../assets/css/my-css/admin/bootstrap.min.css" rel="stylesheet"/>
@@ -33,7 +37,6 @@
     <%--    Datatable--%>
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
-
 </head>
 <body>
 
@@ -60,7 +63,7 @@
                     </a>
                 </li>
 
-                <li>
+                <li class="active">
                     <a href="user-manager.jsp">
                         <i class="ti-user"></i>
                         <p>Quản lý người dùng</p>
@@ -72,7 +75,7 @@
                         <p>Quản lý sản phẩm</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="order-management.jsp">
                         <i class="ti-shopping-cart"></i>
                         <p>Quản lý đơn hàng</p>
@@ -94,7 +97,7 @@
                         <span class="icon-bar bar2"></span>
                         <span class="icon-bar bar3"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Table List</a>
+                    <a class="navbar-brand" href="#">Quản lý người dùng</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -141,111 +144,88 @@
                                 <h4 class="title">Striped Table</h4>
                                 <p class="category">Here is a subtitle for this table</p>
                             </div>
-
                             <div class="content table-responsive table-full-width">
-                                <table id="order-history-table" class="table table-striped">
+                                <table id="user-mn" class="table table-striped">
                                     <thead>
-                                    <th>Người đặt hàng</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                    </thead>
-                                    <tbody>
-                                    <% List<Order> viewOrder = OrderDAO.showOrder();
-                                        for (Order s : viewOrder) {
-                                    %>
                                     <tr>
-                                        <td><%= s.getNameCustom()%>
-                                        </td>
-                                        <td><%= s.getProductName()%>
-                                        </td>
-                                        <td><%= s.getQuantity()%>
-                                        </td>
-                                        <td><%= s.getAddress()%>
-                                        </td>
-                                        <td><%= s.getPhone()%>
-                                        </td>
-                                        <td><%= s.getStauss()%>
-                                        </td>
-                                        <td>
-                                            <input class="delete" type="submit" data-id="<%= s.getId()%>"
-                                                   value="Xóa">
-                                            <input type="submit" value="sửa">
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Tên người dùng</th>
+                                        <th>Email</th>
+                                        <th>Hành Động</th>
                                     </tr>
-                                    <%}%>
-                                    </tbody>
+                                    </thead>
                                 </table>
+<%--                                ajax show người dùng trong quản lý người dùng--%>
+
+                                <script>
+                                    $(document).ready(function (){
+                                        var table = $('#user-mn').DataTable({
+                                            "ajax" :{
+                                                "url":"ShowUser",
+                                                "dataSrc":"",
+                                            },
+                                            "columns": [
+                                                {"data":"id"},
+                                                {"data":"username"},
+                                                {"data":"email"},
+                                                {
+                                                    "data":null,
+
+                                                    render: (data,type)=>   ' <button type="button" class="btn btn-info" >Xem chi tiết </button>' +
+                                                        '  <button type="button" class="btn btn-warning" >Sửa </button>' +
+                                                        '<button type="button" class="btn btn-danger" >Xóa </button>'
+                                                }
+                                            ],
+                                        });
+
+                                        //  $('#user-mn tbody').on('click','button',function (){
+                                        //     var data = table.row($(this).parents('tr')).data();
+                                        //     var id = data.id;
+                                        //
+                                        //     $.ajax({
+                                        //         type: "POST",
+                                        //         url: "deleteUser",
+                                        //         data : {id: id},
+                                        //         success: function (response){
+                                        //             alert(response);
+                                        //             table.ajax.reload();
+                                        //         },
+                                        //         error: function (xhr,status,error){
+                                        //             alert("Error: "+error);
+                                        //         }
+                                        //     })
+                                        // })
+                                        // xóa người dùng trong quản lý người dùng
+                                        $('#user-mn tbody').on ('click','button',function (){
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "deleteUser",
+                                                data : {id: id},
+                                                success: function (response){
+                                                    alert(response);
+                                                    table.ajax.reload();
+                                                },
+                                                error: function (xhr,status,error){
+                                                    alert("Error: "+error);
+                                                }
+                                            })
+                                        })
+
+                                    })
+                                </script>
                             </div>
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </div>
+
         </div>
-
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-
-                        <li>
-                            <a href="http://www.creative-tim.com">
-                                Creative Tim
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://blog.creative-tim.com">
-                                Blog
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.creative-tim.com/license">
-                                Licenses
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright pull-right">
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script>
-                    , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
-                    Tim</a>
-                </div>
-            </div>
-        </footer>
-
-
     </div>
 </div>
 
 
 </body>
-<script src="../assets/js/my-js/admin.js">
-    $(document).ready(function (){
-        $('.delete').click(function (e){
-            var deleteOrder = $(this);
-            var idOrder = $(this).data('id');
-            $.ajax({
-                type: "post",
-                url: "deleteList?id=" + idOrder,
-                success: function (response){
-                    deleteOrder.closest('tr').remove();
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error", error);
-                }
-            });
-        })
-    })
-</script>
-
-
 </html>
