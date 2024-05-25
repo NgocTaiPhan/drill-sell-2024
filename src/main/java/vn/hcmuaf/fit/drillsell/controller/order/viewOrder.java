@@ -35,12 +35,13 @@ public class viewOrder extends HttpServlet {
         // Nếu user không null, tiếp tục xử lý
         int userId = user.getId();
         List<OrderItem> checkOuts = new ArrayList<>();
+
         if (selectedProducts != null) {
             for (String productId : selectedProducts) {
                 checkOuts.addAll(CheckOutDAO.showProducts(userId, Integer.parseInt(productId)));
             }
         }
-        request.setAttribute("checkOuts", checkOuts);
+        session.setAttribute("checkOuts", checkOuts);
         request.getRequestDispatcher("order.jsp").forward(request, response);
     }
 

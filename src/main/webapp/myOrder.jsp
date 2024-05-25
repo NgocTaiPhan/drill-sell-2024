@@ -5,6 +5,8 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -32,7 +34,7 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-
+    <%   NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
 </head>
 <body>
 
@@ -147,65 +149,58 @@
 
         <div class="content">
             <div class="container-fluid">
-                <form action="" method="get">
-                    <table id="myOrder" class="table table-bordered table-striped">
-                        <thead style="text-align: center">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Tổng tiền</th>
-                            <th>Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <%
-                            List<Order> orders = (List<Order>) request.getAttribute("viewOrderCustomer");
-                            if (orders != null) {
-                                for (Order order : orders) {
-                                    for (OrderItem item : order.getOrderItems()) {
-
-
-                        %>
-                        <tr>
-                            <input style="display: none" name="idItem" value="<%= item.getIdItem()%>" readonly>
-                            <td> <%= item.getIdItem() %></td>
-                            <td> <%= item.getProductName() %></td>
-                            <td> <%= item.getQuantity() %></td>
-                            <td> <%= item.getTotalPrice() %></td>
-<%--                            <td>--%>
-<%--                                <button id="detailButton" class="btn btn-info "--%>
-<%--                                        data-toggle="modal"--%>
-<%--                                        data-target="#user-infor">--%>
-<%--&lt;%&ndash;                                    /viewEdit?id=<%= s.getId() %>"&ndash;%&gt;--%>
-<%--                                   <a href="<%= request.getContextPath()%>/detailOrder?idItem=<%=item.getIdItem()%>"></a>--%>
-<%--                                </button>--%>
-
-<%--                            </td>--%>
-                            <td>
-                                <a href="<%= request.getContextPath()%>/detailOrder?idItem=<%=item.getIdItem()%>" class="btn btn-info" data-toggle="modal" data-target="#user-infor">
-                                    Xem chi tiết
-                                </a>
-                            </td>
-
-
-                        </tr>
-                        <%
-                                }
-                            }
-                        } else {
-                        %>
-                        <tr>
-                            <td colspan="5" style="text-align: center">Không có đơn hàng nào</td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                        </tbody>
-                    </table>
-                </form>
-
+                <table id="myOrder" class="table table-bordered table-striped">
+                    <thead style="text-align: center">
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Trạng thái</th>
+                        <th>Tên khách hàng</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<Order> orders = (List<Order>) request.getAttribute("viewOrderCustomer");
+                        if (orders != null) {
+                            for (Order order : orders) {
+                    %>
+                    <tr>
+                        <td><%= order.getOrderId() %></td>
+                        <td><%= order.getStauss() %></td>
+                        <td><%= order.getNameCustomer() %></td>
+                        <td><%= order.getPhone() %></td>
+                        <td><%= order.getAddress() %></td>
+                        <td>
+                            <a href="<%= request.getContextPath() %>/detailOrder?orderId=<%= order.getOrderId() %>" class="btn btn-info">
+                                Xem chi tiết
+                            </a>
+                            <form action="<%= request.getContextPath() %>/viewOrderCustomer" method="post" style="display:inline;">
+                                <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                                <button type="submit" class="btn btn-danger">
+                                    Hủy đơn
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    } else {
+                    %>
+                    <tr>
+                        <td colspan="6" style="text-align: center">Không có đơn hàng nào</td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
             </div>
+        </div>
+
+
+    </div>
         </div>
         <style>
             input{

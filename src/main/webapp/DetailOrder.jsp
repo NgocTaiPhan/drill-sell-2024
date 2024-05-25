@@ -5,10 +5,15 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
+<%@ page import="java.util.Currency" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.sql.Timestamp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8"/>
     <link rel="icon" type="image/png" sizes="96x96" href="assets/images/logo.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -32,7 +37,7 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-
+    <% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
 </head>
 <body>
 
@@ -145,77 +150,113 @@
             </div>
         </nav>
 
-        <form action="#">
+        <form action="detailOrder" method="post">
             <section>
+                <%
+                    List<Order> orders = (List<Order>) request.getAttribute("detailOrder");
+                    if (orders != null && !orders.isEmpty()) {
+                        Order order = orders.get(0); // Lấy đơn hàng đầu tiên
+                        double totalAmount = 0.0; // Biến để lưu tổng tiền của đơn hàng
+                        double shipping = order.getShippingFee() * 1000;
+                        String shippings = currencyFormat.format(shipping);
+                        // Lấy ngày dự kiến giao hàng từ phần tử đầu tiên trong orderItems
+                        String expectedDate = String.valueOf("");
+                        if (!order.getOrderItems().isEmpty()) {
+                            expectedDate = String.valueOf(order.getOrderItems().get(0).getExpectedDate());
+                        }
+                %>
                 <div class="main">
-                    <%
-                        Order order = (Order) request.getAttribute("detailOrder");
-                        OrderItem item = order.getOrderItems().get(0);
-                    %>
                     <div class="container">
                         <h3>Xem chi tiết đơn hàng</h3>
+
                         <div class="orderId">
                             <label>Mã khách hàng:</label>
-                            <input name="" value="<%= item.getIdItem()%>">
+                            <input name="" value="<%= order.getUserId() %>">
                         </div>
                         <div class="nameCustomer">
                             <label>Tên khách hàng:</label>
-                            <input name="" value="<%= order.getName()%>">
+                            <input name="" value="<%= order.getNameCustomer() %>">
                         </div>
                         <div class="phone">
                             <label>Số điện thoại:</label>
-                            <input name="" value="<%= order.getPhone()%>">
+                            <input name="" value="<%= order.getPhone() %>">
                         </div>
                         <div class="address">
                             <label>Địa chỉ:</label>
-                            <input name="" value="<%= order.getAddress()%>">
-                        </div>
-                        <div class="nameProduct">
-                            <label>Tên sản phẩm:</label>
-                            <input name="" value="<%= item.getProductName()%>">
-                        </div>
-                        <div class="quantity">
-                            <label>Số lượng:</label>
-                            <input name="" value="<%= item.getQuantity()%>">
-                        </div>
-                        <div class="unitPrice">
-                            <label>Đơn giá:</label>
-                            <input name="" value="<%= item.getUnitPrice()%>">
-                        </div>
-                        <div class="totalPrice">
-                            <label>Tổng tiền:</label>
-                            <input name="" value="<%= item.getTotalPrice()%>">
+                            <input name="" value="<%= order.getAddress() %>">
                         </div>
                         <div class="status">
                             <label>Trạng thái:</label>
-                            <input name="" value="<%= order.getStauss()%>">
+                            <input type="text" name="statuss" value="<%= order.getStauss() %>" list="status">
+                            <datalist id="status">
+                                <option value="Đã hủy">Đã hủy</option>
+                            </datalist>
                         </div>
 
-                        <div class="cancel">
-                            <input class="cancel" type="submit" value="Hủy đơn">
+                        <h5>Sản phẩm</h5>
+                        <%
+
+                            for (OrderItem item : order.getOrderItems()) {
+                                double totalPrice = item.getTotalPrice() * 1000;
+                                totalAmount += totalPrice + shipping; // Cộng dồn tổng tiền
+                                String formattedAmount = currencyFormat.format(totalPrice);
+                        %>
+
+                        <div class="detail">
+                            <div class="nameProduct">
+                                <input style="border: none" name="" value="<%= item.getProductName() %>">
+                            </div>
+                            <div class="quantity">
+                                <input style="border: none" name="" value="<%= item.getQuantity() %>">
+                            </div>
+                            <div class="totalPrice">
+                                <input style="border: none" name="" value="<%= formattedAmount %>">
+                            </div>
                         </div>
+                        <%
+                            }
+                            String formattedTotalAmount = currencyFormat.format(totalAmount); // Định dạng tổng tiền
+                        %>
+                        <div class="expectedDate">
+                            <label>Ngày dự kiến:</label>
+                            <input style="border: none" name="expectedDate" value="<%=expectedDate %>">
+                        </div>
+                        <div class="shipping">
+                            <label>Phí vận chuyển:</label>
+                            <input style="border: none" name="" value="<%= shippings %>">
+                        </div>
+                        <div class="amount">
+                            <label>Tổng tiền:</label>
+                            <input style="border: none" name="" value="<%= formattedTotalAmount %>">
+                        </div>
+
                     </div>
-
                 </div>
+                <%
+                } else {
+                %>
+                <p>Không tìm thấy đơn hàng.</p>
+                <%
+                    }
+                %>
             </section>
         </form>
 
     </div>
 </div>
 <style>
-    .orderId, .cancel, .status, .totalPrice, .unitPrice, .quantity,
-    .nameProduct, .address, .phone, .nameCustomer{
+    .orderId, .status, .address, .phone, .nameCustomer {
         margin-top: 30px;
     }
 
-    body{
+    body {
         font-family: Arial;
         font-size: 20px;
     }
 
-    .main{
+    .main {
         width: 600px;
-        height: 690px;
+        height: 800px;
         border: 1px solid black;
         border-radius: 30px;
         margin-left: 420px;
@@ -223,24 +264,43 @@
         background: white;
 
     }
-    .main .container{
+
+    .main .container {
         width: 500px;
         height: 650px;
-       margin: auto;
+        margin: auto;
     }
-    input{
-        width: 300px;
+
+    input {
         height: 40px;
         float: right;
-        border-radius: 10px;
     }
-    .cancel{
-        background: #366ddb;
-        border: none;
-        width: 100px;
-        margin-left: 200px;
-        margin-top: 32px;
-        color: white;
+
+    .detail {
+        display: flex;
+    }
+
+    .nameProduct input {
+        width: 300px;
+    }
+
+    .quantity input {
+        width: 20px;
+        margin-left: 15px;
+    }
+
+    .totalPrice input {
+        width: 120px;
+        margin-left: 15px;
+    }
+    .amount{
+        margin-top: 20px;
+    }
+    .shipping input{
+        margin-top: -35px;
+    }
+    .expectedDate{
+        margin-top: 15px;
     }
 
 </style>

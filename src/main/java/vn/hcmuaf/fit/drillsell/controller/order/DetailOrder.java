@@ -17,12 +17,17 @@ import java.util.List;
 public class DetailOrder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            int idItem = Integer.parseInt(request.getParameter("idItem")) ;
-            Order list = CheckOutDAO.showItemOrder(idItem);
-            request.setAttribute("detailOrder", list);
-            request.getRequestDispatcher("DetailOrder.jsp").forward(request, response); // Điều hướng đến trang JSP
-        }
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        List<Order> list = CheckOutDAO.showItemOrder(orderId);
+        request.setAttribute("detailOrder", list);
+        request.getRequestDispatcher("DetailOrder.jsp").forward(request, response); // Điều hướng đến trang JSP
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+}
 
 
 

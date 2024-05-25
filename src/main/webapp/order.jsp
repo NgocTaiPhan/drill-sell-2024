@@ -5,7 +5,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<OrderItem> checkOuts = (List<OrderItem>) request.getAttribute("checkOuts");
+    List<OrderItem> checkOuts = (List<OrderItem>) session.getAttribute("checkOuts");
 %>
 <html lang="vi">
 <head>
