@@ -1,0 +1,72 @@
+.rating .s {
+    font-size: 17px;
+}
+
+.name-custumor i {
+    font-size: 12px;
+}
+
+.name-custumor input {
+    border: none;
+    font-size: 12px;
+}
+
+.messger .mess {
+    width: 500px;
+    height: 50px;
+    font-size: 12px;
+}
+
+.rating {
+    display: inline-block;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    cursor: pointer;
+    width: 20px;
+    height: 10px;
+    font-size: 30px;
+    color: #ccc;
+}
+
+.rating label:before {
+    content: '\2605';
+}
+
+.rating input:checked ~ label {
+    color: #ffbf00;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: #ffbf00;
+}
+
+.rating input:checked + label:hover,
+.rating input:checked + label:hover ~ label,
+.rating input:checked ~ label:hover,
+.rating input:checked ~ label:hover ~ label {
+    color: #ffbf00;
+}
+
+.col-sm-7 {
+    display: flex;
+    text-align: center;
+}
+
+.col-sm-7 .btn {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 16px;
+}
+
+.col-sm-7 #addToCartBtn {
+    border-radius: 5px;
+    height: 40px;
+
+}
+

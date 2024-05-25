@@ -153,16 +153,14 @@ public class UsersDAO {
     }
 
     public List<User> showAll() {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
-                    .mapToBean(User.class)
-                    .list();
-        });
+        return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
+                .mapToBean(User.class)
+                .list());
     }
 
 
     public User getUserById(int id) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE id=?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -173,8 +171,9 @@ public class UsersDAO {
         }
     }
 
+
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().hashPassword("Admin12345"));
+        System.out.println(UsersDAO.getInstance().getUserById(2));
     }
 
 
