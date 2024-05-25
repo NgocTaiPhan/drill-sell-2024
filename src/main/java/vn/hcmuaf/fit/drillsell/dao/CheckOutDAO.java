@@ -35,12 +35,16 @@ public class CheckOutDAO {
 
             for (Order order : orders) {
                 if (orderId == -1) {
-                    orderId = handle.createUpdate("INSERT INTO orders(userId, stauss, nameCustomer, address, phone) " +
-                                    "VALUES (:userId, 'Đợi xác nhận', :nameCustomer, :address, :phone)")
+                    // Tính toán phí vận chuyển
+                    double shippingFee = calculateShippingFee(order.getAddress());
+
+                    orderId = handle.createUpdate("INSERT INTO orders(userId, stauss, nameCustomer, address, phone, shippingFee) " +
+                                    "VALUES (:userId, 'Đợi xác nhận', :nameCustomer, :address, :phone, :shippingFee)")
                             .bind("userId", order.getUserId())
-                            .bind("nameCustomer", order.getName())
+                            .bind("nameCustomer", order.getNameCustomer())
                             .bind("phone", order.getPhone())
                             .bind("address", order.getAddress())
+                            .bind("shippingFee", shippingFee)
                             .executeAndReturnGeneratedKeys("orderId")
                             .mapTo(int.class)
                             .one();
@@ -50,7 +54,6 @@ public class CheckOutDAO {
                     handle.createUpdate("INSERT INTO orderItem(orderId, productId, quantity) " +
                                     "VALUES (:orderId, :productId, :quantity)")
                             .bind("orderId", orderId)
-//                            .bind("cartId", orderItem.getCartId())
                             .bind("productId", orderItem.getProductId())
                             .bind("quantity", orderItem.getQuantity())
                             .execute();
@@ -67,100 +70,138 @@ public class CheckOutDAO {
         });
     }
 
+    // Phương thức để tính toán phí vận chuyển
+    private static double calculateShippingFee(String address) {
+        if (address.contains("Bình Định") || address.contains("Quy Nhơn") || address.contains("Đà Nẵng")
+        || address.contains("Quãng Ngãi") || address.contains("Gia Lai") ) {
+            return 35;
+        } else if (address.contains("TP.HCM") || address.contains("Hồ Chí Minh") || address.contains("Bình Dương")
+        || address.contains("Biên Hòa") ) {
+            return 15;
+        }
+        else if (address.contains("Cai Lậy") || address.contains("Long An")) {
+            return 25;
+        }
+        return 0.0; // Phí vận chuyển mặc định nếu không thuộc các địa chỉ trên
+    }
+
+
 
     public static List<Order> showOrder(int userId) {
-        return DbConnector.me().get().withHandle(handle -> {
-            String query = "SELECT oi.idItem, o.orderId, o.userId, o.nameCustomer, o.phone, o.address, o.stauss, " +
-                    "oi.productId, oi.quantity, (oi.quantity * p.unitPrice) as totalPrice, " +
-                    "p.productName, p.image " +
-                    "FROM orders o " +
-                    "JOIN orderitem oi ON o.orderId = oi.orderId " +
-                    "JOIN products p ON oi.productId = p.productId " +
-                    "WHERE o.userId = :userId";
+        return DbConnector.me().get().inTransaction(handle -> {
+            String query = "SELECT  orders.orderId, orders.stauss, orders.userId, orders.nameCustomer, orders.phone, orders.address\n" +
+                    "FROM orders" +
+                    " WHERE orders.userId = :userId";
 
             return handle.createQuery(query)
                     .bind("userId", userId)
-                    .map((rs, ctx) -> {
-                        Order order = new Order();
-                        order.setOrderId(rs.getInt("orderId"));
-                        order.setUserId(rs.getInt("userId"));
-                        order.setName(rs.getString("nameCustomer"));
-                        order.setPhone(rs.getString("phone"));
-                        order.setAddress(rs.getString("address"));
-                        order.setStauss(rs.getString("stauss"));
-
-                        OrderItem item = new OrderItem();
-                        item.setOrderId(rs.getInt("orderId"));
-                        item.setIdItem(rs.getInt("idItem"));
-                        item.setProductId(rs.getInt("productId"));
-                        item.setQuantity(rs.getInt("quantity"));
-                        item.setTotalPrice(rs.getDouble("totalPrice"));
-                        item.setProductName(rs.getString("productName"));
-
-                        Map.Entry<Order, OrderItem> entry = new AbstractMap.SimpleEntry<>(order, item);
-                        return entry;
-                    })
-                    .list()
-                    .stream()
-                    .collect(Collectors.groupingBy(Map.Entry::getKey))
-                    .entrySet()
-                    .stream()
-                    .map(e -> {
-                        Order order = e.getKey();
-                        List<OrderItem> items = e.getValue().stream().map(Map.Entry::getValue).collect(Collectors.toList());
-                        order.setOrderItems(items);
-                        return order;
-                    })
-                    .collect(Collectors.toList());
+                    .mapToBean(Order.class)
+                    .list();
         });
     }
 
 
 
 
-    public static Order showItemOrder(int idItem) {
-        return DbConnector.me().get().withHandle(handle -> {
-            String query = "SELECT orderitem.idItem, orders.userId, orders.nameCustomer, orders.phone, orders.address, " +
-                    "products.unitPrice, orders.stauss, orderitem.orderId, products.productId, products.productName, orderitem.quantity, " +
-                    "(orderitem.quantity * products.unitPrice) as totalPrice " +
+
+
+
+    public static List<Order> showItemOrder(int orderId) {
+        return DbConnector.me().get().inTransaction(handle -> {
+            String query = "SELECT orders.shippingFee, orderitem.orderId, orderitem.idItem, orders.userId, orders.nameCustomer, orders.phone, orders.address, " +
+                    " orderitem.expectedDate, products.productName, orderitem.quantity, (orderitem.quantity * products.unitPrice) AS totalPrice, orders.stauss " +
                     "FROM products " +
                     "JOIN orderitem ON products.productId = orderitem.productId " +
                     "JOIN orders ON orderitem.orderId = orders.orderId " +
-                    "WHERE orderitem.idItem = :idItem ";
+                    "WHERE orderitem.orderId = :orderId";
 
-
-            List<Order> orders = handle.createQuery(query)
-                    .bind("idItem", idItem)
-//                    .bind("productId", productId)
+            return handle.createQuery(query)
+                    .bind("orderId", orderId)
                     .map((rs, ctx) -> {
                         Order order = new Order();
                         order.setOrderId(rs.getInt("orderId"));
                         order.setUserId(rs.getInt("userId"));
-                        order.setName(rs.getString("nameCustomer"));
+                        order.setNameCustomer(rs.getString("nameCustomer"));
                         order.setPhone(rs.getString("phone"));
                         order.setAddress(rs.getString("address"));
                         order.setStauss(rs.getString("stauss"));
+                        order.setShippingFee(rs.getDouble("shippingFee"));
 
                         OrderItem item = new OrderItem();
                         item.setOrderId(rs.getInt("orderId"));
                         item.setIdItem(rs.getInt("idItem"));
-                        item.setProductId(rs.getInt("productId"));
+                        item.setProductName(rs.getString("productName"));
                         item.setQuantity(rs.getInt("quantity"));
                         item.setTotalPrice(rs.getDouble("totalPrice"));
-                        item.setProductName(rs.getString("productName"));
+                        item.setExpectedDate(rs.getTimestamp("expectedDate"));
 
-                        order.setOrderItems(Collections.singletonList(item)); // Set items as a list containing only one item
+                        order.setOrderItems(new ArrayList<>()); // Initialize the list of order items
+                        order.getOrderItems().add(item); // Add the item to the order's item list
+
                         return order;
                     })
-                    .list();
-
-            if (!orders.isEmpty()) {
-                return orders.get(0); // Return the first (and only) order
-            } else {
-                return null; // No order found with the given orderId
-            }
+                    .reduce(new HashMap<Integer, Order>(), (map, order) -> {
+                        if (map.containsKey(order.getOrderId())) {
+                            map.get(order.getOrderId()).getOrderItems().addAll(order.getOrderItems());
+                        } else {
+                            map.put(order.getOrderId(), order);
+                        }
+                        return map;
+                    })
+                    .values().stream().collect(Collectors.toList());
         });
     }
+
+
+    public static boolean update(int orderId){
+        return DbConnector.me().get().withHandle(handle -> {
+            int row = handle.createUpdate("UPDATE orders\n" +
+                    "SET stauss= 'Đã Hủy'\n" +
+                    "WHERE orderId = :orderId AND stauss IN ('Đợi xác nhận', 'Đã xác nhận'); ")
+                    .bind("orderId", orderId)
+                    .execute();
+            return row>0;
+        });
+    }
+
+    public static boolean updateEx(int orderId) {
+        return DbConnector.me().get().withHandle(handle -> {
+            int row = handle.createUpdate("UPDATE orderItem oi " +
+                            "JOIN orders o ON oi.orderId = o.orderId " +
+                            "SET oi.expectedDate = CASE " +
+                            "    WHEN o.address LIKE '%Bình Định%' " +
+                            "    OR o.address LIKE '%Gia Lai%' " +
+                            "    OR o.address LIKE '%Quy Nhơn%' " +
+                            "    OR o.address LIKE '%Quãng Ngãi%' " +
+                            "    OR o.address LIKE '%Đà Nẵng%' THEN DATE_ADD(oi.timeOrder, INTERVAL 4 DAY) " +
+                            "    WHEN o.address LIKE '%TP.HCM%' " +
+                            "    OR o.address LIKE '%Bình Dương%' " +
+                            "    OR o.address LIKE '%Biên Hòa%' " +
+                            "    OR o.address LIKE '%Hồ Chí Minh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 1 DAY) " +
+                            "    WHEN o.address LIKE '%Cai Lậy%' " +
+                            "    OR o.address LIKE '%Long An%' " +
+                            "    OR o.address LIKE '%Hồ Chí Minh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 2 DAY) " +
+                            "    ELSE oi.expectedDate " + // Giữ nguyên ngày dự kiến giao hàng nếu không phải Bình Định, Gia Lai, Đà Nẵng hoặc TP.HCM
+                            "END " +
+                            "WHERE oi.orderId = :orderId")
+                    .bind("orderId", orderId)
+                    .execute();
+            return row > 0;
+        });
+    }
+
+
+    public static int getOrderId() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1")
+                    .mapTo(int.class)
+                    .findOne()
+                    .orElseThrow(() -> new IllegalStateException("No orderId found"));
+        });
+    }
+
+
+
 
 
 

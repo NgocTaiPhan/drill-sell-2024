@@ -29,6 +29,18 @@ public class viewOrderCustomer extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        response.setContentType("text/html; charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        boolean updateStatus = CheckOutDAO.update(orderId);
+        if (updateStatus) {
+            response.getWriter().println("<script>alert('Đã hủy đơn hàng thành công'); window.location.href='"
+                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+        } else {
+            response.getWriter().println("<script>alert('Hủy đơn hàng thất bại'); window.location.href='"
+                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+        }
     }
 }
+
+

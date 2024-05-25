@@ -22,6 +22,7 @@ public class OrderController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
         String nameCustomer = request.getParameter("nameCustomer");
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
@@ -54,12 +55,19 @@ public class OrderController extends HttpServlet {
             orders.add(order);
 
             boolean insert = CheckOutDAO.insertOrders(orders);
+            int idOrder = CheckOutDAO.getOrderId();
+            boolean updateEx = CheckOutDAO.updateEx(idOrder);
 
             if (insert) {
-                response.getWriter().write("Đơn hàng đã được tạo thành công!");
+                if(updateEx){
+                    response.sendRedirect("viewOrderCustomer?orderSuccess=true");
+                }
+
             } else {
                 response.getWriter().write("Có lỗi xảy ra khi tạo đơn hàng.");
             }
         }
     }
 }
+
+

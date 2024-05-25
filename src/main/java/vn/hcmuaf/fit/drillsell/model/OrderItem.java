@@ -9,7 +9,8 @@ public class OrderItem {
     private int productId;
     private int cartId, idItem;
     @Nullable
-    private Timestamp timeOrder;
+    private Timestamp expectedDate;
+
     private double unitPrice;
     private String productName;
     private double totalPrice;
@@ -18,11 +19,15 @@ public class OrderItem {
     public OrderItem() {
     }
 
-
-    public OrderItem(int orderId, int productId, int cartId, int quantity) {
+    public OrderItem(int orderId, int productId, int cartId, int idItem, @Nullable Timestamp expectedDate, double unitPrice, String productName, double totalPrice, int quantity) {
         this.orderId = orderId;
         this.productId = productId;
         this.cartId = cartId;
+        this.idItem = idItem;
+        this.expectedDate = expectedDate;
+        this.unitPrice = unitPrice;
+        this.productName = productName;
+        this.totalPrice = totalPrice;
         this.quantity = quantity;
     }
 
@@ -58,12 +63,12 @@ public class OrderItem {
         this.idItem = idItem;
     }
 
-    public Timestamp getTimeOrder() {
-        return timeOrder;
+    public Timestamp getExpectedDate() {
+        return expectedDate;
     }
 
-    public void setTimeOrder(Timestamp timeOrder) {
-        this.timeOrder = timeOrder;
+    public void setExpectedDate(Timestamp expectedDate) {
+        this.expectedDate = expectedDate;
     }
 
     public double getUnitPrice() {
@@ -105,7 +110,7 @@ public class OrderItem {
                 ", productId=" + productId +
                 ", cartId=" + cartId +
                 ", idItem=" + idItem +
-                ", timeOrder=" + timeOrder +
+                ", expectedDate=" + expectedDate +
                 ", unitPrice=" + unitPrice +
                 ", productName='" + productName + '\'' +
                 ", totalPrice=" + totalPrice +

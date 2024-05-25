@@ -12,13 +12,11 @@ public class Order {
     private String phone;
     private String address;
     private String stauss;
+    private double shippingFee;
     private List<OrderItem> orderItems;
 
     public Order() {
     }
-
-
-
 
     public Order(int userId, String nameCustomer, String phone, String address) {
         this.userId = userId;
@@ -43,12 +41,12 @@ public class Order {
         this.userId = userId;
     }
 
-    public String getName() {
+    public String getNameCustomer() {
         return nameCustomer;
     }
 
-    public void setName(String name) {
-        this.nameCustomer = name;
+    public void setNameCustomer(String nameCustomer) {
+        this.nameCustomer = nameCustomer;
     }
 
     public String getPhone() {
@@ -75,6 +73,14 @@ public class Order {
         this.stauss = stauss;
     }
 
+    public double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(double shippingFee) {
+        this.shippingFee = shippingFee;
+    }
+
     public List<OrderItem> getOrderItems() {
         return orderItems;
     }
@@ -88,10 +94,11 @@ public class Order {
         return "Order{" +
                 "orderId=" + orderId +
                 ", userId=" + userId +
-                ", name='" + nameCustomer + '\'' +
+                ", nameCustomer='" + nameCustomer + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", stauss='" + stauss + '\'' +
+                ", shippingFee=" + shippingFee +
                 ", orderItems=" + orderItems +
                 '}';
     }
