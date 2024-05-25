@@ -329,8 +329,9 @@
                                     String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
                             %>
                             <tr>
+                                <td style="display: none"><input class="cartId" name="cartId" value="<%=p.getCartId()%>"></td>
 
-                                <td class="li-product-remove"><a href="#"
+                                <td class="li-product-remove"><a
                                                                  onclick="deleteCartProduct(<%= p.getProductId()%>)"><i
                                         class="fa fa-times"></i></a></td>
                                 <td class="sub">
@@ -340,17 +341,18 @@
                                 <td class="li-product-thumbnail"><a href="#"><img height="100px" width="100px"
                                                                                   src="<%= p.getImage()%>"
                                                                                   alt="Li's Product Image"></a></td>
-                                <td class="li-product-name"><a href="#"><%= p.getProductName()%>
-                                </a></td>
-                                <td class="li-product-price"><span
-                                        class="amount"> <%= formattedPrice%></span></td>
+                                <td class="li-product-name"><input name="productName" value="<%= p.getProductName()%>">
+                                </td>
+                                <td class="li-product-price">
+                                    <input name="amount" class="amount" value="<%= formattedPrice%>">
+                                </td>
                                 <div id="errorMessage" style="color: red;"></div>
                                 <td class="quantity">
                                     <button class="minus-button" type="button"
                                             onclick="reduceQuantity(<%= p.getProductId()%>)">-
                                     </button>
                                     <div class="cart-plus-minus">
-                                        <input id="quantityInput" class="cart-plus-minus-box"
+                                        <input name="quantityInput" id="quantityInput" class="cart-plus-minus-box"
                                                value="<%= p.getQuantity()%>">
 
                                     </div>
@@ -425,7 +427,7 @@
 
 
                                 <td class="product-subtotal">
-                                    <span id="subtotal" class="amount"><%= formattedAmount%></span>
+                                    <input id="subtotal" class="amount" value="<%= formattedAmount%>">
                                 </td>
 
                             </tr>
@@ -437,8 +439,8 @@
                     </div>
 
                     <div class="cart-page-total">
-<%--                        <a class="checkOut" href="checkOut?p=<%%>">Thanh toán</a>--%>
-    <button class="checkOut" type="submit">Thanh toán</button>
+                        <%--                        <a class="checkOut" href="checkOut?p=<%%>">Thanh toán</a>--%>
+                        <button class="checkOut" type="submit">Thanh toán</button>
 
 
                     </div>
@@ -448,19 +450,16 @@
             </div>
         </div>
     </div>
+
 </div>
 
-<%--<script>--%>
-<%--    function checkOut() {--%>
-<%--        // Lấy giá trị của tham số p (nếu có)--%>
-<%--        var params = new URLSearchParams(window.location.search);--%>
-<%--        var productId = params.get('productId');--%>
-
-<%--        // Chuyển hướng đến trang checkOut với tham số p (nếu có)--%>
-<%--        window.location.href = 'checkOut?p=' + productId;--%>
-<%--    }--%>
-<%--</script>--%>
-
+<style>
+input{
+    border: none;
+    background: #f3f3f3;
+    color: black;
+}
+</style>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
     <div class="social-button-content">

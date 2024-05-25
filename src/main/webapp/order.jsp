@@ -5,7 +5,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CheckOutDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    List<CheckOut> checkOuts = (List<CheckOut>) request.getAttribute("checkOuts");
+    List<OrderItem> checkOuts = (List<OrderItem>) session.getAttribute("checkOuts");
 %>
 <html lang="vi">
 <head>
@@ -66,6 +66,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Modernizr js -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <%   NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
 </head>
 
 <body>
@@ -84,7 +85,7 @@
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
                         <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : "" %>
+                            <%=(u != null) ? u.getFullname() : ""%>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
@@ -224,14 +225,15 @@
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
                                 <li class="active  yamm-fw"><a href="home.jsp">Trang chủ</a></li>
-                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/product.jsp"
+                                <li class="active  yamm-fw"><a href="<%=request.getContextPath()%>/product.jsp"
                                 >Sản phẩm</a></li>
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
                                         <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
                                         <li>
-                                            <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                            <a href="<%=request.getContextPath()%>/load-by-category?category-id=
+                <%=pc.getId()%>"
                                                methods="post"></i>
                                                 <%=pc.getNameCategory()%>
                                             </a>
@@ -287,86 +289,91 @@
         </div>
     </div>
 </div>
-
 <div class="address">
-    <div class="receive">
-        <p>Địa chỉ nhận hàng</p>
-        <div class="information">
-            <input type="text" id="informations" name="name" placeholder="Tên và số điện thoại">
-            <input type="text" id="address" name="addres" placeholder="Địa chỉ của bạn">
-
-        </div>
-    </div>
-    <div class="product">
-        <table class="table">
-            <thead>
-            <tr>
-                <th class="cart-product-name">Sản phẩm</th>
-                <th class="li-product-price">Đơn Gía</th>
-                <th class="li-product-quantity">Số lượng</th>
-                <th class="li-product-subtotal">Thành tiền</th>
-            </tr>
-            </thead>
-
-            <tbody>
-
-            <%
-                if (checkOuts != null) {
-                    for (CheckOut s : checkOuts) {
-
-
-            %>
-            <tr>
-                <td class="li-product-thumbnail">
-                    <a href="#"><%= s.getProductName()%></a>
-                </td>
-                <td class="li-product-price">
-                    <span class="amount"><%= s.getUnitPrice() %></span>
-                </td>
-                <td class="quantity">
-                    <div class="cart-plus-minus">
-                        <input class="cart-plus-minus-box"
-                               value="<%= s.getQuantity()%>">
-                    </div>
-                </td>
-                <td class="product-subtotal">
-                    <span class="amount">
-                        <%=s.getTotalPrice()%>
-                    </span>
-                </td>
-
-            </tr>
-            <%
-                    }
-                }
-            %>
-
-            </tbody>
-        </table>
-        <div class="statistical">
-            <div class="pay">
-                <table>
-                    <tr>
-                        <td colspan="5"><label>Tổng tiền đơn hàng: </label></td>
-                        <%--                        <td><span id="totalAmount" style="padding-left: 5px"><%= checkOut.getSumTotalPrice() += checkOut.getTotalPrice() %></span></td>--%>
-                    </tr>
-                </table>
-                <a>
-                    <button  class="order">Đặt hàng</button>
-                </a>
+    <form action="order" method="post">
+        <div class="receive">
+            <div id="err" style="color: red; <% if (request.getAttribute("err") == null) { %>display: none;<% } %>">
+                <%= request.getAttribute("err") %>
+            </div>
+            <p>Địa chỉ nhận hàng</p>
+            <div class="information">
+                <input value="<%= request.getParameter("nameCustomer") != null ? request.getParameter("nameCustomer") : "" %>" type="text" id="informations" name="nameCustomer" placeholder="Tên">
+                <input style="width: 200px" value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>" type="text" id="address" name="address" placeholder="Địa chỉ của bạn">
+                <input value="" type="text" id="phone" name="phone" placeholder="Số điện thoại">
             </div>
         </div>
-
-
-    </div>
-
-
+        <div class="product">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="cart-product-name">Sản phẩm</th>
+                    <th class="li-product-price">Đơn Giá</th>
+                    <th class="li-product-quantity">Số lượng</th>
+                    <th class="li-product-subtotal">Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+                    double totalAmount = 0;
+                    if (checkOuts != null) {
+                        for (OrderItem s : checkOuts) {
+                            double unitPrice = s.getUnitPrice() * 1000;
+                            double totalPrice = s.getTotalPrice() * 1000;
+                            totalAmount += totalPrice;
+                            String formattedPrice = currencyFormat.format(unitPrice);
+                            String formattedAmount = currencyFormat.format(totalPrice);
+                %>
+                <tr>
+                    <input style="display: none" class="productId" name="productId" value="<%= s.getProductId()%>">
+                    <input style="display: none" class="cartId" name="cartId" value="<%= s.getCartId()%>">
+                    <td style="display: none"><input class="orderId" name="orderId" value="<%=s.getOrderId()%>"></td>
+                    <td class="li-product-thumbnail">
+                        <input type="hidden" name="productName" value="<%= s.getProductName() %>">
+                        <a href="#"><%= s.getProductName() %></a>
+                    </td>
+                    <td class="li-product-price">
+                        <input type="hidden" name="unitPrice" value="<%= unitPrice %>">
+                        <span class="amount"><%= formattedPrice %></span>
+                    </td>
+                    <td class="quantity">
+                        <div class="cart-plus-minus">
+                            <input type="hidden" name="quantity" value="<%= s.getQuantity() %>">
+                            <input name="quantityInput" class="cart-plus-minus-box" value="<%= s.getQuantity() %>">
+                        </div>
+                    </td>
+                    <td class="product-subtotal">
+                        <input type="hidden" name="totalPrice" value="<%= totalPrice %>">
+                        <span class="amount"><%= formattedAmount %></span>
+                    </td>
+                </tr>
+                <%
+                        }
+                    }
+                    String formattedTotalAmount = currencyFormat.format(totalAmount);
+                %>
+                </tbody>
+            </table>
+            <div class="statistical">
+                <div class="pay">
+                    <table>
+                        <tr>
+                            <td colspan="5"><label>Tổng tiền đơn hàng: </label></td>
+                            <td><input id="totalAmount" name="totalAmount" style="padding-left: 5px" value="<%= formattedTotalAmount %>" readonly></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="order">Đặt hàng</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
-<script>
 
 
-
-</script>
+<style>
+    input{
+        border: none;
+    }
+</style>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">
     <div class="social-button-content">
