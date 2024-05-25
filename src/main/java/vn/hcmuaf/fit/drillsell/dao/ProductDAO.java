@@ -3,10 +3,9 @@ package vn.hcmuaf.fit.drillsell.dao;
 import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
+import vn.hcmuaf.fit.drillsell.model.Review;
 
-import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -100,18 +99,17 @@ public class ProductDAO {
         });
     }
 
-    public static List<Products> detailProduct(int productId) {
+    public Products getProdById(int productId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery(
-                            "SELECT products.productId, products.image, products.unitPrice, products.productName, products.categoryId, products.nameProducer," +
-                                    "products.describle, products.specifions\n" +
-                                    "FROM products " +
-                                    "WHERE products.productId = :productId\n")
+            String sql = "SELECT productId, image, unitPrice, productName, categoryId, nameProducer, describle, specifions " +
+                    "FROM products WHERE productId = :productId";
+            return handle.createQuery(sql)
                     .bind("productId", productId)
                     .mapToBean(Products.class)
-                    .list();
+                    .findOne().orElse(null);
         });
     }
+
 
     public String getFormattedUnitPrice(Products product) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
@@ -157,7 +155,7 @@ public class ProductDAO {
     }
 
     public static void main(String[] args) {
-        System.out.println(ProductDAO.getInstance().getAccessory());
+        System.out.println(ProductDAO.getInstance().getAllReviewByPID(2));
     }
 
 
@@ -178,4 +176,30 @@ public class ProductDAO {
                     .one();
         });
     }
+
+    //    Phương thức thêm đánh giá cho sản phẩm
+    public void insertReview(Review r) {
+        DbConnector.me().get().useHandle(handle -> {
+            String sql = "INSERT INTO reviews (userId, productId, rating, mess) VALUES (?, ?, ?, ?)";
+            handle.createUpdate(sql)
+                    .bind(0, r.getUserId())
+                    .bind(1, r.getProductId())
+                    .bind(2, r.getRating())
+                    .bind(3, r.getMess())
+                    .execute();
+
+            System.out.println("Đã thêm review cho sản phẩm: " + r.getProductId());
+        });
+    }
+
+
+    public List<Review> getAllReviewByPID(int productId) {
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT  userId, productId, rating, mess, dateReview FROM reviews WHERE productId = :productId")
+                .bind("productId", productId)
+                .mapToBean(Review.class)
+                .list());
+    }
+
+
 }

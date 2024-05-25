@@ -12,14 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-public class UsersDAO implements IUserDAO{
-
+public class UsersDAO {
 
     private static UsersDAO instance;
 
-    public UsersDAO() {
+    private UsersDAO() {
     }
 
     public static UsersDAO getInstance() {
@@ -55,7 +53,7 @@ public class UsersDAO implements IUserDAO{
 
     }
 
-//mã hóa mật khẩu
+
     public String hashPassword(String password) {
 
         try {
@@ -154,26 +152,28 @@ public class UsersDAO implements IUserDAO{
         }
     }
 
-    //   show toàn bộ người dùng trong quản lý người dùng
-    public List<User> showUser() {
-        String sql = "SELECT * FROM users";
-        return DbConnector.me().get().withHandle(handle -> handle
-                .createQuery(sql)
-                .mapToBean(User.class).list());
+    public List<User> showAll() {
+        return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
+                .mapToBean(User.class)
+                .list());
     }
 
-//xóa người dùng dựa theo id
-    public boolean  deleteUser(int id) {
-        DbConnector.me().get().useHandle(handle -> {
-            handle.execute("DELETE FROM users WHERE id = ? ", id);
-        });
 
-
-        return true;
+    public User getUserById(int id) {
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE id=?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
     }
+
 
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().hashPassword("hoaHoa@20052003"));
+        System.out.println(UsersDAO.getInstance().getUserById(2));
     }
 
 

@@ -151,6 +151,8 @@ switch (valueNotify) {
             text: "Sản phẩm đã được xóa",
             confirmButtonText: "Đóng"
         });
+
+
     default:
 
 
@@ -158,4 +160,43 @@ switch (valueNotify) {
 
 
 }
+
+function checkLoginAndRedirect(logged, url) {
+
+    if (!logged) {
+        Swal.fire({
+            title: "Bạn chưa đăng nhập",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Đăng nhập",
+            cancelButtonText: `Để sau`
+        }).then((result) => {
+            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+            if (result.isConfirmed) {
+                window.location.href = 'login.jsp';
+            }
+        });
+    } else {
+        window.location.href = url;
+    }
+}
+
+function checkLogin(logged) {
+
+    if (!logged) {
+        Swal.fire({
+            title: "Bạn chưa đăng nhập",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Đăng nhập",
+            cancelButtonText: `Để sau`
+        }).then((result) => {
+            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+            if (result.isConfirmed) {
+                window.location.href = 'login.jsp';
+            }
+        });
+    }
+}
+
 

@@ -125,7 +125,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <h1 class="name">MÁY KHOAN</h1>
 
                 </div>
-
                 <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">
                     <!-- /.contact-row -->
                     <!-- ============================================================= SEARCH AREA ============================================================= -->
@@ -162,33 +161,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <div class="dropdown dropdown-cart">
                         <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon"
+                                     onclick="checkLoginAndRedirect(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-                                <script>
-                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
-                                    function redirectToCart() {
-
-                                        <% if (!logged) { %>
-                                        Swal.fire({
-                                            title: "Bạn chưa đăng nhập",
-                                            icon: "warning",
-                                            showCancelButton: true,
-                                            confirmButtonText: "Đăng nhập",
-                                            cancelButtonText: `Để sau`
-                                        }).then((result) => {
-                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-                                            if (result.isConfirmed) {
-                                                window.location.href = 'login.jsp';
-                                            }
-                                        });
-                                        <% } else { %>
-                                        window.location.href = 'cart.jsp';
-                                        <% } %>
-                                    }
-                                </script>
-
-
                             </div>
                         </div>
 
@@ -422,7 +398,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                             <div class="products">
                                 <div class="product">
                                     <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%= p.getProductId()%>"
+                                        <div class="image"><a href="load-detail?productId=<%= p.getProductId()%>"
                                                               methods="get"><img height="189px" width="189px"
                                                                                  src="<%=p.getImage()%>"
                                                                                  alt="Ảnh sản phẩm"></a></div>
@@ -432,7 +408,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                                     <div class="product-info text-left">
-                                        <h3 class="name"><a href="detail?productId=<%= p.getProductId()%>"
+                                        <h3 class="name"><a href="load-detail?productId=<%= p.getProductId()%>"
                                                             methods="get"><%=p.getProductName()%>
                                         </a>
                                         </h3>
@@ -456,69 +432,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <%}%>
 
                     </div>
-                    <%--                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs">--%>
-                    <%--                        <%--%>
-                    <%--                            List<Products> subListProds = prodsService.showProd();--%>
-                    <%--                            for (Products p : subListProds) {--%>
-                    <%--                                String formattedPrice = prodsService.getFormattedUnitPrice(p);--%>
-
-                    <%--                        %>--%>
-                    <%--                        <div class="item item-carousel">--%>
-                    <%--                            <div class="products">--%>
-                    <%--                                <div class="product">--%>
-                    <%--                                    <div class="product-image">--%>
-                    <%--                                        <div class="image"><a href="detail?productId=<%= p.getProductId()%>"--%>
-                    <%--                                                              methods="get"><img height="189px" width="189px"--%>
-                    <%--                                                                                 src="<%=p.getImage()%>"--%>
-                    <%--                                                                                 alt="Ảnh sản phẩm"></a></div>--%>
-                    <%--                                        <!-- /.image -->--%>
-
-                    <%--                                    </div>--%>
-                    <%--                                    <!-- /.product-image -->--%>
-
-                    <%--                                    <div class="product-info text-left">--%>
-                    <%--                                        <h3 class="name"><a href="detail?productId=<%= p.getProductId()%>"--%>
-                    <%--                                                            methods="get"><%=p.getProductName()%>--%>
-                    <%--                                        </a>--%>
-                    <%--                                        </h3>--%>
-                    <%--                                        <div class="rating rateit-small"></div>--%>
-                    <%--                                        <div class="description"></div>--%>
-                    <%--                                        <div class="product-price"><span--%>
-                    <%--                                                class="price"><%=formattedPrice%></span>--%>
-                    <%--                                        </div>--%>
-                    <%--                                        <!-- /.product-price -->--%>
-
-                    <%--                                    </div>--%>
-                    <%--                                    <!-- /.product-info -->--%>
-
-                    <%--                                    <!-- /.cart -->--%>
-                    <%--                                </div>--%>
-                    <%--                                <!-- /.product -->--%>
-
-                    <%--                            </div>--%>
-                    <%--                            <!-- /.products -->--%>
-                    <%--                        </div>--%>
-
-                    <%--                        <%}%>--%>
-                    <%--                        <!-- /.item -->--%>
-
-
-                    <%--                        <!-- /.item -->--%>
-
-
-                    <%--                        <!-- /.item -->--%>
-
-
-                    <%--                        <!-- /.item -->--%>
-
-
-                    <%--                        <!-- /.item -->--%>
-
-
-                    <%--                        <!-- /.item -->--%>
-                    <%--                    </div>--%>
-
-                    <!-- /.home-owl-carousel -->
                 </section>
                 <!-- /.section -->
                 <!-- ============================================== FEATURED PRODUCTS : END ============================================== -->
@@ -538,7 +451,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                             <div class="products">
                                 <div class="product">
                                     <div class="product-image">
-                                        <div class="image"><a href="detail?productId=<%= a.getProductId()%>"
+                                        <div class="image"><a href="load-detail?productId=<%= a.getProductId()%>"
                                                               methods="post"><img width="189px" height="189px"
 
                                                                                   src="<%=a.getImage()%>"
@@ -550,7 +463,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     <!-- /.product-image -->
 
                                     <div class="product-info text-left">
-                                        <h3 class="name"><a href="detail?productId=<%= a.getProductId()%>"
+                                        <h3 class="name"><a href="load-detail?productId=<%= a.getProductId()%>"
                                                             methods="get"><%=a.getProductName()%>
                                         </a>
                                         </h3>
@@ -624,7 +537,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                             <li class="media">
                                 <div class="pull-left"> <span class="icon fa-stack fa-lg"> <i
                                         class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span></div>
-                                <div class="media-body"><span><a href="detail.jsp">group25@st.hcmuaf.edu.vn</a></span>
+                                <div class="media-body"><span><a href="#">group25@st.hcmuaf.edu.vn</a></span>
                                 </div>
                             </li>
                         </ul>
@@ -641,9 +554,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                     <div class="module-body">
                         <ul class='list-unstyled'>
-                            <li class="first"><a href="detail.jsp" title="Tài khoản của tôi">Tài khoản của tôi</a></li>
-                            <li><a href="detail.jsp" title="Lịch sử đặt hàng">Lịch sử đặt hàng</a></li>
-                            <li class="last"><a href="detail.jsp" title="Giúp đỡ">Giúp đỡ</a></li>
+                            <li class="first"><a href="#" title="Tài khoản của tôi">Tài khoản của tôi</a></li>
+                            <li><a href="#" title="Lịch sử đặt hàng">Lịch sử đặt hàng</a></li>
+                            <li class="last"><a href="#" title="Giúp đỡ">Giúp đỡ</a></li>
                         </ul>
                     </div>
                     <!-- /.module-body -->
@@ -661,8 +574,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                     <div class="module-body">
                         <ul class='list-unstyled'>
-                            <li class="first"><a href="detail.jsp" title="About us">Giỏ hàng</a></li>
-                            <li><a href="detail.jsp" title="Blog">Tin tức</a></li>
+                            <li class="first"><a href="#" title="About us">Giỏ hàng</a></li>
+                            <li><a href="#" title="Blog">Tin tức</a></li>
                             <li class=" last"><a href="contact.jsp" title="Suppliers">Về chúng tôi</a></li>
                         </ul>
                     </div>
@@ -676,15 +589,15 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class="container">
             <div class="col-xs-12 col-sm-6 no-padding social">
                 <ul class="link">
-                    <li class="fb pull-left"><a target="_blank" rel="nofollow" href="detail.jsp" title="Facebook"></a>
+                    <li class="fb pull-left"><a target="_blank" rel="nofollow" href="#" title="Facebook"></a>
                     </li>
-                    <li class="tw pull-left"><a target="_blank" rel="nofollow" href="detail.jsp" title="Twitter"></a>
+                    <li class="tw pull-left"><a target="_blank" rel="nofollow" href="#" title="Twitter"></a>
                     </li>
-                    <li class="googleplus pull-left"><a target="_blank" rel="nofollow" href="detail.jsp"
+                    <li class="googleplus pull-left"><a target="_blank" rel="nofollow" href="#"
                                                         title="GooglePlus"></a>
                     </li>
 
-                    <li class="youtube pull-left"><a target="_blank" rel="nofollow" href="detail.jsp"
+                    <li class="youtube pull-left"><a target="_blank" rel="nofollow" href="#"
                                                      title="Youtube"></a></li>
                 </ul>
             </div>

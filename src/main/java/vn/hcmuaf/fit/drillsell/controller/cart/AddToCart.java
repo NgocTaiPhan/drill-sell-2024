@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
 
@@ -26,7 +27,8 @@ public class AddToCart extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         if (user == null) {
-            response.sendRedirect("detail.jsp?loginRequired=true");
+            Notify.getInstance().sendNotify(session, request, response, "not-logged");
+            response.sendRedirect("load-detail?productId=" + productIdParam);
             return;
         }
 
@@ -46,7 +48,6 @@ public class AddToCart extends HttpServlet {
             response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");
         }
     }
-
 
 
 }

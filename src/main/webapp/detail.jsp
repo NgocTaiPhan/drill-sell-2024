@@ -1,22 +1,16 @@
-
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Optional" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.controller.DetailContronller" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
-<%@ page import="vn.hcmuaf.fit.drillsell.controller.HomeController" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Review" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%
-    List<Products> allProduct = (List<Products>) request.getAttribute("detail");
-    ProductDAO prodsService = ProductDAO.getInstance();
+    Products product = (Products) request.getAttribute("prods");
 
 %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -60,36 +54,36 @@
     <link rel="icon" href="assets/images/logo.png" type="image/png">
     <title>Chi tiết sản phẩm</title>
 
-    <link rel="stylesheet" href="assets\css\bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- Customizable CSS -->
     <link rel="stylesheet" href="assets/css/styleAccount.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="assets\css\main.css">
-    <link rel="stylesheet" href="assets\css\blue.css">
-    <link rel="stylesheet" href="assets\css\owl.carousel.css">
-    <link rel="stylesheet" href="assets\css\owl.transitions.css">
-    <link rel="stylesheet" href="assets\css\animate.min.css">
-    <link rel="stylesheet" href="assets\css\rateit.css">
-    <link rel="stylesheet" href="assets\css\bootstrap-select.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/blue.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="assets/css/owl.transitions.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/rateit.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="assets/css/my-css/footermenu.css">
-    <script src="assets\js\jquery-1.11.1.min.js"></script>
-    <script src="assets\js\bootstrap.min.js"></script>
-    <script src="assets\js\bootstrap-hover-dropdown.min.js"></script>
-    <script src="assets\js\owl.carousel.min.js"></script>
-    <script src="assets\js\echo.min.js"></script>
-    <script src="assets\js\jquery.easing-1.3.min.js"></script>
-    <script src="assets\js\bootstrap-slider.min.js"></script>
-    <script src="assets\js\jquery.rateit.min.js"></script>
-    <script type="text/javascript" src="assets\js\lightbox.min.js"></script>
-    <script src="assets\js\bootstrap-select.min.js"></script>
-    <script src="assets\js\wow.min.js"></script>
-    <script src="assets\js\scripts.js"></script>
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/echo.min.js"></script>
+    <script src="assets/js/jquery.easing-1.3.min.js"></script>
+    <script src="assets/js/bootstrap-slider.min.js"></script>
+    <script src="assets/js/jquery.rateit.min.js"></script>
+    <script type="text/javascript" src="assets/js/lightbox.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
     <script src="assets/js/my-js/footermenu.js"></script>
 
     <!-- Icons/Glyphs -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets\css\font-awesome.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
 
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
@@ -121,7 +115,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 //                            Kiểm tra nếu user rỗng thì lấy dữ liệu từ usergoogle hoặc ngược lại
                             if (logged) { %>
                         <li><a href="profile.jsp"><i class="icon fa fa-user"></i>
-                            <%= (u != null) ? u.getFullname() : "" %>
+                            <%= u.getFullname() %>
                         </a></li>
                         <li><a href="cart.jsp"><i class="icon fa fa-shopping-cart"></i>Giỏ hàng</a></li>
                         <li><a href="order.jsp"><i class="icon fa fa-check"></i>Thanh toán</a></li>
@@ -169,7 +163,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                <label for="searchInput"></label>
+                                <input id="searchInput"
+                                       class="search-field dropdown-toggle"
+                                       data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
                                 <a style="height: 44.5px;" class="search-button" href="#"
                                    onclick="searchProduct(event)"></a>
@@ -199,31 +196,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <div class="dropdown dropdown-cart">
                         <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon"
+                                     onclick="checkLoginAndRedirect(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-                                <script>
-                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
-                                    function redirectToCart() {
-
-                                        <% if (!logged) { %>
-                                        Swal.fire({
-                                            title: "Bạn chưa đăng nhập",
-                                            icon: "warning",
-                                            showCancelButton: true,
-                                            confirmButtonText: "Đăng nhập",
-                                            cancelButtonText: `Để sau`
-                                        }).then((result) => {
-                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-                                            if (result.isConfirmed) {
-                                                window.location.href = 'login.jsp';
-                                            }
-                                        });
-                                        <% } else { %>
-                                        window.location.href = 'cart.jsp';
-                                        <% } %>
-                                    }
-                                </script>
 
 
                             </div>
@@ -248,13 +224,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
     <div class="header-nav animate-dropdown">
         <div class="container">
             <div class="yamm navbar navbar-default" role="navigation">
-                <!--                <div class="navbar-header">-->
-                <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                <!--                            class="navbar-toggle collapsed"-->
-                <!--                            type="button">-->
-                <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                <!--                </div>-->
                 <div class="nav-bg-class">
                     <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                     >
@@ -281,13 +250,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
 
                                 <%
-
-
                                     //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
                                     if (logged) {
                                         if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="/admin/dashboard.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a href="<%=request.getContextPath()%>/admin/dashboard.jsp">Quản
+                                    lý</a></li>
                                 <%
                                         }
                                     }
@@ -338,10 +306,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
             <div class='col-md-9'>
                 <%
-                    if (allProduct != null) {
-                        for (Products p : allProduct) {
-                            String formattedPrice = prodsService.getFormattedUnitPrice(p);
-                %>
+                    assert product != null;
+                    assert u != null;%>
                 <div class="detail-block">
                     <div class="row  wow fadeInUp">
 
@@ -354,7 +320,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         <a data-lightbox="image-1" data-title="Gallery"
                                            href="#">
                                             <img class="img-responsive" alt="Mô tả sản phẩm"
-                                                 src="<%= p.getImage()%>"
+                                                 src="<%= product.getImage()%>"
                                             >
                                         </a>
                                     </div>
@@ -365,7 +331,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         </div><!-- /.gallery-holder -->
                         <div class='col-sm-6 col-md-7 product-info-block'>
                             <div class="product-info">
-                                <h1 class="name"><%= p.getProductName()%>
+                                <h1 class="name"><%= product.getProductName()%>
                                 </h1>
 
                                 <div class="rating-reviews m-t-20">
@@ -405,7 +371,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                                         <div class="col-sm-6">
                                             <div class="price-box">
-                                                <span class="price"><%= formattedPrice %></span>
+                                                <span class="price"><%= ProductDAO.getInstance().getFormattedUnitPrice(product) %></span>
                                             </div>
                                         </div>
 
@@ -421,13 +387,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
-                                            <%--                                            <a href="#" onclick="addToCart(<%=p.getProductId()%>)" class="btn btn-primary">--%>
-                                            <%--                                                <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng--%>
-                                            <%--                                            </a>--%>
-
-                                            <a href="cart?productId=<%=p.getProductId()%>" class="btn btn-primary">
-                                                <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng
-                                            </a>
+                                            <div onclick="checkLoginAndRedirect(<%=logged%>,'cart?productId=<%=product.getProductId()%>')"
+                                                 class="btn btn-primary" style="margin-bottom: 10px ">
+                                                <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
+                                            </div>
 
                                         </div>
 
@@ -435,25 +398,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     </div><!-- /.row -->
                                 </div><!-- /.quantity-container -->
 
-                                <Style>
-                                    .col-sm-7 {
-                                        display: flex;
-                                        text-align: center;
-                                    }
 
-                                    .col-sm-7 .btn {
-                                        display: inline-block;
-                                        margin-left: 15px;
-                                        font-size: 16px;
-                                    }
-
-                                    .col-sm-7 #addToCartBtn {
-                                        border-radius: 5px;
-                                        height: 40px;
-
-                                    }
-
-                                </Style>
                             </div><!-- /.product-info -->
                         </div><!-- /.col-sm-7 -->
 
@@ -478,105 +423,105 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <div id="description" class="tab-pane in active">
                                     <div class="product-tab">
                                         <p class="text">
-                                            <%= p.getDescrible()%>
+                                            <%= product.getDescrible()%>
                                         </p>
                                     </div>
                                 </div><!-- /.tab-pane -->
                                 <div id="specifications" class="tab-pane in ">
-                                    <%= p.getSpecifions()%>
+                                    <%= product.getSpecifions()%>
 
                                 </div><!-- /.tab-pane -->
 
                                 <!-- /.tab-pane -->
 
                                 <div id="reviews" class="tab-pane">
-                                    <div class="name-custumor">
-                                        <i class="fa-solid fa-user"></i>
-                                        <input class="name" placeholder="Tên khách hàng">
-                                    </div>
-                                    <div class="rating">
-                                        <input type="radio" id="star5" name="rating" value="5"/>
-                                        <label class="s" for="star5"></label>
-                                        <input type="radio" id="star4" name="rating" value="4"/>
-                                        <label class="s" for="star4"></label>
-                                        <input type="radio" id="star3" name="rating" value="3"/>
-                                        <label class="s" for="star3"></label>
-                                        <input type="radio" id="star2" name="rating" value="2"/>
-                                        <label class="s" for="star2"></label>
-                                        <input type="radio" id="star1" name="rating" value="1"/>
-                                        <label class="s" for="star1"></label>
-                                    </div><!-- /.product-tab -->
-                                    <div class="messger">
-                                        <input class="mess" placeholder="Mô tả của khách hàng">
+                                    <div class="blog-sub-comments">
+                                        <form class="container" action="add-review"
+                                              id="reviewForm" role="form">
+
+                                            <div class="rating form-group">
+                                                <input type="radio" id="star5" name="rating" value="5"/>
+                                                <label class="s" for="star5"></label>
+                                                <input type="radio" id="star4" name="rating" value="4"/>
+                                                <label class="s" for="star4"></label>
+                                                <input type="radio" id="star3" name="rating" value="3"/>
+                                                <label class="s" for="star3"></label>
+                                                <input type="radio" id="star2" name="rating" value="2"/>
+                                                <label class="s" for="star2"></label>
+                                                <input type="radio" id="star1" name="rating" value="1"/>
+                                                <label class="s" for="star1"></label>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputReviews">Nhập đánh giá của bạn</label>
+                                                <input type="text" name="mess" class="" id="inputReviews"
+                                                       maxlength="500">
+                                            </div>
+                                            <%if (logged) {%>
+                                            <input type="hidden" name="userId" value="<%=u.getId()%>">
+                                            <%}%>
+                                            <input type="hidden" name="prodId" value="<%=product.getProductId()%>">
+                                            <input type="submit" class="btn btn-primary " value="Đánh giá"
+                                            >
+                                        </form>
+
+                                        <div>
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="page-header">
+                                                            <h1><small class="pull-right">45 comments</small> Comments
+                                                            </h1>
+                                                        </div>
+                                                        <div class="comments-list">
+                                                            <%
+                                                                List<Review> reviewList = (List<Review>) request.getAttribute("reviews");
+                                                                if (reviewList != null && !reviewList.isEmpty()) {
+                                                                    for (Review r : reviewList) {
+                                                            %>
+                                                            <div class="media">
+                                                                <p class="pull-right"><small>5 days ago</small></p>
+                                                                <div class="media-left" href="#">
+                                                                    <!-- Placeholder for potential user avatar or other content -->
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h4 class="media-heading user_name"><%= UsersDAO.getInstance().getUserById(r.getUserId()).getFullname() %>
+                                                                    </h4>
+                                                                    <%= r.getMess() %>
+                                                                    <p>
+                                                                    <div class="rating">
+                                                                        <%
+                                                                            for (int i = 0; i < r.getRating(); i++) {
+                                                                        %>
+                                                                        <i class="fa fa-star"></i>
+                                                                        <% } %>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <%
+                                                                }
+                                                            } else {
+                                                            %>
+                                                            <p>Chưa có đánh giá nào.</p>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div><!-- /.tab-pane -->
-                                <style>
-                                    .rating .s {
-                                        font-size: 17px;
-                                    }
 
-                                    .name-custumor i {
-                                        font-size: 12px;
-                                    }
-
-                                    .name-custumor input {
-                                        border: none;
-                                        font-size: 12px;
-                                    }
-
-                                    .messger .mess {
-                                        width: 500px;
-                                        height: 50px;
-                                        font-size: 12px;
-                                    }
-
-                                    .rating {
-                                        display: inline-block;
-                                    }
-
-                                    .rating input {
-                                        display: none;
-                                    }
-
-                                    .rating label {
-                                        cursor: pointer;
-                                        width: 20px;
-                                        height: 10px;
-                                        font-size: 30px;
-                                        color: #ccc;
-                                    }
-
-                                    .rating label:before {
-                                        content: '\2605';
-                                    }
-
-                                    .rating input:checked ~ label {
-                                        color: #ffbf00;
-                                    }
-
-                                    .rating:not(:checked) > label:hover,
-                                    .rating:not(:checked) > label:hover ~ label {
-                                        color: #ffbf00;
-                                    }
-
-                                    .rating input:checked + label:hover,
-                                    .rating input:checked + label:hover ~ label,
-                                    .rating input:checked ~ label:hover,
-                                    .rating input:checked ~ label:hover ~ label {
-                                        color: #ffbf00;
-                                    }
-
-
-                                </style>
                             </div><!-- /.tab-content -->
                         </div><!-- /.col -->
                     </div><!-- /.row -->
                 </div><!-- /.product-tabs -->
-                <%
-                        }
-                    }
-                %>
-
             </div><!-- /.col -->
 
         </div><!-- /.row -->
@@ -618,11 +563,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class="animated alo-circle-fill"></div>
     </a>
 </div>
-
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <!-- ============================================================= Backtop ============================================================= -->
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
+<link rel="stylesheet" href="assets/css/my-css/detailPage.css">
+<script src="assets/js/my-js/notify.js"></script>
 <script src="assets/js/my-js/backtop.js"></script>
 <%
     String loginRequired = request.getParameter("loginRequired");
