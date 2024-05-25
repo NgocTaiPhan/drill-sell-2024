@@ -26,7 +26,7 @@ public class AddToCart extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         if (user == null) {
-            response.getWriter().write("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+            response.sendRedirect("detail.jsp?loginRequired=true");
             return;
         }
 

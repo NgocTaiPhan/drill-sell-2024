@@ -1,3 +1,5 @@
+
+
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Optional" %>
 <%@ page import="java.text.NumberFormat" %>
@@ -419,9 +421,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
-<%--                                            <a href="#" onclick="addToCart(<%=p.getProductId()%>)" class="btn btn-primary">--%>
-<%--                                                <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng--%>
-<%--                                            </a>--%>
+                                            <%--                                            <a href="#" onclick="addToCart(<%=p.getProductId()%>)" class="btn btn-primary">--%>
+                                            <%--                                                <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng--%>
+                                            <%--                                            </a>--%>
 
                                             <a href="cart?productId=<%=p.getProductId()%>" class="btn btn-primary">
                                                 <i class="fa fa-shopping-cart inner-right-vs"></i> Thêm vào giỏ hàng
@@ -622,5 +624,34 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
+<%
+    String loginRequired = request.getParameter("loginRequired");
+    if ("true".equals(loginRequired)) {
+%>
+
+
+<script>
+    Swal.fire({
+        title: "Bạn chưa đăng nhập",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Đăng nhập",
+        cancelButtonText: `Để sau`
+    }).then((result) => {
+
+        //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+        if (result.isConfirmed) {
+            window.location.href = 'login.jsp';
+        } else {
+            window.history.back();
+        }
+    });
+
+</script>
+
+
+<%
+    }
+%>
 </body>
 </html>

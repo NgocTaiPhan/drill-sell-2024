@@ -18,6 +18,7 @@ public class ShowUser extends HttpServlet {
         IUserDAO userDao = new UsersDAO();
         List<User> userList = userDao.showUser();
         Gson gson = new Gson();
+//        hiển thị danh sách người dùng
         String json = gson.toJson(userList);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

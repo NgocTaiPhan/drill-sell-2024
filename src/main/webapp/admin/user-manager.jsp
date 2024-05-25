@@ -155,6 +155,8 @@
                                     </tr>
                                     </thead>
                                 </table>
+<%--                                ajax show người dùng trong quản lý người dùng--%>
+
                                 <script>
                                     $(document).ready(function (){
                                         var table = $('#user-mn').DataTable({
@@ -169,13 +171,32 @@
                                                 {
                                                     "data":null,
 
-                                                    render: (data,type)=>   ' <button type="button" class="btn btn-info">Xem chi tiết </button>' +
+                                                    render: (data,type)=>   ' <button type="button" class="btn btn-info" >Xem chi tiết </button>' +
                                                         '  <button type="button" class="btn btn-warning" >Sửa </button>' +
                                                         '<button type="button" class="btn btn-danger" >Xóa </button>'
                                                 }
                                             ],
                                         });
-                                        $('#user-mn tbody').on('click','button',function (){
+
+                                        //  $('#user-mn tbody').on('click','button',function (){
+                                        //     var data = table.row($(this).parents('tr')).data();
+                                        //     var id = data.id;
+                                        //
+                                        //     $.ajax({
+                                        //         type: "POST",
+                                        //         url: "deleteUser",
+                                        //         data : {id: id},
+                                        //         success: function (response){
+                                        //             alert(response);
+                                        //             table.ajax.reload();
+                                        //         },
+                                        //         error: function (xhr,status,error){
+                                        //             alert("Error: "+error);
+                                        //         }
+                                        //     })
+                                        // })
+                                        // xóa người dùng trong quản lý người dùng
+                                        $('#user-mn tbody').on ('click','button',function (){
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
 
