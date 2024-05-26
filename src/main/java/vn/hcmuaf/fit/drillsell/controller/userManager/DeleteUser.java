@@ -26,7 +26,7 @@ public class DeleteUser extends HttpServlet {
 
             IUserDAO userDao = new UsersDAO();
 //            xóa người dùng trong quản lý người dùng
-            boolean deleted = userDao.deleteUser(id);
+            boolean deleted = userDao.deleteUser(id,1);
             if (deleted) {
                 resp.setContentType("text/plain");
                 resp.setCharacterEncoding("UTF-8");
