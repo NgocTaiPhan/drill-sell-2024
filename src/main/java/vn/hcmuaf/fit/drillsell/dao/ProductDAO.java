@@ -70,6 +70,13 @@ public class ProductDAO {
                     .list();
         });
     }
+    public List<Products> getAllProds() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM products WHERE productStatus = 0")
+                    .mapToBean(Products.class)
+                    .list();
+        });
+    }
 
     public List<Products> getAccessory() {
         return DbConnector.me().get().withHandle(handle -> {

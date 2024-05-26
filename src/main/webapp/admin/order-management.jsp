@@ -78,7 +78,12 @@
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
-
+                <li class="">
+                    <a href="store-manager.jsp">
+                        <i class="ti-user"></i>
+                        <p>Quản lý kho</p>
+                    </a>
+                </li>
 
             </ul>
         </div>

@@ -5,7 +5,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="../assets/images/logo.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-    <title>Quản lý người dùng</title>
+    <title>Quản lý kho</title>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
@@ -81,13 +81,12 @@
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
-                <li class="">
-                    <a href="store-manager.jsp">
+                <li class="active">
+                    <a href="">
                         <i class="ti-user"></i>
                         <p>Quản lý kho</p>
                     </a>
                 </li>
-
 
             </ul>
         </div>
