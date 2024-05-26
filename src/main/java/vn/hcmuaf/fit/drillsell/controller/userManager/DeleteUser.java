@@ -19,30 +19,69 @@ public class DeleteUser extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String idStr = req.getParameter("id");
+//        if (idStr != null ) {
+//            // Chuyển đổi chuỗi thành số nguyên
+//            int id = Integer.parseInt(idStr);
+//
+//            IUserDAO userDao = new UsersDAO();
+////            xóa người dùng trong quản lý người dùng
+//            boolean deleted = userDao.deleteUser(id,1);
+//            if (deleted) {
+//                resp.setContentType("text/plain");
+//                resp.setCharacterEncoding("UTF-8");
+//                resp.getWriter().write("Xóa người dùng thành công");
+//
+//
+//            } else {
+//                resp.setContentType("text/plain");
+//                resp.setCharacterEncoding("UTF-8");
+//                resp.getWriter().write("Không thể xóa tài khoản Admin");
+//            }
+//        } else {
+//
+//        }
+//        String idStr = req.getParameter("id");
+//        if (idStr != null) {
+//            int id = Integer.parseInt(idStr);
+//            IUserDAO userDao = new UsersDAO();
+//            boolean deleted = userDao.deleteUser(id, 1);
+//            String message;
+//            if (deleted) {
+//                message = "Xóa người dùng thành công";
+//            } else {
+//                message = "Không thể xóa tài khoản Admin";
+//            }
+//            resp.setContentType("text/plain");
+//            resp.setCharacterEncoding("UTF-8");
+//            resp.getWriter().write(message);
+//        } else {
+//            resp.setContentType("text/plain");
+//            resp.setCharacterEncoding("UTF-8");
+//            resp.getWriter().write("ID người dùng không hợp lệ");
+//        }
         String idStr = req.getParameter("id");
-        if (idStr != null ) {
-            // Chuyển đổi chuỗi thành số nguyên
+        if (idStr != null) {
             int id = Integer.parseInt(idStr);
-
             IUserDAO userDao = new UsersDAO();
-//            xóa người dùng trong quản lý người dùng
-            boolean deleted = userDao.deleteUser(id,1);
+            boolean deleted = userDao.deleteUser(id, 1);
+            String message;
             if (deleted) {
-                resp.setContentType("text/plain");
-                resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write("Xóa người dùng thành công");
-
-
-
-
+                message = "Xóa người dùng thành công";
+                resp.setStatus(HttpServletResponse.SC_OK); // 200
             } else {
-
+                message = "Không thể xóa tài khoản Admin";
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
             }
+            resp.setContentType("text/plain");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(message);
         } else {
-
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+            resp.setContentType("text/plain");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write("ID người dùng không hợp lệ");
         }
-
-
     }
 }
 
