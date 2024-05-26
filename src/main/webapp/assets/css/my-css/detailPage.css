@@ -69,4 +69,7 @@
     height: 40px;
 
 }
+.border-top-reviews{
+    border-top: 1px solid black;
+}
 

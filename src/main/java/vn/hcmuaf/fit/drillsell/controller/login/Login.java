@@ -28,19 +28,12 @@ public class Login {
             User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
 //            Tìm thấy thông tin người dùng
             if (auth != null) {//Nếu tìm thấy thông tin người dùng thì sẽ set userId trong log là id của người dùng
-                System.out.println(auth.isRoleUser());
 
                 log.setUserId(auth.getId());
                 session.setAttribute("auth", auth); // Gửi thông tin tài khoản để frontend xử lý
                 LogDAO.insertLoginTrue(log); // Ghi nhật ký đăng nhập thành công
 
-                // Kiểm tra quyền của tài khoản
-                if (auth.isRoleUser()) { // Nếu là admin
-                    Notify.getInstance().sendNotify(request.getSession(), request, response, "admin-logged");
-                } else { // Nếu là user
-                    Notify.getInstance().sendNotify(request.getSession(), request, response, "user-logged");
-                }
-                return;
+                response.sendRedirect("home.jsp");
             } else {
                 User user = UsersDAO.getInstance().getUserByUsername(username);
                 // Ghi nhật ký đăng nhập thất bại trước khi chuyển hướng

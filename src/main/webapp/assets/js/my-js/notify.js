@@ -151,6 +151,13 @@ switch (valueNotify) {
             text: "Sản phẩm đã được xóa",
             confirmButtonText: "Đóng"
         });
+    case"add-cart-success":
+        Swal.fire({
+            icon: "success",
+            title: "Thành công",
+            text: "Sản phẩm đã được thêm vào giỏ hàng",
+            confirmButtonText: "Đóng"
+        });
 
 
     default:

@@ -1,10 +1,13 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import org.jdbi.v3.core.Handle;
+import vn.hcmuaf.fit.drillsell.db.Db;
 import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Review;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -133,31 +136,13 @@ public class ProductDAO {
         });
     }
 
-
     public String getNameCategoryById(int categoryId) {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT nameCategory FROM product_categorys WHERE id = :categoryId")
-                    .bind("categoryId", categoryId)
-                    .mapTo(String.class)
-                    .findOne()
-                    .orElse(null);
-        });
+        return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT nameCategory FROM product_categorys WHERE id = :categoryId")
+                .bind("categoryId", categoryId)
+                .mapTo(String.class)
+                .findOne()
+                .orElse(null));
     }
-
-    public List<Products> showProductsLimited(int limit) {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery(
-                            "SELECT productId, image, productName, unitPrice FROM products ORDER BY RAND() LIMIT :limit")
-                    .bind("limit", limit)
-                    .mapToBean(Products.class)
-                    .list();
-        });
-    }
-
-    public static void main(String[] args) {
-        System.out.println(ProductDAO.getInstance().getAllReviewByPID(2));
-    }
-
 
     public List<Products> getProductsByPage(int limit, int offset) {
         return DbConnector.me().get().withHandle(handle -> {
@@ -166,14 +151,6 @@ public class ProductDAO {
                     .bind("offset", offset)
                     .mapToBean(Products.class)
                     .list();
-        });
-    }
-
-    public int getTotalProducts() {
-        return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT COUNT(*) FROM products")
-                    .mapTo(Integer.class)
-                    .one();
         });
     }
 
@@ -196,10 +173,12 @@ public class ProductDAO {
     public List<Review> getAllReviewByPID(int productId) {
         return DbConnector.me().get().withHandle(handle ->
                 handle.createQuery("SELECT  userId, productId, rating, mess, dateReview FROM reviews WHERE productId = :productId")
-                .bind("productId", productId)
-                .mapToBean(Review.class)
-                .list());
+                        .bind("productId", productId)
+                        .mapToBean(Review.class)
+                        .list());
     }
+
+
 
 
 }
