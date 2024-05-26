@@ -179,17 +179,41 @@ public class UsersDAO implements IUserDAO{
     }
 //    Xóa người dùng theo id người dùng
     public boolean deleteUser(int id, int status) {
+        //        kiểm tra xem đã xóa được hay chưa( để thuận tiện thông báo nếu xóa tài khoản admin)
+//        final boolean[] deleted = {false};
+//        DbConnector.me().get().useHandle(handle -> {
+//            int rowCount=    handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser !=1")
+//                    .bind("userStatus", status)
+//                    .bind("id", id)
+//                    .execute();
+//            deleted[0] = rowCount > 0;
+//            System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
+//        });
+//        return true;
+//        final boolean[] deleted = {false};
+//        DbConnector.me().get().useHandle(handle -> {
+//            int rowCount = handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser != 1")
+//                    .bind("userStatus", status)
+//                    .bind("id", id)
+//                    .execute();
+//            deleted[0] = rowCount > 0;
+//            System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
+//        });
+//        return deleted[0];
+
+        final boolean[]  deleted = {false};
+
         DbConnector.me().get().useHandle(handle -> {
-            handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id")
+        int rowCount = handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser != 1")
                     .bind("userStatus", status)
                     .bind("id", id)
                     .execute();
+            deleted[0] = rowCount > 0;
             System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
         });
-
-
-        return true;
+        return deleted[0];
     }
+
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().getUserById(2));
     }

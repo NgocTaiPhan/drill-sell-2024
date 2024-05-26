@@ -168,7 +168,6 @@
                                                 {"data":"id"},
                                                 {"data":"username"},
                                                 {"data":"email"},
-                                                {"data":"email"},
                                                 {
                                                     "data":null,
 
@@ -179,137 +178,32 @@
                                             ],
                                         });
 
-                                        //  $('#user-mn tbody').on('click','button',function (){
-                                        //     var data = table.row($(this).parents('tr')).data();
-                                        //     var id = data.id;
-                                        //
-                                        //     $.ajax({
-                                        //         type: "POST",
-                                        //         url: "deleteUser",
-                                        //         data : {id: id},
-                                        //         success: function (response){
-                                        //             alert(response);
-                                        //             table.ajax.reload();
-                                        //         },
-                                        //         error: function (xhr,status,error){
-                                        //             alert("Error: "+error);
-                                        //         }
-                                        //     })
-                                        // })
-                                        // xóa người dùng trong quản lý người dùng
-                                        // $('#user-mn tbody').on ('click','button',function (){
-                                        //     var data = table.row($(this).parents('tr')).data();
-                                        //     var id = data.id;
-                                        //     data.remove().draw(false);
-                                        //     $.ajax({
-                                        //         type: "POST",
-                                        //         url: "deleteUser",
-                                        //         data : {id: id},
-                                        //         success: function (response){
-                                        //             alert(response);
-                                        //             table.ajax.reload();
-                                        //         },
-                                        //         error: function (xhr,status,error){
-                                        //             alert("Error: "+error);
-                                        //         }
-                                        //     })
-                                        // })
-                                        // $('#user-mn tbody').on('click', 'button', function () {
-                                        //     // Lấy hàng hiện tại
-                                        //     var row = table.row($(this).parents('tr'));
-                                        //     var data = row.data();
-                                        //     var id = data.id;
-                                        //
-                                        //     // Xóa hàng từ bảng DataTables
-                                        //     row.remove().draw(false);
-                                        //
-                                        //     // Thực hiện yêu cầu AJAX để xóa hàng trong cơ sở dữ liệu
-                                        //     $.ajax({
-                                        //         type: "POST",
-                                        //         url: "deleteUser",
-                                        //         data: {id: id},
-                                        //         success: function (response) {
-                                        //             // alert(response);
-                                        //             // Tùy chọn: Tải lại bảng nếu cần cập nhật dữ liệu khác
-                                        //             // table.ajax.reload();
-                                        //
-                                        //             Swal.fire({
-                                        //                 title: "Are you sure?",
-                                        //                 text: "You won't be able to revert this!",
-                                        //                 icon: "warning",
-                                        //                 showCancelButton: true,
-                                        //                 confirmButtonColor: "#3085d6",
-                                        //                 cancelButtonColor: "#d33",
-                                        //                 confirmButtonText: "Yes, delete it!"
-                                        //             }).then((result) => {
-                                        //                 if (result.isConfirmed) {
-                                        //                     Swal.fire({
-                                        //                         title: "Xóa!",
-                                        //                         text: response,
-                                        //                         icon: "success"
-                                        //                     });
-                                        //                 }
-                                        //             });
-                                        //         },
-                                        //         error: function (xhr, status, error) {
-                                        //             alert("Error: " + error);
-                                        //             // Tùy chọn: Khôi phục lại hàng nếu xóa thất bại
-                                        //             // table.row.add(data).draw(false);
-                                        //         }
-                                        //     });
-                                        // });
 
 
 
-                                        // $('#user-mn tbody').on('click','.btn-danger',function (){
-                                        //     var data = table.row($(this).parents('tr')).data();
-                                        //     var id = data.id;
-                                        //
-                                        //     // Hiển thị hộp thoại confirm
-                                        //     var confirmation = confirm("Bạn có chắc chắn muốn xóa?");
-                                        //
-                                        //     if (confirmation) {
-                                        //         // Nếu người dùng chọn "OK", thực hiện xóa
-                                        //         $.ajax({
-                                        //             type: "POST",
-                                        //             url: "deleteUser",
-                                        //             data: { id: id },
-                                        //             success: function (response) {
-                                        //                 alert(response);
-                                        //                 table.ajax.reload();
-                                        //             },
-                                        //             error: function (xhr, status, error) {
-                                        //                 alert("Lỗi: " + error);
-                                        //             }
-                                        //         });
-                                        //     } else {
-                                        //         // Nếu người dùng chọn "Hủy", không thực hiện hành động nào
-                                        //     }
-                                        // });
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
-
-                                            // Hiển thị hộp thoại confirm với SweetAlert2
+                                            // Hiển thị hộp thoại confirm
                                             Swal.fire({
-                                                title: "Are you sure?",
-                                                text: "You won't be able to revert this!",
+                                                title: "Bạn có chắc chắn muốn xóa?",
+                                                text: "Bạn sẽ không thể phục hồi tài khoản này!",
                                                 icon: "warning",
                                                 showCancelButton: true,
                                                 confirmButtonColor: "#3085d6",
                                                 cancelButtonColor: "#d33",
-                                                confirmButtonText: "Yes, delete it!"
+                                                confirmButtonText: "Đồng ý xóa!",
+                                                cancelButtonText: "Hủy"
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
-                                                    // Nếu người dùng chọn "Yes, delete it!", thực hiện xóa
+                                                    // Nếu người dùng chọn "OK", thực hiện xóa
                                                     $.ajax({
                                                         type: "POST",
                                                         url: "deleteUser",
-                                                        data: { id: id },
+                                                        data: {id: id},
                                                         success: function (response) {
-                                                            // Hiển thị thông báo thành công
                                                             Swal.fire({
-                                                                title: "Deleted!",
+                                                                title: "Thành công!",
                                                                 text: response,
                                                                 icon: "success"
                                                             });
@@ -317,10 +211,10 @@
                                                             table.ajax.reload();
                                                         },
                                                         error: function (xhr, status, error) {
-                                                            // Hiển thị thông báo lỗi
+                                                            var errorMessage = xhr.responseText || "An error occurred: " + error;
                                                             Swal.fire({
-                                                                title: "Error!",
-                                                                text: "An error occurred: " + error,
+                                                                title: "Lỗi!",
+                                                                text: errorMessage,
                                                                 icon: "error"
                                                             });
                                                         }
@@ -328,15 +222,15 @@
                                                 } else {
                                                     // Nếu người dùng chọn "Cancel", không thực hiện hành động nào
                                                     Swal.fire({
-                                                        title: "Cancelled",
-                                                        text: "Your file is safe :)",
+                                                        title: "Hủy",
+                                                        text: "Tài khoản của bạn an toàn :)",
                                                         icon: "info"
                                                     });
                                                 }
-                                            });
+                                            })
                                         });
-
                                     })
+
                                 </script>
                                 <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
