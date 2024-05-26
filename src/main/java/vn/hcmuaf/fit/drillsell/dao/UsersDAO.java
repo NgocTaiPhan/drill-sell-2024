@@ -13,11 +13,11 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-public class UsersDAO {
+public class UsersDAO implements IUserDAO{
 
     private static UsersDAO instance;
 
-    private UsersDAO() {
+    public UsersDAO() {
     }
 
     public static UsersDAO getInstance() {
@@ -170,8 +170,26 @@ public class UsersDAO {
                     .orElse(null);
         }
     }
+    //   show toàn bộ người dùng trong quản lý người dùng
+    public List<User> showUser() {
+        String sql = "SELECT * FROM users  WHERE userStatus = 0 ";
+        return DbConnector.me().get().withHandle(handle -> handle
+                .createQuery(sql)
+                .mapToBean(User.class).list());
+    }
+//    Xóa người dùng theo id người dùng
+    public boolean deleteUser(int id, int status) {
+        DbConnector.me().get().useHandle(handle -> {
+            handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id")
+                    .bind("userStatus", status)
+                    .bind("id", id)
+                    .execute();
+            System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
+        });
 
 
+        return true;
+    }
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().getUserById(2));
     }
