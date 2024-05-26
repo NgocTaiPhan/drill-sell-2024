@@ -6,9 +6,10 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Review" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
+<%@ page import="java.sql.Timestamp" %>
 <%
     Products product = (Products) request.getAttribute("prods");
-
+    List<Review> reviewList = (List<Review>) request.getAttribute("reviews");
 %>
 
 <!doctype html>
@@ -305,9 +306,6 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
             <div class='col-md-9'>
-                <%
-                    assert product != null;
-                    assert u != null;%>
                 <div class="detail-block">
                     <div class="row  wow fadeInUp">
 
@@ -336,12 +334,25 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                                 <div class="rating-reviews m-t-20">
                                     <div class="row">
-                                        <div class="col-sm-3">
-                                            <div class="rating rateit-small"></div>
+                                        <div class="col-sm-4">
+                                            <%
+                                                double totalStars = 0;
+                                                for (Review review : reviewList) {
+                                                    totalStars += review.getRating();
+                                                }
+
+                                                double averageStar = reviewList.isEmpty() ? 0.0 : Math.floor(totalStars / reviewList.size());
+                                                for (int i = 0; i < averageStar; i++) {
+                                            %>
+                                            <i class="fa fa-star "
+                                               style="color:  #fdd922!important;"></i>
+                                            <% } %>
                                         </div>
                                         <div class="col-sm-8">
                                             <div class="reviews">
-                                                <a href="#" class="lnk">(13 Đánh giá)</a>
+                                                <div class="lnk"><%=reviewList.size()%>
+                                                    Đánh giá
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -436,6 +447,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                                 <div id="reviews" class="tab-pane">
                                     <div class="blog-sub-comments">
+                                        <%
+                                            if (logged) {
+
+                                        %>
                                         <form class="container" action="add-review"
                                               id="reviewForm" role="form">
 
@@ -464,38 +479,40 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <input type="submit" class="btn btn-primary " value="Đánh giá"
                                             >
                                         </form>
+                                        <%} else {%>
 
+                                        <div class="text-center"> Hãy đăng nhập để đánh giá sản phẩm</div>
+                                        <%}%>
                                         <div>
                                             <div class="container">
                                                 <div class="row">
                                                     <div class="col-md-8">
-                                                        <div class="page-header">
-                                                            <h1><small class="pull-right">45 comments</small> Comments
-                                                            </h1>
-                                                        </div>
                                                         <div class="comments-list">
                                                             <%
-                                                                List<Review> reviewList = (List<Review>) request.getAttribute("reviews");
-                                                                if (reviewList != null && !reviewList.isEmpty()) {
+
+                                                                if (!reviewList.isEmpty()) {
                                                                     for (Review r : reviewList) {
                                                             %>
-                                                            <div class="media">
-                                                                <p class="pull-right"><small>5 days ago</small></p>
-                                                                <div class="media-left" href="#">
-                                                                    <!-- Placeholder for potential user avatar or other content -->
-                                                                </div>
-                                                                <div class="media-body">
-                                                                    <h4 class="media-heading user_name"><%= UsersDAO.getInstance().getUserById(r.getUserId()).getFullname() %>
-                                                                    </h4>
-                                                                    <%= r.getMess() %>
-                                                                    <p>
+                                                            <div class="media ">
+
+                                                                <div class="media-body m-t-20 border-top-reviews">
+                                                                    <h6 class="media-heading user_name m-t-20"><%= UsersDAO.getInstance().getUserById(r.getUserId()).getFullname() %>
+                                                                    </h6>
                                                                     <div class="rating">
                                                                         <%
                                                                             for (int i = 0; i < r.getRating(); i++) {
                                                                         %>
-                                                                        <i class="fa fa-star"></i>
+                                                                        <i class="fa fa-star "
+                                                                           style="color:  #fdd922!important;"></i>
                                                                         <% } %>
+
                                                                     </div>
+                                                                    <div class="text"></div>
+                                                                    <%= r.getMess() %>
+                                                                    <p>
+
+                                                                    <h6 class="dateComment"><%=r.caculateTime()%>
+                                                                    </h6>
                                                                 </div>
                                                             </div>
                                                             <%
@@ -563,6 +580,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class="animated alo-circle-fill"></div>
     </a>
 </div>
+<input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <!-- ============================================================= Backtop ============================================================= -->
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>

@@ -2,6 +2,8 @@ package vn.hcmuaf.fit.drillsell.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 
 public class Review {
     private int reviewId;
@@ -84,5 +86,22 @@ public class Review {
                 ", dateReview=" + dateReview +
                 ", mess='" + mess + '\'' +
                 '}';
+    }
+
+    public String caculateTime() {
+        Instant now = Instant.now();
+        Instant commentInstant = this.getDateReview().toInstant();
+
+        Duration duration = Duration.between(commentInstant, now);
+        long minutes = duration.toMinutes();
+
+        if (minutes < 60) {
+            return minutes + " phút trước";
+        } else if (minutes < 1440) {
+            return minutes / 60 + " giờ trước";
+        } else {
+            return minutes / 1440 + " ngày trước";
+        }
+
     }
 }
