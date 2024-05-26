@@ -42,7 +42,7 @@ public class AddToCart extends HttpServlet {
 
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
-            request.getRequestDispatcher("/detail").forward(request, response);
+            request.getRequestDispatcher("/load-detail").forward(request, response);
         } else {
             // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng, gửi thông báo lỗi cho người dùng
             response.getWriter().write("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng!");

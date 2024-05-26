@@ -91,7 +91,12 @@
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
-
+                <li class="">
+                    <a href="store-manager.jsp">
+                        <i class="ti-user"></i>
+                        <p>Quản lý kho</p>
+                    </a>
+                </li>
 
             </ul>
         </div>
@@ -104,68 +109,48 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-
                             <div class="content table-responsive table-full-width">
-                                <div class="btn btn-info" id="openModalBtn"> Thêm sản phẩm</div>
+                                <div class="btn btn-info" id="openModalBtn">Thêm sản phẩm</div>
                                 <table id="prod-mn" class="table table-striped">
                                     <thead>
-                                    <th>Mã sản phẩm</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Giá</th>
-                                    <th>Số lượng đã bán</th>
-                                    <th>Số lượng còn lại</th>
-                                    <th>Hành động</th>
-                                    </thead>
-                                    <tbody>
-                                    <%for (Products p : ProductDAO.getInstance().showProd()) {%>
                                     <tr>
-                                        <td><%=p.getProductId()%>
-                                        </td>
-                                        <td><%=p.getProductName()%>
-                                        </td>
-                                        <td><%=ProductDAO.getInstance().getFormattedUnitPrice(p)%>
-                                        </td>
-                                        <td>10</td>
-
-                                        <td>
-                                            <%--                                               <%=p.getStatuss()%>--%>
-                                        <td>
-                                            <button type="button" class="btn btn-info view-details" data-toggle="modal"
-                                                    data-product-id="<%=p.getProductId()%>">Xem chi tiết
-                                            </button>
-                                            <script !src="">
-                                                document.addEventListener('DOMContentLoaded', function() {
-                                                    const viewDetailButtons = document.querySelectorAll('.view-details');
-                                                    viewDetailButtons.forEach(button => {
-                                                        button.addEventListener('click', function() {
-                                                            const productId = this.getAttribute('data-product-id');
-                                                            console.log('Product ID:', productId);
-                                                        });
-                                                    });
-                                                });
-
-                                            </script>
-                                            <button type="button" class="btn btn-warning"
-                                            >Sửa
-                                            </button>
-                                            <a type="button" class="btn btn-danger"
-                                               href="<%=request.getContextPath()%>/remove-prod?productId=<%=p.getProductId()%>"
-                                            >Xóa
-                                            </a>
-                                            <a type="button" class="btn btn-default"
-                                               href="<%=request.getContextPath()%>/hide-prod?productId=<%=p.getProductId()%>"
-                                            >Ẩn
-                                            </a>
-                                        </td>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng đã bán</th>
+                                        <th>Số lượng còn lại</th>
+                                        <th>Hành động</th>
                                     </tr>
-
-                                    <%}%>
-
-                                    </tbody>
+                                    </thead>
                                 </table>
-
+                                <script>
+                                    $(document).ready(function () {
+                                        var table = $('#prod-mn').DataTable({
+                                            "ajax": {
+                                                "url": "load-all-prods",
+                                                "dataSrc": "",
+                                            },
+                                            "columns": [
+                                                {"data": "productId"},
+                                                {"data": "productName"},
+                                                {"data": "unitPrice"},
+                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity sold
+                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity remaining
+                                                {
+                                                    "data": null,
+                                                    "render": function (data, type, row) {
+                                                        return ' <button type="button" class="btn btn-info">Xem chi tiết</button>' +
+                                                            ' <button type="button" class="btn btn-warning">Sửa</button>' +
+                                                            ' <button type="button" class="btn btn-danger">Xóa</button>';
+                                                    }
+                                                }
+                                            ]
+                                        });
+                                    });
+                                </script>
                             </div>
                         </div>
+
                     </div>
 
 
