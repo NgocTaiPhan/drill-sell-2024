@@ -10,8 +10,8 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "LoadAllProds", value = "/load-all-prods")
-public class LoadAllProds extends HttpServlet {
+@WebServlet(name = "ShowAllProds", value = "/show-all-prods")
+public class ShowAllProds extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Products> products = ProductDAO.getInstance().getAllProds();
@@ -20,7 +20,8 @@ public class LoadAllProds extends HttpServlet {
         String json = gson.toJson(products);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+        response.getWriter().print(json);
+        response.getWriter().flush();
     }
 
     @Override

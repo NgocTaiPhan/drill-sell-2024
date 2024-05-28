@@ -7,7 +7,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.nio.file.Files;
 
 @WebServlet(name = "RemoveProds", value = "/remove-prod")
 public class RemoveProds extends HttpServlet {
@@ -20,7 +19,7 @@ public class RemoveProds extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         int id = Integer.parseInt(request.getParameter("productId"));
-        ProductDAO.getInstance().changProductStatus(id, 1);
+        ProductDAO.getInstance().changeProductStatus(id, 1);
         Notify.getInstance().sendNotify(session, "remove-success");
         response.sendRedirect("admin/products-management.jsp");
 

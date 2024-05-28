@@ -11,6 +11,18 @@
 
     <title>Quản lý sản phẩm</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet"/>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.jqueryui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.js"></script>
+
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
 
@@ -32,20 +44,6 @@
     <%--    Datatable--%>
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
-
-
-    <script src="../assets/js/jquery-1.11.1.min.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/bootstrap-hover-dropdown.min.js"></script>
-    <script src="../assets/js/owl.carousel.min.js"></script>
-    <script src="../assets/js/echo.min.js"></script>
-    <script src="../assets/js/jquery.easing-1.3.min.js"></script>
-    <script src="../assets/js/bootstrap-slider.min.js"></script>
-    <script src="../assets/js/jquery.rateit.min.js"></script>
-    <script src="../assets/js/lightbox.min.js" type="text/javascript"></script>
-    <script src="../assets/js/bootstrap-select.min.js"></script>
-    <script src="../assets/js/wow.min.js"></script>
-
 </head>
 <body>
 
@@ -110,7 +108,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="content table-responsive table-full-width">
-                                <div class="btn btn-info" id="openModalBtn">Thêm sản phẩm</div>
+                                <button class="btn btn-info addProds" id="addProds">Thêm sản phẩm</button>
                                 <table id="prod-mn" class="table table-striped">
                                     <thead>
                                     <tr>
@@ -126,6 +124,10 @@
                                 <script>
                                     $(document).ready(function () {
                                         var table = $('#prod-mn').DataTable({
+                                            layout: {
+                                                topStart: null,
+                                                bottomStart: null
+                                            },
                                             "ajax": {
                                                 "url": "load-all-prods",
                                                 "dataSrc": "",
@@ -134,19 +136,69 @@
                                                 {"data": "productId"},
                                                 {"data": "productName"},
                                                 {"data": "unitPrice"},
-                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity sold
-                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity remaining
+                                                {"data": null},
+                                                {"data": null},
                                                 {
                                                     "data": null,
                                                     "render": function (data, type, row) {
                                                         return ' <button type="button" class="btn btn-info">Xem chi tiết</button>' +
-                                                            ' <button type="button" class="btn btn-warning">Sửa</button>' +
+                                                            ' <button type="button" class="btn btn-warning">Ẩn</button>' +
                                                             ' <button type="button" class="btn btn-danger">Xóa</button>';
                                                     }
                                                 }
                                             ]
                                         });
+                                        // $('#user-mn tbody').on('click', '.btn-danger', function () {
+                                        //     var data = table.row($(this).parents('tr')).data();
+                                        //     var id = data.id;
+                                        //     // Hiển thị hộp thoại confirm
+                                        //     Swal.fire({
+                                        //         title: "Bạn có chắc chắn muốn xóa?",
+                                        //         text: "Bạn sẽ không thể phục hồi tài khoản này!",
+                                        //         icon: "warning",
+                                        //         showCancelButton: true,
+                                        //         confirmButtonColor: "#3085d6",
+                                        //         cancelButtonColor: "#d33",
+                                        //         confirmButtonText: "Đồng ý xóa!",
+                                        //         cancelButtonText: "Hủy"
+                                        //     }).then((result) => {
+                                        //         if (result.isConfirmed) {
+                                        //             // Nếu người dùng chọn "OK", thực hiện xóa
+                                        //             $.ajax({
+                                        //                 type: "POST",
+                                        //                 url: "remove-prod",
+                                        //                 data: {id: id},
+                                        //                 success: function (response) {
+                                        //                     Swal.fire({
+                                        //                         title: "Thành công!",
+                                        //                         text: response,
+                                        //                         icon: "success"
+                                        //                     });
+                                        //                     // Tải lại bảng dữ liệu
+                                        //                     table.ajax.reload();
+                                        //                 },
+                                        //                 error: function (xhr, status, error) {
+                                        //                     var errorMessage = xhr.responseText || "An error occurred: " + error;
+                                        //                     Swal.fire({
+                                        //                         title: "Lỗi!",
+                                        //                         text: errorMessage,
+                                        //                         icon: "error"
+                                        //                     });
+                                        //                 }
+                                        //             });
+                                        //         } else {
+                                        //             // Nếu người dùng chọn "Cancel", không thực hiện hành động nào
+                                        //             Swal.fire({
+                                        //                 title: "Hủy",
+                                        //                 text: "Tài khoản của bạn an toàn :)",
+                                        //                 icon: "info"
+                                        //             });
+                                        //         }
+                                        //     })
+                                        // })
                                     });
+
+                                    ;
                                 </script>
                             </div>
                         </div>
@@ -288,8 +340,6 @@
         <input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
     </div>
 </div>
-
-
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
