@@ -29,7 +29,7 @@
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/my-css/admin/paper-dashboard.css" rel="stylesheet"/>
 
-
+    <link href="../assets/css/my-css/admin/animate.min.css" rel="stylesheet"/>
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
@@ -180,7 +180,6 @@
 
 
 
-
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -229,15 +228,74 @@
                                                 }
                                             })
                                         });
+                                        $('#user-mn tbody').on('click','.btn-info',function (){
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+                                            var fullname = data.fullname;
+                                            var username = data.username; // Lấy tên người dùng từ dữ liệu hàng được chọn
+                                            var email = data.email; // Lấy mật khẩu từ dữ liệu hàng được chọn
+                                            var address = data.address;
+                                            var phone = data.phone;
+                                            var sex = data.sex;
+                                            var yearOfBirth = data.yearOfBirth;
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "showDetailUser",
+                                                data : {id: id,
+                                                    fullname: fullname,
+                                                    username: username, // Truyền tên người dùng
+                                                    email: email,
+                                                    address: address,
+                                                    phone: phone,
+                                                    sex: sex,
+                                                    yearOfBirth : yearOfBirth
+                                                },
+                                                success: function (response){
+                                                    // window.location.href = "detailUser.jsp";
+
+                                                    // localStorage.setItem('userDetails', JSON.stringify(response));
+                                                    // // Chuyển hướng đến trang detail.jsp
+                                                    // // window.location.href = "detailUser.jsp";
+                                                    // var popup = window.open("detailUser.jsp", "userDetailPopup", "width=600,height=400");
+                                                    // if (popup && !popup.closed) {
+                                                    //     // Thực hiện các thao tác khác ở đây nếu cần thiết, ví dụ: load dữ liệu vào popup
+                                                    // } else {
+                                                    //     // Xử lý khi popup không thể mở được
+                                                    //     console.error("Popup could not be opened.");
+                                                    // }
+                                                    // table.ajax.reload();
+                                                    var popupContent = '<div id="userPopup">' +
+                                                        '<button id="closePopup" class="closeButton">&#x2716;</button>' +
+                                                        '<h1>Thông Tin Khách Hàng</h1>' +
+                                                        '<p><strong>ID:</strong> ' + response.id + '</p>' +
+                                                        '<p><strong>Tên Khách Hàng:</strong> ' + response.fullname + '</p>' +
+                                                        '<p><strong>Tên Đăng Nhập:</strong> ' + response.username + '</p>' +
+                                                        '<p><strong>Email:</strong> ' + response.email + '</p>' +
+                                                        '<p><strong>Địa Chỉ:</strong> ' + response.address + '</p>' +
+                                                        '<p><strong>Số Điện Thoại :</strong> ' + response.phone + '</p>' +
+                                                        '<p><strong>Giới Tính:</strong> ' + response.sex + '</p>' +
+                                                        '<p><strong>Ngày Sinh:</strong> ' + response.yearOfBirth + '</p>' +
+                                                        '</div>';
+                                                    $('body').append('<div class="overlay"></div>');
+                                                    // Thêm popup vào trang
+                                                    $('body').append(popupContent);
+
+                                                    // Đóng popup khi nhấn nút "Close"
+                                                    $('#closePopup').click(function() {
+                                                        $('#userPopup').remove();
+                                                        $('.overlay').remove();
+                                                    });
+                                                },
+                                                error: function (xhr,status,error){
+                                                    alert("Error: "+error);
+                                                }
+                                            })
+                                        })
                                     })
 
                                 </script>
-                                <script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
-"></script>
-                                <link href="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
-" rel="stylesheet">
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+                                <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet">
                             </div>
                         </div>
                     </div>

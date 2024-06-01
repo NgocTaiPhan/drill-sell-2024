@@ -178,28 +178,7 @@ public class UsersDAO implements IUserDAO{
     }
 //    Xóa người dùng theo id người dùng
     public boolean deleteUser(int id, int status) {
-        //        kiểm tra xem đã xóa được hay chưa( để thuận tiện thông báo nếu xóa tài khoản admin)
-//        final boolean[] deleted = {false};
-//        DbConnector.me().get().useHandle(handle -> {
-//            int rowCount=    handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser !=1")
-//                    .bind("userStatus", status)
-//                    .bind("id", id)
-//                    .execute();
-//            deleted[0] = rowCount > 0;
-//            System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
-//        });
-//        return true;
-//        final boolean[] deleted = {false};
-//        DbConnector.me().get().useHandle(handle -> {
-//            int rowCount = handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser != 1")
-//                    .bind("userStatus", status)
-//                    .bind("id", id)
-//                    .execute();
-//            deleted[0] = rowCount > 0;
-//            System.out.println("Người dùng " + id + " thay đổi trạng thái thành : " + status);
-//        });
-//        return deleted[0];
-
+      
         final boolean[]  deleted = {false};
 
         DbConnector.me().get().useHandle(handle -> {
@@ -212,7 +191,26 @@ public class UsersDAO implements IUserDAO{
         });
         return deleted[0];
     }
+    public User getUserById(User user) {
+        int id = user.getId();
+        DbConnector.me().get().useHandle(handle -> {
+            handle.execute("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users WHERE id = ?", id);
 
+        });
+
+
+        return user;
+
+    }
+    public User getDetailUserById() {
+        String sqll ="SELECT users.id,users.username,users.email FROM users ";
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery(sqll)
+                        .mapToBean(User.class)
+                        .findFirst()
+                        .orElse(null));
+
+    }
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().getUserById(2));
     }
