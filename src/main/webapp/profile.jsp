@@ -220,7 +220,7 @@
                                             <div class="form-group">
                                                 <label>Giới tính</label>
                                                 <input type="text" class="form-control border-input" disabled
-                                                       placeholder="First Name" value="<%=u.getSex()%>">
+                                                       placeholder="First Name" value="<% String gender = u.getSex()? "Nam":"Nữ?";%>">
                                             </div>
                                         </div>
                                         <div class="col-md-6">

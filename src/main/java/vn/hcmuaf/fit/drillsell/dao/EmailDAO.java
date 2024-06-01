@@ -12,7 +12,9 @@ import static javax.mail.Transport.send;
 
 public class EmailDAO {
 
-    public final String LINK = "http://localhost:8080/input-code.jsp";
+    public final String LINK = "http://localhost:8080/drillsell_war/input-code.jsp";
+    public final String LINKREGIS = "http://localhost:8080/drillsell_war/confirm-registration";
+
     private Properties prop = new Properties();
     private static EmailDAO instance;
 
@@ -32,12 +34,24 @@ public class EmailDAO {
     }
 
     public boolean sendMailWelcome(String to, String subject, String confirmationCode) {
-        Session session = Session.getInstance(prop, new Authenticator() {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.trust", "*");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        String username = "phuonghuynh131415@gmail.com";
+        String password = "pkgy kplq sjcn gwhu";
+
+        Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(MailProperties.getUsername(), MailProperties.getPassword());
+                return new PasswordAuthentication(username, password);
             }
-        });
+        };
+
+        Session session = Session.getInstance(props, auth);
 
         try {
             Message message = new MimeMessage(session);
@@ -45,20 +59,13 @@ public class EmailDAO {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
 
-            // Tạo liên kết xác nhận
-            String confirmationMessage = "Đây là mã của bạn để " + subject.toLowerCase() + " :" + confirmationCode;
-            String emailContent = "Hãy nhấn vào liên kết sau để " + subject.toLowerCase() + ": <a href=\"" + LINK + "\">Xác nhận đăng ký</a>";
+//            String confirmationMessage = "Đây là mã của bạn để " + subject.toLowerCase() + " :" + confirmationCode;
+            String emailContent = "Hãy nhấn vào liên kết sau để " + subject.toLowerCase() + ": <a href=\"" + LINKREGIS + "\">Xác nhận đăng ký</a>";
 
-            String fullEmailContent = confirmationMessage + "<br/><br/>" + emailContent;
+            String fullEmailContent =  "<br/><br/>" + emailContent;
 
             message.setContent(fullEmailContent, "text/html; charset=utf-8");
 
-
-            message.setHeader("X-Mailer", "JavaMail API");
-            message.setHeader("Content-Type", "text/html; charset=utf-8");
-
-            message.getSentDate();
-            // Gửi email
             send(message);
             System.out.println("Done");
         } catch (MessagingException e) {

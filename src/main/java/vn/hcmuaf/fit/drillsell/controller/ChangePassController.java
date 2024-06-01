@@ -23,7 +23,7 @@ public class ChangePassController extends HttpServlet {
         if (pass.equals(cfPass)) {
             HttpSession session = request.getSession();
             User u = (User) session.getAttribute("user-forgot-pass");
-          UsersDAO.getInstance().changePassword(u.getUsername(),UsersDAO.getInstance().hashPassword(pass));
+          UsersDAO.getInstance().changePassword(u.getUsername(),pass);
             response.sendRedirect("login.jsp");
         }
     }
