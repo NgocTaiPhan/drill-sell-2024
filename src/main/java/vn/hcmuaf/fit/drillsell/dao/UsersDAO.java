@@ -66,29 +66,28 @@ public class UsersDAO implements IUserDAO{
         }
     }
 
-    public boolean addUser(User newUser) {
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate(insertQuery)
-                    .bind(0, newUser.getFullname())
-                    .bind(1, newUser.getAddress())
-                    .bind(2, newUser.getPhone())
-                    .bind(3, newUser.getEmail())
-                    .bind(4, newUser.getUsername())
+     public boolean addUser(User newUser) {
+         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+         Jdbi jdbi = DbConnector.me().get();
+         try (Handle handle = jdbi.open()) {
+             handle.createUpdate(insertQuery)
+                     .bind(0, newUser.getFullname())
+                     .bind(1, newUser.getAddress())
+                     .bind(2, newUser.getPhone())
+                     .bind(3, newUser.getEmail())
+                     .bind(4, newUser.getUsername())
                     .bind(5, hashPassword(newUser.getPasswords()))
-                    .bind(6, newUser.getSex())
-                    .bind(7, newUser.getYearOfBirth())
-                    .bind(8, newUser.getVerificationCode())
-                    .bind(9, newUser.isVerified() ? 1 : 0)  // Chuyển đổi  boolean sang TINYINT
-                    .bind(10, newUser.isRoleUser() ? 1 : 0)  // Chuyển đổi  boolean sang TINYINT
-                    .execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+                     .bind(6, newUser.getSex())
+                     .bind(7, newUser.getYearOfBirth())
+                     .bind(8, newUser.getVerificationCode())
+                     .execute();
+         } catch (Exception e) {
+             e.printStackTrace();
+             return false;
+         }
+         return true;
+     }
+
 
     public boolean changePassword(String username, String newPassword) {
         String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";

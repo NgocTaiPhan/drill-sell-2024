@@ -26,7 +26,7 @@ public class ValidationForm {
     }
 
 
-    public void validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response, String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, String gender) throws ServletException, IOException {
+    public void validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response, String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, boolean gender) throws ServletException, IOException {
 
         if (fullName == null || fullName.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-fullname");
@@ -106,13 +106,20 @@ public class ValidationForm {
             Notify.getInstance().sendNotify(session, request, response, "null-agree");
             return;
         }
-        String cfCode = UUID.randomUUID().toString().substring(0, 6);
+//        String cfCode = UUID.randomUUID().toString().substring(0, 6);
+//        Notify.getInstance().sendNotify(session, request, response, "register-success");
+//        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, cfCode);
+//        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", cfCode);
+//        request.getRequestDispatcher("login.jsp").forward(request, response);
+//        UsersDAO.getInstance().addUser(user);
+        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode);
+        session.setAttribute("user-register", user);
+
+        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
         Notify.getInstance().sendNotify(session, request, response, "register-success");
-        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, cfCode);
-//
-        UsersDAO.getInstance().addUser(user);
-        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", cfCode);
-        request.getRequestDispatcher("input-code.jsp").forward(request, response);
+
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
 

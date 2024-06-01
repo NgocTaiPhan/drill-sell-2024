@@ -198,7 +198,7 @@
                                                 if (result.isConfirmed) {
                                                     // Nếu người dùng chọn "OK", thực hiện xóa
                                                     $.ajax({
-                                                        type: "POST",
+                                                        type: "POST",    
                                                         url: "deleteUser",
                                                         data: {id: id},
                                                         success: function (response) {

@@ -41,20 +41,18 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password-register");
         String confirmPassword = request.getParameter("confirm-password-register");
         String agreeToTerms = request.getParameter("agree-to-terms");
-        String gender = request.getParameter("gender");
-
+//        String gender = request.getParameter("gender");
+        String genderStr = request.getParameter("gender");
+        boolean gender = Boolean.parseBoolean(genderStr);
 //Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
-        User userRegister = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate);
+            User userRegister = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate);
         session.setAttribute("user-register", userRegister);
         //Kiểm tra thông tin đăng kí có hợp lệ không
 
-        ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
+          ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
             //        Xóa user khỏi session sau khi check valid để tối ưu bộ nhớ
-            session.removeAttribute("user-register");
+              session.removeAttribute("user-register");
 //            registerSuccess(fullName, address, phoneNumber, email, username, password, gender, birthDate, UUID.randomUUID().toString().substring(0, 6));
-
-
-
 
 
     }
@@ -68,4 +66,6 @@ public class RegisterController extends HttpServlet {
 
 
 }
+
+
 
