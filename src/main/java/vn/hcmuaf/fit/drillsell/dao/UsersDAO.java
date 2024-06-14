@@ -66,28 +66,49 @@ public class UsersDAO implements IUserDAO{
         }
     }
 
-     public boolean addUser(User newUser) {
-         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-         Jdbi jdbi = DbConnector.me().get();
-         try (Handle handle = jdbi.open()) {
-             handle.createUpdate(insertQuery)
-                     .bind(0, newUser.getFullname())
-                     .bind(1, newUser.getAddress())
-                     .bind(2, newUser.getPhone())
-                     .bind(3, newUser.getEmail())
-                     .bind(4, newUser.getUsername())
-                    .bind(5, hashPassword(newUser.getPasswords()))
-                     .bind(6, newUser.getSex())
-                     .bind(7, newUser.getYearOfBirth())
-                     .bind(8, newUser.getVerificationCode())
-                     .execute();
-         } catch (Exception e) {
-             e.printStackTrace();
-             return false;
-         }
-         return true;
-     }
+//     public boolean addUser(User newUser) {
+//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+//         Jdbi jdbi = DbConnector.me().get();
+//         try (Handle handle = jdbi.open()) {
+//             handle.createUpdate(insertQuery)
+//                     .bind(0, newUser.getFullname())
+//                     .bind(1, newUser.getAddress())
+//                     .bind(2, newUser.getPhone())
+//                     .bind(3, newUser.getEmail())
+//                     .bind(4, newUser.getUsername())
+//                    .bind(5, hashPassword(newUser.getPasswords()))
+//                     .bind(6, newUser.getSex())
+//                     .bind(7, newUser.getYearOfBirth())
+//                     .bind(8, newUser.getVerificationCode())
+//                     .execute();
+//         } catch (Exception e) {
+//             e.printStackTrace();
+//             return false;
+//         }
+//         return true;
+//     }
 
+    public boolean addUser(User newUser,String confirmationCode) {
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate(insertQuery)
+                    .bind(0, newUser.getFullname())
+                    .bind(1, newUser.getAddress())
+                    .bind(2, newUser.getPhone())
+                    .bind(3, newUser.getEmail())
+                    .bind(4, newUser.getUsername())
+                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(6, newUser.getSex())
+                    .bind(7, newUser.getYearOfBirth())
+                    .bind(8, confirmationCode)
+                    .execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     public boolean changePassword(String username, String newPassword) {
         String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
@@ -106,12 +127,12 @@ public class UsersDAO implements IUserDAO{
         return true;
     }
 
-    public boolean changeInfoUser(User user) {
-        deleteUserById(user.getId());
-        addUser(user);
-        return true;
-
-    }
+//    public boolean changeInfoUser(User user) {
+//        deleteUserById(user.getId());
+//        addUser(user);
+//        return true;
+//
+//    }
 
     public void deleteUserById(int userId) {
         String deleteQuery = "DELETE FROM users WHERE id = ?";
@@ -171,7 +192,7 @@ public class UsersDAO implements IUserDAO{
     }
     //   show toàn bộ người dùng trong quản lý người dùng
     public List<User> showUser() {
-        String sql = "SELECT * FROM users  WHERE userStatus = 0 ";
+        String sql = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users  WHERE userStatus = 0 ";
         return DbConnector.me().get().withHandle(handle -> handle
                 .createQuery(sql)
                 .mapToBean(User.class).list());
@@ -194,7 +215,7 @@ public class UsersDAO implements IUserDAO{
     public User getUserById(User user) {
         int id = user.getId();
         DbConnector.me().get().useHandle(handle -> {
-            handle.execute("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode, isVerified, roleUser FROM users WHERE id = ?", id);
+            handle.execute("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth FROM users WHERE id = ?", id);
 
         });
 
@@ -211,6 +232,41 @@ public class UsersDAO implements IUserDAO{
                         .orElse(null));
 
     }
+//    public void updateUser(User user) {
+//        int id = user.getId();
+//        DbConnector.me().get().useHandle(handle -> {
+//            handle.execute(
+//                    "UPDATE users SET fullname = ?, username = ?, email = ?, address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?",
+//                    user.getFullname(),
+//                    user.getUsername(),
+//                    user.getEmail(),
+//                    user.getAddress(),
+//                    user.getPhone(),
+//                    user.getSex(),
+//                    user.getYearOfBirth(),
+//                    user.isRoleUser(),
+//                    id
+//            );
+//        });
+//    }
+public void updateUser(User user) {
+    int id = user.getId();
+    DbConnector.me().get().useHandle(handle -> {
+            handle.execute(
+                    "UPDATE users SET fullname = ?, username = ?, email = ?, address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?",
+                    user.getFullname(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getAddress(),
+                    user.getPhone(),
+                    user.getSex(),
+                    user.getYearOfBirth(),
+                    user.isRoleUser() ? 1 : 0, // Chuyển đổi Boolean thành Integer
+                    id
+            );
+        
+    });
+}
     public static void main(String[] args) {
         System.out.println(UsersDAO.getInstance().getUserById(2));
     }
