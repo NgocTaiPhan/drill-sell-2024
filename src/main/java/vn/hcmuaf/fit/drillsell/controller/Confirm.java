@@ -1,3 +1,4 @@
+
 package vn.hcmuaf.fit.drillsell.controller;
 
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
@@ -11,28 +12,32 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "ConfirmRegistrationServlet", value = "/confirm-registration")
+@WebServlet(name = "Confirm", value = "/confirm")
 public class Confirm extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String confirmationCode = request.getParameter("code");
-        String username = request.getParameter("username");
-
-        // Lấy user từ session
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String code = request.getParameter("code");
         HttpSession session = request.getSession();
+        String confirmationCode = (String) session.getAttribute("confirmationCode");
         User userRegister = (User) session.getAttribute("user-register");
 
-        if (userRegister != null) {
+        // Kiểm tra mã xác nhận
+        if (confirmationCode != null && confirmationCode.equals(code) && userRegister != null) {
             // Thêm user vào cơ sở dữ liệu
-            UsersDAO.getInstance().addUser(userRegister);
+            UsersDAO.getInstance().addUser(userRegister,confirmationCode);
+
             // Xóa user khỏi session sau khi thêm vào cơ sở dữ liệu
             session.removeAttribute("user-register");
-            response.sendRedirect("http://localhost:8080/drillsell_war/login.jsp");
+            session.removeAttribute("confirmationCode");
 
+            // Chuyển hướng đến trang đăng nhập
+            response.sendRedirect("login.jsp");
         } else {
-            response.getWriter().write("Thông tin không hợp lệ hoặc đã hết hạn.");
+            // Mã xác nhận không hợp lệ hoặc hết hạn
+            response.getWriter().write("Mã xác nhận không hợp lệ hoặc đã hết hạn.");
         }
     }
 }

@@ -26,11 +26,10 @@ public class ValidationForm {
     }
 
 
-    public void validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response, String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, boolean gender) throws ServletException, IOException {
-
+    public boolean validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response, String fullName, String birthDate, String address, String phoneNumber, String email, String username, String password, String confirmPassword, String agreeToTerms, boolean gender) throws ServletException, IOException {
         if (fullName == null || fullName.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-fullname");
-            return;
+            return false;
         }
 //        else if (!fullName.matches(".\\d.")) {
 //            Notify.getInstance().registerNotify(session, request, response, "invalid-fullname");
@@ -38,73 +37,73 @@ public class ValidationForm {
 //        }
         if (birthDate == null || birthDate.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-birthday");
-            return;
+            return false;
         } else {
             LocalDate inputDate = LocalDate.parse(birthDate);
             LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
 
             if (inputDate.isAfter(eighteenYearsAgo)) {
                 Notify.getInstance().sendNotify(session, request, response, "not-enough-18");
-                return;
+                return false;
             }
 
         }
         if (address == null || address.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-address");
-            return;
+            return false;
         }
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-phone");
-            return;
+            return false;
         } else {
             if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
                 Notify.getInstance().sendNotify(session, request, response, "invalid-phone");
-                return;
+                return false;
             }
         }
         if (email == null || email.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-email");
-            return;
+            return false;
         } else {
             if (!email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$")) {
                 Notify.getInstance().sendNotify(session, request, response, "invalid-email");
-                return;
+                return false;
             }
         }
         if (username == null || username.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-username");
-            return;
+            return false;
         } else {
             if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
                 Notify.getInstance().sendNotify(session, request, response, "duplicate-acc");
-                return;
+                return false;
             }
         }
         //Kiểm tra mật khẩu
         if (password == null || password.trim().isEmpty()) {
 
             Notify.getInstance().sendNotify(session, request, response, "null-pass");
-            return;
+            return false;
         } else {
             if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
                 Notify.getInstance().sendNotify(session, request, response, "invalid-pass");
-                return;
+                return false;
 
             }
         }
 //        Kiểm tra mật khẩu nhập lại
         if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
             Notify.getInstance().sendNotify(session, request, response, "null-cfpass");
-            return;
+            return false;
         } else {
             if (!password.equals(confirmPassword)) {
                 Notify.getInstance().sendNotify(session, request, response, "pass-not-match");
-                return;
+                return false;
             }
         }
         if (agreeToTerms == null || !agreeToTerms.equals("on")) {
             Notify.getInstance().sendNotify(session, request, response, "null-agree");
-            return;
+            return false;
         }
 //        String cfCode = UUID.randomUUID().toString().substring(0, 6);
 //        Notify.getInstance().sendNotify(session, request, response, "register-success");
@@ -112,14 +111,10 @@ public class ValidationForm {
 //        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", cfCode);
 //        request.getRequestDispatcher("login.jsp").forward(request, response);
 //        UsersDAO.getInstance().addUser(user);
-        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
-        User user = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, confirmationCode);
-        session.setAttribute("user-register", user);
+//        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+//
 
-        EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
-        Notify.getInstance().sendNotify(session, request, response, "register-success");
-
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        return true;
     }
 
 
