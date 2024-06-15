@@ -2,6 +2,9 @@
 
 <%@ page import="java.util.List" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -92,164 +95,170 @@
     <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar bar1"></span>
-                        <span class="icon-bar bar2"></span>
-                        <span class="icon-bar bar3"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Table List</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-panel"></i>
-                                <p>Stats</p>
-                            </a>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-bell"></i>
-                                <p class="notification">5</p>
-                                <p>Notifications</p>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
-                                <li><a href="#">Notification 2</a></li>
-                                <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ti-settings"></i>
-                                <p>Settings</p>
-                            </a>
-                        </li>
-                    </ul>
+                <div class="header-nav animate-dropdown">
+                    <div class="container">
+                        <div class="yamm navbar navbar-default" role="navigation">
+                            <!--                <div class="navbar-header">-->
+                            <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
+                            <!--                            class="navbar-toggle collapsed"-->
+                            <!--                            type="button">-->
+                            <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
+                            <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
+                            <!--                </div>-->
+                            <div class="nav-bg-class">
+                                <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
+                                >
+                                    <div class="nav-outer">
+                                        <ul class="nav navbar-nav">
+                                            <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
+                                            <li class="active  yamm-fw"><a
+                                                    href="<%= request.getContextPath() %>/product.jsp"
+                                            >Sản phẩm</a></li>
+                                            <li class="dropdown active  ">
+                                                <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
+                                                    phẩm</a>
+                                                <ul class="dropdown-menu ">
+                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                                    <li>
+                                                        <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
+                                                           methods="post">
+                                                            <%=pc.getNameCategory()%>
+                                                        </a>
+
+                                                    </li>
+                                                    <%}%>
+
+                                                </ul>
+                                            </li>
+                                            <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
+
+                                            <%
+
+                                                User u = (User) session.getAttribute("auth");
+                                                boolean logged = u != null;
+                                                //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
+                                                if (logged) {
+                                                    if (u.isRoleUser()) {
+                                            %>
+                                            <li class="active yamm-fw"><a href="admin/dashboard.jsp">Quản lý</a>
+                                            </li>
+                                            <%
+                                                    }
+                                                }
+                                            %>
+
+                                        </ul>
+                                        <!-- /.navbar-nav -->
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <!-- /.nav-outer -->
+                                </div>
+                                <!-- /.navbar-collapse -->
+
+                            </div>
+                            <!-- /.nav-bg-class -->
+                        </div>
+                        <!-- /.navbar-default -->
+                    </div>
+                    <!-- /.container-class -->
 
                 </div>
+
             </div>
         </nav>
+        <table id="order" style="margin-top: 30px" class="table">
+            <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Người đặt hàng</th>
+                <th>Địa chỉ</th>
+                <th>Số điện thoại</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
 
+            <%
+                List<Order> showView = OrderDAO.showOrder();
+                if (showView != null) {
+                    for (Order p : showView) {
+            %>
+            <tr>
+                <td><%=p.getOrderId()%></td>
+                <td><%= p.getNameCustomer()%></td>
+                <td><%= p.getAddress()%></td>
+                <td><%= p.getPhone()%></td>
+                <td><%= p.getStauss()%></td>
 
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Striped Table</h4>
-                                <p class="category">Here is a subtitle for this table</p>
-                            </div>
-
-                            <div class="content table-responsive table-full-width">
-                                <table id="order-history-table" class="table table-striped">
-                                    <thead>
-                                    <th>Người đặt hàng</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                    </thead>
-                                    <tbody>
-                                    <% List<Order> viewOrder = OrderDAO.showOrder();
-                                        for (Order s : viewOrder) {
-                                    %>
-                                    <tr>
-                                        <td><%= s.getNameCustom()%>
-                                        </td>
-                                        <td><%= s.getProductName()%>
-                                        </td>
-                                        <td><%= s.getQuantity()%>
-                                        </td>
-                                        <td><%= s.getAddress()%>
-                                        </td>
-                                        <td><%= s.getPhone()%>
-                                        </td>
-                                        <td><%= s.getStauss()%>
-                                        </td>
-                                        <td>
-                                            <input class="delete" type="submit" data-id="<%= s.getId()%>"
-                                                   value="Xóa">
-                                            <input type="submit" value="sửa">
-                                        </td>
-                                    </tr>
-                                    <%}%>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-                </div>
-            </div>
-        </div>
-
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-
-                        <li>
-                            <a href="http://www.creative-tim.com">
-                                Creative Tim
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://blog.creative-tim.com">
-                                Blog
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.creative-tim.com/license">
-                                Licenses
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright pull-right">
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script>
-                    , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
-                    Tim</a>
-                </div>
-            </div>
-        </footer>
-
-
+                <td>
+                    <a href="<%= request.getContextPath()%>/showUpdateOrder?orderId=<%=p.getOrderId()%>"
+                       class="btn btn-info">
+                        Chi tiết
+                    </a>
+                </td>
+            </tr>
+            <%
+                    }
+                }
+            %>
+            </tbody>
+        </table>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#order').DataTable();
+        });
+    </script>
+
+
+
+</div>
+</div>
+</div>
+<Style>
+    input {
+        border: none;
+        background: none;
+    }
+</Style>
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="pull-left">
+            <ul>
+
+                <li>
+                    <a href="http://www.creative-tim.com">
+                        Creative Tim
+                    </a>
+                </li>
+                <li>
+                    <a href="http://blog.creative-tim.com">
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.creative-tim.com/license">
+                        Licenses
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</footer>
+
+
+</div>
 </div>
 
 
 </body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script src="../assets/js/my-js/admin.js">
-    $(document).ready(function (){
-        $('.delete').click(function (e){
-            var deleteOrder = $(this);
-            var idOrder = $(this).data('id');
-            $.ajax({
-                type: "post",
-                url: "deleteList?id=" + idOrder,
-                success: function (response){
-                    deleteOrder.closest('tr').remove();
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error", error);
-                }
-            });
-        })
-    })
+
 </script>
 
 
