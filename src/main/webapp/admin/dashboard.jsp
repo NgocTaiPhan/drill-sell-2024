@@ -53,7 +53,7 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-      
+
             <li >
                 <a href="user-manager.jsp">
                     <i class="ti-user"></i>
@@ -72,14 +72,20 @@
                     <p>Quản lý đơn hàng</p>
                 </a>
             </li>
+            <li >
+                <a href="log_management.jsp">
+                    <%--                        <i class="ti-shopping-cart"></i>--%>
+                    <p>Quản lý log</p>
+                </a>
+            </li>
             <li class="">
                 <a href="store-manager.jsp">
                     <i class="ti-user"></i>
                     <p>Quản lý kho</p>
                 </a>
             </li>
-            
-        
+
+
         </ul>
     </div>
     </div>

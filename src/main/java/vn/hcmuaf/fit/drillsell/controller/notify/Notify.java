@@ -37,4 +37,8 @@ public class Notify {
         request.getRequestDispatcher(url).forward(request, response);
 
     }
+
+    // Thêm hàm sendNotify để hiển thị thông báo pop-up
+
+
 }

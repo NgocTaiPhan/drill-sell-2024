@@ -9,9 +9,11 @@ import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class UsersDAO implements IUserDAO{
 
@@ -37,7 +39,17 @@ public class UsersDAO implements IUserDAO{
                     .orElse(null);
         }
     }
+    public Optional<Instant> getLockedUntil(int id) {
+        String query = " SELECT locked_until FROM users WHERE id = :id ";
+        Jdbi jdbi =DbConnector.me().get();
+        try(Handle handle = jdbi.open()){
+            return handle.createQuery(query)
+                    .bind("id", id)
+                    .mapTo(Instant.class)
+                    .findOne();
+        }
 
+    }
 
     public User getUserByUsername(String username) {
 
@@ -65,6 +77,8 @@ public class UsersDAO implements IUserDAO{
             throw new RuntimeException(e);
         }
     }
+
+
 
 //     public boolean addUser(User newUser) {
 //         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
