@@ -186,6 +186,8 @@
                         <th>IP</th>
                         <th>Cấp độ</th>
                         <th>Trạng thái</th>
+                        <th>Trước khi cập nhật</th>
+                        <th>Sau khi cập nhật</th>
                         <th>Ngày tạo</th>
                     </tr>
                     </thead>
@@ -203,6 +205,8 @@
                         <td><%=l.getIp()%></td>
                         <td><%=l.getLevels()%></td>
                         <td><%=l.getStatuss()%></td>
+                        <td><%=l.getPreviousInfo()%></td>
+                        <td><%=l.getValuess()%></td>
                         <td><%=l.getTimeLogin()%></td>
                     </tr>
                     <%

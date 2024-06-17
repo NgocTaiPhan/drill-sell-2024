@@ -115,6 +115,7 @@
                         <h3>Chỉnh sửa đơn hàng</h3>
                         <tr>
                             <td>Mã đơn hàng:</td>
+                            <input type="hidden" name="userId" value="<%= p.getUserId() %>">
                             <td><input type="hidden" name="orderId" value="<%= p.getOrderId() %>"><%= p.getOrderId() %></td>
                         </tr>
                         <tr>

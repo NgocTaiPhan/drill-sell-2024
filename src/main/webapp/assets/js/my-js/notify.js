@@ -22,6 +22,17 @@ function errorLogin(mess) {
     });
     // <%session.removeAttribute("notify");%>
 }
+function errorLock(mess) {
+    Swal.fire({
+        icon: "error",
+        title: "Đăng nhập thất bại",
+        text: mess,
+        confirmButtonText: "Đóng",
+    });
+    // <%session.removeAttribute("notify");%>
+}
+
+
 
 switch (valueNotify) {
 

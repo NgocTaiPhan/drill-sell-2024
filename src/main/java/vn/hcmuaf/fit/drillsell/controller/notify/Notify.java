@@ -21,24 +21,24 @@ public class Notify {
     public void sendNotify(HttpSession session, String mess) throws ServletException, IOException {
         session.setAttribute("notify", mess);
         System.out.println(mess);
-
     }
 
     public void sendNotify(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess) throws ServletException, IOException {
         session.setAttribute("notify", mess);
         System.out.println(mess);
         request.getRequestDispatcher("login.jsp").forward(request, response);
-
     }
 
     public void sendNotify(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess, String url) throws ServletException, IOException {
         session.setAttribute("notify", mess);
         System.out.println(mess);
         request.getRequestDispatcher(url).forward(request, response);
-
     }
 
-    // Thêm hàm sendNotify để hiển thị thông báo pop-up
-
-
+    // Thêm hàm sendNotifyPopup để hiển thị thông báo pop-up
+    public void sendNotifyPopup(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess, String url) throws ServletException, IOException {
+        session.setAttribute("popupNotify", mess);
+        System.out.println("Popup Notify: " + mess);
+        response.sendRedirect(url);
+    }
 }

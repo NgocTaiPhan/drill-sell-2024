@@ -1,7 +1,9 @@
 package vn.hcmuaf.fit.drillsell.controller.orderManager;
 
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.OrderDAO;
+import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
 
@@ -12,10 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/showUpdateOrder")
 public class update extends HttpServlet {
@@ -27,6 +30,7 @@ public class update extends HttpServlet {
         request.setAttribute("showUpdateOrder", list);
         request.getRequestDispatcher("/detailOrderManager.jsp").forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -42,9 +46,10 @@ public class update extends HttpServlet {
         Date expectedDateStr = Date.valueOf(request.getParameter("expectedDate"));
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        int userId = Integer.parseInt(request.getParameter("userId"));
 
         // Get current status of the order
-        String currentStatuss = OrderDAO.getCurrentStatus(orderId); // Assuming you have a method to get current status from order
+        String currentStatuss = OrderDAO.getCurrentStatus(orderId);
 
         // Check if status update is valid
         if (!OrderDAO.isValidStatuss(currentStatuss, statuss)) {
@@ -53,7 +58,17 @@ public class update extends HttpServlet {
             return;
         }
 
-        order.setStauss(statuss); // Assuming setStauss was a typo and it should be setStatus
+        // Get the previous order information
+        Order previousOrder = OrderDAO.getOrderById(orderId);
+        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + previousOrder.getAddress();
+
+        // Append order items information to previousInfo
+        String itemsInfo = previousOrder.getOrderItems().stream()
+                .map(item -> "Item ID: " + item.getIdItem() + ", Quantity: " + item.getQuantity() + ", Expected Date: " + item.getExpectedDate())
+                .collect(Collectors.joining("; "));
+        previousInfo += ", Items: [" + itemsInfo + "]";
+
+        order.setStauss(statuss);
         if (!OrderDAO.updateStatuss(orderId, statuss)) {
             PrintWriter out = response.getWriter();
             out.println("<script>alert('Cập nhật trạng thái đơn hàng không thành công'); window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
@@ -62,27 +77,27 @@ public class update extends HttpServlet {
 
         // Perform updates based on different status conditions
         boolean update = false;
-        if ("Đã xác nhận".equals(statuss) || "Đang xử lý".equals(statuss) || "Người bán đang chuẩn bị hàng".equals(statuss)) {
-                order.setOrderId(orderId);
-                order.setPhone(phone);
-                order.setAddress(address);
-                OrderItem orderItem = new OrderItem();
-                orderItem.setOrderId(Integer.parseInt(orderIdItemStr)); // Assuming this is the correct setter
-                orderItem.setQuantity(Integer.parseInt(quantityStr));
-                orderItem.setExpectedDate(expectedDateStr);
-                order.setOrderItems(Arrays.asList(orderItem));
-                update = OrderDAO.updates(order);
-        }
+            order.setOrderId(orderId);
+            order.setPhone(phone);
+            order.setAddress(address);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(Integer.parseInt(orderIdItemStr));
+            orderItem.setQuantity(Integer.parseInt(quantityStr));
+            orderItem.setExpectedDate(expectedDateStr);
+            order.setOrderItems(Arrays.asList(orderItem));
+            update = OrderDAO.updates(order);
 
-        PrintWriter out = response.getWriter();
         if (update) {
+            PrintWriter out = response.getWriter();
             out.println("<script>window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
+            Log log = new Log();
+            log.setUserId(userId);
+            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + address + ", Phone: " + phone + ", Quantity: " + quantityStr + ", expectedDate: " +expectedDateStr;
+            log.setValuess(logDetails);
+            LogDAO.insertUpdateOrderInLog(log, previousInfo); // Insert log with previous info
         } else {
-
+            PrintWriter out = response.getWriter();
             out.println("<script>window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
         }
     }
-
 }
-
-

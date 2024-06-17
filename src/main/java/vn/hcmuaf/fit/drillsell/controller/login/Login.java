@@ -11,11 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Instant;
 import java.util.Optional;
 
 public class Login {
     public static void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         // Lấy username, pass nhập từ màn hình
         String username = request.getParameter("username-login");
         String password = request.getParameter("pass-login");
@@ -31,12 +34,16 @@ public class Login {
             if (user != null) {
                 Optional<Instant> lockedUntil = UsersDAO.getInstance().getLockedUntil(user.getId());
                 if (lockedUntil.isPresent() && lockedUntil.get().isAfter(Instant.now())) {
-                    Notify.getInstance().sendNotify(session, request, response, "Tài khoản của bạn đã bị khóa. Vui lòng đăng nhập lại sau 10 phút.", "login.jsp");
+                    PrintWriter out = response.getWriter();
+                    out.println("<script>alert('Tài khoản của bạn đã bị khóa. Vui lòng đăng nhập lại sau 10 phút.'); window.location.href='" + request.getContextPath() + "/login.jsp ';</script>");
                     return;
+
                 }
             }
 
-            // Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
+
+
+        // Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
             User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
 
             // Tìm thấy thông tin người dùng
