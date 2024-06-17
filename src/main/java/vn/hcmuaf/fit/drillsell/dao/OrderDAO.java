@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import org.jdbi.v3.core.Jdbi;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
@@ -14,6 +15,38 @@ import java.util.stream.Collectors;
 
 public class OrderDAO {
 
+    public static Order getOrderById(int orderId) {
+        Jdbi jdbi = DbConnector.me().get();
+        return jdbi.withHandle(handle -> {
+            Order order = handle.createQuery("SELECT * FROM orders WHERE orderId = :orderId")
+                    .bind("orderId", orderId)
+                    .map((rs, ctx) -> {
+                        Order o = new Order();
+                        o.setOrderId(rs.getInt("orderId"));
+                        o.setStauss(rs.getString("stauss"));
+                        o.setPhone(rs.getString("phone"));
+                        o.setAddress(rs.getString("address"));
+                        return o;
+                    })
+                    .one();
+
+            List<OrderItem> orderItems = handle.createQuery("SELECT * FROM orderitem WHERE orderId = :orderId")
+                    .bind("orderId", orderId)
+                    .map((rs, ctx) -> {
+                        OrderItem oi = new OrderItem();
+                        oi.setOrderId(rs.getInt("orderId"));
+//                        oi.setProductId(rs.getInt("productId"));
+                        oi.setQuantity(rs.getInt("quantity"));
+                        oi.setExpectedDate(rs.getDate("expectedDate"));
+                        return oi;
+                    })
+                    .list();
+
+            order.setOrderItems(orderItems);
+            return order;
+        });
+    }
+
     public static List<Order> showOrder() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT orders.orderId, orders.nameCustomer, orders.address, orders.phone, orders.stauss\n" +
@@ -23,9 +56,10 @@ public class OrderDAO {
         });
     }
 
+
     public static List<Order> show(int orderId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT orders.orderId, orderitem.idItem, products.unitPrice,  products.productName,  orderitem.quantity, (products.unitPrice * orderitem.quantity) AS totalPrice\n" +
+            return handle.createQuery("SELECT orders.userId, orders.orderId, orderitem.idItem, products.unitPrice,  products.productName,  orderitem.quantity, (products.unitPrice * orderitem.quantity) AS totalPrice\n" +
                             "FROM orders JOIN orderitem ON orders.orderId = orderitem.orderId\n" +
                             "JOIN products ON orderitem.productId = products.productId\n" +
                             "WHERE orders.orderId = :orderId")
@@ -42,6 +76,7 @@ public class OrderDAO {
 
                         Order order = new Order();
                         order.setOrderId(currentOrderId);
+                        order.setUserId(rs.getInt("userId"));
                         order.setOrderItems(new ArrayList<>()); // Initialize the list of order items
                         order.getOrderItems().add(item); // Add the item to the order's item list
 
@@ -60,28 +95,29 @@ public class OrderDAO {
     }
 
 
+
     public static boolean updates(Order order) {
         return DbConnector.me().get().inTransaction(handle -> {
             int rowsOrderUpdate = 0;
-                rowsOrderUpdate = handle.createUpdate("UPDATE orders " +
-                                "SET phone = :phone, address = :address " +
-                                "WHERE orderId = :orderId")
-                        .bind("phone", order.getPhone())
-                        .bind("address", order.getAddress())
-                        .bind("orderId", order.getOrderId())
-                        .execute();
+            rowsOrderUpdate = handle.createUpdate("UPDATE orders " +
+                            "SET phone = :phone, address = :address " +
+                            "WHERE orderId = :orderId")
+                    .bind("phone", order.getPhone())
+                    .bind("address", order.getAddress())
+                    .bind("orderId", order.getOrderId())
+                    .execute();
 
             int rowsOrderItemUpdate = 0;
 
-                for (OrderItem item : order.getOrderItems()) {
-                    rowsOrderItemUpdate += handle.createUpdate("UPDATE orderitem " +
-                                    "SET quantity = :quantity, expectedDate = :expectedDate " +
-                                    "WHERE orderId = :orderId")
-                            .bind("quantity", item.getQuantity())
-                            .bind("expectedDate", item.getExpectedDate())
-                            .bind("orderId", item.getOrderId())
-                            .execute();
-                }
+            for (OrderItem item : order.getOrderItems()) {
+                rowsOrderItemUpdate += handle.createUpdate("UPDATE orderitem " +
+                                "SET quantity = :quantity, expectedDate = :expectedDate " +
+                                "WHERE orderId = :orderId")
+                        .bind("quantity", item.getQuantity())
+                        .bind("expectedDate", item.getExpectedDate())
+                        .bind("orderId", item.getOrderId())
+                        .execute();
+            }
             // Return true if status update is successful, and either there are no details to update or details update is successful
             return rowsOrderUpdate > 0 && rowsOrderItemUpdate > 0;
         });
@@ -111,11 +147,11 @@ public class OrderDAO {
         return false;
     }
 
-        public static boolean updateStatuss(int orderId, String status){
+    public static boolean updateStatuss(int orderId, String status) {
         return DbConnector.me().get().inTransaction(handle -> {
             int rows = handle.createUpdate("UPDATE orders " +
                             "SET stauss = :stauss " +
-                            "WHERE orderId = :orderId " )
+                            "WHERE orderId = :orderId ")
                     .bind("stauss", status)
                     .bind("orderId", orderId)
                     .execute();
@@ -123,6 +159,7 @@ public class OrderDAO {
 
         });
     }
+
     public static String getCurrentStatus(int orderId) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT orders.stauss FROM orders WHERE orderId= :orderId")
@@ -143,25 +180,28 @@ public class OrderDAO {
 
 
     public static void main(String[] args) {
-// Khởi tạo các đối tượng cần thiết cho đơn hàng và mục đơn hàng
-        OrderItem item1 = new OrderItem();
-        item1.setOrderId(14);
-        item1.setQuantity(3);
-        item1.setExpectedDate(Date.valueOf("2024-08-17 00:00:00"));
+//// Khởi tạo các đối tượng cần thiết cho đơn hàng và mục đơn hàng
+//        OrderItem item1 = new OrderItem();
+//        item1.setOrderId(14);
+//        item1.setQuantity(3);
+//        item1.setExpectedDate(Date.valueOf("2024-08-17 00:00:00"));
+//
+//        List<OrderItem> orderItems = Arrays.asList(item1);
+//
+//        Order order = new Order();
+//        order.setOrderId(14); // Đặt orderId phù hợp với đơn hàng đã tồn tại trong cơ sở dữ liệu
+//        order.setPhone("0348434274");
+//        order.setAddress("Cát Hưng");
+//        order.setStauss("Đã xác nhận");
+//        order.setOrderItems(orderItems);
+//
+//        // Thực hiện cập nhật đơn hàng và in kết quả
+//        boolean result = OrderDAO.updates(order);
+//        System.out.println(result);
+        System.out.println(getOrderById(7));
 
-        List<OrderItem> orderItems = Arrays.asList(item1);
-
-        Order order = new Order();
-        order.setOrderId(14); // Đặt orderId phù hợp với đơn hàng đã tồn tại trong cơ sở dữ liệu
-        order.setPhone("0348434274");
-        order.setAddress("Cát Hưng");
-        order.setStauss("Đã xác nhận");
-        order.setOrderItems(orderItems);
-
-        // Thực hiện cập nhật đơn hàng và in kết quả
-        boolean result = OrderDAO.updates(order);
-        System.out.println(result);
     }
-
-
 }
+
+
+
