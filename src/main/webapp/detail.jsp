@@ -298,9 +298,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class='row single-product'>
             <div class='col-md-3 sidebar'>
                 <div class="sidebar-module-container">
-                    <div class="home-banner outer-top-n">
+
+
+                                    <div class="home-banner outer-top-n">
                         <img src="assets/images/banners/LHS-banner.jpg" alt="Image">
                     </div>
+
                 </div>
             </div><!-- /.sidebar -->
 
