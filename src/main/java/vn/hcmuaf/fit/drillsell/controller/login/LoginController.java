@@ -14,7 +14,7 @@ import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import java.io.IOException;
 
-@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout","/login-google"})
+@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout","/login-google","/loginAdmin"})
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -33,6 +33,8 @@ public class LoginController extends HttpServlet {
         String servletPath = request.getServletPath();
         if (servletPath.equals("/login")) {
             Login.login(request,response);
+        } else if (servletPath.equals("/loginAdmin")) {
+            Login.loginAdmin(request,response);
         } else if (servletPath.equals("/logout")) {
             Logout.logout(request,response);
         } else if (servletPath.equals("/login-google")) {

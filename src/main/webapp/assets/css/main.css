@@ -1107,6 +1107,11 @@ a {
 .sign-in-page .register-form .forgot-password:focus {
   color: #12cca7;
 }
+.sign-in-page-admin .register-form .forgot-password,
+.sign-in-page-admin .register-form .forgot-password:hover,
+.sign-in-page-admin .register-form .forgot-password:focus {
+  color: #12cca7;
+}
 .body-content .my-wishlist-page .my-wishlist table tbody .price {
   color: #12cca7;
 }
@@ -5782,7 +5787,16 @@ age-container #owl-main .owl-next {
     padding: 20px;
     overflow: hidden;
 }
+.sign-in-page-admin {
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.08);
+  padding: 20px;
+  overflow: hidden;
+  width: 50%;
+  margin: 10% 25%;
 
+
+}
 .body-content .sign-in-page .sign-in h4,
 .body-content .sign-in-page .create-new-account h4 {
   font-size:18px;
@@ -5845,7 +5859,68 @@ age-container #owl-main .owl-next {
 .body-content .sign-in-page .register-form .form-group {
   margin-bottom: 25px;
 }
+.body-content .sign-in-page-admin .sign-in h4,
+.body-content .sign-in-page-admin .create-new-account h4 {
+  font-size:18px;
+  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #ddd;
 
+}
+.body-content .sign-in-page-admin .sign-in p,
+.body-content .sign-in-page-admin .create-new-account p {
+  font-size: 15px;
+  color: #666;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in a,
+.body-content .sign-in-page-admin .sign-in .social-sign-in a:hover,
+.body-content .sign-in-page-admin .sign-in .social-sign-in a:focus {
+  border-radius: 3px;
+  padding: 14px 30px;
+  font-size: 15px;
+  display: inline-block;
+  color: #fff;
+  text-align: center;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in a i {
+  padding-right: 6px;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in .facebook-sign-in {
+  background-color: #3d5c98;
+  margin-right: 10px;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in .facebook-sign-in:hover,
+.body-content .sign-in-page-admin .sign-in .social-sign-in .facebook-sign-in:focus {
+  background-color: #153470;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in .twitter-sign-in {
+  background-color: #22aadf;
+}
+.body-content .sign-in-page-admin .sign-in .social-sign-in .twitter-sign-in:hover,
+.body-content .sign-in-page-admin .sign-in .social-sign-in .twitter-sign-in:focus {
+  background-color: #0084B9;
+}
+.body-content .sign-in-page-admin .create-new-account > span {
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 14px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.body-content .sign-in-page-admin .create-new-account .checkbox label {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.body-content .sign-in-page-admin form .form-group span {
+  color: red;
+}
+.body-content .sign-in-page-admin .register-form label {
+  font-size: 14px;
+  font-weight: 400;
+}
+.body-content .sign-in-page-admin.register-form .form-group {
+  margin-bottom: 25px;
+}
 .tooltip.top {
     padding: 5px 0;
     margin-top: -5px;
@@ -5881,3 +5956,10 @@ z-index:10000
     margin-top: 30px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.08);
 	}
+.horizontal-alignment{
+  display: flex;
+  gap: 30px;
+}
+.horizontal-alignment input{
+  margin-left:-10%;
+}
