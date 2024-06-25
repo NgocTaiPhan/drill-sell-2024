@@ -1,8 +1,8 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
-import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Review;
 
 import java.text.NumberFormat;
@@ -197,6 +197,26 @@ public class ProductDAO {
     }
 
     public void hideProd(int id) {
-        changeProductStatus(id, 2);
+        try {
+
+            changeProductStatus(id, 2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        ProductDAO.getInstance().hideProd(0);
+    }
+
+    public boolean isExistProdName(String prodName) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT COUNT(*) FROM products WHERE productName = :productName")
+                    .bind("productName", prodName)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .orElse(0) > 0;
+
+        });
     }
 }

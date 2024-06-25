@@ -285,7 +285,7 @@
     toolbar.innerHTML = '<b></b>';
     let addProdBtn = document.createElement('div')
     // Tạo nút thêm sản phẩm để khi nhấp vào sẽ xuất hiện cửa sổ pop-up
-    addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
+    addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="my-modal.js" data-target="#add-product">Thêm sản phẩm </button>'
     $(document).ready(function () {
 
         new DataTable('#myOrder', {

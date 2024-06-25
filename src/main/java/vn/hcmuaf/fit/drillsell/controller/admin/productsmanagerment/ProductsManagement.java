@@ -1,18 +1,13 @@
 package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 
-import com.google.gson.Gson;
-import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
-import vn.hcmuaf.fit.drillsell.model.Products;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
-@WebServlet(name = "ProductsManagement", urlPatterns = {"/admin/load-all-prods", "/admin/add-prod", "/admin/remove-prod", "/admin/update-prod", "/admin/hide-prod"})
+@WebServlet(name = "ProductsManagement", urlPatterns = {"/admin/load-all-prods", "/admin/show-detail", "/admin/add-prod", "/admin/remove-prod", "/admin/update-prod", "/admin/hide-prod"})
 public class ProductsManagement extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,90 +20,65 @@ public class ProductsManagement extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         String servletPath = request.getServletPath();
         switch (servletPath) {
-            case "/admin/add-prod" -> addProduct(request, response);
-            case "/admin/load-all-prods" -> loadAllProduct(request, response);
-            case "/admin/remove-prod" -> removeProd(request, response);
-            case "/admin/update-prod" -> updateProd(request, response);
-            case "/admin/hide-prod" -> hideProd(request, response);
+            case "/admin/add-prod" -> AddProd.addProduct(request, response);
+            case "/admin/load-all-prods" -> LoadProdInAdmin.loadAllProduct(request, response);
+            case "/admin/remove-prod" -> RemoveProd.removeProd(request, response);
+            case "/admin/update-prod" -> UpdateProd.updateProd(request, response);
+            case "/admin/hide-prod" -> HideProd.hideProd(request, response);
+            case "/admin/show-detail" -> LoadProdInAdmin.showDetail(request, response);
         }
     }
 
-    private void hideProd(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("productId"));
-        ProductDAO.getInstance().hideProd(id);
-    }
 
-    private void updateProd(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("productId"));
-        String prodName = request.getParameter("productName");
-        String image = request.getParameter("productImage");
-        double unitPrice = Double.parseDouble(request.getParameter("unitPrice"));
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        String nameProducer = request.getParameter("nameProducer");
-        String describle = request.getParameter("describle");
-        String specifions = request.getParameter("specifions");
-        Products prod = new Products(id, image, prodName, unitPrice, categoryId, nameProducer, describle, specifions);
-        ProductDAO productDAO = new ProductDAO();
-        productDAO.updateProd(prod);
-    }
-
-    private void removeProd(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("productId"));
-
-        if (id != 0) {
-            ProductDAO productDAO = new ProductDAO();
-            productDAO.removeProduct(id);
-        }
-    }
-
-    private void loadAllProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List<Products> products = ProductDAO.getInstance().getAllProds();
-        Gson gson = new Gson();
-//        hiển thị danh sách người dùng
-        String json = gson.toJson(products);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(json);
-        response.getWriter().flush();
-    }
-
-    public static void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String prodName = request.getParameter("productName");
-        String image = request.getParameter("productImage");
-        double unitPrice = Double.parseDouble(request.getParameter("unitPrice"));
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        String nameProducer = request.getParameter("nameProducer");
-        String describle = request.getParameter("describle");
-        String specifions = request.getParameter("specifions");
-        Notify notify;
-        try {
-            if (prodName == null || prodName.isEmpty()) {
-                notify = new Notify("Lỗi", "Hãy điền tên sản phẩm!.", "error");
-                response.setContentType("application/json");
-
-                PrintWriter writter = response.getWriter();
-                writter.print(notify);
-                writter.flush();
-                return;
-            }
-            Products product = new Products(image, prodName, unitPrice, categoryId, nameProducer, describle, specifions);
-            ProductDAO.getInstance().addProduct(product);
-            notify = new Notify("Thành công", "Thêm sản phẩm thành công!.", "success");
-            response.setContentType("application/json");
-
-            PrintWriter writter = response.getWriter();
-            writter.print(notify);
-            writter.flush();
-
-        } catch (Exception e) {
-            notify = new Notify("Thành công", "Thêm sản phẩm thành công!.", "success");
-            response.setContentType("application/json");
-
-            PrintWriter writter = response.getWriter();
-            writter.print(notify);
-            writter.flush();
-        }
-
-
-    }
 }
+
+
+//    private void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        // Lấy các tham số từ request
+//        String prodName = request.getParameter("productName");
+//        String image = request.getParameter("imageUrl");
+//        String describle = request.getParameter("describle");
+//        String specifions = request.getParameter("specifions");
+//        String nameProducer = request.getParameter("nameProducer");
+//
+//        // In ra từng biến trên một dòng mới (chỉ để kiểm tra, có thể xóa sau)
+//        System.out.println("prodName: " + prodName);
+//        System.out.println("image: " + image);
+//        System.out.println("describle: " + describle);
+//        System.out.println("specifions: " + specifions);
+//        System.out.println("nameProducer: " + nameProducer);
+//
+//        // Khởi tạo biến với giá trị mặc định
+//        double unitPrice = 0.0;
+//        int cateId = 0;
+//
+//        // Kiểm tra các tham số bắt buộc
+//        if (prodName == null || prodName.isEmpty() || image == null || nameProducer == null) {
+//            sendResponeText(response, "Hãy điền đầy đủ thông tin!");
+//            return;
+//        }
+//
+//        try {
+//            // Chuyển đổi giá và danh mục thành số
+//            unitPrice = Double.parseDouble(request.getParameter("unitPrice"));
+//            cateId = Integer.parseInt(request.getParameter("categoryId"));
+//
+//            // Kiểm tra giá trị mặc định (hoặc giá trị không hợp lệ)
+//            if (unitPrice <= 0 || cateId <= 0) {
+//                sendResponeText(response, "Giá bán và danh mục phải là số dương!");
+//                return;
+//            }
+//
+//        } catch (NumberFormatException e) {
+//            sendResponeText(response, "Định dạng giá hoặc danh mục không hợp lệ!");
+//            return;
+//        }
+//
+//        // Tạo đối tượng Products và thêm vào cơ sở dữ liệu
+//        Products product = new Products(image, prodName, unitPrice, cateId, nameProducer, describle, specifions);
+//        System.out.println(product); // In thông tin sản phẩm (chỉ để kiểm tra)
+//
+//        ProductDAO.getInstance().addProduct(product);
+//        sendResponeText(response, "Thêm sản phẩm thành công!");
+//    }
+

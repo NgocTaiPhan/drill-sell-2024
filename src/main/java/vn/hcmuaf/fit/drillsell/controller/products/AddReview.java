@@ -2,7 +2,6 @@ package vn.hcmuaf.fit.drillsell.controller.products;
 
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Review;
-import vn.hcmuaf.fit.drillsell.model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
