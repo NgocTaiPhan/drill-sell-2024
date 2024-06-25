@@ -172,6 +172,20 @@ public class UsersDAO implements IUserDAO{
             return count > 0;
         }
     }
+    public boolean isEmailExists(String email) {
+        String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
+        Jdbi jdbi = DbConnector.me().get();
+
+        try (Handle handle = jdbi.open()) {
+            int count = handle.createQuery(selectQuery)
+                    .bind(0, email)
+                    .mapTo(Integer.class)
+                    .one();
+
+            // Nếu count > 0, tức là email đã tồn tại và là trùng lặp
+            return count > 0;
+        }
+    }
 
     public String getVerifyCode(String username, String email) {
         String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";

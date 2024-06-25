@@ -24,9 +24,12 @@ public class OrderController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         String nameCustomer = request.getParameter("nameCustomer");
-        String address = request.getParameter("address");
+//        String address = request.getParameter("address");
+        String provinceId = request.getParameter("tinh");
+        String districtId = request.getParameter("quan");
+        String wardId = request.getParameter("phuong");
+        String address = provinceId + "," + districtId + ", " + wardId;
         String phone = request.getParameter("phone");
-
         String[] quantities = request.getParameterValues("quantityInput");
         String[] cartIds = request.getParameterValues("cartId");
         String[] productIds = request.getParameterValues("productId");

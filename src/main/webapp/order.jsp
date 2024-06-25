@@ -67,6 +67,74 @@
     <!-- Modernizr js -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     <%   NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
+          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+
+    <%--    Link to css button back-to-home--%>
+    <link href="assets/css/my-css/back-to-home.css" rel="stylesheet">
+    <script src="https://esgoo.net/scripts/jquery.js"></script>
+    <style type="text/css">
+        .css_select_div { text-align: center; }
+        .css_select { display: inline-table; width: 20%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
+    </style>
+    <script>
+        $(document).ready(function () {
+            // Biến lưu trữ thông tin về tỉnh, quận/huyện và phường/xã
+            var provinces = {};
+            var districts = {};
+            var wards = {};
+
+            // Lấy danh sách tỉnh thành từ API và điền vào dropdown tỉnh
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        provinces[val_tinh.full_name] = val_tinh.id; // Lưu tên của tỉnh
+                        $("#tinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
+                    });
+                }
+            });
+
+            // Xử lý sự kiện khi người dùng chọn tỉnh
+            $("#tinh").change(function () {
+                var ten_tinh = $(this).val(); // Lấy tên của tỉnh từ dropdown
+
+                // Xóa các lựa chọn cũ của quận/huyện và phường/xã
+                $("#quan").html('<option value="0">Chọn Quận Huyện</option>');
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách quận/huyện từ API và điền vào dropdown quận/huyện
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinces[ten_tinh] + '.htm', function (data_quan) {
+                    if (data_quan.error == 0) {
+                        $.each(data_quan.data, function (key_quan, val_quan) {
+                            districts[val_quan.full_name] = val_quan.id; // Lưu tên của quận/huyện
+                            $("#quan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+
+            // Xử lý sự kiện khi người dùng chọn quận/huyện
+            $("#quan").change(function () {
+                var ten_quan = $(this).val(); // Lấy tên của quận/huyện từ dropdown
+
+                // Xóa các lựa chọn cũ của phường/xã
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách phường/xã từ API và điền vào dropdown phường/xã
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districts[ten_quan] + '.htm', function (data_phuong) {
+                    if (data_phuong.error == 0) {
+                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                            wards[val_phuong.full_name] = val_phuong.id; // Lưu tên của phường/xã
+                            $("#phuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -298,7 +366,34 @@
             <p>Địa chỉ nhận hàng</p>
             <div class="information">
                 <input value="<%= request.getParameter("nameCustomer") != null ? request.getParameter("nameCustomer") : "" %>" type="text" id="informations" name="nameCustomer" placeholder="Tên">
-                <input style="width: 200px" value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>" type="text" id="address" name="address" placeholder="Địa chỉ của bạn">
+<%--                <input style="width: 200px" value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>" type="text" id="address" name="address" placeholder="Địa chỉ của bạn">--%>
+<%--                <select class="css_select" id="tinh" name="tinh">--%>
+<%--                    <option value="0">Chọn Tỉnh</option>--%>
+<%--                    <!-- Thêm các tùy chọn cho tỉnh -->--%>
+<%--                </select>--%>
+<%--                <select class="css_select" id="quan" name="quan">--%>
+<%--                    <option value="0">Chọn Quận Huyện</option>--%>
+<%--                </select>--%>
+<%--                <select class="css_select" id="phuong" name="phuong">--%>
+<%--                    <option value="0">Chọn Phường Xã</option>--%>
+<%--                    <!-- Thêm các tùy chọn cho xã -->--%>
+<%--                </select>--%>
+
+
+                <div class="css_select_div">
+                    <label class="info-title"  for="address" id="address">Địa chỉ </label>
+                    <select class="css_select" id="tinh" name="tinh">
+                        <option value="0">Chọn Tỉnh</option>
+                        <!-- Thêm các tùy chọn cho tỉnh -->
+                    </select>
+                    <select class="css_select" id="quan" name="quan">
+                        <option value="0">Chọn Quận Huyện</option>
+                    </select>
+                    <select class="css_select" id="phuong" name="phuong">
+                        <option value="0">Chọn Phường Xã</option>
+                        <!-- Thêm các tùy chọn cho xã -->
+                    </select>
+                </div>
                 <input value="" type="text" id="phone" name="phone" placeholder="Số điện thoại">
             </div>
         </div>

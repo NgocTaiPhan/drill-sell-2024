@@ -49,8 +49,6 @@ table.table th, table.table td {
     border: #c3c3c3;
 }
 #address{
-    margin-left: 15px;
-    width: 200px; !important;
     height: 30px;
     border: #c3c3c3;
 
@@ -130,5 +128,8 @@ table.table th, table.table td {
 }
 
 
-
+.information{
+    display: flex;
+    align-items: center;
+}
 
