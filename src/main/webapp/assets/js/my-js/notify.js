@@ -1,4 +1,4 @@
-var valueNotify = document.getElementById("notify").getAttribute('value');
+var valueNotify = document.querySelector('#notify').getAttribute('value');
 
 
 function errorRegister(mess) {
@@ -33,6 +33,15 @@ function errorLock(mess) {
 }
 
 
+
+function errorAddProd(mess) {
+    Swal.fire({
+        icon: "error",
+        title: "Đăng nhập thất bại",
+        text: mess,
+        confirmButtonText: "Đóng",
+    });
+}
 
 switch (valueNotify) {
 
@@ -114,7 +123,6 @@ switch (valueNotify) {
             text: "Hãy xác nhận email và đăng nhập!",
             confirmButtonText: "Đóng",
         }).then((result) => {
-            // <%session.removeAttribute("notify");%>
             window.location.href = "login.jsp";
         });
     // ---------------------------------Thông báo của phần đăng kí--------------------------------------
@@ -179,7 +187,18 @@ switch (valueNotify) {
             confirmButtonText: "Đóng"
         });
 
-
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
     default:
 
 
@@ -224,6 +243,8 @@ function checkLogin(logged) {
             }
         });
     }
+
+    
 }
 
 

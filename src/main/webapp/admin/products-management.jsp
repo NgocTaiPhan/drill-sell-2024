@@ -1,4 +1,3 @@
-<%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -10,6 +9,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
     <title>Quản lý sản phẩm</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet"/>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.jqueryui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.js"></script>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
@@ -32,20 +43,6 @@
     <%--    Datatable--%>
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
-
-
-    <script src="../assets/js/jquery-1.11.1.min.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/bootstrap-hover-dropdown.min.js"></script>
-    <script src="../assets/js/owl.carousel.min.js"></script>
-    <script src="../assets/js/echo.min.js"></script>
-    <script src="../assets/js/jquery.easing-1.3.min.js"></script>
-    <script src="../assets/js/bootstrap-slider.min.js"></script>
-    <script src="../assets/js/jquery.rateit.min.js"></script>
-    <script src="../assets/js/lightbox.min.js" type="text/javascript"></script>
-    <script src="../assets/js/bootstrap-select.min.js"></script>
-    <script src="../assets/js/wow.min.js"></script>
-
 </head>
 <body>
 
@@ -116,44 +113,20 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="content table-responsive table-full-width">
-                                <div class="btn btn-info" id="openModalBtn">Thêm sản phẩm</div>
+                                <button class="btn btn-info open-modal" id="open-modal">Thêm sản phẩm</button>
                                 <table id="prod-mn" class="table table-striped">
                                     <thead>
                                     <tr>
                                         <th>Mã sản phẩm</th>
                                         <th>Tên sản phẩm</th>
-                                        <th>Giá</th>
+                                        <th>Giá (nghìn VND)</th>
                                         <th>Số lượng đã bán</th>
                                         <th>Số lượng còn lại</th>
                                         <th>Hành động</th>
                                     </tr>
                                     </thead>
                                 </table>
-                                <script>
-                                    $(document).ready(function () {
-                                        var table = $('#prod-mn').DataTable({
-                                            "ajax": {
-                                                "url": "load-all-prods",
-                                                "dataSrc": "",
-                                            },
-                                            "columns": [
-                                                {"data": "productId"},
-                                                {"data": "productName"},
-                                                {"data": "unitPrice"},
-                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity sold
-                                                {"data": null, "defaultContent": ""}, // Placeholder for quantity remaining
-                                                {
-                                                    "data": null,
-                                                    "render": function (data, type, row) {
-                                                        return ' <button type="button" class="btn btn-info">Xem chi tiết</button>' +
-                                                            ' <button type="button" class="btn btn-warning">Sửa</button>' +
-                                                            ' <button type="button" class="btn btn-danger">Xóa</button>';
-                                                    }
-                                                }
-                                            ]
-                                        });
-                                    });
-                                </script>
+
                             </div>
                         </div>
 
@@ -165,64 +138,46 @@
         </div>
 
         <%--Modal thêm sản phẩm--%>
+
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close-btn">&times;</span>
+                <span id="close-btn" class="close-btn">&times;</span>
                 <h4>Thêm sản phẩm</h4>
-                <div class="container ">
-                    <div class=" center-block">
+                <div class="container">
+                    <div class="center-block">
 
-                        <form class="col-lg-6 center-block" action="<%=request.getContextPath()%>/admin/add-product"
-                              method="post"
-                        >
+                        <form class="col-lg-6 center-block" id="formAddProd">
                             <div class="form-group center-block">
-                                <img width="200px" height="200px" src="" id="loadProdsImg" class="img-thumbnail"
-                                     alt="Ảnh sản phẩm">
+                                <img width="200px" height="200px" src="" class=" loadProdsImg img-thumbnail"
+                                     alt="Ảnh sản phẩm" style="margin-left: 45%">
                             </div>
                             <div class="form-group">
-                                <label for="imageFileInput">Ảnh sản phẩm (URL hoặc tệp):</label>
-                                <input type="file" id="imageFileInput" name="imageUrl" accept="image/*">
-                                <input type="text" id="imageUrlInput" name="imageUrl" placeholder="Nhập URL ảnh">
+                                <label for="imageUrlInput">Ảnh sản phẩm (URL hoặc tệp):</label>
+                                <input type="text" id="imageUrlInput" class="form-control imageUrlInput" name="imageUrl"
+                                       placeholder="Nhập URL ảnh">
+                                <input type="button" class="btn btn-default" onclick="openCKFinder()" value="Chọn ảnh">
                             </div>
-                            <script !src="">
-                                const imageUrlInput = document.getElementById('imageUrlInput');
-                                const loadProdsImg = document.getElementById('loadProdsImg');
-
-                                imageUrlInput.addEventListener('input', function () {
-                                    const imageUrl = this.value.trim();
-                                    if (imageUrl !== '') {
-                                        loadProdsImg.src = imageUrl;
-                                    } else {
-                                        // Nếu không có URL, bạn có thể đặt lại ảnh mặc định hoặc xóa src
-                                        loadProdsImg.src = ''; // Hoặc một đường dẫn mặc định
-                                    }
-                                });
-                            </script>
 
                             <div class="form-group">
                                 <label for="productName">Tên sản phẩm</label>
                                 <input type="text" class="form-control" id="productName" name="productName">
                             </div>
                             <div class="form-group">
-                                <label for="productDescription">Mô tả</label>
-                                <textarea class="form-control" id="productDescription" name="productDescription"
+                                <label for="describle">Mô tả</label>
+                                <textarea class="form-control" id="describle" name="describle"
                                           rows="3"
                                 ></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="specifications">Thông số kỹ thuật</label>
-                                <textarea class="form-control" id="specifications" name="specifications"
+                                <label for="specifions">Thông số kỹ thuật</label>
+                                <textarea class="form-control" id="specifions" name="specifions"
                                           rows="3"
                                 ></textarea>
                             </div>
+
                             <div class="form-group">
-                                <label for="productPrice">Giá bán</label>
-                                <input type="number" class="form-control" id="productPrice" name="productPrice"
-                                >
-                            </div>
-                            <div class="form-group">
-                                <label for="manufacturerId">Nhà sản xuất</label>
-                                <select class="form-control" id="manufacturerId" name="manufacturerId">
+                                <label for="nameProducer">Nhà sản xuất</label>
+                                <select class="form-control" id="nameProducer" name="nameProducer">
                                     <option value="">Chọn nhà sản xuất</option>
                                     <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
                                     <option value="<%=pdName%>"><%=pdName%>
@@ -230,85 +185,108 @@
                                     <%}%>
                                 </select>
                             </div>
-
                             <div class="form-group">
-                                <label for="categoryId">Danh mục sản phẩm</label>
-                                <select class="form-control" id="categoryId" name="categoryId">
-                                    <option value="">Chọn danh mục sản phẩm</option>
-                                    <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
-                                    <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
-                                    </option>
-                                    <%}%>
-                                </select>
+                                <label for="unitPrice">Giá bán</label>
+                                <input type="number" class="form-control" id="unitPrice" name="unitPrice">
+                                <div class="form-group">
+                                    <label for="categoryId">Danh mục sản phẩm</label>
+                                    <select class="form-control" id="categoryId" name="categoryId">
+                                        <option value="">Chọn danh mục sản phẩm</option>
+                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
+                                        </option>
+                                        <%}%>
+                                    </select>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Thêm</button>
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
-        <div id="modal-detail" class="modal">
+        <%--        Modal update sản phẩm--%>
+        <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close-btn">&times;</span>
                 <h4>Thêm sản phẩm</h4>
-                <div class="container ">
-                    <div class=" center-block">
+                <div class="container">
+                    <div class="center-block">
 
+                        <form class="col-lg-6 center-block" id="formUpdateProd">
+                            <div class="form-group center-block">
+                                <img width="200px" height="200px" src="" class="loadProdsImg img-thumbnail"
+                                     alt="Ảnh sản phẩm" style="margin-left: 45%">
+                            </div>
+                            <div class="form-group">
+                                <label for="imageUrlInputU">Ảnh sản phẩm (URL hoặc tệp):</label>
+                                <input disabled type="text" id="imageUrlInputU" class="imageUrlInput form-control"
+                                       name="imageUrl"
+                                       placeholder="Nhập URL ảnh">
+                                <input disabled type="button" class="btn btn-default" onclick="openCKFinder()"
+                                       value="Chọn ảnh">
+                            </div>
 
+                            <div class="form-group">
+                                <label for="productNameU">Tên sản phẩm</label>
+                                <input disabled type="text" class="form-control" id="productNameU" name="productName">
+                            </div>
+                            <div class="form-group">
+                                <label for="describleU">Mô tả</label>
+                                <textarea disabled class="form-control" id="describleU" name="describle"
+                                          rows="3"
+                                ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="specifions">Thông số kỹ thuật</label>
+                                <textarea disabled class="form-control" id="specifionsU" name="specifions"
+                                          rows="3"
+                                ></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nameProducerU">Nhà sản xuất</label>
+                                <select class="form-control" id="nameProducerU" name="nameProducer" disabled>
+                                    <option id="nameProducerUI" value="">Chọn nhà sản xuất</option>
+                                    <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
+                                    <option value="<%=pdName%>"><%=pdName%>
+                                    </option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="unitPriceU">Giá bán</label>
+                                <input type="number" class="form-control" id="unitPriceU" name="unitPrice" disabled>
+                                <div class="form-group">
+                                    <label for="categoryId">Danh mục sản phẩm</label>
+                                    <select class="form-control" id="categoryIdU" name="categoryId" disabled>
+                                        <option value="">Chọn danh mục sản phẩm</option>
+                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
+                                        </option>
+                                        <%}%>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Thay đổi thông tin sản phẩm</button>
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-
-                        <li>
-                            <a href="http://www.creative-tim.com">
-                                Creative Tim
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://blog.creative-tim.com">
-                                Blog
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.creative-tim.com/license">
-                                Licenses
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright pull-right">
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script>
-                    , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
-                    Tim</a>
-                </div>
-            </div>
-        </footer>
-
-        <input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
     </div>
 </div>
-
-
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
-        integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
-        crossorigin="anonymous"></script>
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
-      integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
 
-<%--Modal dùng đẻ hiển thị cửa sổ popup thêm sản phẩm--%>
-
-<script src="../assets/js/my-js/prod-mn.js"></script>
-<script src="../assets/js/my-js/notify.js"></script>
+<script src="../assets/js/my-js/prod-management/my-modal.js"></script>
+<script src="../assets/js/my-js/renotify.js"></script>
+<script src="../assets/js/my-js/prod-management/load-img.js"></script>
+<script src="../assets/js/my-js/prod-management/prod-management.js"></script>
 <link rel="stylesheet" href="../assets/css/my-css/admin/prods-mn.css">
 
 

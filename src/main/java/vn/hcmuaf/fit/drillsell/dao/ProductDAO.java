@@ -1,13 +1,10 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
-import org.jdbi.v3.core.Handle;
-import vn.hcmuaf.fit.drillsell.db.Db;
+import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
-import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Review;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -27,15 +24,11 @@ public class ProductDAO {
     }
 
     public void removeProduct(int pId) {
-        DbConnector.me().get().useHandle(handle -> {
-            handle.createUpdate("UPDATE products SET productStatus = 2 WHERE productId =:productId")
-                    .bind("productId", pId)
-                    .execute();
-        });
+        changeProductStatus(pId, 1);
     }
 
     //Hàm sẽ thay đổi trạng thái sản phẩm trong db productStatus: 0 - Bình thường, 1 - Đã xóa, 2 - Ẩn, dựa trên id sản phẩm
-    public void changProductStatus(int productId, int status) {
+    public void changeProductStatus(int productId, int status) {
         DbConnector.me().get().useHandle(dbConnection -> {
             dbConnection.createUpdate("UPDATE products SET productStatus = :productStatus WHERE productId = :productId")
                     .bind("productStatus", status)
@@ -70,6 +63,7 @@ public class ProductDAO {
                     .list();
         });
     }
+
     public List<Products> getAllProds() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT * FROM products WHERE productStatus = 0")
@@ -186,6 +180,43 @@ public class ProductDAO {
     }
 
 
+    public void updateProd(Products product) {
 
+        DbConnector.me().get().withHandle(handle -> handle.createUpdate(" UPDATE products\n" +
+                        "        SET image = :image,\n" +
+                        "            productName = :productName,\n" +
+                        "            unitPrice = :unitPrice,\n" +
+                        "            categoryId = :categoryId,\n" +
+                        "            nameProducer = :nameProducer,\n" +
+                        "            describle = :describle,\n" +
+                        "            specifions = :specifions\n" +
+                        "        WHERE productId = :productId")
+                .bindBean(product)
+                .execute());
+        System.out.println("update: " + product.getProductId());
+    }
 
+    public void hideProd(int id) {
+        try {
+
+            changeProductStatus(id, 2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        ProductDAO.getInstance().hideProd(0);
+    }
+
+    public boolean isExistProdName(String prodName) {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT COUNT(*) FROM products WHERE productName = :productName")
+                    .bind("productName", prodName)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .orElse(0) > 0;
+
+        });
+    }
 }

@@ -25,7 +25,6 @@ public class LoadProdDetail extends HttpServlet {
         List<Review> reviews = ProductDAO.getInstance().getAllReviewByPID(pId);
         request.setAttribute("prods", prod);
         request.setAttribute("reviews", reviews);
-        System.out.println(reviews);
         request.getRequestDispatcher("detail.jsp").forward(request, response);
     }
 }
