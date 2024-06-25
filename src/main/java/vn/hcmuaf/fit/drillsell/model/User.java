@@ -15,9 +15,10 @@ User {
             email,
             username,
             passwords,
-            sex,
+
             yearOfBirth,
             verificationCode;
+    private boolean sex;
     private boolean isVerified, roleUser;
 
     public User() {
@@ -35,7 +36,7 @@ User {
     }
 
 
-    public User(int id, String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
+    public User(int id, String fullname, String address, String phone, String email, String username, String passwords, boolean sex, String yearOfBirth) {
         this.id = id;
         this.fullname = fullname;
         this.address = address;
@@ -49,7 +50,7 @@ User {
 
 
 
-    public User(String fullname, String address, String phone, String email, String username, String passwords, String sex, String yearOfBirth) {
+    public User(String fullname, String address, String phone, String email, String username, String passwords, boolean sex, String yearOfBirth) {
         this.fullname = fullname;
         this.address = address;
         this.phone = phone;
@@ -61,7 +62,7 @@ User {
 
     }
 
-    public User(String fullname, String address, String phone, String email, String username, String passwords, String gender, String yearOfBirth, String verificationCode) {
+    public User(String fullname, String address, String phone, String email, String username, String passwords, boolean gender, String yearOfBirth, String verificationCode) {
         this.fullname = fullname;
         this.address = address;
         this.phone = phone;
@@ -129,11 +130,11 @@ User {
         this.passwords = passwords;
     }
 
-    public String getSex() {
+    public boolean getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(boolean sex) {
         this.sex = sex;
     }
 
@@ -198,3 +199,4 @@ User {
 
 
 }
+

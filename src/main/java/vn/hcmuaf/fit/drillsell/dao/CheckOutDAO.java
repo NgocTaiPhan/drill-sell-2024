@@ -39,7 +39,7 @@ public class CheckOutDAO {
                     double shippingFee = calculateShippingFee(order.getAddress());
 
                     orderId = handle.createUpdate("INSERT INTO orders(userId, stauss, nameCustomer, address, phone, shippingFee) " +
-                                    "VALUES (:userId, 'Đợi xác nhận', :nameCustomer, :address, :phone, :shippingFee)")
+                                    "VALUES (:userId, 'Đang xử lý', :nameCustomer, :address, :phone, :shippingFee)")
                             .bind("userId", order.getUserId())
                             .bind("nameCustomer", order.getNameCustomer())
                             .bind("phone", order.getPhone())
@@ -72,19 +72,31 @@ public class CheckOutDAO {
 
     // Phương thức để tính toán phí vận chuyển
     private static double calculateShippingFee(String address) {
-        if (address.contains("Bình Định") || address.contains("Quy Nhơn") || address.contains("Đà Nẵng")
-        || address.contains("Quãng Ngãi") || address.contains("Gia Lai") ) {
+        if (address.contains("Thừa Thiên Huế") || address.contains("Đà Nẵng") || address.contains("Quảng Nam")
+                || address.contains("Quãng Ngãi") || address.contains("Bình Định")
+                || address.contains("Phú Yên") || address.contains("Khánh Hòa") || address.contains("Ninh Thuận")
+                || address.contains("Bình Thuận") || address.contains("Kon Tum") || address.contains("Gia Lai")
+                || address.contains("Đắk Lắk") || address.contains("Quảng Bình")
+        ) {
             return 35;
-        } else if (address.contains("TP.HCM") || address.contains("Hồ Chí Minh") || address.contains("Bình Dương")
-        || address.contains("Biên Hòa") ) {
-            return 15;
-        }
-        else if (address.contains("Cai Lậy") || address.contains("Long An")) {
-            return 25;
+        } else if (address.contains("TP.HCM") || address.contains("Hồ Chí Minh") || address.contains("Long An")) {
+            return 10;
+
+        } else if (address.contains("Tiền Giang") || address.contains("Bến Tre") || address.contains("Vĩnh Long") || address.contains("Trà Vinh")
+                || address.contains("Sóc Trăng") || address.contains("Bạc Liêu") || address.contains("Cà Mau") || address.contains("Đồng Tháp")
+                || address.contains("An Giang") || address.contains("Kiên Giang") || address.contains("Cần Thơ")
+        ) {
+            return 20;
+        } else if (address.contains("Hà Nội") || address.contains("Hải Phòng") || address.contains("Quảng Ninh") || address.contains("Bắc Kạn")
+                || address.contains("Bắc Ninh") || address.contains("Thái Bình") || address.contains("Phú Thọ") || address.contains("Tuyên Quang") || address.contains("Điện Biên")
+                || address.contains("Hà Nam") || address.contains("Nam Định") || address.contains("Bắc Giang") || address.contains("Hà Giang") || address.contains("Lai Châu")
+                || address.contains("Hưng Yên") || address.contains("Ninh Bình") || address.contains("Lạng Sơn") || address.contains("Lào Cai") || address.contains("Sơn La")
+                || address.contains("Hải Dương") || address.contains("Thái Nguyên") || address.contains("Cao Bằng") || address.contains("Yên Bái") || address.contains("Hòa Bình")
+        ) {
+            return 40;
         }
         return 0.0; // Phí vận chuyển mặc định nếu không thuộc các địa chỉ trên
     }
-
 
 
     public static List<Order> showOrder(int userId) {
@@ -99,11 +111,6 @@ public class CheckOutDAO {
                     .list();
         });
     }
-
-
-
-
-
 
 
     public static List<Order> showItemOrder(int orderId) {
@@ -133,7 +140,7 @@ public class CheckOutDAO {
                         item.setProductName(rs.getString("productName"));
                         item.setQuantity(rs.getInt("quantity"));
                         item.setTotalPrice(rs.getDouble("totalPrice"));
-                        item.setExpectedDate(rs.getTimestamp("expectedDate"));
+                        item.setExpectedDate(rs.getDate("expectedDate"));
 
                         order.setOrderItems(new ArrayList<>()); // Initialize the list of order items
                         order.getOrderItems().add(item); // Add the item to the order's item list
@@ -153,14 +160,14 @@ public class CheckOutDAO {
     }
 
 
-    public static boolean update(int orderId){
+    public static boolean update(int orderId) {
         return DbConnector.me().get().withHandle(handle -> {
             int row = handle.createUpdate("UPDATE orders\n" +
-                    "SET stauss= 'Đã Hủy'\n" +
-                    "WHERE orderId = :orderId AND stauss IN ('Đợi xác nhận', 'Đã xác nhận'); ")
+                            "SET stauss= 'Đã Hủy'\n" +
+                            "WHERE orderId = :orderId AND stauss IN ('Đợi xác nhận', 'Đã xác nhận'); ")
                     .bind("orderId", orderId)
                     .execute();
-            return row>0;
+            return row > 0;
         });
     }
 
@@ -171,16 +178,58 @@ public class CheckOutDAO {
                             "SET oi.expectedDate = CASE " +
                             "    WHEN o.address LIKE '%Bình Định%' " +
                             "    OR o.address LIKE '%Gia Lai%' " +
+                            "    OR o.address LIKE '%Thừa Thiên Huế%' " +
                             "    OR o.address LIKE '%Quy Nhơn%' " +
                             "    OR o.address LIKE '%Quãng Ngãi%' " +
-                            "    OR o.address LIKE '%Đà Nẵng%' THEN DATE_ADD(oi.timeOrder, INTERVAL 4 DAY) " +
+                            "    OR o.address LIKE '%Quảng Nam%' " +
+                            "    OR o.address LIKE '%Khánh Hòa%' " +
+                            "    OR o.address LIKE '%Ninh Thuận%' " +
+                            "    OR o.address LIKE '%Bình Thuận%' " +
+                            "    OR o.address LIKE '%Kon Tum%' " +
+                            "    OR o.address LIKE '%Đắk Lắk%' " +
+                            "    OR o.address LIKE '%Quảng Bình%' " +
+                            "    OR o.address LIKE '%Đà Nẵng%' THEN DATE_ADD(oi.timeOrder, INTERVAL 5 DAY) " +
+
                             "    WHEN o.address LIKE '%TP.HCM%' " +
                             "    OR o.address LIKE '%Bình Dương%' " +
                             "    OR o.address LIKE '%Biên Hòa%' " +
-                            "    OR o.address LIKE '%Hồ Chí Minh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 1 DAY) " +
-                            "    WHEN o.address LIKE '%Cai Lậy%' " +
                             "    OR o.address LIKE '%Long An%' " +
-                            "    OR o.address LIKE '%Hồ Chí Minh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 2 DAY) " +
+                            "    OR o.address LIKE '%Tiền Giang%' " +
+                            "    OR o.address LIKE '%Bến Tre%' " +
+                            "    OR o.address LIKE '%Vĩnh Long%' " +
+                            "    OR o.address LIKE '%Trà Vinh%' " +
+                            "    OR o.address LIKE '%Sóc Trăng%' " +
+                            "    OR o.address LIKE '%Bạc Liêu%' " +
+                            "    OR o.address LIKE '%Cà Mau%' " +
+                            "    OR o.address LIKE '%Đồng Tháp%' " +
+                            "    OR o.address LIKE '%An Giang%' " +
+                            "    OR o.address LIKE '%Kiên Giang%' " +
+                            "    OR o.address LIKE '%Cần Thơ%' " +
+                            "    OR o.address LIKE '%Hồ Chí Minh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 3 DAY) " +
+
+
+                            "    WHEN o.address LIKE '%Hà Nội%' " +
+                            "    OR o.address LIKE '%Hải Phòng%' " +
+                            "    OR o.address LIKE '%Bắc Ninh%' " +
+                            "    OR o.address LIKE '%Hà Nam%' " +
+                            "    OR o.address LIKE '%Hưng Yên%' " +
+                            "    OR o.address LIKE '%Thái Bình%' " +
+                            "    OR o.address LIKE '%Nam Định%' " +
+                            "    OR o.address LIKE '%Ninh Bình%' " +
+                            "    OR o.address LIKE '%Thái Nguyên%' " +
+                            "    OR o.address LIKE '%Phú Thọ%' " +
+                            "    OR o.address LIKE '%Bắc Giang%' " +
+                            "    OR o.address LIKE '%Lạng Sơn%' " +
+                            "    OR o.address LIKE '%Cao Bằng%' " +
+                            "    OR o.address LIKE '%Bắc Kạn%' " +
+                            "    OR o.address LIKE '%Tuyên Quang%' " +
+                            "    OR o.address LIKE '%Hà Giang%' " +
+                            "    OR o.address LIKE '%Lào Cai%' " +
+                            "    OR o.address LIKE '%Yên Bái%' " +
+                            "    OR o.address LIKE '%Điện Biên%' " +
+                            "    OR o.address LIKE '%Lai Châu%' " +
+                            "    OR o.address LIKE '%Hòa Bình%' " +
+                            "    OR o.address LIKE '%Quảng Ninh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 7 DAY) " +
                             "    ELSE oi.expectedDate " + // Giữ nguyên ngày dự kiến giao hàng nếu không phải Bình Định, Gia Lai, Đà Nẵng hoặc TP.HCM
                             "END " +
                             "WHERE oi.orderId = :orderId")
@@ -201,11 +250,6 @@ public class CheckOutDAO {
     }
 
 
-
-
-
-
-
     public static void main(String[] args) {
 //        // Tạo danh sách các đối tượng Order với danh sách OrderItem
 //        OrderItem orderItem1 = new OrderItem(1, 120, 3, 3);
@@ -217,7 +261,7 @@ public class CheckOutDAO {
 //        boolean areOrdersInserted = CheckOutDAO.insertOrders(orders);
 //        System.out.println("Orders inserted: " + areOrdersInserted);
 ////        deleteCart(3);
-        System.out.println(showItemOrder(1));
+        System.out.println(showItemOrder(5));
     }
 
 }

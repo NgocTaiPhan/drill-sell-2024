@@ -14,7 +14,8 @@ public class Log {
     private Timestamp timeLogin;
     private String statuss;
     private String address;
-    private int levels;
+    private String levels, valuess, previousInfo;
+    private int SL;
 
     static Map<Integer, String> leveMapping = new HashMap<>();
 
@@ -39,7 +40,7 @@ public class Log {
     public Log() {
     }
 
-    public Log(int id, int userId, String ip, @Nullable Timestamp timeLogin, String statuss, String address, int levels) {
+    public Log(int id, int userId, String ip, @Nullable Timestamp timeLogin, String statuss, String address, String levels, String valuess, String previousInfo, int SL) {
         this.id = id;
         this.userId = userId;
         this.ip = ip;
@@ -47,6 +48,9 @@ public class Log {
         this.statuss = statuss;
         this.address = address;
         this.levels = levels;
+        this.valuess = valuess;
+        this.previousInfo = previousInfo;
+        this.SL = SL;
     }
 
     public int getId() {
@@ -97,11 +101,11 @@ public class Log {
         this.address = address;
     }
 
-    public int getLevels() {
+    public String getLevels() {
         return levels;
     }
 
-    public void setLevels(int levels) {
+    public void setLevels(String levels) {
         this.levels = levels;
     }
 
@@ -145,6 +149,30 @@ public class Log {
         Log.DANGER = DANGER;
     }
 
+    public int getSL() {
+        return SL;
+    }
+
+    public void setSL(int SL) {
+        this.SL = SL;
+    }
+
+    public String getValuess() {
+        return valuess;
+    }
+
+    public void setValuess(String valuess) {
+        this.valuess = valuess;
+    }
+
+    public String getPreviousInfo() {
+        return previousInfo;
+    }
+
+    public void setPreviousInfo(String previousInfo) {
+        this.previousInfo = previousInfo;
+    }
+
     @Override
     public String toString() {
         return "Log{" +
@@ -154,7 +182,10 @@ public class Log {
                 ", timeLogin=" + timeLogin +
                 ", statuss='" + statuss + '\'' +
                 ", address='" + address + '\'' +
-                ", levels=" + levels +
+                ", levels='" + levels + '\'' +
+                ", valuess='" + valuess + '\'' +
+                ", previousInfo='" + previousInfo + '\'' +
+                ", SL=" + SL +
                 '}';
     }
 }

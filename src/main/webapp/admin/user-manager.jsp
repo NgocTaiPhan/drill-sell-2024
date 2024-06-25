@@ -29,7 +29,8 @@
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/my-css/admin/paper-dashboard.css" rel="stylesheet"/>
 
-
+    <link href="../assets/css/my-css/admin/animate.min.css" rel="stylesheet"/>
+    <link href="../assets/css/my-css/pop-up.css" rel="stylesheet"/>
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
@@ -81,6 +82,12 @@
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
+                <li >
+                    <a href="log_management.jsp">
+                        <%--                        <i class="ti-shopping-cart"></i>--%>
+                        <p>Quản lý log</p>
+                    </a>
+                </li>
                 <li class="">
                     <a href="store-manager.jsp">
                         <i class="ti-user"></i>
@@ -105,41 +112,9 @@
                     </button>
                     <a class="navbar-brand" href="#">Quản lý người dùng</a>
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-panel"></i>
-                                <p>Stats</p>
-                            </a>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="ti-bell"></i>
-                                <p class="notification">5</p>
-                                <p>Notifications</p>
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Notification 1</a></li>
-                                <li><a href="#">Notification 2</a></li>
-                                <li><a href="#">Notification 3</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ti-settings"></i>
-                                <p>Settings</p>
-                            </a>
-                        </li>
-                    </ul>
 
-                </div>
             </div>
         </nav>
-
 
         <div class="content">
             <div class="container-fluid">
@@ -186,7 +161,6 @@
 
 
 
-
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -204,7 +178,7 @@
                                                 if (result.isConfirmed) {
                                                     // Nếu người dùng chọn "OK", thực hiện xóa
                                                     $.ajax({
-                                                        type: "POST",
+                                                        type: "POST",    
                                                         url: "deleteUser",
                                                         data: {id: id},
                                                         success: function (response) {
@@ -235,15 +209,157 @@
                                                 }
                                             })
                                         });
+                                        $('#user-mn tbody').on('click','.btn-info',function (){
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+                                            var fullname = data.fullname;
+                                            var username = data.username; // Lấy tên người dùng từ dữ liệu hàng được chọn
+                                            var email = data.email; // Lấy mật khẩu từ dữ liệu hàng được chọn
+                                            var address = data.address;
+                                            var phone = data.phone;
+                                            var sex = data.sex ? 'Nam' : 'Nữ';
+                                            var yearOfBirth = data.yearOfBirth;
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "showDetailUser",
+                                                 data : {id: id,
+                                                    fullname: fullname,
+                                                     username: username, // Truyền tên người dùng
+                                                     email: email,
+                                                     address: address,
+                                                     phone: phone,
+                                                    sex: sex,
+                                                    yearOfBirth : yearOfBirth
+                                                },
+                                                success: function (response){
+
+                                                    var popupContent = '<div id="userPopup">' +
+                                                        '<button id="closePopup" class="closeButton">&#x2716;</button>' +
+                                                        '<h1>Thông Tin Khách Hàng</h1>' +
+                                                        '<p><strong>ID:</strong> ' + response.id + '</p>' +
+                                                        '<p><strong>Tên Khách Hàng:</strong> ' + response.fullname + '</p>' +
+                                                        '<p><strong>Tên Đăng Nhập:</strong> ' + response.username + '</p>' +
+                                                        '<p><strong>Email:</strong> ' + response.email + '</p>' +
+                                                        '<p><strong>Địa Chỉ:</strong> ' + response.address + '</p>' +
+                                                        '<p><strong>Số Điện Thoại :</strong> ' + response.phone + '</p>' +
+                                                        '<p><strong>Giới Tính:</strong> ' + sex + '</p>' +
+                                                        '<p><strong>Ngày Sinh:</strong> ' + response.yearOfBirth + '</p>' +
+                                                        '</div>';
+                                                    $('body').append('<div class="overlay"></div>');
+                                                    // Thêm popup vào trang
+                                                    $('body').append(popupContent);
+
+                                                    // Đóng popup khi nhấn nút "Close"
+                                                    $('#closePopup').click(function() {
+                                                        $('#userPopup').remove();
+                                                        $('.overlay').remove();
+                                                    });
+                                                },
+                                                error: function (xhr,status,error){
+                                                    alert("Error: "+error);
+                                                }
+                                            })
+                                        })
+
+                                        $('#user-mn tbody').on('click', '.btn-warning', function () {
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+                                            var fullname = data.fullname;
+                                            var username = data.username;
+                                            var email = data.email;
+                                            var address = data.address;
+                                            var phone = data.phone;
+                                            var sex = data.sex ? 'Nam' : 'Nữ'; // Chuyển đổi thành giá trị Boolean dưới dạng chuỗi
+                                            var yearOfBirth = data.yearOfBirth;
+                                            var roleUser = data.roleUser ? 'Admin' : 'User'; // Chuyển đổi thành chuỗi 'admin' hoặc 'user'
+
+                                            var popupContent = '<div id="userPopup">' +
+                                                '<button id="closePopup1" class="closeButton1">&#x2716;</button>' +
+                                                '<h1>Chỉnh sửa Thông Tin Khách Hàng</h1>' +
+                                                '<form id="editUserForm">' +
+                                                '<input type="hidden" name="id" value="' + id + '">' +
+                                                '<p><label>Tên Khách Hàng:</label> <input type="text" name="fullname" value="' + fullname + '"></p>' +
+                                                '<p><label>Tên Đăng Nhập:</label> <input type="text" name="username" value="' + username + '"></p>' +
+                                                '<p><label>Email:</label> <input type="text" name="email" value="' + email + '"></p>' +
+                                                '<p><label>Địa Chỉ:</label> <input type="text" name="address" value="' + address + '"></p>' +
+                                                '<p><label>Số Điện Thoại :</label> <input type="text" name="phone" value="' + phone + '"></p>' +
+                                                '<p><label>Giới Tính:</label> <select name="sex" id="sex">' +
+                                                '<option value="Nam"' + (sex === 'Nam' ? ' selected' : '') + '>Nam</option>' +
+                                                '<option value="Nữ"' + (sex === 'Nữ' ? ' selected' : '') + '>Nữ</option>' +
+                                                '</select></p>' +
+                                                 '<p><label>Ngày Sinh:</label> <input type="text" name="yearOfBirth" value="' + yearOfBirth + '"></p>' +
+                                                '<p><label>Chức Vụ:</label> <select name="roleUser" id="roleUser">' +
+                                                '<option value="Admin"' + (roleUser === 'Admin' ? ' selected' : '') + '>Admin</option>' +
+                                                '<option value="User"' + (roleUser === 'User' ? ' selected' : '') + '>User</option>' +
+                                                '</select></p>' +
+                                                '<button type="submit">Cập nhật</button>' +
+                                                '</form>' +
+                                                '</div>';
+                                            $('body').append('<div class="overlay"></div>');
+                                            $('body').append(popupContent);
+
+                                            $('#closePopup1').click(function () {
+                                                $('#userPopup').remove();
+                                                $('.overlay').remove();
+                                            });
+
+                                            $('#editUserForm').submit(function (e) {
+                                                e.preventDefault();
+                                                Swal.fire({
+                                                    title: "Bạn có chắc chắn muốn cập nhật thông tin?",
+                                                    text: "Hãy kiểm tra lại thông tin trước khi xác nhận!",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: "#3085d6",
+                                                    cancelButtonColor: "#d33",
+                                                    confirmButtonText: "Đồng ý cập nhật!",
+                                                    cancelButtonText: "Hủy"
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Nếu người dùng chọn "OK", thực hiện cập nhật
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: "editUser",
+                                                            data: $('#editUserForm').serialize(),
+                                                            success: function (response) {
+                                                                Swal.fire({
+                                                                    title: "Thành công!",
+                                                                    text: response,
+                                                                    icon: "success"
+                                                                });
+                                                                $('#userPopup').remove();
+                                                                $('.overlay').remove();
+                                                                // Cập nhật lại bảng dữ liệu nếu cần thiết
+                                                                table.ajax.reload();
+                                                            },
+                                                            error: function (xhr, status, error) {
+                                                                var errorMessage = xhr.responseText || "An error occurred: " + error;
+                                                                Swal.fire({
+                                                                    title: "Lỗi!",
+                                                                    text: errorMessage,
+                                                                    icon: "error"
+                                                                });
+                                                            }
+                                                        });
+                                                    } else {
+                                                        // Nếu người dùng chọn "Cancel", không thực hiện hành động nào
+                                                        Swal.fire({
+                                                            title: "Hủy",
+                                                            text: "Thông tin của bạn vẫn chưa thay đổi :)",
+                                                            icon: "info"
+                                                        });
+                                                    }
+                                                });
+                                            });
+
+                                        });
+
+
                                     })
 
                                 </script>
-                                <script src="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
-"></script>
-                                <link href="
-https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
-" rel="stylesheet">
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+                                <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet">
                             </div>
                         </div>
                     </div>

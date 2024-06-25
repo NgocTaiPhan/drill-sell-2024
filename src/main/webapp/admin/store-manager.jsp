@@ -81,6 +81,12 @@
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
+                <li >
+                    <a href="log_management.jsp">
+                        <%--                        <i class="ti-shopping-cart"></i>--%>
+                        <p>Quản lý log</p>
+                    </a>
+                </li>
                 <li class="active">
                     <a href="">
                         <i class="ti-user"></i>

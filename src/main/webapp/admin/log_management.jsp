@@ -5,6 +5,8 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Log" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.LogDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -75,13 +77,13 @@
                         <p>Quản lý sản phẩm</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="order-management.jsp">
                         <i class="ti-shopping-cart"></i>
                         <p>Quản lý đơn hàng</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="log_management.jsp">
                         <%--                        <i class="ti-shopping-cart"></i>--%>
                         <p>Quản lý log</p>
@@ -93,6 +95,7 @@
                         <p>Quản lý kho</p>
                     </a>
                 </li>
+
 
             </ul>
         </div>
@@ -116,7 +119,8 @@
                                 >
                                     <div class="nav-outer">
                                         <ul class="nav navbar-nav">
-                                            <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
+                                            <li class="active  yamm-fw"><a
+                                                    href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
                                             <li class="active  yamm-fw"><a
                                                     href="<%= request.getContextPath() %>/product.jsp"
                                             >Sản phẩm</a></li>
@@ -172,55 +176,60 @@
 
             </div>
         </nav>
-        <table id="order" style="margin-top: 30px" class="table">
-            <thead>
-            <tr>
-                <th>Mã đơn hàng</th>
-                <th>Người đặt hàng</th>
-                <th>Địa chỉ</th>
-                <th>Số điện thoại</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <%
-                List<Order> showView = OrderDAO.showOrder();
-                if (showView != null) {
-                    for (Order p : showView) {
-            %>
-            <tr>
-                <td><%=p.getOrderId()%></td>
-                <td><%= p.getNameCustomer()%></td>
-                <td><%= p.getAddress()%></td>
-                <td><%= p.getPhone()%></td>
-                <td><%= p.getStauss()%></td>
+        <div class="content">
+            <div class="container-fluid">
+                <table id="log" class="table table-bordered table-striped">
+                    <thead style="text-align: center">
+                    <tr>
+                        <th>Mã log</th>
+                        <th>Mã user</th>
+                        <th>IP</th>
+                        <th>Cấp độ</th>
+                        <th>Trạng thái</th>
+                        <th>Trước khi cập nhật</th>
+                        <th>Sau khi cập nhật</th>
+                        <th>Ngày tạo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<Log> log = LogDAO.showLog();
+                        if (log != null) {
+                            for (Log l : log) {
 
 
-                <td>
-                    <a href="<%= request.getContextPath()%>/showUpdateOrder?orderId=<%=p.getOrderId()%>"
-                       class="btn btn-info">
-                        Chi tiết
-                    </a>
-                </td>
-            </tr>
-
-
-            <%
-                    }
-                }
-            %>
-            </tbody>
-        </table>
+                    %>
+                    <tr>
+                        <td><%= l.getId()%></td>
+                        <td><%=l.getUserId()%></td>
+                        <td><%=l.getIp()%></td>
+                        <td><%=l.getLevels()%></td>
+                        <td><%=l.getStatuss()%></td>
+                        <td><%=l.getPreviousInfo()%></td>
+                        <td><%=l.getValuess()%></td>
+                        <td><%=l.getTimeLogin()%></td>
+                    </tr>
+                    <%
+                            }
+                        }
+                    %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            $('#order').DataTable();
+        $(document).ready(function () {
+
+            new DataTable('#log', {
+                layout: {
+                    topStart: toolbar,
+                    bottomStart: toolbar
+                }
+            });
         });
     </script>
-
 
 
 </div>

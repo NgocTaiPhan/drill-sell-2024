@@ -17,7 +17,7 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <link href="assets/images/logo.png" rel="icon" type="image/png">
-    <title>Đăng nhập/Đăng kí</title>
+    <title>Admin đăng nhập</title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
 
@@ -60,69 +60,11 @@
     <%--    Link to css button back-to-home--%>
     <link href="assets/css/my-css/back-to-home.css" rel="stylesheet">
     <script src="https://esgoo.net/scripts/jquery.js"></script>
-        <style type="text/css">
-            .css_select_div { text-align: center; }
-            .css_select { display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
-        </style>
-    <script>
-    $(document).ready(function () {
-    // Biến lưu trữ thông tin về tỉnh, quận/huyện và phường/xã
-    var provinces = {};
-    var districts = {};
-    var wards = {};
-
-    // Lấy danh sách tỉnh thành từ API và điền vào dropdown tỉnh
-    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-    if (data_tinh.error == 0) {
-    $.each(data_tinh.data, function (key_tinh, val_tinh) {
-    provinces[val_tinh.full_name] = val_tinh.id; // Lưu tên của tỉnh
-    $("#tinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
-    });
-    }
-    });
-
-    // Xử lý sự kiện khi người dùng chọn tỉnh
-    $("#tinh").change(function () {
-    var ten_tinh = $(this).val(); // Lấy tên của tỉnh từ dropdown
-
-    // Xóa các lựa chọn cũ của quận/huyện và phường/xã
-    $("#quan").html('<option value="0">Chọn Quận Huyện</option>');
-    $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
-
-    // Lấy danh sách quận/huyện từ API và điền vào dropdown quận/huyện
-    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinces[ten_tinh] + '.htm', function (data_quan) {
-    if (data_quan.error == 0) {
-    $.each(data_quan.data, function (key_quan, val_quan) {
-    districts[val_quan.full_name] = val_quan.id; // Lưu tên của quận/huyện
-    $("#quan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
-    });
-    }
-    });
-    });
-
-    // Xử lý sự kiện khi người dùng chọn quận/huyện
-    $("#quan").change(function () {
-    var ten_quan = $(this).val(); // Lấy tên của quận/huyện từ dropdown
-
-    // Xóa các lựa chọn cũ của phường/xã
-    $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
-
-    // Lấy danh sách phường/xã từ API và điền vào dropdown phường/xã
-    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districts[ten_quan] + '.htm', function (data_phuong) {
-    if (data_phuong.error == 0) {
-    $.each(data_phuong.data, function (key_phuong, val_phuong) {
-    wards[val_phuong.full_name] = val_phuong.id; // Lưu tên của phường/xã
-    $("#phuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
-    });
-    }
-    });
-    });
-    });
-</script>
+<link href="adminLogin.css">
 </head>
 <body class="cnt-home">
 
-<div><a href="./home.jsp">
+<div><a href="home.jsp">
     <button class="button-back-home " role="button">Quay về trang chủ</button>
 </a></div>
 <input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
@@ -130,14 +72,18 @@
 
 <div class="body-content">
     <div class="container">
-        <div class="sign-in-page">
+        <div class="sign-in-page-admin">
             <div class="row">
                 <!-- Sign-in -->
                 <div class="col-md-6 col-sm-6 sign-in">
-                    <h3 class="">Đăng nhập</h3>
+                    <style>
+                        .col-md-6, .col-sm-6{ margin-left: 25%}
+
+                    </style>
+                    <h3 class="">Admin Đăng Nhập</h3>
                     <p class=""></p>
 
-                    <form class="outer-top-xs" id="login-form" role="form" action="login" method="POST">
+                    <form class="outer-top-xs" id="login-form" role="form" action="loginAdmin" method="POST">
                         <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
                             <div class="error-email-login"></div>
@@ -160,13 +106,14 @@
                                 Quên mật khẩu
                             </a>
                         </div>
+                        <div class ="horizontal-alignment">
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
                            href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
 
-
+                        </div>
                     </form>
 
                     <%--                    <script>--%>
@@ -203,120 +150,6 @@
                     }
                 %>
 
-
-                <div class="col-md-6 col-sm-6 create-new-account">
-                    <h3 class="checkout-subtitle">Tạo tài khoản mới</h3>
-                    <p class="text title-tag-line"> Nhập thông tin bên dưới để tạo tài khoản mới</p>
-                    <form class="register-form outer-top-xs" role="form" id="register-form" action="register"
-                          method="post">
-                        <h4>Thông tin người dùng</h4>
-
-                        <div class="form-group">
-                            <label class="info-title" for="full-name-register">Họ và tên <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="full-name-register"
-                                   name="full-name-register"
-                                   type="text" value="<%=fullName%>">
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="info-title" for="birth-date-register">Ngày, tháng, năm sinh
-                                <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="birth-date-register"
-                                   name="birth-date-register"
-                                   type="date" value="<%=sqlDate%>">
-                        </div>
-                        <div class="form-group ">
-                            <label class="info-title" for="gender">Giới tính
-                                <span>*</span></label>
-                            <div class="radio outer-xs" id="gender"
-                                 style="display: flex; justify-content: space-around">
-                                <label>
-                                    <input id="genderFemale" name="gender" type="radio" value="Nữ" checked>Nữ
-                                </label>
-                                <label>
-                                    <input id="genderMale" name="gender" type="radio" value="Nam">Nam
-                                </label>
-                            </div>
-                        </div>
-
-<%--                        <div class="form-group">--%>
-<%--                            <label class="info-title" for="address-register">Địa chỉ <span>*</span></label>--%>
-<%--                            <input class="form-control unicase-form-control text-input" id="address-register"--%>
-<%--                                   name="address-register"--%>
-<%--                                   type="text" value="<%=address%>">--%>
-<%--                        </div>--%>
-                                                    <div class="form-group">
-                                                     <label class="info-title"  for="address-register" id="address-register">Địa chỉ <span>*</span></label>
-
-                                                        <div class="css_select_div">
-                                                            <select class="css_select" id="tinh" name="tinh">
-                                                                <option value="0">Chọn Tỉnh</option>
-                                                                <!-- Thêm các tùy chọn cho tỉnh -->
-                                                            </select>
-                                                            <select class="css_select" id="quan" name="quan">
-                                                                <option value="0">Chọn Quận Huyện</option>
-                                                            </select>
-                                                            <select class="css_select" id="phuong" name="phuong">
-                                                                <option value="0">Chọn Phường Xã</option>
-                                                                <!-- Thêm các tùy chọn cho xã -->
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                        <div class="form-group">
-                            <label class="info-title" for="phone-number-register">Số điện thoại
-                                <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="phone-number-register"
-                                   type="tel" name="phone-number-register" value="<%=phoneNumber%>">
-                        </div>
-                        <div class="form-group">
-                            <label class="info-title" for="email-register">Địa chỉ email <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="email-register"
-                                   type="text" name="email-register"
-                                   value="<%=email%>">
-
-                        </div>
-                        <h4>Thông tin tài khoản</h4>
-                        <div class="form-group">
-
-                            <label class="info-title" for="username-register">Tên đăng nhập <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="username-register"
-                                   type="text" name="username-register"
-                                   value="<%=username%>">
-                        </div>
-                        <div class="form-group">
-                            <label class="info-title" for="password-register">Mật khẩu <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input" id="password-register"
-                                   type="password" name="password-register"
-                                   value="<%=password%>">
-
-
-                        </div>
-                        <div class="form-group">
-                            <label class="info-title" for="confirm-password-register">Nhập lại mật khẩu
-                                <span>*</span></label>
-                            <input class="form-control unicase-form-control text-input"
-                                   id="confirm-password-register"
-                                   type="password" name="confirm-password-register">
-                        </div>
-
-                        <div class="form-group" style="white-space: nowrap;  ">
-                            <input class=" form-checkbox-input" id="agree-to-terms" style="margin-right: 5px;"
-                                   type="checkbox" name="agree-to-terms">
-                            <label class="info-title" for="agree-to-terms">Đồng ý với <a href="#">điều
-                                khoản</a> của chúng tôi
-                                <span>*</span></label>
-                        </div>
-
-
-                        <button class="btn-upper btn btn-primary checkout-page-button" type="submit">Đăng
-                            kí
-                        </button>
-                    </form>
-
-
-                </div>
 
             </div>
         </div>

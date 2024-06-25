@@ -2,6 +2,7 @@ package vn.hcmuaf.fit.drillsell.model;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class OrderItem {
@@ -9,7 +10,7 @@ public class OrderItem {
     private int productId;
     private int cartId, idItem;
     @Nullable
-    private Timestamp expectedDate;
+    private Date expectedDate;
 
     private double unitPrice;
     private String productName;
@@ -19,7 +20,7 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(int orderId, int productId, int cartId, int idItem, @Nullable Timestamp expectedDate, double unitPrice, String productName, double totalPrice, int quantity) {
+    public OrderItem(int orderId, int productId, int cartId, int idItem, Date expectedDate, double unitPrice, String productName, double totalPrice, int quantity) {
         this.orderId = orderId;
         this.productId = productId;
         this.cartId = cartId;
@@ -63,11 +64,11 @@ public class OrderItem {
         this.idItem = idItem;
     }
 
-    public Timestamp getExpectedDate() {
+    public Date getExpectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Timestamp expectedDate) {
+    public void setExpectedDate(Date expectedDate) {
         this.expectedDate = expectedDate;
     }
 
