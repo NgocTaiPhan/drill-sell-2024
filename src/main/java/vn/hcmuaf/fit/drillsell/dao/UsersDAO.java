@@ -193,7 +193,7 @@ public class UsersDAO implements IUserDAO{
     }
 
 
-    public User getUserById(int id) {
+    public static User getUserById(int id) {
         String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE id=?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
@@ -282,7 +282,7 @@ public void updateUser(User user) {
     });
 }
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().getUserById(2));
+        System.out.println(UsersDAO.getInstance().getUserById(1));
     }
 
 

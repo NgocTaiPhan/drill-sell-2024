@@ -18,7 +18,7 @@ public class LogDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             try {
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Login susess', 'INFO')")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thành công', 'INFO')")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
                         .execute();
@@ -31,15 +31,11 @@ public class LogDAO {
 
     }
 
-
     public static boolean inserLoginFalse(Log log) {
-
         return DbConnector.me().get().inTransaction(handle -> {
             try {
-
-
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Login False', 'ERROR')")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thất bại', 'ERROR')")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
                         .execute();
@@ -70,7 +66,7 @@ public class LogDAO {
             // Kiểm tra số lần đăng nhập thất bại trong vòng 5 phút
             Optional<Log> re = handle.createQuery("SELECT userId, ip, COUNT(userId) AS SL " +
                             "FROM log " +
-                            "WHERE timeLogin >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) AND log.statuss = 'Login False' " +
+                            "WHERE timeLogin >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) AND log.statuss = 'Đăng nhập thất bại' " +
                             "GROUP BY userId, ip " +
                             "HAVING SL >= 3")
                     .mapToBean(Log.class)
@@ -83,7 +79,7 @@ public class LogDAO {
 
                     // Kiểm tra số lần đăng nhập sai để quyết định trạng thái
                     if (re.get().getSL() >= 5) {
-                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Login DANGER', 'DANGER')")
+                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 5 lần tài khoản bị khóa 10p', 'DANGER')")
                                 .bind("userId", log.getUserId())
                                 .bind("ip", ipAddress)
                                 .execute();
@@ -93,7 +89,7 @@ public class LogDAO {
                                 .bind("id", log.getUserId())
                                 .execute();
                     } else if (re.get().getSL() >= 3) {
-                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Login WARNING', 'WARNING')")
+                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 3 lần', 'WARNING')")
                                 .bind("userId", log.getUserId())
                                 .bind("ip", ipAddress)
                                 .execute();
@@ -127,9 +123,10 @@ public class LogDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             try {
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels, valuess, previousInfo) VALUES (:userId, :ip, 'Update Order', 'INFO', :valuess, :previousInfo)")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels, valuess, previousInfo) VALUES (:userId, :ip, :statuss, 'INFO', :valuess, :previousInfo)")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
+                        .bind("statuss", log.getStatuss())
                         .bind("valuess", log.getValuess())
                         .bind("previousInfo", previousInfo)
                         .execute();
@@ -143,9 +140,7 @@ public class LogDAO {
 
 
 
-
-
-
+//
     public static void main(String[] args) {
         Log log = new Log();
         log.setUserId(7); // Đặt giá trị userId thực tế

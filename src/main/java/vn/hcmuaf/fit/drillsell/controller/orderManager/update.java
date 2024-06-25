@@ -94,6 +94,8 @@ public class update extends HttpServlet {
             log.setUserId(userId);
             String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + address + ", Phone: " + phone + ", Quantity: " + quantityStr + ", expectedDate: " +expectedDateStr;
             log.setValuess(logDetails);
+            String status = "Update Order";
+            log.setStatuss(status);
             LogDAO.insertUpdateOrderInLog(log, previousInfo); // Insert log with previous info
         } else {
             PrintWriter out = response.getWriter();
