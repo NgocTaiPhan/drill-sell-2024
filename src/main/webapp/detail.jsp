@@ -404,7 +404,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <div onclick="checkLoginAndRedirect(<%=logged%>,'cart?productId=<%=product.getProductId()%>')"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
-                                            </div>+
+                                            </div>
 
                                         </div>
 

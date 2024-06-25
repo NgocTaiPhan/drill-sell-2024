@@ -64,7 +64,9 @@ package vn.hcmuaf.fit.drillsell.controller.userManager;
 
 import com.google.gson.Gson;
 import vn.hcmuaf.fit.drillsell.dao.IUserDAO;
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.User;
 
 import javax.servlet.ServletException;
@@ -92,6 +94,16 @@ public class EditUser extends HttpServlet {
         String sexStr = req.getParameter("sex");
         String yearOfBirth = req.getParameter("yearOfBirth");
         String roleUserStr = req.getParameter("roleUser");
+        User users = UsersDAO.getInstance().getUserById(Integer.parseInt(idStr));
+        String previousInfo = "user ID: " + users.getId()
+                + ", fullname: " + users.getFullname()
+                + ", address: " + users.getAddress()
+                + ", phone: " + users.getPhone()+ ", email: "
+                + users.getEmail() + ", username: "
+                + users.getUsername() + ", sex: "
+                + setGender(users.getSex()) + ", yearOfBirth: "
+                + users.getYearOfBirth() + ", role: "
+                + setRole(users.isRoleUser());
 
         if (idStr != null) {
             int id = Integer.parseInt(idStr); // Chuyển đổi chuỗi thành số nguyên
@@ -119,9 +131,25 @@ public class EditUser extends HttpServlet {
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write(json);
+
+            Log log = new Log();
+            log.setUserId(Integer.parseInt(idStr));
+            String values = "user ID: " + idStr + ", fullname: " + fullname + ", address: " + address + ", phone: " + phone + ", email: " + email + ", username: " + userName + ", sex: " + sexStr + ", yearOfBirth: " + yearOfBirth + ", role: " + roleUserStr;
+            log.setValuess(values);
+            log.setStatuss("Cập nhật User");
+            LogDAO.insertUpdateOrderInLog(log, previousInfo);
         } else {
             // Xử lý khi không có id trong request
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing user ID");
         }
+    }
+
+    private String setGender(boolean gender) {
+        if (gender)return "Nam";
+        return "Nữ";
+    }
+    private String setRole(boolean gender) {
+        if (gender)return "Admin";
+        return "User";
     }
 }
