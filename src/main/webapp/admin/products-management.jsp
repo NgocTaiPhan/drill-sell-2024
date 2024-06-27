@@ -25,12 +25,9 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
 
-
     <!-- Bootstrap core CSS     -->
     <link href="../assets/css/my-css/admin/bootstrap.min.css" rel="stylesheet"/>
 
-    <!-- Animation library for notifications   -->
-    <link href="../assets/css/my-css/admin/animate.min.css" rel="stylesheet"/>
 
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/my-css/admin/paper-dashboard.css" rel="stylesheet"/>
@@ -113,7 +110,9 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="content table-responsive table-full-width">
-                                <button class="btn btn-info open-modal" id="open-modal">Thêm sản phẩm</button>
+                                <button link-to-modal="addProdModal" onclick="handleModal('addProdModal')"
+                                        class="btn btn-info open-modal">Thêm sản phẩm
+                                </button>
                                 <table id="prod-mn" class="table table-striped">
                                     <thead>
                                     <tr>
@@ -139,9 +138,9 @@
 
         <%--Modal thêm sản phẩm--%>
 
-        <div id="myModal" class="modal">
+        <div id="addProdModal" class="modal">
             <div class="modal-content">
-                <span id="close-btn" class="close-btn">&times;</span>
+                <span  class="close-btn">&times;</span>
                 <h4>Thêm sản phẩm</h4>
                 <div class="container">
                     <div class="center-block">
@@ -207,11 +206,11 @@
                 </div>
             </div>
         </div>
-        <%--        Modal update sản phẩm--%>
-        <div id="myModal" class="modal">
+        <%--        Modal xem chi tiết và update sản phẩm--%>
+        <div id="modalDetailProd" class="modal">
             <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h4>Thêm sản phẩm</h4>
+                <span  class="close-btn">&times;</span>
+                <h4>Chi tiết sản phẩm</h4>
                 <div class="container">
                     <div class="center-block">
 
@@ -240,7 +239,7 @@
                                 ></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="specifions">Thông số kỹ thuật</label>
+                                <label for="specifionsU">Thông số kỹ thuật</label>
                                 <textarea disabled class="form-control" id="specifionsU" name="specifions"
                                           rows="3"
                                 ></textarea>
@@ -260,7 +259,7 @@
                                 <label for="unitPriceU">Giá bán</label>
                                 <input type="number" class="form-control" id="unitPriceU" name="unitPrice" disabled>
                                 <div class="form-group">
-                                    <label for="categoryId">Danh mục sản phẩm</label>
+                                    <label for="categoryIdU">Danh mục sản phẩm</label>
                                     <select class="form-control" id="categoryIdU" name="categoryId" disabled>
                                         <option value="">Chọn danh mục sản phẩm</option>
                                         <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
@@ -279,6 +278,7 @@
             </div>
         </div>
     </div>
+
 </div>
 </body>
 
