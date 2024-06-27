@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    //Khởi tạo DataTable bằng dữ liệu và load bằng ajax
+    //==========================Khởi tạo DataTable bằng dữ liệu và load bằng ajax=====================================
     var table = $("#prod-mn").DataTable({
         layout: {
             topStart: null,
@@ -21,12 +21,12 @@ $(document).ready(function () {
 
                     return ' <button id="hideProd" type="button" class="btn btn-warning">Ẩn</button>' +
                         ' <button id="removeProd" type="button" class="btn btn-danger">Xóa</button>' +
-                        ' <button id="updateProd" type="button" class="btn btn-info fa fa-info"></button>';
+                        ' <button onclick="handleModal(`modalDetailProd`)" link-to-modal="modalDetailProd" id="detailProd" type="button" class="btn btn-info fa fa-info"></button>';
                 }
             }
         ]
     });
-
+    // ------------------------------------Xóa sản phẩm------------------------------------------
     $("#prod-mn tbody").on('click', '#removeProd', function () {
         var data = table.row($(this).parents('tr')).data();
         var productId = data.productId;
@@ -69,7 +69,7 @@ $(document).ready(function () {
         })
     });
 
-    //Ẩn sản phẩm
+    //------------------------------------------Ẩn sản phẩm-------------------------------------------
     $("#prod-mn tbody").on('click', '#hideProd', function () {
         var data = table.row($(this).parents('tr')).data();
         var productId = data.productId;
@@ -113,7 +113,8 @@ $(document).ready(function () {
             }
         })
     })
-    $("#prod-mn tbody").on('click', '#updateProd', function () {
+    // ----------------------------------------------Xử lý load chi tiết sản phẩm---------------------------------------
+    $("#prod-mn tbody").on('click', '#detailProd', function () {
         var data = table.row($(this).parents('tr')).data();
         var productId = data.productId;
         // Hiển thị thông báo ẩn sản phẩm
@@ -122,10 +123,17 @@ $(document).ready(function () {
             type: "POST",
             url: "show-detail",
             data: {productId: productId},
-            success: function (response) {
+            success: function (product) {
+                $('#imageUrlInputU').val(product.image);
+                $('#productNameU').val(product.productName);
+                $('#nameProducerU').val(product.nameProducer);
+                $('#unitPriceU').val(product.unitPrice);
+                $('#describleU').val(product.describle);
+                $('#specifionsU').val(product.specifions);
+                document.querySelector('#modalDetailProd').style.display = "block";
+                $('.loadProdsImg').attr('src', product.image);
 
-                // Tải lại bảng dữ liệu
-                table.ajax.reload();
+
             },
             error: function (xhr, status, error) {
                 var errorMessage = xhr.responseText || "An error occurred: " + error;
@@ -140,4 +148,6 @@ $(document).ready(function () {
 
     })
 });
+
+
 
