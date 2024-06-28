@@ -100,7 +100,6 @@
                                                            methods="post">
                                                             <%=pc.getNameCategory()%>
                                                         </a>
-
                                                     </li>
                                                     <%}%>
 
@@ -161,7 +160,6 @@
                 <div class="main">
                     <div class="container">
                         <h3>Xem chi tiết đơn hàng</h3>
-
                         <div class="orderId">
                             <label>Mã khách hàng:</label>
                             <input name="" value="<%= order.getUserId() %>">

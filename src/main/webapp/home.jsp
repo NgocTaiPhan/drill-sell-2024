@@ -224,7 +224,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
                                     if (logged) {
                                         if (u.isRoleUser()) {
-                                %>              
+                                %>
                                 <li class="active yamm-fw"><a
                                         href="${pageContext.request.contextPath}/admin/dashboard.jsp">Quản lý</a></li>
                                 <%
@@ -695,6 +695,27 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
 </body>
+<script>
 
+    function checkLoginAndRedirect(logged, url) {
+
+        if (!logged) {
+            Swal.fire({
+                title: "Bạn chưa đăng nhập",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Đăng nhập",
+                cancelButtonText: `Để sau`
+            }).then((result) => {
+                //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+                if (result.isConfirmed) {
+                    window.location.href = 'login.jsp';
+                }
+            });
+        } else {
+            window.location.href = url;
+        }
+    }
+</script>
 
 </html>

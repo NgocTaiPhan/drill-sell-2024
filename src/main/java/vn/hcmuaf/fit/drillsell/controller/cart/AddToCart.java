@@ -39,7 +39,6 @@ public class AddToCart extends HttpServlet {
         int userId = Integer.parseInt(userIdParam);
 
         boolean insertProduct = CartDAO.insertCartItem(userId, productId);
-
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng, chuyển hướng người dùng đến trang detail.jsp
             request.getRequestDispatcher("/load-detail").forward(request, response);

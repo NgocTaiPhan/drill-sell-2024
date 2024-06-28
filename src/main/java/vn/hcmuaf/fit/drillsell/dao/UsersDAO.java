@@ -3,6 +3,7 @@ package vn.hcmuaf.fit.drillsell.dao;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import vn.hcmuaf.fit.drillsell.model.Log;
+import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
@@ -213,7 +214,7 @@ public class UsersDAO implements IUserDAO{
     }
 //    Xóa người dùng theo id người dùng
     public boolean deleteUser(int id, int status) {
-      
+
         final boolean[]  deleted = {false};
 
         DbConnector.me().get().useHandle(handle -> {
@@ -263,6 +264,13 @@ public class UsersDAO implements IUserDAO{
 //            );
 //        });
 //    }
+public static long getCountCustomer() {
+    return DbConnector.me().get().withHandle(handle ->
+            handle.createQuery("SELECT COUNT(users.id) AS countCustomer FROM users")
+                    .mapTo(Long.class) // Map the count to a Long
+                    .one()
+    );
+}
 public void updateUser(User user) {
     int id = user.getId();
     DbConnector.me().get().useHandle(handle -> {
@@ -278,13 +286,11 @@ public void updateUser(User user) {
                     user.isRoleUser() ? 1 : 0, // Chuyển đổi Boolean thành Integer
                     id
             );
-        
+
     });
 }
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().getUserById(1));
+        System.out.println(getCountCustomer());
     }
-
-
 }
 

@@ -392,7 +392,26 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                     </div>
                                 </div>
 
-
+<%--                                <script>--%>
+<%--                                    function checkLoginAndRedirect(logged, url) {--%>
+<%--                                        if (!logged) {--%>
+<%--                                            Swal.fire({--%>
+<%--                                                title: "Bạn chưa đăng nhập",--%>
+<%--                                                icon: "warning",--%>
+<%--                                                showCancelButton: true,--%>
+<%--                                                confirmButtonText: "Đăng nhập",--%>
+<%--                                                cancelButtonText: `Để sau`--%>
+<%--                                            }).then((result) => {--%>
+<%--                                                //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập--%>
+<%--                                                if (result.isConfirmed) {--%>
+<%--                                                    window.location.href = 'login.jsp';--%>
+<%--                                                }--%>
+<%--                                            });--%>
+<%--                                        } else {--%>
+<%--                                            window.location.href = url;--%>
+<%--                                        }--%>
+<%--                                    }--%>
+<%--                                </script>--%>
                                 <div class="quantity-container info-container">
                                     <div class="row">
 
@@ -621,4 +640,26 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
     }
 %>
 </body>
+<script>
+
+    function checkLoginAndRedirect(logged, url) {
+
+        if (!logged) {
+            Swal.fire({
+                title: "Bạn chưa đăng nhập",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Đăng nhập",
+                cancelButtonText: `Để sau`
+            }).then((result) => {
+                //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
+                if (result.isConfirmed) {
+                    window.location.href = 'login.jsp';
+                }
+            });
+        } else {
+            window.location.href = url;
+        }
+    }
+</script>
 </html>

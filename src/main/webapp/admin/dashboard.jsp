@@ -1,27 +1,31 @@
+<%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.OrderDAO" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <link rel="icon" type="image/png" sizes="96x96" href="../assets/images/logo.png">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
-	<title>Quản trị</title>
-
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
+    <title>Quản trị</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
 
 
     <!-- Bootstrap core CSS     -->
-    <link href="../assets/css/my-css/admin/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/my-css/admin/bootstrap.min.css" rel="stylesheet"/>
 
     <!-- Animation library for notifications   -->
     <link href="../assets/css/my-css/admin/animate.min.css" rel="stylesheet"/>
 
     <!--  Paper Dashboard core CSS    -->
     <link href="../assets/css/my-css/admin/paper-dashboard.css" rel="stylesheet"/>
-
-
 
 
     <!--  Fonts and icons     -->
@@ -34,60 +38,60 @@
 <div class="wrapper">
     <div class="sidebar" data-background-color="white" data-active-color="primary">
 
-    <!--
-		Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-		Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-	-->
+        <!--
+            Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+            Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+        -->
 
-    <div class="sidebar-wrapper">
-        <div class="logo">
-            <a href="../home.jsp" class="simple-text">
-                Máy khoan
-            </a>
+        <div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="../home.jsp" class="simple-text">
+                    Máy khoan
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li class="active">
+                    <a href="dashboard.jsp">
+                        <i class="ti-panel"></i>
+                        <p>Thống kê</p>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="user-manager.jsp">
+                        <i class="ti-user"></i>
+                        <p>Quản lý người dùng</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="products-management.jsp">
+                        <i class="ti-check-box"></i>
+                        <p>Quản lý sản phẩm</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="order-management.jsp">
+                        <i class="ti-shopping-cart"></i>
+                        <p>Quản lý đơn hàng</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="log_management.jsp">
+                        <%--                        <i class="ti-shopping-cart"></i>--%>
+                        <p>Quản lý log</p>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="store-manager.jsp">
+                        <i class="ti-user"></i>
+                        <p>Quản lý kho</p>
+                    </a>
+                </li>
+
+
+            </ul>
         </div>
-
-        <ul class="nav">
-            <li class="active">
-                <a href="dashboard.jsp">
-                    <i class="ti-panel"></i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
-
-            <li >
-                <a href="user-manager.jsp">
-                    <i class="ti-user"></i>
-                    <p>Quản lý người dùng</p>
-                </a>
-            </li>
-            <li>
-                <a href="products-management.jsp">
-                    <i class="ti-check-box"></i>
-                    <p>Quản lý sản phẩm</p>
-                </a>
-            </li>
-            <li>
-                <a href="order-management.jsp">
-                    <i class="ti-shopping-cart"></i>
-                    <p>Quản lý đơn hàng</p>
-                </a>
-            </li>
-            <li >
-                <a href="log_management.jsp">
-                    <%--                        <i class="ti-shopping-cart"></i>--%>
-                    <p>Quản lý log</p>
-                </a>
-            </li>
-            <li class="">
-                <a href="store-manager.jsp">
-                    <i class="ti-user"></i>
-                    <p>Quản lý kho</p>
-                </a>
-            </li>
-
-
-        </ul>
-    </div>
     </div>
 
     <div class="main-panel">
@@ -116,29 +120,45 @@
                 <div class="row">
                     <div class="col-lg-3 col-sm-6">
                         <div class="card">
+                            <%
+                                Order list = OrderDAO.getDaily();
+                                if (list != null) {
+                                    String formattedAmount = currencyFormat.format(list.getSumTotalDay() * 1000);
+                            %>
                             <div class="content">
                                 <div class="row">
                                     <div class="col-xs-5">
                                         <div class="icon-big icon-warning text-center">
                                             <i class="ti-server"></i>
+                                            <div class="numbers">
+                                                <i class="ti-reload" style="font-size: 25px">
+                                                    <%= formattedAmount%>
+                                                </i>
+                                                <%--                                                <%= list.getQuantityProduct()%>--%>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-xs-7">
+
                                         <div class="numbers">
-                                            <p>Capacity</p>
-                                            105GB
+                                            <p>Số đơn hàng: <%= list.getNumberOfOrders()%></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="footer">
-                                    <hr />
+                                    <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Updated now
+                                        <p>Doanh thu theo ngày</p>
+                                        <%--                                        <i class="ti-reload"><%= list.getSumTotalDay()%></i>--%>
                                     </div>
                                 </div>
                             </div>
+                            <%}%>
                         </div>
+
                     </div>
+
+
                     <div class="col-lg-3 col-sm-6">
                         <div class="card">
                             <div class="content">
@@ -156,7 +176,7 @@
                                     </div>
                                 </div>
                                 <div class="footer">
-                                    <hr />
+                                    <hr/>
                                     <div class="stats">
                                         <i class="ti-calendar"></i> Last day
                                     </div>
@@ -181,7 +201,7 @@
                                     </div>
                                 </div>
                                 <div class="footer">
-                                    <hr />
+                                    <hr/>
                                     <div class="stats">
                                         <i class="ti-timer"></i> In the last hour
                                     </div>
@@ -200,15 +220,22 @@
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
-                                            <p>Followers</p>
-                                            +45
+                                            <%
+                                                long u = UsersDAO.getCountCustomer();
+                                            %>
+                                            <div class="numbers">
+                                                <i class="ti-reload" style="font-size: 25px; color: #f19925">
+                                                    <%= u%>
+                                                </i>
+                                                <%--                                                <%= list.getQuantityProduct()%>--%>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="footer">
-                                    <hr />
+                                    <hr/>
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Updated now
+                                        <i class="ti-reload"></i> Số tài khoản đăng ký
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +330,7 @@
                         </li>
                         <li>
                             <a href="http://blog.creative-tim.com">
-                               Blog
+                                Blog
                             </a>
                         </li>
                         <li>
@@ -314,7 +341,10 @@
                     </ul>
                 </nav>
                 <div class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
+                    &copy;
+                    <script>document.write(new Date().getFullYear())</script>
+                    , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
+                    Tim</a>
                 </div>
             </div>
         </footer>
@@ -325,44 +355,44 @@
 
 </body>
 
-    <!--   Core JS Files   -->
-    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
-	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+<!--   Core JS Files   -->
+<script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
-	<!--  Checkbox, Radio & Switch Plugins -->
-	<script src="assets/js/bootstrap-checkbox-radio.js"></script>
+<!--  Checkbox, Radio & Switch Plugins -->
+<script src="assets/js/bootstrap-checkbox-radio.js"></script>
 
-	<!--  Charts Plugin -->
-	<script src="assets/js/chartist.min.js"></script>
+<!--  Charts Plugin -->
+<script src="assets/js/chartist.min.js"></script>
 
-    <!--  Notifications Plugin    -->
-    <script src="assets/js/bootstrap-notify.js"></script>
+<!--  Notifications Plugin    -->
+<script src="assets/js/bootstrap-notify.js"></script>
 
-    <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 
-    <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-	<script src="assets/js/paper-dashboard.js"></script>
+<!-- Paper Dashboard Core javascript and methods for Demo purpose -->
+<script src="assets/js/paper-dashboard.js"></script>
 
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-	<script src="assets/js/demo.js"></script>
+<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+<script src="assets/js/demo.js"></script>
 
-	<script type="text/javascript">
-    	$(document).ready(function(){
+<script type="text/javascript">
+    $(document).ready(function () {
 
-        	demo.initChartist();
+        demo.initChartist();
 
-        	$.notify({
-            	icon: 'ti-gift',
-            	message: "Welcome to <b>Paper Dashboard</b> - a beautiful Bootstrap freebie for your next project."
+        $.notify({
+            icon: 'ti-gift',
+            message: "Welcome to <b>Paper Dashboard</b> - a beautiful Bootstrap freebie for your next project."
 
-            },{
-                type: 'success',
-                timer: 4000
-            });
+        }, {
+            type: 'success',
+            timer: 4000
+        });
 
-    	});
+    });
 
-	</script>
+</script>
 
 </html>

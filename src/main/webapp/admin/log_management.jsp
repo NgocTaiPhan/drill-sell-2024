@@ -203,7 +203,39 @@
                         <td><%= l.getId()%></td>
                         <td><%=l.getUserId()%></td>
                         <td><%=l.getIp()%></td>
-                        <td><%=l.getLevels()%></td>
+
+<%--                        <td>--%>
+<%--                            <% String level = l.getLevels(); %>--%>
+<%--                            <% if (level.equals("INFO")) { %>--%>
+<%--                            <span style="color: green;"><%= level %></span>--%>
+<%--                            <% } else if (level.equals("WARNING")) { %>--%>
+<%--                            <span style="color: yellow;"><%= level %></span>--%>
+<%--                            <% } else if (level.equals("DANGER")) { %>--%>
+<%--                            <span style="color: red;"><%= level %></span>--%>
+<%--                            <% } else if (level.equals("ERROR")) { %>--%>
+<%--                            <span style="color: orange;"><%= level %></span>--%>
+<%--                            <% } else { %>--%>
+<%--                            <%= level %>--%>
+<%--                            <% } %>--%>
+<%--                        </td>--%>
+                        <td>
+                            <div style="<%
+                                if (l.getLevels().equals("INFO")) { %>
+                                    background: #83d983;
+                                <% } else if (l.getLevels().equals("WARNING")) { %>
+                                    background: yellow;
+                                <% } else if (l.getLevels().equals("DANGER")) { %>
+                                    background: red;
+                                <% } else if (l.getLevels().equals("ERROR")) { %>
+                                    background: orange;
+                                <% } %>
+                                    width: 70px; height: 20px;" class="con">
+                                <%= l.getLevels() %>
+                            </div>
+                        </td>
+
+
+
                         <td><%=l.getStatuss()%></td>
                         <td><%=l.getPreviousInfo()%></td>
                         <td><%=l.getValuess()%></td>
