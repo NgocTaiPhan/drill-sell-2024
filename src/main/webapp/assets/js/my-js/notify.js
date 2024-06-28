@@ -1,4 +1,4 @@
-var valueNotify = document.getElementById("notify").getAttribute('value');
+var valueNotify = document.querySelector('#notify').getAttribute('value');
 
 
 function errorRegister(mess) {
@@ -34,6 +34,15 @@ function errorLock(mess) {
 
 
 
+function errorAddProd(mess) {
+    Swal.fire({
+        icon: "error",
+        title: "Đăng nhập thất bại",
+        text: mess,
+        confirmButtonText: "Đóng",
+    });
+}
+
 switch (valueNotify) {
 
     // ---------------------------------Thông báo của phần đăng kí--------------------------------------
@@ -47,9 +56,14 @@ switch (valueNotify) {
 
 
     case "null-address":
-        errorRegister("Hãy nhập địa chỉ");
+        errorRegister("Hãy chọn địa chỉ");
         break;
-
+    case "null-quan":
+        errorRegister("Hãy chọn địa chỉ");
+        break;
+    case "null-phuong":
+        errorRegister("Hãy chọn địa chỉ");
+        break;
 
     case "null-phone":
         errorRegister("Hãy nhập số điện thoại");
@@ -68,7 +82,7 @@ switch (valueNotify) {
         break;
 
     case "null-cfpass":
-        errorRegister("Hãy nhập lại mật khẩu");
+        errorRegister("Hãy nhập để xác nhận lại mật khẩu");
         break;
 
     case "null-agree":
@@ -86,12 +100,16 @@ switch (valueNotify) {
     case "invalid-email":
         errorRegister("Email không hợp lệ");
         break;
-
+    case "email-exists":
+        errorRegister("Địa chỉ email đã tồn tại");
+        break;
     case "invalid-username":
         errorRegister("Tên đăng nhập không hợp lệ");
         break;
     case "invalid-pass":
         errorRegister("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
+        break;
+
     case "pass-not-match":
         errorRegister("Mật khẩu không khớp");
         break;
@@ -105,7 +123,6 @@ switch (valueNotify) {
             text: "Hãy xác nhận email và đăng nhập!",
             confirmButtonText: "Đóng",
         }).then((result) => {
-            // <%session.removeAttribute("notify");%>
             window.location.href = "login.jsp";
         });
     // ---------------------------------Thông báo của phần đăng kí--------------------------------------
@@ -170,7 +187,18 @@ switch (valueNotify) {
             confirmButtonText: "Đóng"
         });
 
-
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
+case"null-prod-name":
+        errorAddProd("Hãy nhập tên sản phẩm");
+        break;
     default:
 
 
@@ -215,6 +243,8 @@ function checkLogin(logged) {
             }
         });
     }
+
+    
 }
 
 

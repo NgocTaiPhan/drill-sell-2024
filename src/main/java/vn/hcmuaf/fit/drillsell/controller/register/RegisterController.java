@@ -50,7 +50,8 @@ public class RegisterController extends HttpServlet {
         session.setAttribute("user-register", userRegister);
 
         // Kiểm tra thông tin đăng kí có hợp lệ không
-          boolean invalid =ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate, address, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
+        boolean invalid = ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate,
+                provinceId, districtId, wardId, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
 if(invalid) {
     // Tạo mã xác nhận và lưu vào session
     String confirmationCode = UUID.randomUUID().toString().substring(0, 6);

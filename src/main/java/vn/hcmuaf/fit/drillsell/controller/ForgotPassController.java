@@ -33,7 +33,7 @@ public class ForgotPassController extends HttpServlet {
         String verifyCode = UsersDAO.getInstance().getVerifyCode(username, email);
         session.setAttribute("vertificationCode", verifyCode);
         if (verifyCode != null) {
-            // Gửi email chứa mã OTP (tạm thời comment lại vì đây là phần tạo modal)
+            // Gửi email chứa mã OTP (tạm thời comment lại vì đây là phần tạo my-modal.js)
             EmailDAO.getInstance().sendMailOTP(email, "Lấy lại mật khẩu", verifyCode);
             System.out.println(verifyCode);
             response.sendRedirect("input-code.jsp");

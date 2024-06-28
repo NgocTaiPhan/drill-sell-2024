@@ -123,7 +123,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <li><a href="<%=request.getContextPath()%>/logout"><i
                                 class="icon fa fa-arrow-circle-o-right"></i>Đăng xuất</a></li>
                         <% } else { %>
-                        <li><a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a></li>
+                        <li>
+                            <a href="login.jsp"><i class="icon fa fa-lock"></i>Đăng nhập</a>
+                        </li>
                         <% } %>
                     </ul>
                 </div>
@@ -425,6 +427,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
                                             </div>
 
+
                                         </div>
 
 
@@ -442,7 +445,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                 <div class="product-tabs inner-bottom-xs  wow fadeInUp">
                     <div class="row">
                         <div class="col-sm-3">
-                            <ul id="product-tabs" class="nav nav-tabs nav-tab-cell">
+                            <ul id="product-tabs" style="white-space: nowrap" class="nav nav-tabs nav-tab-cell">
                                 <li class="active"><a data-toggle="tab" href="#description">Mô tả sản phẩm</a></li>
                                 <li><a data-toggle="tab" href="#specifications">Thông số kỹ thuật</a></li>
 
@@ -460,11 +463,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         </p>
                                     </div>
                                 </div><!-- /.tab-pane -->
-                                <div id="specifications" class="tab-pane in ">
-                                    <%= product.getSpecifions()%>
-
+                                <div id="specifications" class="tab-pane in "><%= product.getSpecifions() %>
                                 </div><!-- /.tab-pane -->
-
                                 <!-- /.tab-pane -->
 
                                 <div id="reviews" class="tab-pane">
@@ -503,7 +503,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         </form>
                                         <%} else {%>
 
-                                        <div class="text-center"> Hãy đăng nhập để đánh giá sản phẩm</div>
+                                        <div class="text-center">
+                                            <h6>Hãy đăng nhập để đánh giá sản phẩm</h6>
+                                            <a href="login.jsp" class="btn btn-primary">Đăng nhập</a>
+                                        </div>
+
                                         <%}%>
                                         <div>
                                             <div class="container">
@@ -541,7 +545,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                                                 }
                                                             } else {
                                                             %>
-                                                            <p>Chưa có đánh giá nào.</p>
+                                                            <p class="m-t-20 text-warning "><h5>Chưa có đánh giá
+                                                            nào.</h5></p>
                                                             <%
                                                                 }
                                                             %>
