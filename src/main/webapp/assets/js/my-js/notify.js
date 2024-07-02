@@ -1,250 +1,81 @@
-var valueNotify = document.querySelector('#notify').getAttribute('value');
+function submitFormAngGetNotify(formId, urlServlet) {
+    $(formId).submit(function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi gửi biểu mẫu mặc định
+        console.log(formId.data)
+        $.ajax({
+            type: 'POST',
+            url: urlServlet,
+            data: $(this).serialize(),
+            success: function (response) {
+                // Hiển thị thông báo thành công
+                Swal.fire({
+                    title: "Thành công!",
+                    text: response,
+                    icon: "success"
+                });
 
-
-function errorRegister(mess) {
-    Swal.fire({
-        icon: "error",
-        title: "Đăng kí thất bại",
-        text: mess,
-        confirmButtonText: "Đóng",
-    });
-    // alert(mess)
-    // <%session.removeAttribute("notify");%>
-
-}
-
-function errorLogin(mess) {
-    Swal.fire({
-        icon: "error",
-        title: "Đăng nhập thất bại",
-        text: mess,
-        confirmButtonText: "Đóng",
-    });
-    // <%session.removeAttribute("notify");%>
-}
-function errorLock(mess) {
-    Swal.fire({
-        icon: "error",
-        title: "Đăng nhập thất bại",
-        text: mess,
-        confirmButtonText: "Đóng",
-    });
-    // <%session.removeAttribute("notify");%>
-}
-
-
-
-function errorAddProd(mess) {
-    Swal.fire({
-        icon: "error",
-        title: "Đăng nhập thất bại",
-        text: mess,
-        confirmButtonText: "Đóng",
-    });
-}
-
-switch (valueNotify) {
-
-    // ---------------------------------Thông báo của phần đăng kí--------------------------------------
-    case "null-fullname":
-        errorRegister("Hãy điền họ và tên");
-        break;
-
-    case "null-birthday":
-        errorRegister("Hãy nhập ngày sinh");
-        break;
-
-
-    case "null-address":
-        errorRegister("Hãy chọn địa chỉ");
-        break;
-    case "null-quan":
-        errorRegister("Hãy chọn địa chỉ");
-        break;
-    case "null-phuong":
-        errorRegister("Hãy chọn địa chỉ");
-        break;
-
-    case "null-phone":
-        errorRegister("Hãy nhập số điện thoại");
-        break;
-
-    case "null-email":
-        errorRegister("Hãy nhập địa chỉ email");
-        break;
-
-    case "null-username":
-        errorRegister("Hãy nhập tên đăng nhập");
-        break;
-
-    case "null-pass":
-        errorRegister("Hãy nhập mật khẩu");
-        break;
-
-    case "null-cfpass":
-        errorRegister("Hãy nhập để xác nhận lại mật khẩu");
-        break;
-
-    case "null-agree":
-        errorRegister("Hãy đồng ý với điều khoản của chúng tôi.");
-        break;
-
-    case "not-enough-18":
-        errorRegister("Người dùng chưa đủ 18 tuổi.");
-        break;
-
-    case "invalid-phone":
-        errorRegister("Số điện thoại không hợp lệ");
-        break;
-
-    case "invalid-email":
-        errorRegister("Email không hợp lệ");
-        break;
-    case "email-exists":
-        errorRegister("Địa chỉ email đã tồn tại");
-        break;
-    case "invalid-username":
-        errorRegister("Tên đăng nhập không hợp lệ");
-        break;
-    case "invalid-pass":
-        errorRegister("Mật khẩu phải từ 8 kí tự, bao gồm chữ hoa, chữ thường và số")
-        break;
-
-    case "pass-not-match":
-        errorRegister("Mật khẩu không khớp");
-        break;
-    case "duplicate-acc":
-        errorRegister("Tên đăng nhập đã tồn tại");
-        break;
-    case"register-success":
-        Swal.fire({
-            icon: "success",
-            title: "Đăng kí thành công",
-            text: "Hãy xác nhận email và đăng nhập!",
-            confirmButtonText: "Đóng",
-        }).then((result) => {
-            window.location.href = "login.jsp";
-        });
-    // ---------------------------------Thông báo của phần đăng kí--------------------------------------
-    // ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
-    case"admin-logged":
-        Swal.fire({
-            icon: "success",
-            title: "Đăng nhập với quyền quản trị",
-            text: "Chào mừng",
-            confirmButtonText: "Đóng",
-        }).then((result) => {
-            // <%session.removeAttribute("notify");%>
-            window.location.href = "home.jsp";
-        });
-
-    case"user-logged":
-        Swal.fire({
-            icon: "success",
-            title: "Đăng nhập thành công",
-            text: "Chào mừng",
-            confirmButtonText: "Đóng",
-        }).then((result) => {
-            // <%session.removeAttribute("notify");%>
-            window.location.href = "home.jsp";
-        });
-    case "null-user-login":
-        errorLogin("Hãy nhập tên đăng nhập và mật khẩu!")
-        break;
-    case "not-found-user":
-        errorLogin("Không tìm thấy tài khoản!")
-        break;
-// ---------------------------------Thông báo của phần ĐĂNG NHẬP--------------------------------------
-    case "add-prod-success":
-        Swal.fire({
-            icon: "success",
-            title: "Thành công",
-            text: "Thêm sản phẩm thành công",
-            confirmButtonText: "OK",
-        }).then((result) => {
-            // <%session.removeAttribute("notify");%>
-            window.location.href = "products-management.jsp";
-        });
-    case"hide-success":
-        Swal.fire({
-            icon: "success",
-            title: "Ẩn thành công",
-            text: "Sản phẩm đã được ẩn",
-            confirmButtonText: "Đóng"
-        });
-    case"remove-success":
-        Swal.fire({
-            icon: "success",
-            title: "Xóa thành công",
-            text: "Sản phẩm đã được xóa",
-            confirmButtonText: "Đóng"
-        });
-    case"add-cart-success":
-        Swal.fire({
-            icon: "success",
-            title: "Thành công",
-            text: "Sản phẩm đã được thêm vào giỏ hàng",
-            confirmButtonText: "Đóng"
-        });
-
-case"null-prod-name":
-        errorAddProd("Hãy nhập tên sản phẩm");
-        break;
-case"null-prod-name":
-        errorAddProd("Hãy nhập tên sản phẩm");
-        break;
-case"null-prod-name":
-        errorAddProd("Hãy nhập tên sản phẩm");
-        break;
-case"null-prod-name":
-        errorAddProd("Hãy nhập tên sản phẩm");
-        break;
-    default:
-
-
-    // break;
-
-
-}
-
-function checkLoginAndRedirect(logged, url) {
-
-    if (!logged) {
-        Swal.fire({
-            title: "Bạn chưa đăng nhập",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Đăng nhập",
-            cancelButtonText: `Để sau`
-        }).then((result) => {
-            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-            if (result.isConfirmed) {
-                window.location.href = 'login.jsp';
+                $(formId)[0].reset();
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: errorMessage,
+                    icon: "error"
+                });
             }
         });
-    } else {
-        window.location.href = url;
-    }
+    });
 }
 
-function checkLogin(logged) {
-
-    if (!logged) {
-        Swal.fire({
-            title: "Bạn chưa đăng nhập",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Đăng nhập",
-            cancelButtonText: `Để sau`
-        }).then((result) => {
-            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-            if (result.isConfirmed) {
-                window.location.href = 'login.jsp';
+function submitFormAndRedirect(formId, urlServlet, url) {
+    $(formId).submit(function (event) {
+        event.preventDefault(); // Ngăn chặn hành vi gửi biểu mẫu mặc định
+        console.log(formId.data)
+        $.ajax({
+            type: 'POST',
+            url: urlServlet,
+            data: $(this).serialize(),
+            success: function (response) {
+                var data = JSON.parse(response);
+                swalWithBootstrapButtons.fire({
+                    title: "Thành công",
+                    text: data.message,
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonText: "Trở về trang chủ",
+                    cancelButtonText: "Chuyển đến trang đăng nhập",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        window.location.href = data.url;
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: errorMessage,
+                    icon: "error"
+                });
             }
         });
-    }
+    });
 
-    
 }
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+});
 
 
