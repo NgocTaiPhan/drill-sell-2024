@@ -21,7 +21,19 @@ public class LoadProdInAdmin {
         response.getWriter().flush();
     }
 
-    static void showDetail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    static void loadHideProd(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Products> products = ProductDAO.getInstance().getHideProds();
+        Gson gson = new Gson();
+
+        String json = gson.toJson(products);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(json);
+        response.getWriter().flush();
+
+    }
+
+    static void loadDetail(HttpServletRequest request, HttpServletResponse response) throws IOException {
 //Lấy thông id từ client rồi sau đó xử lý để gửi thông tin sản phẩm
         int id = Integer.parseInt(request.getParameter("productId"));
         Products prod = ProductDAO.getInstance().getProdById(id);

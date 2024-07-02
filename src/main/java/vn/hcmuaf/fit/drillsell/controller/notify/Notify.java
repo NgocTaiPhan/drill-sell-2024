@@ -49,14 +49,14 @@ public class Notify {
     }
 
     //Gửi respone thành công đến client kèm theo tin nhắn thông báo
-    public static void sendResponeText(HttpServletResponse resp, String mess, int status) throws IOException {
+    public static void sendResponseText(HttpServletResponse resp, String mess, int status) throws IOException {
         resp.setStatus(status);
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
+        System.out.println(mess);
         resp.getWriter().write(mess);
 
     }
-
     public Notify(String title, String mess, String type) {
         this.title = title;
         this.mess = mess;

@@ -40,6 +40,8 @@
     <%--    Datatable--%>
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
+
+    <link href="../assets/css/my-css/admin/prods-mn.css" rel="stylesheet">
 </head>
 <body>
 
@@ -101,18 +103,39 @@
             </ul>
         </div>
     </div>
-
     <div class="main-panel">
-        <h3 style="margin-left: 20px" class="title-uppercase">Quản lý sản phẩm</h3>
+        <div class="main-header">
+            <div class="main-title">
+
+                <h3 class="title-uppercase">Quản lý sản phẩm</h3>
+            </div>
+            <div class="right-main-header ">
+                <button link-to-modal="addProdModal" onclick="handleModal('addProdModal')"
+                        class=" btn-add-prod  open-modal">
+                    Thêm sản phẩm
+                </button>
+            </div>
+        </div>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="content table-responsive table-full-width">
-                                <button link-to-modal="addProdModal" onclick="handleModal('addProdModal')"
-                                        class="btn btn-info open-modal">Thêm sản phẩm
-                                </button>
+                                <div class="nav-bar">
+                                    <div class="nav-item">
+                                        <button class=" btn-add-prod  open-modal">
+                                            Sản phẩm đã ẩn
+                                        </button>
+                                    </div>
+                                    <div class="nav-item">
+                                        <button class=" btn-add-prod  open-modal">
+                                            Sản phẩm đã xóa
+                                        </button>
+                                    </div>
+
+                                </div>
+
                                 <table id="prod-mn" class="table table-striped">
                                     <thead>
                                     <tr>
@@ -140,7 +163,7 @@
 
         <div id="addProdModal" class="modal">
             <div class="modal-content">
-                <span  class="close-btn">&times;</span>
+                <span class="close-button">&times;</span>
                 <h4>Thêm sản phẩm</h4>
                 <div class="container">
                     <div class="center-block">
@@ -209,7 +232,7 @@
         <%--        Modal xem chi tiết và update sản phẩm--%>
         <div id="modalDetailProd" class="modal">
             <div class="modal-content">
-                <span  class="close-btn">&times;</span>
+                <span class="close-button">&times;</span>
                 <h4>Chi tiết sản phẩm</h4>
                 <div class="container">
                     <div class="center-block">
@@ -217,7 +240,7 @@
                         <form class="col-lg-6 center-block" id="formUpdateProd">
                             <div class="form-group center-block">
                                 <img width="200px" height="200px" src="" class="loadProdsImg img-thumbnail"
-                                     alt="Ảnh sản phẩm" style="margin-left: 45%">
+                                     alt="Ảnh sản phẩm">
                             </div>
                             <div class="form-group">
                                 <label for="imageUrlInputU">Ảnh sản phẩm (URL hoặc tệp):</label>
@@ -282,12 +305,12 @@
 </div>
 </body>
 
-
 <script src="../assets/js/my-js/prod-management/my-modal.js"></script>
-<script src="../assets/js/my-js/renotify.js"></script>
+<script src="../assets/js/my-js/notify.js"></script>
 <script src="../assets/js/my-js/prod-management/load-img.js"></script>
 <script src="../assets/js/my-js/prod-management/prod-management.js"></script>
-<link rel="stylesheet" href="../assets/css/my-css/admin/prods-mn.css">
 
+<style>
 
+</style>
 </html>

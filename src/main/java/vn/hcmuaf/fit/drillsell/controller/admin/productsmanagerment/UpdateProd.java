@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponeText;
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 public class UpdateProd {
     static void updateProd(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -23,9 +23,9 @@ public class UpdateProd {
             Products prod = new Products(id, image, prodName, unitPrice, categoryId, nameProducer, describle, specifions);
             ProductDAO productDAO = new ProductDAO();
             productDAO.updateProd(prod);
-            sendResponeText(response, "Sửa thông tin sản phẩm thành công", HttpServletResponse.SC_OK);
+            sendResponseText(response, "Sửa thông tin sản phẩm thành công", HttpServletResponse.SC_OK);
         } catch (Exception e) {
-            sendResponeText(response, "Có lỗi trong quá trình thực hiện", HttpServletResponse.SC_BAD_REQUEST);
+            sendResponseText(response, "Có lỗi trong quá trình thực hiện", HttpServletResponse.SC_BAD_REQUEST);
 
         }
 
