@@ -200,7 +200,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon"
-                                     onclick="checkLoginAndRedirect(<%=logged%>,'cart.jsp')">
+                                     onclick="callServletAndRedirect('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
 
@@ -403,7 +403,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
-                                            <div onclick="checkLoginAndRedirect(<%=logged%>,'cart?productId=<%=product.getProductId()%>')"
+                                            <div onclick="callServlet('cart','<%=product.getProductId()%>')"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
                                             </div>
