@@ -17,6 +17,12 @@ import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 public class AddToCart extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIdParam = request.getParameter("productId");
@@ -39,5 +45,6 @@ public class AddToCart extends HttpServlet {
             // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng
             sendResponseText(response, "Lỗi khi thêm sản phẩm vào giỏ hàng", HttpServletResponse.SC_BAD_REQUEST);
         }
+
     }
 }

@@ -304,9 +304,20 @@
 
 </div>
 </body>
+<script !src="">
+
+
+    $(document).ready(() => {
+
+
+        submitFormAndNotify('#formAddProd', 'add-prod');
+        submitFormAndNotify('#formUpdateProd', 'update-prod');
+    })
+</script>
 
 <script src="../assets/js/my-js/prod-management/my-modal.js"></script>
 <script src="../assets/js/my-js/notify.js"></script>
+<script src="../assets/js/my-js/ajax-process.js"></script>
 <script src="../assets/js/my-js/prod-management/load-img.js"></script>
 <script src="../assets/js/my-js/prod-management/prod-management.js"></script>
 

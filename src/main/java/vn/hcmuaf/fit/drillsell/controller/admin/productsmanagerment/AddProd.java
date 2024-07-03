@@ -32,8 +32,8 @@ public class AddProd {
         int cateId = 0;
 
         // Kiểm tra tất cả trường đã nhập
-        if (prodName == null || prodName.isEmpty() || image == null || nameProducer == null) {
-            sendResponseText(response, "Hãy điền đầy đủ thông tin sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+        if (prodName == null || prodName.isEmpty() ) {
+            sendResponseText(response, "Hãy nhập tên sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         //Kiểm tra ảnh sản phẩm

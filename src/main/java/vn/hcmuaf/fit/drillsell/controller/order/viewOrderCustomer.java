@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
+
 @WebServlet("/viewOrderCustomer")
 public class viewOrderCustomer extends HttpServlet {
     @Override
@@ -34,11 +36,9 @@ public class viewOrderCustomer extends HttpServlet {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         boolean updateStatus = CheckOutDAO.update(orderId);
         if (updateStatus) {
-            response.getWriter().println("<script>alert('Đã hủy đơn hàng thành công'); window.location.href='"
-                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+            sendResponseText(response, "Hủy đơn hàng thành công!", HttpServletResponse.SC_OK);
         } else {
-            response.getWriter().println("<script>alert('Hủy đơn hàng thất bại'); window.location.href='"
-                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+            sendResponseText(response, "Hủy đơn hàng thất bại!", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 }

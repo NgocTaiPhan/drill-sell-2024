@@ -403,7 +403,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
 
-                                            <div onclick="callServlet('cart','<%=product.getProductId()%>')"
+                                            <div onclick="callServlet('cart',{name: 'productId', dataValue: '<%=product.getProductId()%>'})"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
                                             </div>
@@ -588,13 +588,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class="animated alo-circle-fill"></div>
     </a>
 </div>
-<input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <!-- ============================================================= Backtop ============================================================= -->
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <link rel="stylesheet" href="assets/css/my-css/detailPage.css">
 <script src="assets/js/my-js/notify.js"></script>
+<script src="assets/js/my-js/ajax-process.js"></script>
 <script src="assets/js/my-js/backtop.js"></script>
 <%
     String loginRequired = request.getParameter("loginRequired");

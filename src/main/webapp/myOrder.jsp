@@ -176,12 +176,11 @@
                             <a href="<%= request.getContextPath() %>/detailOrder?orderId=<%= order.getOrderId() %>" class="btn btn-info">
                                 Xem chi tiết
                             </a>
-                            <form action="<%= request.getContextPath() %>/viewOrderCustomer" method="post" style="display:inline;">
-                                <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
-                                <button type="submit" class="btn btn-danger">
+                            <button onclick="callServlet('viewOrderCustomer',{name:'orderId',dataValue:'<%=order.getOrderId()%>'})"
+                                    type="submit"
+                                    class="btn btn-danger">
                                     Hủy đơn
                                 </button>
-                            </form>
                         </td>
                     </tr>
                     <%
@@ -280,6 +279,8 @@
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 <script src="assets/js/demo.js"></script>
+<script src="./assets/js/my-js/notify.js"></script>
+<script src="./assets/js/my-js/ajax-process.js"></script>
 <script>
     let toolbar = document.createElement('div');
     toolbar.innerHTML = '<b></b>';
@@ -316,7 +317,12 @@
     //         });
     //     })
     // })
+    $(document).ready((e) => {
 
+
+
+
+    })
 </script>
 
 </html>
