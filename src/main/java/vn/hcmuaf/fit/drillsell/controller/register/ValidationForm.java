@@ -1,112 +1,165 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
-import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
+
+/**
+ * Lớp ValidationForm thực hiện xác thực các thông tin đăng ký người dùng từ form.
+ */
 public class ValidationForm {
-    private static ValidationForm instance;
+    private static volatile ValidationForm instance;
 
     private ValidationForm() {
     }
 
+    /**
+     * Phương thức getInstance() để lấy instance duy nhất của ValidationForm (Singleton pattern).
+     *
+     * @return instance của ValidationForm
+     */
     public static ValidationForm getInstance() {
-        if (instance == null) instance = new ValidationForm();
-        return instance;
-    }
-
-    public boolean validationRegister(HttpSession session, HttpServletRequest request, HttpServletResponse response,
-                                      String fullName, String birthDate, String provinceId, String districtId, String wardId,
-                                      String phoneNumber, String email, String username, String password,
-                                      String confirmPassword, String agreeToTerms, boolean gender) throws ServletException, IOException {
-        if (fullName == null || fullName.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-fullname");
-            return false;
-        }
-        if (birthDate == null || birthDate.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-birthday");
-            return false;
-        } else {
-            LocalDate inputDate = LocalDate.parse(birthDate);
-            LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
-            if (inputDate.isAfter(eighteenYearsAgo)) {
-                Notify.getInstance().sendNotify(session, request, response, "not-enough-18");
-                return false;
-            }
-        }
-        if (provinceId == null || "0".equals(provinceId)) {
-            Notify.getInstance().sendNotify(session, request, response, "null-address");
-            return false;
-        }
-        if (districtId == null || "0".equals(districtId)) {
-            Notify.getInstance().sendNotify(session, request, response, "null-quan");
-            return false;
-        }
-        if (wardId == null || "0".equals(wardId)) {
-            Notify.getInstance().sendNotify(session, request, response, "null-phuong");
-            return false;
-        }
-        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-phone");
-            return false;
-        } else {
-            if (!phoneNumber.matches("^(\\+84|0)[0-9]{9}$")) {
-                Notify.getInstance().sendNotify(session, request, response, "invalid-phone");
-                return false;
-            }
-        }
-        if (email == null || email.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-email");
-            return false;
-        } else {
-            if (!email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$")) {
-                Notify.getInstance().sendNotify(session, request, response, "invalid-email");
-                return false;
-            } else {
-                if (UsersDAO.getInstance().isEmailExists(email)) {
-                    Notify.getInstance().sendNotify(session, request, response, "email-exists");
-                    return false;
+        if (instance == null) {
+            synchronized (ValidationForm.class) {
+                if (instance == null) {
+                    instance = new ValidationForm();
                 }
             }
         }
-        if (username == null || username.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-username");
-            return false;
-        } else {
-            if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
-                Notify.getInstance().sendNotify(session, request, response, "duplicate-acc");
-                return false;
-            }
+        return instance;
+    }
+
+    /**
+     * Phương thức validate để kiểm tra và xác thực các thông tin đăng ký người dùng.
+     * @param response       HttpServletResponse để gửi phản hồi khi có lỗi
+     * @param fullName       Họ và tên từ form
+     * @param birthDate      Ngày sinh từ form
+     * @param provinceId     ID tỉnh/thành phố từ form
+     * @param districtId     ID quận/huyện từ form
+     * @param wardId         ID phường/xã từ form
+     * @param phoneNumber    Số điện thoại từ form
+     * @param email          Email từ form
+     * @param username       Tên đăng nhập từ form
+     * @param password       Mật khẩu từ form
+     * @param confirmPassword Nhập lại mật khẩu từ form
+     * @param agreeToTerms   Đồng ý với điều khoản từ form
+     * @throws IOException      nếu có lỗi xảy ra trong quá trình xử lý IO
+     */
+    public void checkValid(
+            HttpServletResponse response,
+            String fullName,
+            String birthDate,
+            String provinceId,
+            String districtId,
+            String wardId,
+            String phoneNumber,
+            String email,
+            String username,
+            String password,
+            String confirmPassword,
+            String agreeToTerms
+    )
+            throws IOException {
+
+        // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
+        if (isNullOrEmpty(fullName)) {
+            sendResponseText(response, "Hãy nhập họ và tên!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        if (password == null || password.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-pass");
-            return false;
-        } else {
-            if (!password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-                Notify.getInstance().sendNotify(session, request, response, "invalid-pass");
-                return false;
-            }
+        if (isNullOrEmpty(birthDate)) {
+            sendResponseText(response, "Hãy chọn ngày sinh!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            Notify.getInstance().sendNotify(session, request, response, "null-cfpass");
-            return false;
-        } else {
-            if (!password.equals(confirmPassword)) {
-                Notify.getInstance().sendNotify(session, request, response, "pass-not-match");
-                return false;
-            }
+        if (!isValidAge(birthDate)) {
+            sendResponseText(response, "Bạn chưa đủ 18 tuổi!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        if (agreeToTerms == null || !agreeToTerms.equals("on")) {
-            Notify.getInstance().sendNotify(session, request, response, "null-agree");
-            return false;
+        if (isInvalidAddress(provinceId, districtId, wardId)) {
+            sendResponseText(response, "Hãy chọn địa chỉ!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (isNullOrEmpty(phoneNumber)) {
+            sendResponseText(response, "Hãy nhập số điện thoại!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (!isValidPhoneNumber(phoneNumber)) {
+            sendResponseText(response, "Số điện thoại không hợp lệ!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (isNullOrEmpty(email)) {
+            sendResponseText(response, "Hãy nhập email!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (!isValidEmail(email)) {
+            sendResponseText(response, "Email không hợp lệ!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (UsersDAO.getInstance().isEmailExists(email)) {
+            sendResponseText(response, "Email đã tồn tại!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (isNullOrEmpty(username)) {
+            sendResponseText(response, "Hãy nhập tên đăng nhập!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
+            sendResponseText(response, "Tên đăng nhập đã tồn tại!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (isNullOrEmpty(password)) {
+            sendResponseText(response, "Hãy nhập mật khẩu!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (!isValidPassword(password)) {
+            sendResponseText(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", HttpServletResponse.SC_BAD_REQUEST);
+
+            return;
+        }
+        if (isNullOrEmpty(confirmPassword)) {
+            sendResponseText(response, "Hãy nhập lại mật khẩu!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (!password.equals(confirmPassword)) {
+            sendResponseText(response, "Mật khẩu không trùng khớp!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        if (agreeToTerms == null || !"on".equals(agreeToTerms)) {
+            sendResponseText(response, "Hãy đồng ý với điều khoản của chúng tôi!", HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
-        return true;
     }
+
+    // Các phương thức hỗ trợ kiểm tra dữ liệu
+    private static boolean isNullOrEmpty(String formInput) {
+        return formInput == null || formInput.trim().isEmpty();
+    }
+
+    private static boolean isValidAge(String birthDate) {
+        LocalDate inputDate = LocalDate.parse(birthDate);
+        LocalDate eighteenYearsAgo = LocalDate.now().minusYears(18);
+        return !inputDate.isAfter(eighteenYearsAgo);
+    }
+
+    private static boolean isInvalidAddress(String provinceId, String districtId, String wardId) {
+        return "0".equals(provinceId) || "0".equals(districtId) || "0".equals(wardId);
+    }
+
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("^(\\+84|0)[0-9]{9}$");
+    }
+
+    private static boolean isValidEmail(String email) {
+        return email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,63}$");
+    }
+
+    private static boolean isValidPassword(String password) {
+        return password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$");
+    }
+
 }
+

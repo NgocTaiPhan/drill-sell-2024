@@ -1,9 +1,7 @@
 function handleModal(modalId) {
     const modal = document.getElementById(modalId);
     const btnOpen = document.querySelector(`[link-to-modal='${modalId}']`);
-    const btnClose = document.querySelector('.close-btn');
-    console.log(modal);
-
+    const btnClose = document.querySelector('.close-button');
     function openModal() {
         modal.style.display = 'block';
         modal.style.position = 'fixed';

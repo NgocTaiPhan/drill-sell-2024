@@ -5,16 +5,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-import vn.hcmuaf.fit.drillsell.model.User;
-import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
-
-
 import java.io.IOException;
 
-@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout","/login-google","/loginAdmin"})
+@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout", "/login-google", "/loginAdmin", "/logged"})
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +32,8 @@ public class LoginController extends HttpServlet {
             Logout.logout(request,response);
         } else if (servletPath.equals("/login-google")) {
             LoginGoogle.loginGoogle(request,response);
+        } else if (servletPath.equals("/logged")) {
+            Login.checkLogin(request, response);
         }
 
 

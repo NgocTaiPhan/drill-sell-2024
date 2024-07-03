@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
+
 @WebServlet(name = "Confirm", value = "/confirm")
 public class Confirm extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -34,10 +36,13 @@ public class Confirm extends HttpServlet {
             session.removeAttribute("confirmationCode");
 
             // Chuyển hướng đến trang đăng nhập
-            response.sendRedirect("login.jsp");
-        } else {
+            sendResponseText(response, "Tài khoản đã được xác nhận", HttpServletResponse.SC_BAD_REQUEST);
+        } else if (!code.equals(confirmationCode)) {
             // Mã xác nhận không hợp lệ hoặc hết hạn
-            response.getWriter().write("Mã xác nhận không hợp lệ hoặc đã hết hạn.");
+            sendResponseText(response, "Mã xác nhận không hợp lệ!", HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            sendResponseText(response, "Mã xác nhận đã hết hạn!", HttpServletResponse.SC_BAD_REQUEST);
+
         }
     }
 }

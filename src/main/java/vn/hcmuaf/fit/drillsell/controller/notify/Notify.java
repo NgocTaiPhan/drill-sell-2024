@@ -1,107 +1,57 @@
 package vn.hcmuaf.fit.drillsell.controller.notify;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Notify {
-    public static final String SUCCESS = "success";
-    public static final String ERROR = "error";
-    public static final String WARNING = "warning";
-    public static final String QUESTION = "question";
-    private String title, mess, type;
-    private static Notify instance;
-
     private Notify() {
     }
 
-    public static Notify getInstance() {
-        if (instance == null) instance = new Notify();
-        return instance;
-    }
-
-    public void sendNotify(HttpSession session, String mess) throws ServletException, IOException {
-        session.setAttribute("notify", mess);
-        System.out.println(mess);
-    }
-
-    public void sendNotify(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess) throws ServletException, IOException {
-        session.setAttribute("notify", mess);
-        System.out.println(mess);
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
-
-    public void sendNotify(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess, String url) throws ServletException, IOException {
-        session.setAttribute("notify", mess);
-        System.out.println(mess);
-        request.getRequestDispatcher(url).forward(request, response);
-    }
-
-    // Thêm hàm sendNotifyPopup để hiển thị thông báo pop-up
-    public void sendNotifyPopup(HttpSession session, HttpServletRequest request, HttpServletResponse response, String mess, String url) throws ServletException, IOException {
-        session.setAttribute("popupNotify", mess);
-        System.out.println("Popup Notify: " + mess);
-        response.sendRedirect(url);
-    }
-
-    //Gửi respone thành công đến client kèm theo tin nhắn thông báo
-    public static void sendResponeText(HttpServletResponse resp, String mess, int status) throws IOException {
+    public static void sendResponse(HttpServletResponse resp, int status) throws IOException {
         resp.setStatus(status);
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("UTF-8");
+
+    }
+    //Gửi respone đến client kèm theo tin nhắn thông báo
+    public static void sendResponseText(HttpServletResponse resp, String mess, int status) throws IOException {
+        resp.setStatus(status);
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        System.out.println(mess);
         resp.getWriter().write(mess);
 
     }
 
-    public Notify(String title, String mess, String type) {
-        this.title = title;
-        this.mess = mess;
-        this.type = type;
+    public static void sendResponseAndBackHome(HttpServletResponse resp, String mess, int status) throws IOException {
+        resp.setStatus(status);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("message", mess);
+        jsonObject.addProperty("namePage", "OK");
+        jsonObject.addProperty("pageUrl", "home.jsp");
+
+        resp.getWriter().write(jsonObject.toString());
     }
 
-    public String getType() {
-        return type;
+    public static void sendResponseAndRedirect(HttpServletResponse resp, String message, Page page, int status) throws IOException {
+        resp.setStatus(status);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("message", message);
+        jsonObject.addProperty("namePage", page.getNamePage());
+        jsonObject.addProperty("pageUrl", page.getPageUrl());
+
+        resp.getWriter().write(jsonObject.toString());
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 
-    public String getMess() {
-        return mess;
-    }
 
-    public void setMess(String mess) {
-        this.mess = mess;
-    }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String notifys(String title, String mess, String type) {
-        Notify notify = new Notify(title, mess, type);
-        return notify.toJsonNotify();
-    }
-
-    private String toJsonNotify() {
-        return new Gson().toJson(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Notify{" +
-                "title='" + title + '\'' +
-                ", mess='" + mess + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 }

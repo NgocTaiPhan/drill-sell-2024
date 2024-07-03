@@ -1,6 +1,6 @@
-/* Basic Modal Styling */
+/*-------------------------------------------------- Css cho phần modal------------------------------------------- */
 .modal {
-    display: none; /* Ẩn my-modal.js ban đầu */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -19,16 +19,57 @@
     width: 60%;
 }
 
-.close-btn {
+.close-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close-btn:hover,
-.close-btn:focus {
+.close-button:hover,
+.close-button:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/*--------------------------------------------------------Css cho phần header---------------------------------*/
+.main-header {
+    display: flex;
+    white-space: nowrap;
+    justify-content: space-between;
+}
+
+.main-title {
+    margin-left: 2%;
+}
+
+.right-main-header {
+    margin-right: 5%;
+    margin-top: 2%;
+}
+
+.btn-add-prod {
+    /*background-color: #157ED2;*/
+    color: #157ED2;
+    border-color: #157ED2;
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+
+
+}
+
+.btn-add-prod:hover,
+.btn-add-prod:active {
+    background-color: #157ED2;
+    color: white;
+    /*border-color: #157ED2;*/
+}
+.nav-bar{
+    display: flex;
+    justify-content: space-around;
+    width: 30%;
 }

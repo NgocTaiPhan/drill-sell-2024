@@ -64,12 +64,13 @@
 </head>
 <body class="cnt-home">
 
-<div><a href="home.jsp">
-    <button class="button-back-home " role="button">Quay về trang chủ</button>
-</a></div>
-<input type="hidden" id="notify" name="notify" value="<%=session.getAttribute("notify")%>">
-
-
+<div>
+    <a href="home.jsp">
+        <button class="button-back-home " role="button">
+            Quay về trang chủ
+        </button>
+    </a>
+</div>
 <div class="body-content">
     <div class="container">
         <div class="sign-in-page-admin">
@@ -82,8 +83,8 @@
                     </style>
                     <h3 class="">Admin Đăng Nhập</h3>
                     <p class=""></p>
-
-                    <form class="outer-top-xs" id="login-form" role="form" action="loginAdmin" method="POST">
+                    <form class="outer-top-xs" id="login-form" role="form"
+                          action="loginAdmin" method="POST">
                         <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
                             <div class="error-email-login"></div>

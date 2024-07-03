@@ -25,7 +25,7 @@ public class ProductsManagement extends HttpServlet {
             case "/admin/remove-prod" -> RemoveProd.removeProd(request, response);
             case "/admin/update-prod" -> UpdateProd.updateProd(request, response);
             case "/admin/hide-prod" -> HideProd.hideProd(request, response);
-            case "/admin/show-detail" -> LoadProdInAdmin.showDetail(request, response);
+            case "/admin/show-detail" -> LoadProdInAdmin.loadDetail(request, response);
         }
     }
 

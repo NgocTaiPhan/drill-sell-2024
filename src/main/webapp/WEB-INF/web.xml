@@ -11,4 +11,25 @@
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/admin/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>myfilter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/cart/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/checkout/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/profile/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/view/*</url-pattern>
+    </filter-mapping>
+
 </web-app>

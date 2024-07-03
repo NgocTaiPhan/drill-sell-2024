@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponeText;
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 public class HideProd {
     static void hideProd(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -16,9 +16,9 @@ public class HideProd {
             int prodId = Integer.parseInt(id);
             ProductDAO.getInstance().hideProd(prodId);
 
-            sendResponeText(response, "Ẩn sản phẩm thành công!", HttpServletResponse.SC_OK);
+            sendResponseText(response, "Ẩn sản phẩm thành công!", HttpServletResponse.SC_OK);
         } else {
-            sendResponeText(response, "Xảy ra lỗi khi ẩn sản phẩm!", HttpServletResponse.SC_BAD_REQUEST);
+            sendResponseText(response, "Xảy ra lỗi khi ẩn sản phẩm!", HttpServletResponse.SC_BAD_REQUEST);
         }
 
     }

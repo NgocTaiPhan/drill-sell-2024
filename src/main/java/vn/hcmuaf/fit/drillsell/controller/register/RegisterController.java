@@ -1,9 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
-import java.io.IOException;
-import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
-import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
 
 import javax.servlet.ServletException;
@@ -14,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.UUID;
+
+import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseAndRedirect;
+
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -23,6 +24,7 @@ public class RegisterController extends HttpServlet {
         doGet(req, resp);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -50,20 +52,16 @@ public class RegisterController extends HttpServlet {
         session.setAttribute("user-register", userRegister);
 
         // Kiểm tra thông tin đăng kí có hợp lệ không
-        boolean invalid = ValidationForm.getInstance().validationRegister(session, request, response, fullName, birthDate,
-                provinceId, districtId, wardId, phoneNumber, email, username, password, confirmPassword, agreeToTerms, gender);
-if(invalid) {
-    // Tạo mã xác nhận và lưu vào session
-    String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
-    session.setAttribute("confirmationCode", confirmationCode);
+        ValidationForm.getInstance().checkValid(response, fullName, birthDate,
+                provinceId, districtId, wardId, phoneNumber, email, username, password, confirmPassword, agreeToTerms);
 
-    // Gửi email xác nhận
-    EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+            // Tạo mã xác nhận và lưu vào session
+            String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+            session.setAttribute("confirmationCode", confirmationCode);
 
-    // Chuyển hướng người dùng đến trang thông báo kiểm tra email
-    request.getRequestDispatcher("check-email.jsp").forward(request, response);
-}else{
-
-}
+            // Gửi email xác nhận
+            EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+        Page loginPage = new Page("Đăng nhập", "login.jsp");
+        sendResponseAndRedirect(response, "Đăng kí thành công! Hãy kiểm tra email của bạn để xác nhận tài khoản!", loginPage, HttpServletResponse.SC_OK);
     }
 }
