@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.login;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
@@ -14,8 +15,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.*;
-
 public class Login {
     public static void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -27,7 +26,7 @@ public class Login {
         Log log = new Log();
 
         if (!validInput(username, password)) {
-            sendResponseText(response, "Hãy điền đầy đủ thông tin đăng nhập", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy điền đầy đủ thông tin đăng nhập", Page.NULL_PAGE);
             return;
         }
 
@@ -35,7 +34,7 @@ public class Login {
         if (user != null) {
             Optional<Instant> lockedUntil = UsersDAO.getInstance().getLockedUntil(user.getId());
             if (lockedUntil.isPresent() && lockedUntil.get().isAfter(Instant.now())) {
-                sendResponseText(response, "Tài khoản của bạn đã bị khóa. Hãy đăng nhập lại sau 10 phút.", HttpServletResponse.SC_BAD_REQUEST);
+                Notify.errorNotify(response, "Tài khoản của bạn đã bị khóa. Hãy đăng nhập lại sau 10 phút.", Page.NULL_PAGE);
                 return;
             }
         }
@@ -46,12 +45,12 @@ public class Login {
             log.setUserId(auth.getId());
             session.setAttribute("auth", auth);
             LogDAO.insertLoginTrue(log);
-            sendResponseAndBackHome(response, "Đăng nhập thành công", HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Đăng nhập thành công", Page.HOME_PAGE);
         } else {
             log.setUserId(user != null ? user.getId() : 0);
             LogDAO.inserLoginFalse(log);
             LogDAO.checkLogin(log);
-            sendResponseText(response, "Không tìm thấy tài khoản", HttpServletResponse.SC_NOT_FOUND);
+            Notify.errorNotify(response, "Không tìm thấy tài khoản", Page.NULL_PAGE);
         }
     }
 
@@ -76,7 +75,7 @@ public class Login {
 //                    PrintWriter out = response.getWriter();
 //                    out.println("<script>alert('Tài khoản của bạn đã bị khóa. Vui lòng đăng nhập lại sau 10 phút.'); window.location.href='" + request.getContextPath() + "/login.jsp ';</script>");
 //                    return;
-                    sendResponseText(response, "Tài khoản của bạn đã bị khóa. Hãy đăng nhập lại sau 10 phút.", HttpServletResponse.SC_BAD_REQUEST);
+                    Notify.errorNotify(response, "Tài khoản của bạn đã bị khóa. Hãy đăng nhập lại sau 10 phút.", Page.NULL_PAGE);
                 }
             }
 
@@ -103,7 +102,7 @@ public class Login {
                 } else {
                     // Nếu không phải admin, xóa thông tin đăng nhập và thông báo lỗi
                     session.removeAttribute("auth");
-                    sendResponseText(response, "Tài khoản của bạn không có quyền truy cập!", HttpServletResponse.SC_UNAUTHORIZED);
+                    Notify.errorNotify(response, "Tài khoản của bạn không có quyền truy cập!", Page.NULL_PAGE);
                 }
             } else {
                 // Ghi nhật ký đăng nhập thất bại trước khi chuyển hướng
@@ -118,11 +117,11 @@ public class Login {
                 LogDAO.checkLogin(log);
 
                 // Báo lỗi khi không tìm thấy thông tin đăng nhập
-                sendResponseText(response, "Không tìm thấy tài khoản!", HttpServletResponse.SC_NOT_FOUND);
+                Notify.errorNotify(response, "Không tìm thấy tài khoản!", Page.NULL_PAGE);
             }
         } else {
             // Báo lỗi khi người dùng chưa điền thông tin đăng nhập
-            sendResponseText(response, "Hãy điền đầy đủ thông tin đăng nhập!", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy điền đầy đủ thông tin đăng nhập!", Page.NULL_PAGE);
         }
     }
 
@@ -130,11 +129,9 @@ public class Login {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         if (request.getSession().getAttribute("auth") != null) {
-
-            sendResponse(response, HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Đăng nhập thành công", Page.HOME_PAGE);
         } else {
-
-            sendResponseAndRedirect(response, "Bạn chưa đăng nhập", new Page("Đăng nhập", "login.jsp"), HttpServletResponse.SC_BAD_REQUEST);
+            Notify.warningNotify(response, "Bạn chưa đăng nhập", Page.LOGIN_PAGE);
         }
     }
     public static boolean validInput(String username, String password) {

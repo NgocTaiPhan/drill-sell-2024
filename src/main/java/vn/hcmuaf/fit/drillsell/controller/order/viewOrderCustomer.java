@@ -1,5 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.order;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
@@ -12,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 @WebServlet("/viewOrderCustomer")
 public class viewOrderCustomer extends HttpServlet {
@@ -36,9 +36,9 @@ public class viewOrderCustomer extends HttpServlet {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         boolean updateStatus = CheckOutDAO.update(orderId);
         if (updateStatus) {
-            sendResponseText(response, "Hủy đơn hàng thành công!", HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Hủy đơn hàng thành công!", Page.NULL_PAGE);
         } else {
-            sendResponseText(response, "Hủy đơn hàng thất bại!", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hủy đơn hàng thất bại!", Page.NULL_PAGE);
         }
     }
 }

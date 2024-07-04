@@ -18,11 +18,10 @@ const Toast = Swal.mixin({
     }
 });
 
-function successNotify(message) {
+function normalNotify(type, message) {
     Swal.fire({
-        title: "Thành công!",
         text: message,
-        icon: "success"
+        icon: type
     });
 }
 
@@ -34,38 +33,37 @@ function errorNotify(message) {
     });
 }
 
-function successNotifyAndRedirect(message, namePage, pageUrl) {
-    swalWithBootstrapButtons.fire({
-        title: "Thành công",
-        text: message,
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: namePage,
-        cancelButtonText: "Hủy",
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = pageUrl;
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Xử lý khi người dùng huỷ bỏ
-            // window.location.href = 'home.jsp';
-        }
-    });
+function checkButton(namePage, pageUrl) {
+    const buttonValue = {};
+    if (pageUrl === null || pageUrl === "" || pageUrl === 'home.jsp') {
+        Object.assign(buttonValue, {
+            showConfirm: false,
+            text: "OK"
+        });
+    } else {
+        Object.assign(buttonValue, {
+            showConfirm: true,
+            text: namePage
+        });
+    }
+    return buttonValue;
 }
 
-function notifyRedirect(message, namePage, pageUrl) {
+
+function notifyAndRedirect(type, message, namePage, pageUrl) {
+    const buttonValue = checkButton(namePage, pageUrl);
     swalWithBootstrapButtons.fire({
-        title: message,
-        showCancelButton: true,
-        cancelButtonText: "Hủy",
-        confirmButtonText: namePage,
+        text: message,
+        icon: type,
+        showCancelButton: buttonValue.showConfirm,
+        confirmButtonText: buttonValue.text,
+        cancelButtonText: 'Hủy',
         reverseButtons: true
     }).then((result) => {
-        if (result.isConfirmed) {
+        if (pageUrl === null || pageUrl === '') {
+
+        } else if (result.isConfirmed) {
             window.location.href = pageUrl;
-        } else {
-            // Xử lý khi người dùng huỷ bỏ
-            // window.location.href = 'home.jsp';
         }
     });
 }

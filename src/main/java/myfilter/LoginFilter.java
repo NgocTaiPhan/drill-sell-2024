@@ -1,15 +1,11 @@
 package myfilter;
 
-import vn.hcmuaf.fit.drillsell.controller.notify.Page;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseAndRedirect;
 
 @WebFilter(urlPatterns = {"/cart/*", "/checkout/*", "/profile/*", "/viewOrderCustomer/*"})
 public class LoginFilter implements Filter {
@@ -32,8 +28,8 @@ public class LoginFilter implements Filter {
             chain.doFilter(request, response);
 
         } else {
-//            sendResponseText(httpResponse, "Bạn chưa đăng nhập", HttpServletResponse.SC_UNAUTHORIZED);
-            sendResponseAndRedirect(httpResponse, "Bạn chưa đăng nhập", new Page("Đăng nhập", "login.jsp"), HttpServletResponse.SC_UNAUTHORIZED);
+//            Notify.warningNotify(httpResponse, "Bạn chưa đăng nhập", Page.LOGIN_PAGE);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
     }

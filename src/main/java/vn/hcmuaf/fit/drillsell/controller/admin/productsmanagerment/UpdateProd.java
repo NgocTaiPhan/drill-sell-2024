@@ -1,13 +1,13 @@
 package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 public class UpdateProd {
     static void updateProd(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -23,9 +23,9 @@ public class UpdateProd {
             Products prod = new Products(id, image, prodName, unitPrice, categoryId, nameProducer, describle, specifions);
             ProductDAO productDAO = new ProductDAO();
             productDAO.updateProd(prod);
-            sendResponseText(response, "Sửa thông tin sản phẩm thành công", HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Sửa thông tin sản phẩm thành công", Page.NULL_PAGE);
         } catch (Exception e) {
-            sendResponseText(response, "Có lỗi trong quá trình thực hiện", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Có lỗi trong quá trình thực hiện", Page.NULL_PAGE);
 
         }
 

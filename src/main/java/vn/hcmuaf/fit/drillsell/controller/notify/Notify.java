@@ -6,52 +6,40 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Notify {
-    private Notify() {
+
+    public static void successNotify(HttpServletResponse response, String message, Page page) throws IOException {
+        sendNotify(response, Type.SUCCESS, message, page);
     }
 
-    public static void sendResponse(HttpServletResponse resp, int status) throws IOException {
-        resp.setStatus(status);
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-
-    }
-    //Gửi respone đến client kèm theo tin nhắn thông báo
-    public static void sendResponseText(HttpServletResponse resp, String mess, int status) throws IOException {
-        resp.setStatus(status);
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-        System.out.println(mess);
-        resp.getWriter().write(mess);
-
+    public static void errorNotify(HttpServletResponse response, String message, Page page) throws IOException {
+        sendNotify(response, Type.ERROR, message, page);
     }
 
-    public static void sendResponseAndBackHome(HttpServletResponse resp, String mess, int status) throws IOException {
-        resp.setStatus(status);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("message", mess);
-        jsonObject.addProperty("namePage", "OK");
-        jsonObject.addProperty("pageUrl", "home.jsp");
-
-        resp.getWriter().write(jsonObject.toString());
+    public static void warningNotify(HttpServletResponse response, String message, Page page) throws IOException {
+        sendNotify(response, Type.WARNING, message, page);
     }
 
-    public static void sendResponseAndRedirect(HttpServletResponse resp, String message, Page page, int status) throws IOException {
-        resp.setStatus(status);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
+    public static void infoNotify(HttpServletResponse response, String message, Page page) throws IOException {
+        sendNotify(response, Type.INFO, message, page);
+    }
+
+    public static void normalNotify(HttpServletResponse response, String message, Page page) throws IOException {
+        sendNotify(response, Type.NO_TYPE, message, page);
+    }
+
+
+    public static void sendNotify(HttpServletResponse response, String type, String message, Page page) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("message", message);
+        jsonObject.addProperty("type", type);
         jsonObject.addProperty("namePage", page.getNamePage());
         jsonObject.addProperty("pageUrl", page.getPageUrl());
 
-        resp.getWriter().write(jsonObject.toString());
+        response.getWriter().write(jsonObject.toString());
     }
-
-
 
 
 }
