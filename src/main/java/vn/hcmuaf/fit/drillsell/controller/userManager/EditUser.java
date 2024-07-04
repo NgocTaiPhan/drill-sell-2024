@@ -88,6 +88,7 @@ public class EditUser extends HttpServlet {
         String idStr = req.getParameter("id");
         String fullname = req.getParameter("fullname");
         String userName = req.getParameter("username");
+        String passwords = req.getParameter("passwords");
         String address = req.getParameter("address");
         String phone = req.getParameter("phone");
         String email = req.getParameter("email");
@@ -112,6 +113,7 @@ public class EditUser extends HttpServlet {
             user.setId(id);
             user.setFullname(fullname);
             user.setUsername(userName);
+            user.setPasswords(passwords);
             user.setEmail(email);
             user.setAddress(address);
             user.setPhone(phone);
