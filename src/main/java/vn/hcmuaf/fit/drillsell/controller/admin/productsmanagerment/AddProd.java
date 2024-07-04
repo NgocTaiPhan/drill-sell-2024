@@ -1,5 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
@@ -7,8 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 public class AddProd {
 
@@ -33,42 +33,42 @@ public class AddProd {
 
         // Kiểm tra tất cả trường đã nhập
         if (prodName == null || prodName.isEmpty() ) {
-            sendResponseText(response, "Hãy nhập tên sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập tên sản phẩm", Page.NULL_PAGE);
             return;
         }
         //Kiểm tra ảnh sản phẩm
         if (image.isEmpty() || image == null) {
 
-            sendResponseText(response, "Hãy nhập hình ảnh sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập hình ảnh sản phẩm", Page.NULL_PAGE);
             return;
         }
         //Kiểm tra mô tả
         if (describle.isEmpty() || describle == null) {
 
-            sendResponseText(response, "Hãy nhập mô tả sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập mô tả sản phẩm", Page.NULL_PAGE);
             return;
         }
         //Kiểm tra thông số kỹ thuật
         if (specifions.isEmpty() || specifions == null) {
 
-            sendResponseText(response, "Hãy nhập thông số kỹ thuật", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập thông số kỹ thuật", Page.NULL_PAGE);
             return;
         }
 //        Kiểm tra tên nhà sản xuất
         if (nameProducer.isEmpty() || nameProducer == null) {
 
-            sendResponseText(response, "Hãy chọn nhà sản xuất", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy chọn nhà sản xuất", Page.NULL_PAGE);
             return;
         }
         //Kiểm tra tên sản phẩm
         if (prodName.isEmpty() || prodName == null) {
 
-            sendResponseText(response, "Hãy nhập tên sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập tên sản phẩm", Page.NULL_PAGE);
             return;
 
             //Kiểm tra tên sản phẩm có trùng không
         } else if (ProductDAO.getInstance().isExistProdName(prodName)) {
-            sendResponseText(response, "Tên sản phẩm đã tồn tại", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Tên sản phẩm đã tồn tại", Page.NULL_PAGE);
             return;
         }
 
@@ -79,18 +79,18 @@ public class AddProd {
 
             //Kiểm tra giá có hợp lệ không
             if (unitPrice <= 0) {
-                sendResponseText(response, "Hãy nhập giá sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+                Notify.errorNotify(response, "Hãy nhập giá sản phẩm", Page.NULL_PAGE);
                 return;
             }
             //Kiểm tra loại sản phẩm có hợp lệ không
             if (cateId <= 0) {
-                sendResponseText(response, "Hãy chọn loại sản phẩm", HttpServletResponse.SC_BAD_REQUEST);
+                Notify.errorNotify(response, "Hãy chọn loại sản phẩm", Page.NULL_PAGE);
                 return;
             }
 
         } catch (NumberFormatException e) {
             //Bắt lỗi khi không nhập giá
-            sendResponseText(response, "Hãy nhập số", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Hãy nhập số", Page.NULL_PAGE);
             return;
         }
         try {
@@ -98,9 +98,9 @@ public class AddProd {
             Products product = new Products(image, prodName, unitPrice, cateId, nameProducer, describle, specifions);
 //            System.out.println(product); //In ra sản phẩm sau khi đã kiểm tra
             ProductDAO.getInstance().addProduct(product);
-            sendResponseText(response, "Thêm sản phẩm thành công!", HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Thêm sản phẩm thành công!", Page.NULL_PAGE);
         } catch (Exception e) {
-            sendResponseText(response, "Có lỗi trong quá trình thực hiện", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Có lỗi trong quá trình thực hiện", Page.NULL_PAGE);
         }
 
     }

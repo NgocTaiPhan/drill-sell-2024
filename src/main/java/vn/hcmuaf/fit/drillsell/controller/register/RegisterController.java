@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.UUID;
 
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseAndRedirect;
 
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
@@ -52,8 +52,10 @@ public class RegisterController extends HttpServlet {
         session.setAttribute("user-register", userRegister);
 
         // Kiểm tra thông tin đăng kí có hợp lệ không
-        ValidationForm.getInstance().checkValid(response, fullName, birthDate,
+        boolean isValidRegister = ValidationForm.getInstance().checkValid(response, fullName, birthDate,
                 provinceId, districtId, wardId, phoneNumber, email, username, password, confirmPassword, agreeToTerms);
+        if (isValidRegister) {
+
 
             // Tạo mã xác nhận và lưu vào session
             String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
@@ -61,7 +63,9 @@ public class RegisterController extends HttpServlet {
 
             // Gửi email xác nhận
             EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
-        Page loginPage = new Page("Đăng nhập", "login.jsp");
-        sendResponseAndRedirect(response, "Đăng kí thành công! Hãy kiểm tra email của bạn để xác nhận tài khoản!", loginPage, HttpServletResponse.SC_OK);
+
+            Notify.successNotify(response, "Đăng kí thành công! Hãy kiểm tra email của bạn để xác nhận tài khoản!", Page.MAIL_PAGE);
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.cart;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.model.User;
 
@@ -10,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 @WebServlet("/cart")
 public class AddToCart extends HttpServlet {
@@ -40,10 +40,10 @@ public class AddToCart extends HttpServlet {
 
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng
-            sendResponseText(response, "Thêm sản phẩm vào giỏ hàng thành công", HttpServletResponse.SC_OK);
+            Notify.successNotify(response, "Thêm sản phẩm vào giỏ hàng thành công", Page.NULL_PAGE);
         } else {
             // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng
-            sendResponseText(response, "Lỗi khi thêm sản phẩm vào giỏ hàng", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Lỗi khi thêm sản phẩm vào giỏ hàng", Page.NULL_PAGE);
         }
 
     }

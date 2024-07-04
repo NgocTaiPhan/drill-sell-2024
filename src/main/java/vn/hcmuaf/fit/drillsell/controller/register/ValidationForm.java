@@ -1,12 +1,13 @@
 package vn.hcmuaf.fit.drillsell.controller.register;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static vn.hcmuaf.fit.drillsell.controller.notify.Notify.sendResponseText;
 
 /**
  * Lớp ValidationForm thực hiện xác thực các thông tin đăng ký người dùng từ form.
@@ -49,7 +50,7 @@ public class ValidationForm {
      * @param agreeToTerms   Đồng ý với điều khoản từ form
      * @throws IOException      nếu có lỗi xảy ra trong quá trình xử lý IO
      */
-    public void checkValid(
+    public boolean checkValid(
             HttpServletResponse response,
             String fullName,
             String birthDate,
@@ -67,70 +68,71 @@ public class ValidationForm {
 
         // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
         if (isNullOrEmpty(fullName)) {
-            sendResponseText(response, "Hãy nhập họ và tên!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
+            return false;
         }
         if (isNullOrEmpty(birthDate)) {
-            sendResponseText(response, "Hãy chọn ngày sinh!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
+            return false;
         }
         if (!isValidAge(birthDate)) {
-            sendResponseText(response, "Bạn chưa đủ 18 tuổi!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
+            return false;
         }
         if (isInvalidAddress(provinceId, districtId, wardId)) {
-            sendResponseText(response, "Hãy chọn địa chỉ!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy chọn địa chỉ!", Page.NULL_PAGE);
+            return false;
         }
         if (isNullOrEmpty(phoneNumber)) {
-            sendResponseText(response, "Hãy nhập số điện thoại!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
+            return false;
         }
         if (!isValidPhoneNumber(phoneNumber)) {
-            sendResponseText(response, "Số điện thoại không hợp lệ!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
+            return false;
         }
         if (isNullOrEmpty(email)) {
-            sendResponseText(response, "Hãy nhập email!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
+            return false;
         }
         if (!isValidEmail(email)) {
-            sendResponseText(response, "Email không hợp lệ!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
+            return false;
         }
         if (UsersDAO.getInstance().isEmailExists(email)) {
-            sendResponseText(response, "Email đã tồn tại!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Email đã tồn tại!", Page.NULL_PAGE);
+            return false;
         }
         if (isNullOrEmpty(username)) {
-            sendResponseText(response, "Hãy nhập tên đăng nhập!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
+            return false;
         }
         if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
-            sendResponseText(response, "Tên đăng nhập đã tồn tại!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Tên đăng nhập đã tồn tại!", Page.NULL_PAGE);
+            return false;
         }
         if (isNullOrEmpty(password)) {
-            sendResponseText(response, "Hãy nhập mật khẩu!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập mật khẩu!", Page.NULL_PAGE);
+            return false;
         }
         if (!isValidPassword(password)) {
-            sendResponseText(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", HttpServletResponse.SC_BAD_REQUEST);
+            Notify.errorNotify(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
 
-            return;
+            return false;
         }
         if (isNullOrEmpty(confirmPassword)) {
-            sendResponseText(response, "Hãy nhập lại mật khẩu!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Hãy nhập lại mật khẩu!", Page.NULL_PAGE);
+            return false;
         }
         if (!password.equals(confirmPassword)) {
-            sendResponseText(response, "Mật khẩu không trùng khớp!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            Notify.errorNotify(response, "Mật khẩu không trùng khớp!", Page.NULL_PAGE);
+            return false;
         }
-        if (agreeToTerms == null || !"on".equals(agreeToTerms)) {
-            sendResponseText(response, "Hãy đồng ý với điều khoản của chúng tôi!", HttpServletResponse.SC_BAD_REQUEST);
-            return;
+        if (!"on".equals(agreeToTerms)) {
+            Notify.errorNotify(response, "Hãy đồng ý với điều khoản của chúng tôi!", Page.NULL_PAGE);
+            return false;
         }
+        return true;
 
     }
 
