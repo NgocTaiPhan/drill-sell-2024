@@ -28,6 +28,7 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
@@ -152,128 +153,172 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-4 col-md-5">
-                        <div class="card card-user">
-                            <div class="image">
-                                <img src="assets/img/background.jpg" alt="..."/>
-                            </div>
-                            <div class="content">
-                                <div class="author">
-                                    <img class="avatar border-white" src="../assets/img/faces/face-2.jpg" alt="..."/>
-                                    <h4 class="title"><%=u.getFullname()%><br/>
-                                        <a href="#"><small><%=u.getEmail()%>
-                                        </small></a>
-                                    </h4>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <div class="row">
-                                    <div class="col-md-3 col-md-offset-1">
-                                        <h5>12<br/><small>Tuổi tài khoản</small></h5>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h5>2<br/><small>Số đơn hàng</small></h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5>24<br/><small>Sản phẩm trong giỏ hàng</small></h5>
-                                    </div>
-                                </div>
+<%--                    <div class="col-lg-4 col-md-5">--%>
+<%--                        <div class="card card-user">--%>
+<%--                            <div class="image">--%>
+<%--                                <img src="assets/img/background.jpg" alt="..."/>--%>
+<%--                            </div>--%>
+<%--                            <div class="content">--%>
+<%--                                <div class="author">--%>
+<%--                                    <img class="avatar border-white" src="../assets/img/faces/face-2.jpg" alt="..."/>--%>
+<%--                                    <h4 class="title"><%=u.getFullname()%><br/>--%>
+<%--                                        <a href="#"><small><%=u.getEmail()%>--%>
+<%--                                        </small></a>--%>
+<%--                                    </h4>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                            <hr>--%>
+
+<%--                        </div>--%>
+
+<%--                    </div>--%>
+    <div class="col-lg-8 col-md-7">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Thông tin tài khoản</h4>
+            </div>
+            <div class="content">
+                <form>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" class="form-control border-input" id="fullname" placeholder="">
                             </div>
                         </div>
-
-                    </div>
-                    <div class="col-lg-8 col-md-7">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Thông tin tài khoản</h4>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tên đăng nhập</label>
+                                <input type="text" class="form-control border-input" id="username">
                             </div>
-                            <div class="content">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <label>Họ và tên</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="" value="<%=u.getFullname()%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Tên đăng nhập</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getUsername()%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="emailUser">Địa chi email</label>
-                                                <input id="emailUser" type="email" class="form-control border-input"
-                                                       disabled
-                                                       value="<%=u.getEmail()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Giới tính</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="First Name" value="<% String gender = u.getSex()? "Nam":"Nữ?";%>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Ngày tháng năm sinh</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getYearOfBirth()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Địa chỉ</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       placeholder="Home Address" value="<%=u.getAddress()%>">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Số điện thoại</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=u.getPhone()%>">
-                                            </div>
-                                        </div>
-                                        <%String typeAcc = u.isRoleUser() ? "Quản trị" : "Người dùng";%>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Loại tài khoản</label>
-                                                <input type="text" class="form-control border-input" disabled
-                                                       value="<%=typeAcc%>">
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-
-                                    <div class="text-center">
-                                        <a class="btn btn-warning btn-fill btn-wd">Đổi mật khẩu</a>
-                                        <a class="btn btn-info btn-fill btn-wd">Thay đổi thông tin
-                                        </a>
-
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </form>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="emailUser">Địa chỉ email</label>
+                                <input id="emailUser" type="email" class="form-control border-input">
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <input type="text" class="form-control border-input" id="gender">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ngày tháng năm sinh</label>
+                                <input type="text" class="form-control border-input" id="yearOfBirth">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Địa chỉ</label>
+                                <input type="text" class="form-control border-input" id="address" placeholder="Home Address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" class="form-control border-input" id="phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Loại tài khoản</label>
+                                <input type="text" class="form-control border-input" id="accountType">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a class="btn btn-warning btn-fill btn-wd">Đổi mật khẩu</a>
+                        <a class="btn btn-info btn-fill btn-wd" id="changeUserInfo">Thay đổi thông tin</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "showUserInfor", // URL của servlet hoặc phương thức controller để lấy thông tin người dùng
+                method: 'GET',
+                success: function(data) {
+                    console.log("Received data: ", data); // Log để kiểm tra dữ liệu nhận được
+                    // Giả sử dữ liệu nhận được từ máy chủ có định dạng JSON và có các thuộc tính: fullname, username, email, sex, yearOfBirth, address, phone, roleUser
+                    $('#fullname').val(data.fullname);
+                    $('#username').val(data.username);
+                    $('#emailUser').val(data.email);
+                    $('#gender').val(data.sex ? 'Nam' : 'Nữ');
+                    $('#yearOfBirth').val(data.yearOfBirth);
+                    $('#address').val(data.address);
+                    $('#phone').val(data.phone);
+                    $('#accountType').val(data.roleUser ? 'Quản trị' : 'Người dùng');
+                },
+                error: function(error) {
+                    console.log('Error fetching user info:', error);
+                }
+            });
+            $('#changeUserInfo').click(function(e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
+
+                // Lấy dữ liệu từ các input
+                var fullname = $('#fullname').val();
+                var username = $('#username').val();
+                var email = $('#emailUser').val();
+                var gender = $('#gender').val();
+                var yearOfBirth = $('#yearOfBirth').val(); // Kiểm tra xem biến này có giá trị hay không
+                var address = $('#address').val();
+                var phone = $('#phone').val();
+
+                // Tạo đối tượng dữ liệu để gửi lên server
+                var userData = {
+                    id: parseInt(sessionStorage.getItem('userid')),
+                    fullname: fullname,
+                    username: username,
+                    email: email,
+                    gender: gender,
+                    yearOfBirth: yearOfBirth, // Kiểm tra giá trị này
+                    address: address,
+                    phone: phone
+                };
+
+                console.log(userData); // Kiểm tra dữ liệu trước khi gửi
+
+                // Gửi yêu cầu Ajax để cập nhật thông tin người dùng
+                $.ajax({
+                    url: 'updateUserInfo', // URL của servlet hoặc controller xử lý cập nhật
+                    method: 'POST', // Phương thức HTTP
+                    contentType: 'application/json; charset=UTF-8', // Kiểu dữ liệu gửi đi
+                    data: JSON.stringify(userData), // Dữ liệu gửi đi (đã chuyển thành JSON)
+                    success: function(response) {
+                        // Xử lý kết quả thành công
+                        console.log('Update successful:', response);
+                        // Có thể cập nhật lại giao diện hoặc hiển thị thông báo thành công
+                        alert('Cập nhật thông tin thành công!');
+                    },
+                    error: function(error) {
+                        // Xử lý lỗi
+                        console.log('Error updating user info:', error);
+                        alert('Đã xảy ra lỗi khi cập nhật thông tin.');
+                    }
+                });
+            });
+
+        });
+    </script>
 
 
                 </div>
