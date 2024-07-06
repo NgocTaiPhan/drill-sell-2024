@@ -162,7 +162,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <div class=" lnk-cart">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon"
-                                     onclick="checkLoginAndRedirect(<%=logged%>,'cart.jsp')">
+                                     onclick="callServletAndRedirect('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
 
@@ -691,7 +691,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
-<script src="assets/js/my-js/notify.js"></script>
+<script src="./assets/js/my-js/notify.js"></script>
+<script src="./assets/js/my-js/ajax-process.js"></script>
 
 
 </body>

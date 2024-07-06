@@ -11,7 +11,6 @@ import java.util.Properties;
 import static javax.mail.Transport.send;
 
 public class EmailDAO {
-
     public final String LINK = "http://localhost:8080/drillsell_war/input-code.jsp";
 public final String LINKREGIS = "http://localhost:8080/drillsell_war/confirm.jsp";
     private Properties prop = new Properties();

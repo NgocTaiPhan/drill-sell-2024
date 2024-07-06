@@ -81,66 +81,24 @@ public class UsersDAO implements IUserDAO{
 
 
 
-//     public boolean addUser(User newUser) {
-//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-//         Jdbi jdbi = DbConnector.me().get();
-//         try (Handle handle = jdbi.open()) {
-//             handle.createUpdate(insertQuery)
-//                     .bind(0, newUser.getFullname())
-//                     .bind(1, newUser.getAddress())
-//                     .bind(2, newUser.getPhone())
-//                     .bind(3, newUser.getEmail())
-//                     .bind(4, newUser.getUsername())
-//                    .bind(5, hashPassword(newUser.getPasswords()))
-//                     .bind(6, newUser.getSex())
-//                     .bind(7, newUser.getYearOfBirth())
-//                     .bind(8, newUser.getVerificationCode())
-//                     .execute();
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//             return false;
-//         }
-//         return true;
-//     }
 
-    public boolean addUser(User newUser,String confirmationCode) {
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate(insertQuery)
-                    .bind(0, newUser.getFullname())
-                    .bind(1, newUser.getAddress())
-                    .bind(2, newUser.getPhone())
-                    .bind(3, newUser.getEmail())
-                    .bind(4, newUser.getUsername())
-                    .bind(5, hashPassword(newUser.getPasswords()))
-                    .bind(6, newUser.getSex())
-                    .bind(7, newUser.getYearOfBirth())
-                    .bind(8, confirmationCode)
-                    .execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+// đổi mật khẩu(mã hóa trước khi cập nhật)
+public boolean changePassword(String username, String newPassword) {
+    String hashedPassword = hashPassword(newPassword);
+    String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
+
+    Jdbi jdbi = DbConnector.me().get();
+    try (Handle handle = jdbi.open()) {
+        handle.createUpdate(queryUpdatePass)
+                .bind(0, hashedPassword)
+                .bind(1, username)
+                .execute();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
     }
-
-    public boolean changePassword(String username, String newPassword) {
-        String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
-
-
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate(queryUpdatePass)
-                    .bind(0, hashPassword(newPassword))
-                    .bind(1, username)
-                    .execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+    return true;
+}
 
 //    public boolean changeInfoUser(User user) {
 //        deleteUserById(user.getId());
@@ -173,6 +131,7 @@ public class UsersDAO implements IUserDAO{
             return count > 0;
         }
     }
+//    kiểm tra sự tồn tại của email khi đăng ký
     public boolean isEmailExists(String email) {
         String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -252,6 +211,7 @@ public class UsersDAO implements IUserDAO{
         return user;
 
     }
+//    lấy thông tin chi tiết người dùng
     public User getDetailUserById() {
         String sqll ="SELECT users.id,users.username,users.email FROM users ";
         return DbConnector.me().get().withHandle(handle ->
@@ -261,23 +221,7 @@ public class UsersDAO implements IUserDAO{
                         .orElse(null));
 
     }
-//    public void updateUser(User user) {
-//        int id = user.getId();
-//        DbConnector.me().get().useHandle(handle -> {
-//            handle.execute(
-//                    "UPDATE users SET fullname = ?, username = ?, email = ?, address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?",
-//                    user.getFullname(),
-//                    user.getUsername(),
-//                    user.getEmail(),
-//                    user.getAddress(),
-//                    user.getPhone(),
-//                    user.getSex(),
-//                    user.getYearOfBirth(),
-//                    user.isRoleUser(),
-//                    id
-//            );
-//        });
-//    }
+
 public static long getCountCustomer() {
     return DbConnector.me().get().withHandle(handle ->
             handle.createQuery("SELECT COUNT(users.id) AS countCustomer FROM users")
@@ -285,24 +229,73 @@ public static long getCountCustomer() {
                     .one()
     );
 }
+// cập nhật người dùng
 public void updateUser(User user) {
     int id = user.getId();
+    String hashedPassword = user.getPasswords() != null ? hashPassword(user.getPasswords()) : null;
     DbConnector.me().get().useHandle(handle -> {
-            handle.execute(
-                    "UPDATE users SET fullname = ?, username = ?, email = ?, address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?",
-                    user.getFullname(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getAddress(),
-                    user.getPhone(),
-                    user.getSex(),
-                    user.getYearOfBirth(),
-                    user.isRoleUser() ? 1 : 0, // Chuyển đổi Boolean thành Integer
-                    id
-            );
-
+        handle.createUpdate(
+                        "UPDATE users SET fullname = ?, username = ?, email = ?, passwords = COALESCE(?, passwords), address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
+                .bind(0, user.getFullname())
+                .bind(1, user.getUsername())
+                .bind(2, user.getEmail())
+                .bind(3, hashedPassword)  // Bind hashedPassword only if not null
+                .bind(4, user.getAddress())
+                .bind(5, user.getPhone())
+                .bind(6, user.getSex())
+                .bind(7, user.getYearOfBirth())
+                .bind(8, user.isRoleUser() ? 1 : 0)
+                .bind(9, id)
+                .execute();
     });
 }
+    public boolean addUser(User newUser,String confirmationCode) {
+
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate(insertQuery)
+                    .bind(0, newUser.getFullname())
+                    .bind(1, newUser.getAddress())
+                    .bind(2, newUser.getPhone())
+                    .bind(3, newUser.getEmail())
+                    .bind(4, newUser.getUsername())
+                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(6, newUser.getSex())
+                    .bind(7, newUser.getYearOfBirth())
+                    .bind(8, confirmationCode)
+                    .execute();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    public boolean AdminaddUser(User newUser,String confirmationCode) {
+
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, roleUser, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?,?)";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate(insertQuery)
+                    .bind(0, newUser.getFullname())
+                    .bind(1, newUser.getAddress())
+                    .bind(2, newUser.getPhone())
+                    .bind(3, newUser.getEmail())
+                    .bind(4, newUser.getUsername())
+                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(6, newUser.getSex())
+                    .bind(7, newUser.getYearOfBirth())
+                    .bind(8,newUser.isRoleUser())
+                    .bind(9, confirmationCode)
+                    .execute();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         System.out.println(getCountCustomer());
     }

@@ -1,5 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.order;
 
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
@@ -34,11 +36,9 @@ public class viewOrderCustomer extends HttpServlet {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         boolean updateStatus = CheckOutDAO.update(orderId);
         if (updateStatus) {
-            response.getWriter().println("<script>alert('Đã hủy đơn hàng thành công'); window.location.href='"
-                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+            Notify.successNotify(response, "Hủy đơn hàng thành công!", Page.NULL_PAGE);
         } else {
-            response.getWriter().println("<script>alert('Hủy đơn hàng thất bại'); window.location.href='"
-                    + request.getContextPath() + "/viewOrderCustomer';</script>");
+            Notify.errorNotify(response, "Hủy đơn hàng thất bại!", Page.NULL_PAGE);
         }
     }
 }

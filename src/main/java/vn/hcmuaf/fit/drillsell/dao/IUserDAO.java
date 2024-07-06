@@ -13,4 +13,5 @@ boolean deleteUser(int id, int status);
     User getDetailUserById();
 
     void updateUser(User user);
+
 }

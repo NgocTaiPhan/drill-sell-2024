@@ -217,4 +217,13 @@ public class ProductDAO {
 
         });
     }
+
+    public List<Products> getHideProds() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT * FROM products WHERE productStatus = 1")
+                    .mapToBean(Products.class)
+                    .list();
+        });
+
+    }
 }

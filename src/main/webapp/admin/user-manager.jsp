@@ -38,6 +38,65 @@
     <%--    Datatable--%>
     <link href="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
+    <style type="text/css">
+        .css_select_div { text-align: center; }
+        .css_select { display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
+    </style>
+    <script>
+        $(document).ready(function () {
+            // Biến lưu trữ thông tin về tỉnh, quận/huyện và phường/xã
+            var provinces = {};
+            var districts = {};
+            var wards = {};
+
+            // Lấy danh sách tỉnh thành từ API và điền vào dropdown tỉnh
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        provinces[val_tinh.full_name] = val_tinh.id; // Lưu tên của tỉnh
+                        $("#tinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
+                    });
+                }
+            });
+
+            // Xử lý sự kiện khi người dùng chọn tỉnh
+            $("#tinh").change(function () {
+                var ten_tinh = $(this).val(); // Lấy tên của tỉnh từ dropdown
+
+                // Xóa các lựa chọn cũ của quận/huyện và phường/xã
+                $("#quan").html('<option value="0">Chọn Quận Huyện</option>');
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách quận/huyện từ API và điền vào dropdown quận/huyện
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinces[ten_tinh] + '.htm', function (data_quan) {
+                    if (data_quan.error == 0) {
+                        $.each(data_quan.data, function (key_quan, val_quan) {
+                            districts[val_quan.full_name] = val_quan.id; // Lưu tên của quận/huyện
+                            $("#quan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+
+            // Xử lý sự kiện khi người dùng chọn quận/huyện
+            $("#quan").change(function () {
+                var ten_quan = $(this).val(); // Lấy tên của quận/huyện từ dropdown
+
+                // Xóa các lựa chọn cũ của phường/xã
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách phường/xã từ API và điền vào dropdown phường/xã
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districts[ten_quan] + '.htm', function (data_phuong) {
+                    if (data_phuong.error == 0) {
+                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                            wards[val_phuong.full_name] = val_phuong.id; // Lưu tên của phường/xã
+                            $("#phuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -116,11 +175,70 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="header">
-                                <h4 class="title">Striped Table</h4>
-                                <p class="category">Here is a subtitle for this table</p>
-                            </div>
                             <div class="content table-responsive table-full-width">
+                                <div class="btn btn-info" id="openModalBtn">Thêm người dùng</div>
+
+                                <!-- Modal form thêm người dùng -->
+                                <div id="addUserModal" class="modal">
+
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <h2>Thêm người dùng</h2>
+                                        <form id="addUserForm">
+                                            <label for="fullname">Tên người dùng:</label>
+                                            <input type="text" id="fullname" name="fullname" required><br><br>
+
+                                            <label for="username">Tên đăng nhập:</label>
+                                            <input type="text" id="username" name="username" required><br><br>
+
+                                            <label for="email">Email:</label>
+                                            <input type="email" id="email" name="email" required><br><br>
+
+                                            <label for="passwords">Mật khẩu:</label>
+                                            <input type="password" id="passwords" name="passwords" required><br><br>
+
+                                            <div class="form-group">
+                                                <label class="info-title"  for="address" id="address">Địa chỉ <span>*</span></label>
+
+                                                <div class="css_select_div">
+                                                    <select class="css_select" id="tinh" name="tinh">
+                                                        <option value="0">Chọn Tỉnh</option>
+                                                        <!-- Thêm các tùy chọn cho tỉnh -->
+                                                    </select>
+                                                    <select class="css_select" id="quan" name="quan">
+                                                        <option value="0">Chọn Quận Huyện</option>
+                                                    </select>
+                                                    <select class="css_select" id="phuong" name="phuong">
+                                                        <option value="0">Chọn Phường Xã</option>
+                                                        <!-- Thêm các tùy chọn cho xã -->
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <label for="phone">Số điện thoại:</label>
+                                            <input type="text" id="phone" name="phone"><br><br>
+
+                                            <label for="sex">Giới tính:</label>
+                                            <select id="sex" name="sex">
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
+                                            </select><br><br>
+
+                                            <label for="yearOfBirth">Năm sinh:</label>
+                                            <input type="date" id="yearOfBirth" name="yearOfBirth"><br><br>
+
+                                            <label for="roleUser">Chức vụ:</label>
+                                            <select id="roleUser" name="roleUser">
+                                                <option value="User">User</option>
+                                                <option value="Admin">Admin</option>
+                                            </select><br><br>
+
+                                            <button type="submit">Thêm người dùng</button>
+                                        </form>
+                                    </div>
+                                </div>
+
                                 <table id="user-mn" class="table table-striped">
                                     <thead>
                                     <tr>
@@ -131,10 +249,14 @@
                                     </tr>
                                     </thead>
                                 </table>
-<%--                                ajax show người dùng trong quản lý người dùng--%>
+
+                                <%--                                ajax show người dùng trong quản lý người dùng--%>
 
                                 <script>
+
+
                                     $(document).ready(function (){
+
                                         var table = $('#user-mn').DataTable({
                                             "ajax" :{
                                                 "url":"ShowUser",
@@ -155,7 +277,40 @@
                                         });
 
 
+                                        $("#openModalBtn").click(function() {
+                                            $("#addUserModal").css("display", "block");
+                                            $('#openModalBtn').append('<div class="overlay"></div>');
+                                        });
 
+                                        // Đóng modal khi nhấn nút đóng hoặc nút đóng modal
+                                        $(".close").click(function() {
+                                            $("#addUserModal").css("display", "none");
+                                            $('.overlay').remove();
+                                        });
+                                        // Xử lý khi submit form thêm người dùng
+                                        $("#addUserForm").submit(function(e) {
+                                            e.preventDefault();
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "addUser",
+                                                data: $(this).serialize(),
+                                                success: function(response) {
+                                                    alert("Thêm người dùng thành công!");
+                                                    // Tải lại bảng dữ liệu nếu cần thiết
+
+                                                    // Đóng modal sau khi thêm thành công
+                                                    $("#addUserModal").css("display", "none");
+                                                    $('.overlay').remove();
+                                                    // Reset form sau khi thêm thành công
+                                                    $("#addUserForm")[0].reset();
+                                                    table.ajax.reload();
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    alert("Lỗi khi thêm người dùng: " + error);
+                                                }
+                                            });
+                                        });
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -276,6 +431,7 @@
                                                 '<p><label>Tên Khách Hàng:</label> <input type="text" name="fullname" value="' + fullname + '"></p>' +
                                                 '<p><label>Tên Đăng Nhập:</label> <input type="text" name="username" value="' + username + '"></p>' +
                                                 '<p><label>Email:</label> <input type="text" name="email" value="' + email + '"></p>' +
+                                                '<p><label>Mật khẩu:</label> <input type="text" name="passwords" value=""></p>' +
                                                 '<p><label>Địa Chỉ:</label> <input type="text" name="address" value="' + address + '"></p>' +
                                                 '<p><label>Số Điện Thoại :</label> <input type="text" name="phone" value="' + phone + '"></p>' +
                                                 '<p><label>Giới Tính:</label> <select name="sex" id="sex">' +
