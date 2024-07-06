@@ -111,11 +111,13 @@ public class LogDAO {
     public static List<Log> showLog() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT log.id, log.userId, log.ip, log.timeLogin, log.statuss, log.levels, log.valuess, log.previousInfo " +
-                            "FROM log")
+                            "FROM log" +
+                            " ORDER BY log.id DESC")
                     .mapToBean(Log.class)
                     .list();
         });
     }
+
 
 
 
@@ -142,27 +144,28 @@ public class LogDAO {
 
 //
     public static void main(String[] args) {
-        Log log = new Log();
-        log.setUserId(7); // Đặt giá trị userId thực tế
-        log.setStatuss("Đã xác nhận"); // Đặt giá trị status thực tế
-        log.setAddress("123 Fake Street"); // Đặt giá trị address thực tế
-
-        // Giả sử bạn có ID của đơn hàng muốn lấy
-        int orderId = 3;
+//        Log log = new Log();
+//        log.setUserId(7); // Đặt giá trị userId thực tế
+//        log.setStatuss("Đã xác nhận"); // Đặt giá trị status thực tế
+//        log.setAddress("123 Fake Street"); // Đặt giá trị address thực tế
 //
-//        // Lấy thông tin đơn hàng trước khi cập nhật từ cơ sở dữ liệu
-        Order previousOrder = OrderDAO.getOrderById(orderId);
-
-        // Tạo chuỗi thông tin trước khi update từ đơn hàng
-        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss()+ ", Quantity: " +  ", Address: " + previousOrder.getAddress() ;
-
-        // Tạo chuỗi thông tin cập nhật log
-        String logDetails = "Order ID: " + orderId + ", Status: " + log.getStatuss() + ", Address: " + log.getAddress();
-        log.setValuess(logDetails);
-
-        // In ra thông tin trước và sau khi cập nhật
-        System.out.println("Previous Info: " + previousInfo);
-        System.out.println("Log Update: " + insertUpdateOrderInLog(log, previousInfo));
+//        // Giả sử bạn có ID của đơn hàng muốn lấy
+//        int orderId = 3;
+////
+////        // Lấy thông tin đơn hàng trước khi cập nhật từ cơ sở dữ liệu
+//        Order previousOrder = OrderDAO.getOrderById(orderId);
+//
+//        // Tạo chuỗi thông tin trước khi update từ đơn hàng
+//        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss()+ ", Quantity: " +  ", Address: " + previousOrder.getAddress() ;
+//
+//        // Tạo chuỗi thông tin cập nhật log
+//        String logDetails = "Order ID: " + orderId + ", Status: " + log.getStatuss() + ", Address: " + log.getAddress();
+//        log.setValuess(logDetails);
+//
+//        // In ra thông tin trước và sau khi cập nhật
+//        System.out.println("Previous Info: " + previousInfo);
+//        System.out.println("Log Update: " + insertUpdateOrderInLog(log, previousInfo));
+        System.out.println(showLog());
 
     }
 }

@@ -226,7 +226,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         if (u.isRoleUser()) {
                                 %>
                                 <li class="active yamm-fw"><a
-                                        href="${pageContext.request.contextPath}/admin/dashboard.jsp">Quản lý</a></li>
+                                        href="${pageContext.request.contextPath}/admin/user-manager.jsp">Quản lý</a></li>
                                 <%
                                         }
                                     }

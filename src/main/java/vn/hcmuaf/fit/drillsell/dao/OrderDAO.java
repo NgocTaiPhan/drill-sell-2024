@@ -3,6 +3,7 @@ package vn.hcmuaf.fit.drillsell.dao;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.BeanMapper;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
+import vn.hcmuaf.fit.drillsell.model.MonthlyRevenue;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
 
@@ -10,6 +11,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderDAO {
+    public static Order getOrderId(int orderId) {
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT * FROM orders WHERE orderId = :orderId")
+                        .bind("orderId", orderId)
+                        .mapToBean(Order.class)
+                        .findOne()
+                        .orElse(null)
+        );
+    }
 
     public static Order getOrderById(int orderId) {
         Jdbi jdbi = DbConnector.me().get();
@@ -22,6 +32,8 @@ public class OrderDAO {
                         o.setStauss(rs.getString("stauss"));
                         o.setPhone(rs.getString("phone"));
                         o.setAddress(rs.getString("address"));
+                        o.setExpectedDate(rs.getDate("expectedDate"));
+
                         return o;
                     })
                     .one();
@@ -31,9 +43,8 @@ public class OrderDAO {
                     .map((rs, ctx) -> {
                         OrderItem oi = new OrderItem();
                         oi.setOrderId(rs.getInt("orderId"));
-//                        oi.setProductId(rs.getInt("productId"));
+                        oi.setProductId(rs.getInt("productId"));
                         oi.setQuantity(rs.getInt("quantity"));
-                        oi.setExpectedDate(rs.getDate("expectedDate"));
                         return oi;
                     })
                     .list();
@@ -55,7 +66,7 @@ public class OrderDAO {
 
     public static List<Order> show(int orderId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT orders.userId, orders.orderId, orderitem.idItem, products.unitPrice,  products.productName,  orderitem.quantity, (products.unitPrice * orderitem.quantity) AS totalPrice\n" +
+            return handle.createQuery("SELECT products.productId,  orders.userId, orders.orderId, orderitem.idItem, products.unitPrice,  products.productName,  orderitem.quantity, (products.unitPrice * orderitem.quantity) AS totalPrice\n" +
                             "FROM orders JOIN orderitem ON orders.orderId = orderitem.orderId\n" +
                             "JOIN products ON orderitem.productId = products.productId\n" +
                             "WHERE orders.orderId = :orderId")
@@ -69,6 +80,8 @@ public class OrderDAO {
                         item.setUnitPrice(rs.getDouble("unitPrice"));
                         item.setQuantity(rs.getInt("quantity"));
                         item.setTotalPrice(rs.getDouble("totalPrice"));
+                        item.setProductId(rs.getInt("productId"));
+
 
                         Order order = new Order();
                         order.setOrderId(currentOrderId);
@@ -94,30 +107,17 @@ public class OrderDAO {
 
     public static boolean updates(Order order) {
         return DbConnector.me().get().inTransaction(handle -> {
-            int rowsOrderUpdate = 0;
-            rowsOrderUpdate = handle.createUpdate("UPDATE orders " +
-                            "SET phone = :phone, address = :address " +
-                            "WHERE orderId = :orderId")
-                    .bind("phone", order.getPhone())
+            int rows = handle.createUpdate("UPDATE orders SET address = :address, phone = :phone, expectedDate = :expectedDate WHERE orderId = :orderId")
                     .bind("address", order.getAddress())
+                    .bind("phone", order.getPhone())
+                    .bind("expectedDate", order.getExpectedDate())
                     .bind("orderId", order.getOrderId())
                     .execute();
-
-            int rowsOrderItemUpdate = 0;
-
-            for (OrderItem item : order.getOrderItems()) {
-                rowsOrderItemUpdate += handle.createUpdate("UPDATE orderitem " +
-                                "SET quantity = :quantity, expectedDate = :expectedDate " +
-                                "WHERE orderId = :orderId")
-                        .bind("quantity", item.getQuantity())
-                        .bind("expectedDate", item.getExpectedDate())
-                        .bind("orderId", item.getOrderId())
-                        .execute();
-            }
-            // Return true if status update is successful, and either there are no details to update or details update is successful
-            return rowsOrderUpdate > 0 && rowsOrderItemUpdate > 0;
+            return rows > 0;
         });
     }
+
+
 
 
     public static boolean isValidStatuss(String currentStatuss, String newStatuss) {
@@ -173,25 +173,11 @@ public class OrderDAO {
             return row > 0;
         });
     }
-    public static Map<String, Object> getDailyOrderStats() {
-        Jdbi jdbi = DbConnector.me().get();
-        return jdbi.withHandle(handle ->
-                handle.createQuery("SELECT COUNT(orders.orderId) AS numberOfOrders, SUM(orderitem.quantity) AS quantityProduct, " +
-                                "SUM(products.unitPrice * orderitem.quantity) AS sumTotalDay " +
-                                "FROM orders " +
-                                "JOIN orderitem ON orders.orderId = orderitem.orderId " +
-                                "JOIN products ON orderitem.productId = products.productId " +
-                                "WHERE orders.stauss NOT IN ( 'Đã hủy', 'Đã hoàn trả') AND DATE(orderitem.timeOrder) = CURDATE()")
-                        .mapToMap()
-                        .one()
-        );
-    }
 
     public static Order getDaily() {
         return DbConnector.me().get().withHandle(handle -> {
             handle.registerRowMapper(BeanMapper.factory(Order.class));
             return handle.createQuery("SELECT COUNT(orders.orderId) AS numberOfOrders, " +
-                            "SUM(orderitem.quantity) AS quantityProduct, " +
                             "SUM(products.unitPrice * orderitem.quantity) AS sumTotalDay " +
                             "FROM orders " +
                             "JOIN orderitem ON orders.orderId = orderitem.orderId " +
@@ -202,17 +188,72 @@ public class OrderDAO {
         });
     }
 
+    public static List<MonthlyRevenue> getMonthlyRevenue() {
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT YEAR(orderitem.timeOrder) AS year, " +
+                            "       MONTH(orderitem.timeOrder) AS month, " +
+                            "       SUM(products.unitPrice * orderitem.quantity) AS totalRevenue " +
+                            "FROM orders " +
+                            "JOIN orderitem ON orders.orderId = orderitem.orderId " +
+                            "JOIN products ON orderitem.productId = products.productId " +
+                            "WHERE orders.stauss = 'Đã giao hàng' " +
+                            "GROUP BY YEAR(orderitem.timeOrder), MONTH(orderitem.timeOrder) " +
+                            "ORDER BY YEAR(orderitem.timeOrder), MONTH(orderitem.timeOrder)")
+                    .map((rs, ctx) -> {
+                        MonthlyRevenue revenue = new MonthlyRevenue();
+                        revenue.setYear(rs.getInt("year"));
+                        revenue.setMonth(rs.getInt("month"));
+                        revenue.setTotalRevenue(rs.getDouble("totalRevenue"));
+                        return revenue;
+                    })
+                    .list();
+        });
+    }
+
+    public static long revenue(){
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT SUM(oi.quantity * p.unitPrice) AS revenue\n" +
+                                "FROM orders o\n" +
+                                "JOIN orderItem oi ON o.orderId = oi.orderId\n" +
+                                "JOIN products p ON oi.productId = p.productId\n" +
+                                "WHERE O.stauss = 'Đã giao hàng' AND MONTH(oi.timeOrder) = MONTH(CURRENT_DATE())\n" +
+                                "AND YEAR(oi.timeOrder) = YEAR(CURRENT_DATE());")
+                        .mapTo(Long.class) // Map the count to a Long
+                        .one()
+        );
+    }
+
+    public static boolean updateQuantity(OrderItem item) {
+        return DbConnector.me().get().inTransaction(handle -> {
+            int rows = handle.createUpdate("UPDATE orderitem oi " +
+                            "JOIN orders o ON oi.orderId = o.orderId " +
+                            "SET oi.quantity = :quantity " +
+                            "WHERE oi.orderId = :orderId AND oi.productId = :productId " +
+                            "AND o.stauss NOT IN ('Đã bàn giao cho đơn vị vận chuyển GHTK', 'Đang giao hàng', 'Đã giao hàng', 'Đã hoàn trả', 'Đã hủy')")
+                    .bind("quantity", item.getQuantity())
+                    .bind("orderId", item.getOrderId())
+                    .bind("productId", item.getProductId())
+                    .execute();
+            return rows > 0;
+        });
+    }
+
+
+
+
+
+
     public static void main(String[] args) {
-//// Khởi tạo các đối tượng cần thiết cho đơn hàng và mục đơn hàng
+// Khởi tạo các đối tượng cần thiết cho đơn hàng và mục đơn hàng
 //        OrderItem item1 = new OrderItem();
-//        item1.setOrderId(14);
+//        item1.setOrderId(27);
 //        item1.setQuantity(3);
-//        item1.setExpectedDate(Date.valueOf("2024-08-17 00:00:00"));
+////        item1.setExpectedDate(Date.valueOf("2024-08-17 00:00:00"));
 //
 //        List<OrderItem> orderItems = Arrays.asList(item1);
 //
 //        Order order = new Order();
-//        order.setOrderId(14); // Đặt orderId phù hợp với đơn hàng đã tồn tại trong cơ sở dữ liệu
+//        order.setOrderId(27); // Đặt orderId phù hợp với đơn hàng đã tồn tại trong cơ sở dữ liệu
 //        order.setPhone("0348434274");
 //        order.setAddress("Cát Hưng");
 //        order.setStauss("Đã xác nhận");
@@ -221,8 +262,12 @@ public class OrderDAO {
 //        // Thực hiện cập nhật đơn hàng và in kết quả
 //        boolean result = OrderDAO.updates(order);
 //        System.out.println(result);
-//        System.out.println(getOrderById(7));
-        System.out.println(getDaily());
+//        System.out.println(getOrderId(26));
+//                OrderItem item1 = new OrderItem();
+//        item1.setOrderId(30);
+//        item1.setProductId(7);
+//        item1.setQuantity(2);
+        System.out.println(getOrderById(8));
 
     }
 }

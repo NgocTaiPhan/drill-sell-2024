@@ -58,12 +58,6 @@
             </div>
 
             <ul class="nav">
-                <li>
-                    <a href="dashboard.jsp">
-                        <i class="ti-panel"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
 
                 <li>
                     <a href="user-manager.jsp">
@@ -101,172 +95,89 @@
         </div>
     </div>
 
-    <div class="main-panel">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="header-nav animate-dropdown">
-                    <div class="container">
-                        <div class="yamm navbar navbar-default" role="navigation">
-                            <!--                <div class="navbar-header">-->
-                            <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                            <!--                            class="navbar-toggle collapsed"-->
-                            <!--                            type="button">-->
-                            <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                            <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                            <!--                </div>-->
-                            <div class="nav-bg-class">
-                                <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
-                                >
-                                    <div class="nav-outer">
-                                        <ul class="nav navbar-nav">
-                                            <li class="active  yamm-fw"><a
-                                                    href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
-                                            <li class="active  yamm-fw"><a
-                                                    href="<%= request.getContextPath() %>/product.jsp"
-                                            >Sản phẩm</a></li>
-                                            <li class="dropdown active  ">
-                                                <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
-                                                    phẩm</a>
-                                                <ul class="dropdown-menu ">
-                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
-                                                    <li>
-                                                        <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
-                                                           methods="post">
-                                                            <%=pc.getNameCategory()%>
-                                                        </a>
+    <div class="wrapper">
+        <!-- Sidebar code omitted for brevity -->
 
-                                                    </li>
-                                                    <%}%>
-
-                                                </ul>
-                                            </li>
-                                            <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
-
-                                            <%
-
-                                                User u = (User) session.getAttribute("auth");
-                                                boolean logged = u != null;
-                                                //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
-                                                if (logged) {
-                                                    if (u.isRoleUser()) {
-                                            %>
-                                            <li class="active yamm-fw"><a href="admin/dashboard.jsp">Quản lý</a>
-                                            </li>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-
-                                        </ul>
-                                        <!-- /.navbar-nav -->
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <!-- /.nav-outer -->
-                                </div>
-                                <!-- /.navbar-collapse -->
-
-                            </div>
-                            <!-- /.nav-bg-class -->
+        <div class="main-panel">
+            <nav class="navbar navbar-default">
+                <!-- Navbar code omitted for brevity -->
+                <div class="nav-bg-class">
+                    <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
+                    >
+                        <div class="nav-outer">
+                            <ul class="nav navbar-nav">
+                                <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
+                                <li class="active  yamm-fw"><a
+                                        href="<%= request.getContextPath() %>/product.jsp"
+                                >Sản phẩm</a></li>
+                            </ul>
+                            <!-- /.navbar-nav -->
+                            <div class="clearfix"></div>
                         </div>
-                        <!-- /.navbar-default -->
+                        <!-- /.nav-outer -->
                     </div>
-                    <!-- /.container-class -->
+                    <!-- /.navbar-collapse -->
 
                 </div>
-
-            </div>
-        </nav>
-        <div class="content">
-            <div class="container-fluid">
-                <table id="log" class="table table-bordered table-striped">
-                    <thead style="text-align: center">
-                    <tr>
-                        <th>Mã log</th>
-                        <th>Mã user</th>
-                        <th>IP</th>
-                        <th>Cấp độ</th>
-                        <th>Trạng thái</th>
-                        <th>Trước khi cập nhật</th>
-                        <th>Sau khi cập nhật</th>
-                        <th>Ngày tạo</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        List<Log> log = LogDAO.showLog();
-                        if (log != null) {
-                            for (Log l : log) {
-
-
-                    %>
-                    <tr>
-                        <td><%= l.getId()%></td>
-                        <td><%=l.getUserId()%></td>
-                        <td><%=l.getIp()%></td>
-
-<%--                        <td>--%>
-<%--                            <% String level = l.getLevels(); %>--%>
-<%--                            <% if (level.equals("INFO")) { %>--%>
-<%--                            <span style="color: green;"><%= level %></span>--%>
-<%--                            <% } else if (level.equals("WARNING")) { %>--%>
-<%--                            <span style="color: yellow;"><%= level %></span>--%>
-<%--                            <% } else if (level.equals("DANGER")) { %>--%>
-<%--                            <span style="color: red;"><%= level %></span>--%>
-<%--                            <% } else if (level.equals("ERROR")) { %>--%>
-<%--                            <span style="color: orange;"><%= level %></span>--%>
-<%--                            <% } else { %>--%>
-<%--                            <%= level %>--%>
-<%--                            <% } %>--%>
-<%--                        </td>--%>
-                        <td>
-                            <div style="<%
-                                if (l.getLevels().equals("INFO")) { %>
-                                    background: #83d983;
-                                <% } else if (l.getLevels().equals("WARNING")) { %>
-                                    background: yellow;
-                                <% } else if (l.getLevels().equals("DANGER")) { %>
-                                    background: red;
-                                <% } else if (l.getLevels().equals("ERROR")) { %>
-                                    background: orange;
-                                <% } %>
-                                    width: 70px; height: 20px;" class="con">
-                                <%= l.getLevels() %>
-                            </div>
-                        </td>
-
-
-
-                        <td><%=l.getStatuss()%></td>
-                        <td><%=l.getPreviousInfo()%></td>
-                        <td><%=l.getValuess()%></td>
-                        <td><%=l.getTimeLogin()%></td>
-                    </tr>
-                    <%
-                            }
-                        }
-                    %>
-                    </tbody>
-                </table>
+            </nav>
+            <div class="content">
+                <div class="container-fluid">
+                    <table id="log" class="table table-bordered table-striped">
+                        <thead style="text-align: center">
+                        <tr>
+                            <th>Mã log</th>
+                            <th>Mã user</th>
+                            <th>IP</th>
+                            <th>Cấp độ</th>
+                            <th>Trạng thái</th>
+                            <th>Trước khi cập nhật</th>
+                            <th>Sau khi cập nhật</th>
+                            <th>Ngày tạo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% List<Log> log = LogDAO.showLog();
+                            if (log != null) {
+                                for (Log l : log) {
+                        %>
+                        <tr>
+                            <td><%= l.getId()%></td>
+                            <td><%=l.getUserId()%></td>
+                            <td><%=l.getIp()%></td>
+                            <td>
+                                <div style="<%
+                                if (l.getLevels().equals("INFO")) { %> background: #48a1da;
+                                    <% } else if (l.getLevels().equals("WARNING")) { %> background: orange;
+                                    <% } else if (l.getLevels().equals("DANGER")) { %> background: red;
+                                    <% } else if (l.getLevels().equals("ERROR")) { %> background: yellow;
+                                    <% } %> width: 70px; height: 20px;" class="con">
+                                    <%= l.getLevels() %>
+                                </div>
+                            </td>
+                            <td><%=l.getStatuss()%></td>
+                            <td><%=l.getPreviousInfo()%></td>
+                            <td><%=l.getValuess()%></td>
+                            <td><%=l.getTimeLogin()%></td>
+                        </tr>
+                        <% }
+                        } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        $(document).ready(function () {
-
-            new DataTable('#log', {
-                layout: {
-                    topStart: toolbar,
-                    bottomStart: toolbar
-                }
+        <script>
+            $(document).ready(function () {
+                $('#log').DataTable({
+                    "order": [[0, "desc"]]  // Sắp xếp theo cột đầu tiên (Mã log) giảm dần
+                });
             });
-        });
-    </script>
+        </script>
 
+        <!-- Footer code omitted for brevity -->
 
-</div>
-</div>
-</div>
+    </div>
 <Style>
     input {
         border: none;
@@ -308,6 +219,7 @@
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script src="../assets/js/my-js/admin.js">
+
 
 </script>
 

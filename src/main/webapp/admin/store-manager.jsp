@@ -56,12 +56,7 @@
             </div>
 
             <ul class="nav">
-                <li>
-                    <a href="dashboard.jsp">
-                        <i class="ti-panel"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
+
 
                 <li class="active">
                     <a href="user-manager.jsp">

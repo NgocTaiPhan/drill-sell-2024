@@ -150,11 +150,12 @@
                         Order order = orders.get(0); // Lấy đơn hàng đầu tiên
                         double totalAmount = 0.0; // Biến để lưu tổng tiền của đơn hàng
                         double shipping = order.getShippingFee() * 1000;
+                        double s = 0.0;
                         String shippings = currencyFormat.format(shipping);
                         // Lấy ngày dự kiến giao hàng từ phần tử đầu tiên trong orderItems
                         String expectedDate = String.valueOf("");
                         if (!order.getOrderItems().isEmpty()) {
-                            expectedDate = String.valueOf(order.getOrderItems().get(0).getExpectedDate());
+                            expectedDate = String.valueOf(order.getExpectedDate());
                         }
                 %>
                 <div class="main">
@@ -189,8 +190,9 @@
 
                             for (OrderItem item : order.getOrderItems()) {
                                 double totalPrice = item.getTotalPrice() * 1000;
-                                totalAmount += totalPrice + shipping; // Cộng dồn tổng tiền
+                                totalAmount += totalPrice ; // Cộng dồn tổng tiền
                                 String formattedAmount = currencyFormat.format(totalPrice);
+                              s = totalAmount + shipping;
                         %>
 
                         <div class="detail">
@@ -206,7 +208,7 @@
                         </div>
                         <%
                             }
-                            String formattedTotalAmount = currencyFormat.format(totalAmount); // Định dạng tổng tiền
+                            String formattedTotalAmount = currencyFormat.format(s); // Định dạng tổng tiền
                         %>
                         <div class="expectedDate">
                             <label>Ngày dự kiến:</label>
