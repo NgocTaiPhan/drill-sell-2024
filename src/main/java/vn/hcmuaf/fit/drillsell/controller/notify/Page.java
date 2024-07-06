@@ -9,6 +9,7 @@ public class Page {
     public static final Page LOGIN_PAGE = new Page("login", "Đăng nhập", "login.jsp");
     public static final Page HOME_PAGE = new Page("home", "Trang chủ", "home.jsp");
     public static final Page MAIL_PAGE = new Page("email", "Kiểm tra email", "https://mail.google.com/");
+    public static final Page CONFIRM_CODE_PAGE = new Page("confirm", "Xác nhận", "confirm.jsp");
     public static final Page NULL_PAGE = new Page("nullPage", "", "");
 
     public Page(String key, String namePage, String pageUrl) {
