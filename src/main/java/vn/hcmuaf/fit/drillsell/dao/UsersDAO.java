@@ -2,8 +2,6 @@ package vn.hcmuaf.fit.drillsell.dao;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import vn.hcmuaf.fit.drillsell.model.Log;
-import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.utils.UserUtils;
@@ -103,35 +101,10 @@ public class UsersDAO implements IUserDAO{
 //         return true;
 //     }
 
-    public boolean addUser(User newUser,String a) {
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-        Jdbi jdbi = DbConnector.me().get();
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate(insertQuery)
-                    .bind(0, newUser.getFullname())
-                    .bind(1, newUser.getAddress())
-                    .bind(2, newUser.getPhone())
-                    .bind(3, newUser.getEmail())
-                    .bind(4, newUser.getUsername())
-                    .bind(5, UserUtils.hashPassword(newUser.getPasswords()))
-                    .bind(6, newUser.getSex())
-                    .bind(7, newUser.getYearOfBirth())
-                    .bind(8, newUser.getVerificationCode())
-                    .execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-
-    public boolean changePassword(String username, String newPassword) {
-        String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
 // đổi mật khẩu(mã hóa trước khi cập nhật)
 public boolean changePassword(String username, String newPassword) {
-    String hashedPassword = hashPassword(newPassword);
+    String hashedPassword = UserUtils.hashPassword(newPassword);
     String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
         Jdbi jdbi = DbConnector.me().get();
@@ -279,7 +252,7 @@ public static long getCountCustomer() {
 // cập nhật người dùng
 public void updateUser(User user) {
     int id = user.getId();
-    String hashedPassword = user.getPasswords() != null ? hashPassword(user.getPasswords()) : null;
+    String hashedPassword = user.getPasswords() != null ? UserUtils.hashPassword(user.getPasswords()) : null;
     DbConnector.me().get().useHandle(handle -> {
         handle.createUpdate(
                         "UPDATE users SET fullname = ?, username = ?, email = ?, passwords = COALESCE(?, passwords), address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
@@ -317,7 +290,7 @@ public void updateUser(User user) {
                     .bind(2, newUser.getPhone())
                     .bind(3, newUser.getEmail())
                     .bind(4, newUser.getUsername())
-                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(5, UserUtils.hashPassword(newUser.getPasswords()))
                     .bind(6, newUser.getSex())
                     .bind(7, newUser.getYearOfBirth())
                     .bind(8, confirmationCode)
@@ -340,7 +313,7 @@ public void updateUser(User user) {
                     .bind(2, newUser.getPhone())
                     .bind(3, newUser.getEmail())
                     .bind(4, newUser.getUsername())
-                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(5, UserUtils.hashPassword(newUser.getPasswords()))
                     .bind(6, newUser.getSex())
                     .bind(7, newUser.getYearOfBirth())
                     .bind(8,newUser.isRoleUser())
