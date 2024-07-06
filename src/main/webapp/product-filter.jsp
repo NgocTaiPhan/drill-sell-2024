@@ -626,7 +626,7 @@
                         %>
                         <div class="product">
                             <div class="product-image">
-                                <div class="image"><a href="detail?productId=<%=p.getProductId()%>"><img height="189px"
+                                <div class="image"><a href="load-detail?productId=<%= p.getProductId()%>"><img height="189px"
                                                                                                          width="189px"
                                                                                                          src="<%=p.getImage()%>"
                                                                                                          alt="Ảnh sản phẩm"></a>
@@ -637,7 +637,7 @@
 
                             <div class="product-info text-left">
                                 <h3 class="name"><a
-                                        href="detail?productId=<%=p.getProductId()%>"><%=p.getProductName()%>
+                                        href="load-detail?productId=<%= p.getProductId()%>"><%=p.getProductName()%>
                                 </a></h3>
                                 <div class="rating rateit-small"></div>
                                 <div class="description"></div>

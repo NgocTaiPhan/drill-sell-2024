@@ -14,11 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet("/showUpdateOrder")
 public class update extends HttpServlet {
@@ -60,13 +58,10 @@ public class update extends HttpServlet {
 
         // Get the previous order information
         Order previousOrder = OrderDAO.getOrderById(orderId);
-        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + previousOrder.getAddress();
+        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + previousOrder.getAddress() + ", Phone: " + previousOrder.getPhone();
 
-        // Append order items information to previousInfo
-        String itemsInfo = previousOrder.getOrderItems().stream()
-                .map(item -> "Item ID: " + item.getIdItem() + ", Quantity: " + item.getQuantity() + ", Expected Date: " + item.getExpectedDate())
-                .collect(Collectors.joining("; "));
-        previousInfo += ", Items: [" + itemsInfo + "]";
+        // Append expected date to previousInfo
+        previousInfo += ", Expected Date: " + previousOrder.getExpectedDate();
 
         order.setStauss(statuss);
         if (!OrderDAO.updateStatuss(orderId, statuss)) {
@@ -77,22 +72,23 @@ public class update extends HttpServlet {
 
         // Perform updates based on different status conditions
         boolean update = false;
-            order.setOrderId(orderId);
-            order.setPhone(phone);
-            order.setAddress(address);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrderId(Integer.parseInt(orderIdItemStr));
-            orderItem.setQuantity(Integer.parseInt(quantityStr));
-            orderItem.setExpectedDate(expectedDateStr);
-            order.setOrderItems(Arrays.asList(orderItem));
-            update = OrderDAO.updates(order);
+        order.setOrderId(orderId);
+        order.setPhone(phone);
+        order.setAddress(address);
+        order.setExpectedDate(expectedDateStr);  // Set the expected date for the order
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderId(Integer.parseInt(orderIdItemStr));
+        orderItem.setQuantity(Integer.parseInt(quantityStr));
+        orderItem.setExpectedDate(expectedDateStr);
+        order.setOrderItems(Arrays.asList(orderItem));
+        update = OrderDAO.updates(order);
 
         if (update) {
             PrintWriter out = response.getWriter();
             out.println("<script>window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
             Log log = new Log();
             log.setUserId(userId);
-            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + address + ", Phone: " + phone + ", Quantity: " + quantityStr + ", expectedDate: " +expectedDateStr;
+            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + address + ", Phone: " + phone  + ", Expected Date: " + expectedDateStr;
             log.setValuess(logDetails);
             String status = "Update Order";
             log.setStatuss(status);
