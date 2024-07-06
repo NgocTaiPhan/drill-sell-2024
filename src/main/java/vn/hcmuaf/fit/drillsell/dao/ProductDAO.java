@@ -1,11 +1,19 @@
 package vn.hcmuaf.fit.drillsell.dao;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.ProductCategorys;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.Review;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -205,10 +213,6 @@ public class ProductDAO {
         }
     }
 
-    public static void main(String[] args) {
-        ProductDAO.getInstance().hideProd(0);
-    }
-
     public boolean isExistProdName(String prodName) {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT COUNT(*) FROM products WHERE productName = :productName")
@@ -228,4 +232,20 @@ public class ProductDAO {
         });
 
     }
+
+    public void addProdFormExcel(List<Products> prods) {
+        DbConnector.me().get().useHandle(handle -> {
+            for (Products prod : prods) {
+                handle.createUpdate(
+                                "INSERT INTO products (image, productName, unitPrice, categoryId, nameProducer, describle, specifions) \" +\n" +
+                                        "                        \"VALUES (:image, :productName, :unitPrice, :categoryId, :nameProducer, :describle, :specifions)")
+                        .bindBean(prods)
+                        .execute();
+            }
+        });
+    }
+
+
+
+
 }

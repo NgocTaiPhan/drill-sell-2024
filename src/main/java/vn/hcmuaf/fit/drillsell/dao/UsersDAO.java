@@ -2,21 +2,15 @@ package vn.hcmuaf.fit.drillsell.dao;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import vn.hcmuaf.fit.drillsell.model.Log;
-import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
+import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.utils.UserUtils;
 
-import java.net.InetAddress;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class UsersDAO implements IUserDAO{
-
     private static UsersDAO instance;
 
     public UsersDAO() {
@@ -65,18 +59,23 @@ public class UsersDAO implements IUserDAO{
 
     }
 
+    public User getUserByUserNameAndEmail(String username, String email) {
 
-    public String hashPassword(String password) {
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes());
-            byte[] hash = md.digest();
-            return Base64.getEncoder().encodeToString(hash);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND email = ? ";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, username).
+                    bind(1, email)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
         }
+
     }
+
+
+
 
 
 
@@ -102,7 +101,7 @@ public class UsersDAO implements IUserDAO{
 //         return true;
 //     }
 
-    public boolean addUser(User newUser,String confirmationCode) {
+    public boolean addUser(User newUser,String a) {
         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
@@ -112,10 +111,10 @@ public class UsersDAO implements IUserDAO{
                     .bind(2, newUser.getPhone())
                     .bind(3, newUser.getEmail())
                     .bind(4, newUser.getUsername())
-                    .bind(5, hashPassword(newUser.getPasswords()))
+                    .bind(5, UserUtils.hashPassword(newUser.getPasswords()))
                     .bind(6, newUser.getSex())
                     .bind(7, newUser.getYearOfBirth())
-                    .bind(8, confirmationCode)
+                    .bind(8, newUser.getVerificationCode())
                     .execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,6 +123,7 @@ public class UsersDAO implements IUserDAO{
         return true;
     }
 
+
     public boolean changePassword(String username, String newPassword) {
         String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
@@ -131,7 +131,7 @@ public class UsersDAO implements IUserDAO{
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             handle.createUpdate(queryUpdatePass)
-                    .bind(0, hashPassword(newPassword))
+                    .bind(0, UserUtils.hashPassword(newPassword))
                     .bind(1, username)
                     .execute();
         } catch (Exception e) {
@@ -295,10 +295,16 @@ public void updateUser(User user) {
         
     });
 }
-    public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().getUserById(1));
-    }
 
+    public void updateVerifyCode(int id, String verifyCode) {
+        DbConnector.me().get().useHandle(handle -> {
+            handle.execute(
+                    "UPDATE users SET verificationCode = ? WHERE id = ?",
+                    verifyCode,
+                    id
+            );
+        });
+    }
 
 }
 

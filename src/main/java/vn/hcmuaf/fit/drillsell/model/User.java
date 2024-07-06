@@ -179,12 +179,14 @@ User {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + passwords + '\'' +
-                ", sex='" + sex + '\'' +
+                ", passwords='" + passwords + '\'' +
                 ", yearOfBirth='" + yearOfBirth + '\'' +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", sex=" + sex +
+                ", isVerified=" + isVerified +
+                ", roleUser=" + roleUser +
                 '}';
     }
-
 
     public static void main(String[] args) {
         List<User> users = DbConnector.me().get().withHandle(handle -> {
