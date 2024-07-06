@@ -3,6 +3,7 @@ package vn.hcmuaf.fit.drillsell.dao;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import vn.hcmuaf.fit.drillsell.model.Log;
+import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 
@@ -186,7 +187,7 @@ public boolean changePassword(String username, String newPassword) {
     }
 //    Xóa người dùng theo id người dùng
     public boolean deleteUser(int id, int status) {
-      
+
         final boolean[]  deleted = {false};
 
         DbConnector.me().get().useHandle(handle -> {
@@ -220,11 +221,18 @@ public boolean changePassword(String username, String newPassword) {
                         .orElse(null));
 
     }
+
+public static long getCountCustomer() {
+    return DbConnector.me().get().withHandle(handle ->
+            handle.createQuery("SELECT COUNT(users.id) AS countCustomer FROM users")
+                    .mapTo(Long.class) // Map the count to a Long
+                    .one()
+    );
+}
 // cập nhật người dùng
 public void updateUser(User user) {
     int id = user.getId();
     String hashedPassword = user.getPasswords() != null ? hashPassword(user.getPasswords()) : null;
-
     DbConnector.me().get().useHandle(handle -> {
         handle.createUpdate(
                         "UPDATE users SET fullname = ?, username = ?, email = ?, passwords = COALESCE(?, passwords), address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
@@ -289,9 +297,7 @@ public void updateUser(User user) {
         return true;
     }
     public static void main(String[] args) {
-        System.out.println(UsersDAO.getInstance().getUserById(1));
+        System.out.println(getCountCustomer());
     }
-
-
 }
 

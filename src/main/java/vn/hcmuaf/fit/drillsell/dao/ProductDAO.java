@@ -93,9 +93,7 @@ public class ProductDAO {
     }
 
     public List<Products> getProductByProducer(String producerName) {
-
         return DbConnector.me().get().withHandle(handle -> {
-
             return handle.createQuery("SELECT productId, image, productName, unitPrice FROM products WHERE nameProducer = ? AND productStatus = 0")
                     .bind(0, producerName)
                     .mapToBean(Products.class)
