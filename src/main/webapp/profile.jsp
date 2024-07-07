@@ -29,6 +29,7 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/my-js/notify.js"></script>
 
 </head>
 <body>
@@ -310,15 +311,23 @@
                     contentType: 'application/json; charset=UTF-8', // Kiểu dữ liệu gửi đi
                     data: JSON.stringify(userData), // Dữ liệu gửi đi (đã chuyển thành JSON)
                     success: function(response) {
-                        // Xử lý kết quả thành công
-                        console.log('Update successful:', response);
-                        // Có thể cập nhật lại giao diện hoặc hiển thị thông báo thành công
-                        alert('Cập nhật thông tin thành công!');
+                        // Xử lý kết quả từ server
+                        if (response.message === "Update successful") {
+                            // Cập nhật thành công
+                            console.log('Update successful:', response);
+                            // Có thể cập nhật lại giao diện hoặc hiển thị thông báo thành công
+                            alert('Cập nhật thông tin thành công!');
+                        } else {
+                            // Có lỗi xảy ra khi cập nhật
+                            console.log('Error updating user info:', response);
+                            alert(response.message);
+                        }
                     },
-                    error: function(error) {
+                    error: function(xhr) {
                         // Xử lý lỗi
-                        console.log('Error updating user info:', error);
-                        alert('Đã xảy ra lỗi khi cập nhật thông tin.');
+                        console.log('Error updating user info:', xhr);
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        alert('Đã xảy ra lỗi: ' + errorResponse.error);
                     }
                 });
             });

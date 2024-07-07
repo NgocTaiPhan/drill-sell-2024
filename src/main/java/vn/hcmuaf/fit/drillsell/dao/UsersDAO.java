@@ -250,7 +250,7 @@ public static long getCountCustomer() {
     );
 }
 // cập nhật người dùng
-public void updateUser(User user) {
+public void adminupdateUser(User user) {
     int id = user.getId();
     String hashedPassword = user.getPasswords() != null ? UserUtils.hashPassword(user.getPasswords()) : null;
     DbConnector.me().get().useHandle(handle -> {
@@ -271,6 +271,9 @@ public void updateUser(User user) {
 }
 
     public boolean adminUpdateUser(User user) {
+
+
+    public boolean updateUser(User user) {
         int id = user.getId();
 
         DbConnector.me().get().useHandle(handle -> {
