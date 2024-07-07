@@ -31,5 +31,17 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/view/*</url-pattern>
     </filter-mapping>
-
+    <servlet>
+        <servlet-name>AddExcel</servlet-name>
+        <servlet-class>vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment.AddExcel</servlet-class>
+        <multipart-config>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddExcel</servlet-name>
+        <url-pattern>/admin/add-excel</url-pattern>
+    </servlet-mapping>
 </web-app>

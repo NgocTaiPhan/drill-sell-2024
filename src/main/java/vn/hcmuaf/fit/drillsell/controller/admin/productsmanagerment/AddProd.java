@@ -4,11 +4,14 @@ import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.utils.ProductUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.Part;
+import java.io.*;
+import java.util.List;
 
 public class AddProd {
 
@@ -103,5 +106,8 @@ public class AddProd {
             Notify.errorNotify(response, "Có lỗi trong quá trình thực hiện", Page.NULL_PAGE);
         }
 
+    }
+
+    public static void addProductFromExcel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 }

@@ -30,7 +30,7 @@
 <%--    + forgot-pass = 0. Nếu người dùng đã đăng nhập và muốn thay đổi mật khẩu thì giao diện sẽ là gồm: Nhập mật khẩu hiện tại, Mật khẩu mới va nhập lại--%>
 
 <div class="container w-25 center m-t-20">
-    <form action="change-pass" method="post">
+    <form onsubmit="submitFormAndRedirect(event,this,'change-pass')">
         <%
             String forgotPass = (String) request.getParameter("forgot-pass");
             if (forgotPass.equals("0")) {
