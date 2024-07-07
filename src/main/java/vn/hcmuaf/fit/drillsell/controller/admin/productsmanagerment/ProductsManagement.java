@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "ProductsManagement", urlPatterns = {"/admin/load-all-prods", "/admin/show-detail", "/admin/add-prod", "/admin/remove-prod", "/admin/update-prod", "/admin/hide-prod"})
+@WebServlet(name = "ProductsManagement", urlPatterns = {"/admin/load-all-prods", "/admin/show-detail", "/admin/add-prod", "/admin/remove-prod", "/admin/update-prod", "/admin/hide-prod", "/admin/add-prods"})
 public class ProductsManagement extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -21,6 +21,7 @@ public class ProductsManagement extends HttpServlet {
         String servletPath = request.getServletPath();
         switch (servletPath) {
             case "/admin/add-prod" -> AddProd.addProduct(request, response);
+            case "/admin/add-prods" -> AddProd.addProductFromExcel(request, response);
             case "/admin/load-all-prods" -> LoadProdInAdmin.loadAllProduct(request, response);
             case "/admin/remove-prod" -> RemoveProd.removeProd(request, response);
             case "/admin/update-prod" -> UpdateProd.updateProd(request, response);

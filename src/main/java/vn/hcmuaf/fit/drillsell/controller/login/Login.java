@@ -6,6 +6,7 @@ import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.utils.UserUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class Login {
+    static UserUtils userUtils;
     public static void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -39,7 +41,7 @@ public class Login {
             }
         }
 
-        User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
+        User auth = UsersDAO.getInstance().getUser(username, userUtils.hashPassword(password));
         if (auth != null) {
             System.out.println(auth);
             log.setUserId(auth.getId());
@@ -80,7 +82,7 @@ public class Login {
             }
 
             // Mã hóa mật khẩu người dùng nhập sau đó so sánh với mật khẩu đã mã hóa trong database
-            User auth = UsersDAO.getInstance().getUser(username, UsersDAO.getInstance().hashPassword(password));
+            User auth = UsersDAO.getInstance().getUser(username, userUtils.hashPassword(password));
 
             // Tìm thấy thông tin người dùng
             if (auth != null) {

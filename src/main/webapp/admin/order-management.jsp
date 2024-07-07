@@ -56,12 +56,7 @@
             </div>
 
             <ul class="nav">
-                <li>
-                    <a href="dashboard.jsp">
-                        <i class="ti-panel"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
+
 
                 <li>
                     <a href="user-manager.jsp">
@@ -111,6 +106,9 @@
                             <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
                             <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
                             <!--                </div>-->
+
+
+
                             <div class="nav-bg-class">
                                 <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                                 >
@@ -120,39 +118,7 @@
                                             <li class="active  yamm-fw"><a
                                                     href="<%= request.getContextPath() %>/product.jsp"
                                             >Sản phẩm</a></li>
-                                            <li class="dropdown active  ">
-                                                <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
-                                                    phẩm</a>
-                                                <ul class="dropdown-menu ">
-                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
-                                                    <li>
-                                                        <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
-                                                           methods="post">
-                                                            <%=pc.getNameCategory()%>
-                                                        </a>
-
-                                                    </li>
-                                                    <%}%>
-
-                                                </ul>
-                                            </li>
-                                            <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
-
-                                            <%
-
-                                                User u = (User) session.getAttribute("auth");
-                                                boolean logged = u != null;
-                                                //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
-                                                if (logged) {
-                                                    if (u.isRoleUser()) {
-                                            %>
-                                            <li class="active yamm-fw"><a href="admin/dashboard.jsp">Quản lý</a>
-                                            </li>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-
+                                            <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/revenueChart">Xem thống kê</a></li>
                                         </ul>
                                         <!-- /.navbar-nav -->
                                         <div class="clearfix"></div>
@@ -216,11 +182,12 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            $('#order').DataTable();
+        $(document).ready(function () {
+            $('#order').DataTable({
+                "order": [[0, "desc"]]  // Sắp xếp theo cột đầu tiên (Mã log) giảm dần
+            });
         });
     </script>
-
 
 
 </div>

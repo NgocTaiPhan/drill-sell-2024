@@ -39,6 +39,9 @@ public class MailProperties {
     public static boolean getTls() {
         return "true".equals(prop.getProperty("mail.smtp.starttls.enable"));
     }
-//    poia peru zqds apnv
+
+    public static String getSsl() {
+        return prop.getProperty("mail.smtp.ssl.trust");
+    }
 }
 
