@@ -23,6 +23,78 @@ public class ValidationForm {
         if (instance == null) instance = new ValidationForm();
         return instance;
     }
+public boolean validateUserData(
+        HttpServletResponse response,
+        String fullname,
+        String yearOfBirth,
+        String phone,
+        String currentUsername,
+        String newUsername,
+        String provinceId,
+        String districtId,
+        String wardId,
+        String currentEmail,
+        String newEmail
+) throws IOException {
+    if (FormUtils.isNullOrEmpty(fullname)) {
+        Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
+        return false;
+    }
+    if (FormUtils.isNullOrEmpty(yearOfBirth)) {
+        Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
+        return false;
+    }
+    if (!FormUtils.isValidAge(yearOfBirth)) {
+        Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
+        return false;
+    }
+    if (FormUtils.isNullOrEmpty(phone)) {
+        Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
+        return false;
+    }
+    if (!FormUtils.isValidPhoneNumber(phone)) {
+        Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
+        return false;
+    }
+    if (!currentEmail.equals(newEmail)) {
+        if (FormUtils.isNullOrEmpty(newEmail)) {
+            Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidEmail(newEmail)) {
+            Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (UsersDAO.getInstance().isEmailExists(newEmail)) {
+            Notify.errorNotify(response, "Email đã tồn tại!", Page.NULL_PAGE);
+            return false;
+        }
+    }
+    if (!currentUsername.equals(newUsername)) {
+        if (FormUtils.isNullOrEmpty(newUsername)) {
+            Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
+            return false;
+        }
+        if (UsersDAO.getInstance().isUsernameDuplicate(newUsername)) {
+            Notify.errorNotify(response, "Tên đăng nhập đã tồn tại!", Page.NULL_PAGE);
+            return false;
+        }
+    }
+    if ("0".equals(provinceId)) {
+        Notify.errorNotify(response, "Hãy chọn tỉnh/thành phố!", Page.NULL_PAGE);
+        return false;
+    }
+    if ("0".equals(districtId)) {
+        Notify.errorNotify(response, "Hãy chọn quận/huyện!", Page.NULL_PAGE);
+        return false;
+    }
+    if ("0".equals(wardId)) {
+        Notify.errorNotify(response, "Hãy chọn xã/phường!", Page.NULL_PAGE);
+        return false;
+    }
+
+    return true;
+}
 
     public boolean checkValid(
             HttpServletResponse response,
@@ -109,6 +181,7 @@ public class ValidationForm {
         return true;
 
     }
+
 
 
 
