@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    private int cartId;
+    private int cartId, countQuantity;
     private int userId;
     private int productId;
     private int quantity;
@@ -23,8 +23,9 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(int cartId, int userId, int productId, int quantity, String image, String productName, double totalPrice, double unitPrice, Timestamp createArt, @Nullable Timestamp updatedAt) {
+    public Cart(int cartId, int countQuantity, int userId, int productId, int quantity, String image, String productName, double totalPrice, double unitPrice, Timestamp createArt, @Nullable Timestamp updatedAt) {
         this.cartId = cartId;
+        this.countQuantity = countQuantity;
         this.userId = userId;
         this.productId = productId;
         this.quantity = quantity;
@@ -116,10 +117,19 @@ public class Cart {
         this.updatedAt = updatedAt;
     }
 
+    public int getCountQuantity() {
+        return countQuantity;
+    }
+
+    public void setCountQuantity(int countQuantity) {
+        this.countQuantity = countQuantity;
+    }
+
     @Override
     public String toString() {
         return "Cart{" +
                 "cartId=" + cartId +
+                ", countQuantity=" + countQuantity +
                 ", userId=" + userId +
                 ", productId=" + productId +
                 ", quantity=" + quantity +

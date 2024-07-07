@@ -31,9 +31,13 @@ public class updateQuantity extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         String productIdParam = request.getParameter("productId");
         String orderIdParam = request.getParameter("orderId");
         String quantityParam = request.getParameter("quantity");
+        int userId = Integer.parseInt(request.getParameter("userId"));
+
 
         if (productIdParam == null || productIdParam.isEmpty() ||
                 orderIdParam == null || orderIdParam.isEmpty() ||
@@ -87,7 +91,8 @@ public class updateQuantity extends HttpServlet {
         Log log = new Log();
         String logDetails =  updatedInfo;
         log.setValuess(logDetails);
-        String status = "Update Order";
+        log.setUserId(userId);
+        String status = "Cập nhật số lượng sản phẩm trong đơn hàng";
         log.setStatuss(status);
         LogDAO.insertUpdateOrderInLog(log, previousInfo); // Insert log with previous info
 

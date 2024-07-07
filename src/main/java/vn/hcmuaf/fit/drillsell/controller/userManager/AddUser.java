@@ -1,11 +1,16 @@
 
 package vn.hcmuaf.fit.drillsell.controller.userManager;
-
+import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
+import vn.hcmuaf.fit.drillsell.controller.notify.Page;
+import vn.hcmuaf.fit.drillsell.controller.register.ValidationForm;
+import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
+import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
+import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +36,9 @@ public class AddUser extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
+        User auth = (User) session.getAttribute("auth");
 
+        int userId = auth.getId();
         // Lấy các thông tin từ form
         String fullName = req.getParameter("fullname");
         String username = req.getParameter("username");
@@ -47,6 +54,7 @@ public class AddUser extends HttpServlet {
         String roleUserStr = req.getParameter("roleUser");
         boolean gender = "Nam".equalsIgnoreCase(genderStr);
         boolean roleUser = "Admin".equalsIgnoreCase(roleUserStr);
+
 
         String birthDateString = birthDate;
         java.sql.Date sqlDate = null;
@@ -70,12 +78,16 @@ public class AddUser extends HttpServlet {
         newUser.setPhone(phoneNumber);
         newUser.setSex(gender);
         newUser.setYearOfBirth(birthDateString);
+        newUser.setRoleUser("Admin".equals(roleUser));
+        User addUser = UsersDAO.getUsers(userId);
+            String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+            session.setAttribute("confirmationCode", confirmationCode);
+        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
         newUser.setRoleUser(roleUser);
-
-        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+       
+      String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         session.setAttribute("confirmationCode", confirmationCode);
         boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser, confirmationCode);
-
         if (addUserResult) {
             // Lấy ID của người dùng mới thêm sau khi thêm thành công
             int newUserId = UsersDAO.getInstance().getUserByUsername(username).getId();
@@ -93,6 +105,12 @@ public class AddUser extends HttpServlet {
             log.setValuess(values);
             LogDAO.insertUpdateOrderInLog(log, previousInfo);
             resp.getWriter().write("Người dùng đã được thêm thành công!");
+            // Ghi log thông tin sản phẩm vừa thêm
+            Log log = new Log();
+            log.setStatuss("Thêm người dùng");
+            log.setUserId(userId); // Thiết lập userId cho log
+            log.setValuess(" " + addUser);
+            LogDAO.insertUpdateOrderInLog(log, null);
         } else {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Thêm người dùng không thành công!");
         }

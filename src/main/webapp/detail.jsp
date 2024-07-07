@@ -7,6 +7,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Review" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="java.sql.Timestamp" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 <%
     Products product = (Products) request.getAttribute("prods");
     List<Review> reviewList = (List<Review>) request.getAttribute("reviews");
@@ -167,7 +168,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
                                 <label for="searchInput"></label>
-                                <input id="searchInput"
+                                <input style="height: 44.5px;" id="searchInput"
                                        class="search-field dropdown-toggle"
                                        data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
@@ -194,25 +195,45 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                 <!-- /.top-search-holder -->
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
-                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
-
+                    <!-- SHOPPING CART DROPDOWN -->
                     <div class="dropdown dropdown-cart">
-                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                        <div class="lnk-cart">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon"
-                                     onclick="callServletAndRedirect('logged','cart.jsp')">
+                                <div class="basket" id="basketIcon" onclick="callServletAndRedirect('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
+                                    <div class="cart-count" id="cart-count">
+                                        <%
+                                            User u1 = (User) session.getAttribute("auth");
+                                            long quantity = 0;
+                                            if (u1 != null) {
+                                                quantity = CartDAO.countQuantity(u1.getId());
+                                            }
+                                        %>
+                                        <p><%=quantity%></p>
+                                    </div>
                                 </div>
-
-
                             </div>
                         </div>
-
                     </div>
                     <!-- /.dropdown-cart -->
-
-                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
+
+                <Style>
+                    .cart-count {
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        top: -10px;
+                        left: 20px;
+                        background-color: red;
+                        color: white;
+                        padding-left: 3px;
+                        border-radius: 50%;
+                        margin-left: 13px;
+                        font-size: 12px;
+                    }
+
+                </Style>
                 <!-- /.top-cart-row -->
             </div>
             <!-- /.row -->
@@ -421,11 +442,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         <div class="col-sm-7">
                                             <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
                                                     class="fa fa-check inner-right-vs"></i> Mua ngay</a>
-
-                                            <div onclick="callServlet('cart',{name: 'productId', dataValue: '<%=product.getProductId()%>'})"
+<%--                                            onclick="callServlet('cart',{name: 'productId', dataValue: '<%=product.getProductId()%>'})"--%>
+                                            <a href="<%= request.getContextPath()%>/cart?productId=<%=product.getProductId()%>"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
-                                            </div>
+                                            </a>
 
 
                                         </div>

@@ -198,6 +198,29 @@ public boolean changePassword(String username, String newPassword) {
                     .orElse(null);
         }
     }
+
+    public static User getUser(int id) {
+        String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth FROM users WHERE id=?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    public static User getUsers(int id) {
+        String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth FROM users WHERE id=?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .findOnly();
+        }
+    }
     //   show toàn bộ người dùng trong quản lý người dùng
     public List<User> showUser() {
         String sql = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users  WHERE userStatus = 0 ";

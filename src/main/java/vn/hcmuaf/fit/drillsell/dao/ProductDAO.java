@@ -150,6 +150,15 @@ public class ProductDAO {
                 .findOne()
                 .orElse(null));
     }
+    public Products getProductByName(String productName) {
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT * FROM products WHERE productName = :productName")
+                        .bind("productName", productName)
+                        .mapToBean(Products.class)
+                        .findOnly()
+        );
+    }
+
 
     public List<Products> getProductsByPage(int limit, int offset) {
         return DbConnector.me().get().withHandle(handle -> {

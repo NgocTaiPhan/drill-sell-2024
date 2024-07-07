@@ -38,7 +38,8 @@ public class AddToCart extends HttpServlet {
         boolean insertProduct = CartDAO.insertCartItem(userId, productId);
         if (insertProduct) {
             // Nếu sản phẩm được thêm thành công vào giỏ hàng
-            Notify.successNotify(response, "Thêm sản phẩm vào giỏ hàng thành công", Page.NULL_PAGE);
+//            Notify.successNotify(response, "Thêm sản phẩm vào giỏ hàng thành công", Page.NULL_PAGE);
+            request.getRequestDispatcher("/load-detail").forward(request, response);
         } else {
             // Nếu có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng
             Notify.errorNotify(response, "Lỗi khi thêm sản phẩm vào giỏ hàng", Page.NULL_PAGE);

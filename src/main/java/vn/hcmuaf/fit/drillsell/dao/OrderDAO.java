@@ -20,6 +20,15 @@ public class OrderDAO {
                         .orElse(null)
         );
     }
+    public static Order getStatuss(int orderId) {
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT stauss, orderId, userId  FROM orders WHERE orderId = :orderId")
+                        .bind("orderId", orderId)
+                        .mapToBean(Order.class)
+                        .findOne()
+                        .orElse(null)
+        );
+    }
 
     public static Order getOrderById(int orderId) {
         Jdbi jdbi = DbConnector.me().get();
@@ -107,7 +116,7 @@ public class OrderDAO {
 
     public static boolean updates(Order order) {
         return DbConnector.me().get().inTransaction(handle -> {
-            int rows = handle.createUpdate("UPDATE orders SET address = :address, phone = :phone, expectedDate = :expectedDate WHERE orderId = :orderId")
+            int rows = handle.createUpdate("UPDATE orders SET address = :address, phone = :phone, expectedDate = :expectedDate WHERE orderId = :orderId AND stauss IN ('Đang xử lý', 'Đã xác nhận', 'Người bán đang chuẩn bị hàng')")
                     .bind("address", order.getAddress())
                     .bind("phone", order.getPhone())
                     .bind("expectedDate", order.getExpectedDate())
@@ -141,6 +150,15 @@ public class OrderDAO {
                 return newStatuss.equals("Đã hủy");
         }
         return false;
+    }
+
+    public static Order getStatus(int orderId){
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT orderId,  stauss  FROM order WHERE orderId = :orderId ")
+                    .bind("orderId", orderId)
+                    .mapTo(Order.class)
+                    .one();
+        });
     }
 
     public static boolean updateStatuss(int orderId, String status) {
@@ -210,16 +228,18 @@ public class OrderDAO {
         });
     }
 
-    public static long revenue(){
+    public static long revenue() {
         return DbConnector.me().get().withHandle(handle ->
-                handle.createQuery("SELECT SUM(oi.quantity * p.unitPrice) AS revenue\n" +
-                                "FROM orders o\n" +
-                                "JOIN orderItem oi ON o.orderId = oi.orderId\n" +
-                                "JOIN products p ON oi.productId = p.productId\n" +
-                                "WHERE O.stauss = 'Đã giao hàng' AND MONTH(oi.timeOrder) = MONTH(CURRENT_DATE())\n" +
+                handle.createQuery("SELECT COALESCE(SUM(oi.quantity * p.unitPrice), 0) AS revenue " +
+                                "FROM orders o " +
+                                "JOIN orderitem oi ON o.orderId = oi.orderId " +
+                                "JOIN products p ON oi.productId = p.productId " +
+                                "WHERE o.stauss = 'Đã giao hàng' " +
+                                "AND MONTH(oi.timeOrder) = MONTH(CURRENT_DATE()) " +
                                 "AND YEAR(oi.timeOrder) = YEAR(CURRENT_DATE());")
-                        .mapTo(Long.class) // Map the count to a Long
-                        .one()
+                        .mapTo(Long.class) // Map kết quả tới Long
+                        .findOne() // Sử dụng findOne() thay vì one()
+                        .orElse(0L) // Trả về 0 nếu không có kết quả
         );
     }
 
@@ -267,7 +287,7 @@ public class OrderDAO {
 //        item1.setOrderId(30);
 //        item1.setProductId(7);
 //        item1.setQuantity(2);
-        System.out.println(getOrderById(8));
+        System.out.println(getStatuss(4));
 
     }
 }

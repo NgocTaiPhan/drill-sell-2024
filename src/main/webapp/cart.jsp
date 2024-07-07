@@ -143,7 +143,7 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                <input style="height: 44.5px;" id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
                                 <a style="height: 44.5px;" class="search-button" href="#"
                                    onclick="searchProduct(event)"></a>
@@ -167,47 +167,47 @@
                 </div>
                 <!-- /.top-search-holder -->
 
-                <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
-                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
+<%--                <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">--%>
+<%--                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->--%>
 
-                    <div class="dropdown dropdown-cart">
-                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
-                            <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
-                                    <i class="glyphicon glyphicon-shopping-cart"></i>
-                                </div>
-                                <script>
-                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
-                                    function redirectToCart() {
+<%--                    <div class="dropdown dropdown-cart">--%>
+<%--                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">--%>
+<%--                            <div class="items-cart-inner">--%>
+<%--                                <div class="basket" id="basketIcon" onclick="redirectToCart()">--%>
+<%--                                    <i class="glyphicon glyphicon-shopping-cart"></i>--%>
+<%--                                </div>--%>
+<%--                                <script>--%>
+<%--                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo--%>
+<%--                                    function redirectToCart() {--%>
 
-                                        <% if (!logged) { %>
-                                        Swal.fire({
-                                            title: "Bạn chưa đăng nhập",
-                                            icon: "warning",
-                                            showCancelButton: true,
-                                            confirmButtonText: "Đăng nhập",
-                                            cancelButtonText: `Để sau`
-                                        }).then((result) => {
-                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-                                            if (result.isConfirmed) {
-                                                window.location.href = 'login.jsp';
-                                            }
-                                        });
-                                        <% } else { %>
-                                        window.location.href = 'cart.jsp';
-                                        <% } %>
-                                    }
-                                </script>
+<%--                                        <% if (!logged) { %>--%>
+<%--                                        Swal.fire({--%>
+<%--                                            title: "Bạn chưa đăng nhập",--%>
+<%--                                            icon: "warning",--%>
+<%--                                            showCancelButton: true,--%>
+<%--                                            confirmButtonText: "Đăng nhập",--%>
+<%--                                            cancelButtonText: `Để sau`--%>
+<%--                                        }).then((result) => {--%>
+<%--                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập--%>
+<%--                                            if (result.isConfirmed) {--%>
+<%--                                                window.location.href = 'login.jsp';--%>
+<%--                                            }--%>
+<%--                                        });--%>
+<%--                                        <% } else { %>--%>
+<%--                                        window.location.href = 'cart.jsp';--%>
+<%--                                        <% } %>--%>
+<%--                                    }--%>
+<%--                                </script>--%>
 
 
-                            </div>
-                        </div>
+<%--                            </div>--%>
+<%--                        </div>--%>
 
-                    </div>
-                    <!-- /.dropdown-cart -->
+<%--                    </div>--%>
+<%--                    <!-- /.dropdown-cart -->--%>
 
-                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
-                </div>
+<%--                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->--%>
+<%--                </div>--%>
                 <!-- /.top-cart-row -->
             </div>
             <!-- /.row -->

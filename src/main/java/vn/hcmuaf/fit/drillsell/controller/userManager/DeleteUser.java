@@ -26,6 +26,8 @@ public class DeleteUser extends HttpServlet {
         if (idStr != null) {
             int id = Integer.parseInt(idStr);
             IUserDAO userDao = new UsersDAO();
+            User u = UsersDAO.getUser(Integer.parseInt(idStr));
+
             boolean deleted = userDao.deleteUser(id, 1);
             String message;
             if (deleted) {
@@ -34,7 +36,7 @@ public class DeleteUser extends HttpServlet {
                 Log log = new Log();
                 log.setUserId(Integer.parseInt(idStr));
                 String values = null;
-                String previousInfo = null;
+                String previousInfo = "User ID: " + u.getId() + ", fullname: " +u.getFullname()+", address: "+ u.getAddress() +", phone: " +u.getPhone()+ ", email: " + u.getEmail() + ", username: " +u.getEmail()+ ", sex: "+ setGender(u.getSex())+", yearOfBirth: " + u.getYearOfBirth();
                 log.setValuess(values);
                 log.setStatuss("Xóa user: " + idStr);
                 LogDAO.insertUpdateOrderInLog(log, previousInfo);
@@ -51,6 +53,13 @@ public class DeleteUser extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write("ID người dùng không hợp lệ");
         }
+    }
+
+
+
+    private String setGender(boolean gender) {
+        if (gender)return "Nam";
+        return "Nữ";
     }
 }
 

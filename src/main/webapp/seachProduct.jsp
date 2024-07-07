@@ -8,6 +8,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Products" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.*" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%List<Products> searchResults = (List<Products>) request.getAttribute("loadProduct");%>
@@ -151,7 +152,33 @@
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon" onclick="redirectToCart()">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
+                                    <div class="cart-count" id="cart-count">
+                                        <%
+                                            User u1 = (User) session.getAttribute("auth");
+                                            long quantity = 0;
+                                            if (u1 != null) {
+                                                quantity = CartDAO.countQuantity(u1.getId());
+                                            }
+                                        %>
+                                        <p><%=quantity%></p>
+                                    </div>
                                 </div>
+                                <Style>
+                                    .cart-count {
+                                        width: 20px;
+                                        height: 20px;
+                                        position: absolute;
+                                        top: -10px;
+                                        left: 20px;
+                                        background-color: red;
+                                        color: white;
+                                        padding-left: 3px;
+                                        border-radius: 50%;
+                                        margin-left: 13px;
+                                        font-size: 12px;
+                                    }
+
+                                </Style>
                                 <script>
                                     //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
                                     function redirectToCart() {
