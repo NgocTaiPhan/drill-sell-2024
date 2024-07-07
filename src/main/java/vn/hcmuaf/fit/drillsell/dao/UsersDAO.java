@@ -270,6 +270,26 @@ public void updateUser(User user) {
     });
 }
 
+    public boolean adminUpdateUser(User user) {
+        int id = user.getId();
+
+        DbConnector.me().get().useHandle(handle -> {
+            handle.createUpdate(
+                            "UPDATE users SET fullname = ?, username = ?, email = ?, address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
+                    .bind(0, user.getFullname())
+                    .bind(1, user.getUsername())
+                    .bind(2, user.getEmail())
+                    .bind(3, user.getAddress())
+                    .bind(4, user.getPhone())
+                    .bind(5, user.getSex())
+                    .bind(6, user.getYearOfBirth())
+                    .bind(7, user.isRoleUser() ? 1 : 0)
+                    .bind(8, id)
+                    .execute();
+        });
+        return true;
+
+
     public void updateVerifyCode(int id, String verifyCode) {
         DbConnector.me().get().useHandle(handle -> {
             handle.execute(
@@ -278,6 +298,7 @@ public void updateUser(User user) {
                     id
             );
         });
+
     }
     public boolean addUser(User newUser,String confirmationCode) {
 

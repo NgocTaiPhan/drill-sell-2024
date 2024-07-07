@@ -13,9 +13,17 @@ import vn.hcmuaf.fit.drillsell.model.User;
 
 import java.io.IOException;
 
+
+
 @WebServlet(name = "ForgotPassController", value = "/forgot-pas")
 public class ForgotPassController extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+  doGet(request,response);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,14 +52,6 @@ public class ForgotPassController extends HttpServlet {
         }
 
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-  doGet(request,response);
-    }
-
-
 
 
 }
