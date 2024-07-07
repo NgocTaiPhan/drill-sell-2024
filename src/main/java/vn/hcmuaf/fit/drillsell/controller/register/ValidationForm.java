@@ -36,32 +36,32 @@ public boolean validateUserData(
         String currentEmail,
         String newEmail
 ) throws IOException {
-    if (isNullOrEmpty(fullname)) {
+    if (FormUtils.isNullOrEmpty(fullname)) {
         Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
         return false;
     }
-    if (isNullOrEmpty(yearOfBirth)) {
+    if (FormUtils.isNullOrEmpty(yearOfBirth)) {
         Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
         return false;
     }
-    if (!isValidAge(yearOfBirth)) {
+    if (!FormUtils.isValidAge(yearOfBirth)) {
         Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
         return false;
     }
-    if (isNullOrEmpty(phone)) {
+    if (FormUtils.isNullOrEmpty(phone)) {
         Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
         return false;
     }
-    if (!isValidPhoneNumber(phone)) {
+    if (!FormUtils.isValidPhoneNumber(phone)) {
         Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
         return false;
     }
     if (!currentEmail.equals(newEmail)) {
-        if (isNullOrEmpty(newEmail)) {
+        if (FormUtils.isNullOrEmpty(newEmail)) {
             Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
             return false;
         }
-        if (!isValidEmail(newEmail)) {
+        if (!FormUtils.isValidEmail(newEmail)) {
             Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
             return false;
         }
@@ -71,7 +71,7 @@ public boolean validateUserData(
         }
     }
     if (!currentUsername.equals(newUsername)) {
-        if (isNullOrEmpty(newUsername)) {
+        if (FormUtils.isNullOrEmpty(newUsername)) {
             Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
             return false;
         }

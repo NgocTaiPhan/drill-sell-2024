@@ -270,7 +270,6 @@ public void adminupdateUser(User user) {
     });
 }
 
-    public boolean adminUpdateUser(User user) {
 
 
     public boolean updateUser(User user) {
@@ -291,7 +290,7 @@ public void adminupdateUser(User user) {
                     .execute();
         });
         return true;
-
+    }
 
     public void updateVerifyCode(int id, String verifyCode) {
         DbConnector.me().get().useHandle(handle -> {
@@ -354,4 +353,3 @@ public void adminupdateUser(User user) {
         System.out.println(getCountCustomer());
     }
 }
-
