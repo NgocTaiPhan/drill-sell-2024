@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class
 User {
-    private int id;
+    private int id, countCustomer;
     private String fullname,
 
     address,
@@ -36,19 +36,21 @@ User {
     }
 
 
-    public User(int id, String fullname, String address, String phone, String email, String username, String passwords, boolean sex, String yearOfBirth) {
+    public User(int id, int countCustomer, String fullname, String address, String phone, String email, String username, String passwords, String yearOfBirth, String verificationCode, boolean sex, boolean isVerified, boolean roleUser) {
         this.id = id;
+        this.countCustomer = countCustomer;
         this.fullname = fullname;
         this.address = address;
         this.phone = phone;
         this.email = email;
         this.username = username;
         this.passwords = passwords;
-        this.sex = sex;
         this.yearOfBirth = yearOfBirth;
+        this.verificationCode = verificationCode;
+        this.sex = sex;
+        this.isVerified = isVerified;
+        this.roleUser = roleUser;
     }
-
-
 
     public User(String fullname, String address, String phone, String email, String username, String passwords, boolean sex, String yearOfBirth) {
         this.fullname = fullname;
@@ -170,21 +172,36 @@ User {
         this.roleUser = roleUser;
     }
 
+    public int getCountCustomer() {
+        return countCustomer;
+    }
+
+    public void setCountCustomer(int countCustomer) {
+        this.countCustomer = countCustomer;
+    }
+
+    public boolean isSex() {
+        return sex;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", countCustomer=" + countCustomer +
                 ", fullname='" + fullname + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + passwords + '\'' +
-                ", sex='" + sex + '\'' +
+                ", passwords='" + passwords + '\'' +
                 ", yearOfBirth='" + yearOfBirth + '\'' +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", sex=" + sex +
+                ", isVerified=" + isVerified +
+                ", roleUser=" + roleUser +
                 '}';
     }
-
 
     public static void main(String[] args) {
         List<User> users = DbConnector.me().get().withHandle(handle -> {
