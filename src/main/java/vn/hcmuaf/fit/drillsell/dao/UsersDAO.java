@@ -221,7 +221,7 @@ public boolean changePassword(String username, String newPassword) {
 
     }
 // cập nhật người dùng
-public void updateUser(User user) {
+public void adminupdateUser(User user) {
     int id = user.getId();
     String hashedPassword = user.getPasswords() != null ? hashPassword(user.getPasswords()) : null;
 
@@ -241,7 +241,9 @@ public void updateUser(User user) {
                 .execute();
     });
 }
-    public boolean adminUpdateUser(User user) {
+
+
+    public boolean updateUser(User user) {
         int id = user.getId();
 
         DbConnector.me().get().useHandle(handle -> {

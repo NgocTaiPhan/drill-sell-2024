@@ -12,6 +12,6 @@ boolean deleteUser(int id, int status);
     User getUserById(User user);
     User getDetailUserById();
 
-    void updateUser(User user);
-
+    boolean updateUser(User user);
+    void adminupdateUser(User user);
 }
