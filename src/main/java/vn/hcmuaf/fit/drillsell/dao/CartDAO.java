@@ -91,6 +91,16 @@ public class CartDAO {
         }
     }
 
+    public static int countQuantity(int userId){
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT  SUM(cart.quantity) AS countQuantity" +
+                    " FROM cart WHERE userId= :userId")
+                    .bind("userId", userId)
+                    .mapTo(Integer.class)
+                    .one();
+        });
+    }
+
 
 
     public static boolean delete(int userId, int productId){
@@ -123,7 +133,7 @@ public class CartDAO {
 //        System.out.println(getProductCart());
 //            System.out.println(getCartByUserId(1));
 //        insertCartItem(2, 95);
-//        System.out.println(selectProduct(2));
+        System.out.println(countQuantity(4));
     }
 }
 

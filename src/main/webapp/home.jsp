@@ -6,6 +6,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 
 
 <%
@@ -156,28 +157,45 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                 <!-- /.top-search-holder -->
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
-                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
-
+                    <!-- SHOPPING CART DROPDOWN -->
                     <div class="dropdown dropdown-cart">
-                        <div class=" lnk-cart">
+                        <div class="lnk-cart">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon"
-                                     onclick="callServletAndRedirect('logged','cart.jsp')">
+                                <div class="basket" id="basketIcon" onclick="callServletAndRedirect('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
+                                    <div class="cart-count" id="cart-count">
+                                        <%
+                                            User u1 = (User) session.getAttribute("auth");
+                                            long quantity = 0;
+                                            if (u1 != null) {
+                                                quantity = CartDAO.countQuantity(u1.getId());
+                                            }
+                                        %>
+                                        <p><%=quantity%></p>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
-
-
-
-
                     <!-- /.dropdown-cart -->
-
-                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
+
+                <Style>
+                    .cart-count {
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        top: -10px;
+                        left: 20px;
+                        background-color: red;
+                        color: white;
+                        padding-left: 3px;
+                        border-radius: 50%;
+                        margin-left: 13px;
+                        font-size: 12px;
+                    }
+
+                </Style>
                 <!-- /.top-cart-row -->
             </div>
             <!-- /.row -->
@@ -226,7 +244,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         if (u.isRoleUser()) {
                                 %>
                                 <li class="active yamm-fw"><a
-                                        href="${pageContext.request.contextPath}/admin/user-manager.jsp">Quản lý</a></li>
+                                        href="${pageContext.request.contextPath}/admin/user-manager.jsp">Quản lý</a>
+                                </li>
                                 <%
                                         }
                                     }

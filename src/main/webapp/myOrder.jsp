@@ -245,17 +245,7 @@
 
 </body>
 
-<%--<script>--%>
-<%--    document.querySelectorAll(".btn-info").forEach(button => {--%>
-<%--        button.addEventListener("click", function() {--%>
-<%--            var orderId = this.getAttribute("data-orderid");--%>
-<%--            var productId = this.getAttribute("data-productid");--%>
-<%--            window.location.href = "detailOrder?orderId=" + orderId + "&productId=" + productId;--%>
-<%--        });--%>
-<%--    });--%>
 
-
-<%--</script>--%>
 
 
 <!--   Core JS Files   -->
@@ -294,29 +284,15 @@
     $(document).ready(function () {
 
         new DataTable('#myOrder', {
+
             layout: {
+                "myOrder": [[0, "desc"]],  // Sắp xếp theo cột đầu tiên (Mã log) giảm dần
                 topStart: toolbar,
                 bottomStart: toolbar
             }
         });
     });
 
-    // $(document).ready(function (){
-    //     $('.delete').click(function (e){
-    //         var deleteOrder = $(this);
-    //         var idOrder = $(this).data('id');
-    //         $.ajax({
-    //             type: "post",
-    //             url: "deleteList?id=" + idOrder,
-    //             success: function (response){
-    //                 deleteOrder.closest('tr').remove();
-    //             },
-    //             error: function (xhr, status, error) {
-    //                 console.error("Error", error);
-    //             }
-    //         });
-    //     })
-    // })
     $(document).ready((e) => {
 
 

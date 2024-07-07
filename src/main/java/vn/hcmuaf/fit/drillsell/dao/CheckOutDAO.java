@@ -118,7 +118,8 @@ public class CheckOutDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             String query = "SELECT  orders.orderId, orders.stauss, orders.userId, orders.nameCustomer, orders.phone, orders.address\n" +
                     "FROM orders" +
-                    " WHERE orders.userId = :userId";
+                    " WHERE orders.userId = :userId " +
+                    " ORDER BY orderId DESC";
 
             return handle.createQuery(query)
                     .bind("userId", userId)

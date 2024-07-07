@@ -143,21 +143,10 @@
                         </tr>
                         <tr>
                             <td>Trạng thái:</td>
-                            <td><input style="width: 400px" type="text" name="statuss" value="<%= p.getStauss() %>"
-                                       list="status">
-                                <datalist id="status">
-                                    <option value="Đang xử lý">Đang xử lý</option>
-                                    <option value="Đã xác nhận">Đã xác nhận</option>
-                                    <option value="Người bán đang chuẩn bị hàng">Người bán đang chuẩn bị hàng</option>
-                                    <option value="Đã hủy">Đã hủy</option>
-                                    <option value="Đã bàn giao cho đơn vị vận chuyển GHTK">Đã bàn giao cho đơn vị vận
-                                        chuyển
-                                        GHTK
-                                    </option>
-                                    <option value="Đang giao hàng">Đang giao hàng</option>
-                                    <option value="Đã giao hàng">Đã giao hàng</option>
-                                    <option value="Đã hoàn trả">Đã hoàn trả</option>
-                                </datalist>
+                            <td>
+                                <input style="width: 400px" type="text" name="statuss" value="<%= p.getStauss() %>" readonly>
+                            </td>
+
                             </td>
                         </tr>
                         <table style="margin-top: 20px; margin-bottom: 20px">
@@ -206,9 +195,9 @@
                             <a href="updateOrderQuantity?orderId=<%=p.getOrderId()%>"  class="btn btn-info">
                                 Cập nhật số lượng
                             </a>
-<%--                            <a href="" class="btn btn-warning">--%>
-<%--                                Cập nhật trạng thái--%>
-<%--                            </a>--%>
+                            <a href="updateStatus?orderId=<%=p.getOrderId()%>" methods="post" class="btn btn-warning">
+                                Cập nhật trạng thái
+                            </a>
 
                             <button type="submit" class="btn btn-danger">
                                 Lưu
