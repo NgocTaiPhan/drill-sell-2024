@@ -1,4 +1,5 @@
 package vn.hcmuaf.fit.drillsell.controller.userManager;
+
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.controller.register.ValidationForm;
@@ -30,6 +31,7 @@ public class AddUser extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
@@ -73,8 +75,10 @@ public class AddUser extends HttpServlet {
                 System.err.println("Error parsing birthDate: " + e.getMessage());
             }
         }
+
         ValidationForm validationForm = ValidationForm.getInstance();
         boolean isValid = validationForm.validateAddUser(resp,fullName,username,email,password,provinceId,districtId,wardId,phoneNumber,birthDate);
+
         // Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
         if (!isValid) {
             return; // Dừng xử lý nếu các thông tin không hợp lệ
@@ -95,7 +99,9 @@ public class AddUser extends HttpServlet {
         session.setAttribute("confirmationCode", confirmationCode);
         boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
         if (addUserResult) {
-            Notify.successNotify(resp,"Thêm thành công người dùng!s",Page.NULL_PAGE);
+
+            Notify.successNotify(resp,"Người dùng đã được thêm thành công!",Page.NULL_PAGE);
+
             // Ghi log thông tin sản phẩm vừa thêm
             Log log = new Log();
             log.setStatuss("Thêm người dùng");
@@ -109,4 +115,4 @@ public class AddUser extends HttpServlet {
 //            req.getRequestDispatcher("check-email.jsp").forward(req, resp);
 
     }
-}
+
