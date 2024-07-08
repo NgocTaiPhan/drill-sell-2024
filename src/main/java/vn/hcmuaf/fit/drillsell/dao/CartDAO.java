@@ -91,15 +91,16 @@ public class CartDAO {
         }
     }
 
-    public static int countQuantity(int userId){
+    public static int countQuantity(int userId) {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT  SUM(cart.quantity) AS countQuantity" +
-                    " FROM cart WHERE userId= :userId")
+            return handle.createQuery("SELECT SUM(cart.quantity) AS countQuantity FROM cart WHERE userId = :userId")
                     .bind("userId", userId)
                     .mapTo(Integer.class)
-                    .one();
+                    .findOne()
+                    .orElse(0); // Nếu không có giá trị thì trả về 0
         });
     }
+
 
 
 
@@ -116,7 +117,7 @@ public class CartDAO {
                 return false;
             }
         });
-}
+    }
 
 
 
@@ -133,12 +134,12 @@ public class CartDAO {
 //        System.out.println(getProductCart());
 //            System.out.println(getCartByUserId(1));
 //        insertCartItem(2, 95);
-        System.out.println(countQuantity(4));
+        System.out.println(countQuantity(2));
     }
 }
 
 
- 
+
 
 
 

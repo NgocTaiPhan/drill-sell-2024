@@ -1,4 +1,3 @@
-
 package vn.hcmuaf.fit.drillsell.controller.userManager;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
@@ -11,7 +10,6 @@ import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +20,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-
 @WebServlet("/admin/addUser")
 public class AddUser extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -66,8 +63,6 @@ public class AddUser extends HttpServlet {
         System.out.println("Sex: " + gender);
         System.out.println("Year of Birth: " + birthDate);
         System.out.println("Role User: " + roleUser);
-
-
         String birthDateString = birthDate;
         java.sql.Date sqlDate = null;
         if (birthDate != null && !birthDate.isEmpty()) {
@@ -81,8 +76,13 @@ public class AddUser extends HttpServlet {
             }
         }
 
+        ValidationForm validationForm = ValidationForm.getInstance();
+        boolean isValid = validationForm.validateAddUser(resp,fullName,username,email,password,provinceId,districtId,wardId,phoneNumber,birthDate);
 
         // Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
+        if (!isValid) {
+            return; // Dừng xử lý nếu các thông tin không hợp lệ
+        }
         User newUser = new User();
         newUser.setFullname(fullName);
         newUser.setUsername(username);
@@ -99,7 +99,9 @@ public class AddUser extends HttpServlet {
         session.setAttribute("confirmationCode", confirmationCode);
         boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
         if (addUserResult) {
-            resp.getWriter().write("Người dùng đã được thêm thành công!");
+
+            Notify.successNotify(resp,"Người dùng đã được thêm thành công!",Page.NULL_PAGE);
+
             // Ghi log thông tin sản phẩm vừa thêm
             Log log = new Log();
             log.setStatuss("Thêm người dùng");
@@ -107,63 +109,10 @@ public class AddUser extends HttpServlet {
             log.setValuess(" " + addUser);
             LogDAO.insertUpdateOrderInLog(log, null);
         } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Thêm người dùng không thành công!");
+            Notify.errorNotify(resp, "Thêm người dùng thất bại", Page.NULL_PAGE);
         }
         // Chuyển hướng người dùng đến trang thông báo kiểm tra email
 //            req.getRequestDispatcher("check-email.jsp").forward(req, resp);
 
     }
-}
-//        req.setCharacterEncoding("UTF-8");
-//        resp.setCharacterEncoding("UTF-8");
-//
-//        // Lấy dữ liệu từ request
-//        String fullname = req.getParameter("fullname");
-//        String username = req.getParameter("username");
-//        String email = req.getParameter("email");
-////        String password = req.getParameter("password");
-//        String address = req.getParameter("address");
-//        String phone = req.getParameter("phone");
-//        String sex = req.getParameter("sex");
-////        String yearOfBirth = req.getParameter("yearOfBirth");
-//        String roleUser = req.getParameter("roleUser");
-//
-//        System.out.println("Dữ liệu nhận được:");
-//        System.out.println("Fullname: " + fullname);
-//        System.out.println("Username: " + username);
-//        System.out.println("Email: " + email);
-////        System.out.println("Password: " + password);
-//        System.out.println("Address: " + address);
-//        System.out.println("Phone: " + phone);
-//        System.out.println("Sex: " + sex);
-////        System.out.println("Year of Birth: " + yearOfBirth);
-//        System.out.println("Role User: " + roleUser);
-//
-//        // Tạo đối tượng User từ dữ liệu nhận được từ request
-//        User newUser = new User();
-//        newUser.setFullname(fullname);
-//        newUser.setUsername(username);
-//        newUser.setEmail(email);
-////        newUser.setPasswords(password); // Bạn có thể mã hóa mật khẩu tại đây nếu cần thiết
-//        newUser.setAddress(address);
-//        newUser.setPhone(phone);
-//        newUser.setSex("Nam".equals(sex));
-////        newUser.setYearOfBirth(yearOfBirth);
-//        newUser.setRoleUser("Admin".equals(roleUser));
-//
-//        // Gọi phương thức addUser của UserDAO để thêm người dùng vào cơ sở dữ liệu
-//        String confirmationCode = generateConfirmationCode();
-//        UsersDAO userDao = new UsersDAO();
-//        boolean addUserResult = userDao.addUser(newUser, confirmationCode);
-//
-//        // Xử lý kết quả và gửi phản hồi về cho client (trang web)
-//        if (addUserResult) {
-//            resp.getWriter().write("Người dùng đã được thêm thành công!");
-//        } else {
-//            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Thêm người dùng không thành công!");
-//        }
-//    }
-//
-//    private String generateConfirmationCode() {
-//        return UUID.randomUUID().toString().substring(0, 6);
-//    }
+
