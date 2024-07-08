@@ -47,7 +47,11 @@ public class Login {
             log.setUserId(auth.getId());
             session.setAttribute("auth", auth);
             LogDAO.insertLoginTrue(log);
-            Notify.successNotify(response, "Đăng nhập thành công", Page.HOME_PAGE);
+
+
+                // Nếu không có redirectURL, mặc định chuyển hướng đến trang chủ hoặc trang mặc định
+                Notify.successNotify(response, "Đăng nhập thành công", Page.HOME_PAGE);
+
         } else {
             log.setUserId(user != null ? user.getId() : 0);
             LogDAO.inserLoginFalse(log);
@@ -99,7 +103,7 @@ public class Login {
                         session.removeAttribute("redirectAfterLogin"); // Xóa URL sau khi sử dụng
                         response.sendRedirect(redirectURL); // Điều hướng tới URL ban đầu
                     } else {
-                        response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp"); // Điều hướng mặc định
+                        response.sendRedirect(request.getContextPath() + "/admin/user-manager.jsp"); // Điều hướng mặc định
                     }
                 } else {
                     // Nếu không phải admin, xóa thông tin đăng nhập và thông báo lỗi

@@ -77,7 +77,7 @@ public class AddUser extends HttpServlet {
         }
 
         ValidationForm validationForm = ValidationForm.getInstance();
-        boolean isValid = validationForm.validateAddUser(resp,fullName,username,email,password,provinceId,districtId,wardId,phoneNumber,birthDate);
+        boolean isValid = validationForm.validateAddUser(resp, fullName, username, email, password, provinceId, districtId, wardId, phoneNumber, birthDate);
 
         // Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
         if (!isValid) {
@@ -97,10 +97,10 @@ public class AddUser extends HttpServlet {
         User addUser = UsersDAO.getUsers(userId);
         String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         session.setAttribute("confirmationCode", confirmationCode);
-        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
+        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser, confirmationCode);
         if (addUserResult) {
 
-            Notify.successNotify(resp,"Người dùng đã được thêm thành công!",Page.NULL_PAGE);
+            Notify.successNotify(resp, "Người dùng đã được thêm thành công!", Page.NULL_PAGE);
 
             // Ghi log thông tin sản phẩm vừa thêm
             Log log = new Log();
@@ -115,4 +115,6 @@ public class AddUser extends HttpServlet {
 //            req.getRequestDispatcher("check-email.jsp").forward(req, resp);
 
     }
+}
+
 
