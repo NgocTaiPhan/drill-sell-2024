@@ -184,21 +184,29 @@
                                     <div class="modal-content">
                                         <span class="close">&times;</span>
                                         <h2>Thêm người dùng</h2>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+                                                integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+                                                crossorigin="anonymous"></script>
+                                        <link rel="stylesheet"
+                                              href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+                                              integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+                                      <script src="../assets/js/my-js/notify.js"></script>
+                                        <script src="../assets/js/my-js/ajax-process.js"></script>
                                         <form id="addUserForm">
                                             <label for="fullname">Tên người dùng:</label>
-                                            <input type="text" id="fullname" name="fullname" required><br><br>
+                                            <input type="text" id="fullname" name="fullname"><br><br>
 
                                             <label for="username">Tên đăng nhập:</label>
-                                            <input type="text" id="username" name="username" required><br><br>
+                                            <input type="text" id="username" name="username"><br><br>
 
                                             <label for="email">Email:</label>
-                                            <input type="email" id="email" name="email" required><br><br>
+                                            <input type="email" id="email" name="email"><br><br>
 
                                             <label for="passwords">Mật khẩu:</label>
-                                            <input type="password" id="passwords" name="passwords" required><br><br>
+                                            <input type="password" id="passwords" name="passwords"><br><br>
 
                                             <div class="form-group">
-                                                <label class="info-title"  for="address" id="address">Địa chỉ <span>*</span></label>
+                                                <label class="info-title"  for="address" id="address"><span>Địa chỉ:</span></label>
 
                                                 <div class="css_select_div">
                                                     <select class="css_select" id="tinh" name="tinh">
@@ -282,12 +290,13 @@
                                             $('#openModalBtn').append('<div class="overlay"></div>');
                                         });
 
-                                        // Đóng modal khi nhấn nút đóng hoặc nút đóng modal
+// Đóng modal khi nhấn nút đóng hoặc nút đóng modal
                                         $(".close").click(function() {
                                             $("#addUserModal").css("display", "none");
                                             $('.overlay').remove();
                                         });
-                                        // Xử lý khi submit form thêm người dùng
+
+// Xử lý khi submit form thêm người dùng
                                         $("#addUserForm").submit(function(e) {
                                             e.preventDefault();
 
@@ -296,21 +305,26 @@
                                                 url: "addUser",
                                                 data: $(this).serialize(),
                                                 success: function(response) {
-                                                    alert("Thêm người dùng thành công!");
-                                                    // Tải lại bảng dữ liệu nếu cần thiết
-
-                                                    // Đóng modal sau khi thêm thành công
-                                                    $("#addUserModal").css("display", "none");
-                                                    $('.overlay').remove();
-                                                    // Reset form sau khi thêm thành công
-                                                    $("#addUserForm")[0].reset();
-                                                    table.ajax.reload();
+                                                    if (response.type === "success") {
+                                                        normalNotify(response.type, response.message, function() {
+                                                            // Đóng modal sau khi thêm thành công
+                                                            $("#addUserModal").css("display", "none");
+                                                            $('.overlay').remove();
+                                                            // Reset form sau khi thêm thành công
+                                                            $("#addUserForm")[0].reset();
+                                                            table.ajax.reload();
+                                                        });
+                                                    } else {
+                                                        // Hiển thị thông báo lỗi
+                                                        normalNotify(response.type, response.message);
+                                                    }
                                                 },
                                                 error: function(xhr, status, error) {
-                                                    alert("Lỗi khi thêm người dùng: " + error);
+                                                    normalNotify("error", "Lỗi khi thêm người dùng: " + error);
                                                 }
                                             });
                                         });
+
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -438,7 +452,7 @@
                                                 '<option value="Nam"' + (sex === 'Nam' ? ' selected' : '') + '>Nam</option>' +
                                                 '<option value="Nữ"' + (sex === 'Nữ' ? ' selected' : '') + '>Nữ</option>' +
                                                 '</select></p>' +
-                                                 '<p><label>Ngày Sinh:</label> <input type="text" name="yearOfBirth" value="' + yearOfBirth + '"></p>' +
+                                                 '<p><label>Ngày Sinh:</label> <input type="date" name="yearOfBirth" value="' + yearOfBirth + '"></p>' +
                                                 '<p><label>Chức Vụ:</label> <select name="roleUser" id="roleUser">' +
                                                 '<option value="Admin"' + (roleUser === 'Admin' ? ' selected' : '') + '>Admin</option>' +
                                                 '<option value="User"' + (roleUser === 'User' ? ' selected' : '') + '>User</option>' +

@@ -1,4 +1,3 @@
-
 package vn.hcmuaf.fit.drillsell.controller.userManager;
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
@@ -10,7 +9,6 @@ import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
-import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,10 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
-
 @WebServlet("/admin/addUser")
 public class AddUser extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -44,6 +41,7 @@ public class AddUser extends HttpServlet {
         String username = req.getParameter("username");
         String email = req.getParameter("email");
         String password = req.getParameter("passwords");
+
         String provinceId = req.getParameter("tinh");
         String districtId = req.getParameter("quan");
         String wardId = req.getParameter("phuong");
@@ -51,11 +49,18 @@ public class AddUser extends HttpServlet {
         String phoneNumber = req.getParameter("phone");
         String genderStr = req.getParameter("sex");
         String birthDate = req.getParameter("yearOfBirth");
-        String roleUserStr = req.getParameter("roleUser");
-        boolean gender = "Nam".equalsIgnoreCase(genderStr);
-        boolean roleUser = "Admin".equalsIgnoreCase(roleUserStr);
-
-
+        String roleUser = req.getParameter("roleUser");
+        boolean gender = Boolean.parseBoolean(genderStr);
+        System.out.println("Dữ liệu nhận được:");
+        System.out.println("Fullname: " + fullName);
+        System.out.println("Username: " + username);
+        System.out.println("Email: " + email);
+        System.out.println("Password: " + password);
+        System.out.println("Address: " + address);
+        System.out.println("Phone: " + phoneNumber);
+        System.out.println("Sex: " + gender);
+        System.out.println("Year of Birth: " + birthDate);
+        System.out.println("Role User: " + roleUser);
         String birthDateString = birthDate;
         java.sql.Date sqlDate = null;
         if (birthDate != null && !birthDate.isEmpty()) {
@@ -64,11 +69,16 @@ public class AddUser extends HttpServlet {
                 java.util.Date utilDate = sdf.parse(birthDate);
                 sqlDate = new java.sql.Date(utilDate.getTime());
             } catch (Exception e) {
+                // Handle parsing exception (e.g., log the error)
                 System.err.println("Error parsing birthDate: " + e.getMessage());
             }
         }
-
+        ValidationForm validationForm = ValidationForm.getInstance();
+        boolean isValid = validationForm.validateAddUser(resp,fullName,username,email,password,provinceId,districtId,wardId,phoneNumber,birthDate);
         // Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
+        if (!isValid) {
+            return; // Dừng xử lý nếu các thông tin không hợp lệ
+        }
         User newUser = new User();
         newUser.setFullname(fullName);
         newUser.setUsername(username);
@@ -76,35 +86,16 @@ public class AddUser extends HttpServlet {
         newUser.setPasswords(password);
         newUser.setAddress(address);
         newUser.setPhone(phoneNumber);
-        newUser.setSex(gender);
+        newUser.setSex("Nam".equals(gender));
         newUser.setYearOfBirth(birthDateString);
         newUser.setRoleUser("Admin".equals(roleUser));
+        // Lấy sản phẩm vừa được thêm từ cơ sở dữ liệu
         User addUser = UsersDAO.getUsers(userId);
-            String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
-            session.setAttribute("confirmationCode", confirmationCode);
-        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
-        newUser.setRoleUser(roleUser);
-       
-      String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
+        String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         session.setAttribute("confirmationCode", confirmationCode);
-        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser, confirmationCode);
+        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser,confirmationCode);
         if (addUserResult) {
-            // Lấy ID của người dùng mới thêm sau khi thêm thành công
-            int newUserId = UsersDAO.getInstance().getUserByUsername(username).getId();
-            newUser.setId(newUserId);
-
-            // Ghi log khi thêm người dùng thành công
-            Log log = new Log();
-            log.setUserId(newUserId); // Sử dụng ID người dùng mới thêm
-            log.setStatuss("Thêm thành công user có ID: " + newUserId );
-            log.setLevels("INFO");
-            log.setIp(InetAddress.getLocalHost().getHostAddress());
-
-            String previousInfo = null;
-            String values = "user ID: " + newUserId + ", fullname: " + fullName + ", address: " + address + ", phone: " + phoneNumber + ", email: " + email + ", username: " + username + ", sex: " + setGender(gender) + ", yearOfBirth: " + birthDate + ", role: " + setRole(roleUser);
-            log.setValuess(values);
-            LogDAO.insertUpdateOrderInLog(log, previousInfo);
-            resp.getWriter().write("Người dùng đã được thêm thành công!");
+            Notify.successNotify(resp,"Thêm thành công người dùng!s",Page.NULL_PAGE);
             // Ghi log thông tin sản phẩm vừa thêm
             Log log = new Log();
             log.setStatuss("Thêm người dùng");
@@ -112,15 +103,10 @@ public class AddUser extends HttpServlet {
             log.setValuess(" " + addUser);
             LogDAO.insertUpdateOrderInLog(log, null);
         } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Thêm người dùng không thành công!");
+            Notify.errorNotify(resp, "Thêm người dùng thất bại", Page.NULL_PAGE);
         }
-    }
-    private String setGender(boolean gender) {
-        if (gender)return "Nam";
-        return "Nữ";
-    }
-    private String setRole(boolean roleUser) {
-        if (roleUser)return "Admin";
-        return "User";
+        // Chuyển hướng người dùng đến trang thông báo kiểm tra email
+//            req.getRequestDispatcher("check-email.jsp").forward(req, resp);
+
     }
 }

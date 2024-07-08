@@ -30,7 +30,6 @@ public class RegisterController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
-
         // Lấy các thông tin từ form
         String fullName = request.getParameter("full-name-register");
         String birthDate = request.getParameter("birth-date-register");
@@ -46,7 +45,6 @@ public class RegisterController extends HttpServlet {
         String agreeToTerms = request.getParameter("agree-to-terms");
         String genderStr = request.getParameter("gender");
         boolean gender = Boolean.parseBoolean(genderStr);
-
         // Lưu user vào session để refill vào form khi nhập thông tin không hợp lệ
         User userRegister = new User(fullName, address, phoneNumber, email, username, password, gender, birthDate, "");
         session.setAttribute("user-register", userRegister);
