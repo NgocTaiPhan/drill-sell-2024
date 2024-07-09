@@ -42,6 +42,7 @@
     <script src="https://cdn.datatables.net/v/dt/jqc-1.12.4/dt-2.0.3/datatables.min.js"></script>
 
     <link href="../assets/css/my-css/admin/prods-mn.css" rel="stylesheet">
+    <link href="../assets/css/my-css/admin/store-mn.css" rel="stylesheet">
 </head>
 <body>
 
@@ -106,9 +107,10 @@
             </div>
             <div class="right-main-header ">
 
-                <form id="uploadForm" action="add-excel" method="post" enctype="multipart/form-data">
+                <form id="uploadForm" enctype="multipart/form-data">
                     <input type="file" id="fileInput" name="excelFile" accept=".xlsx, .xls" style="display: none;" />
-                    <label for="fileInput" class="btn-add-prod open-modal" onclick="openFilePickerAndUpload('add-excel')">Nhập kho</label>
+                    <label for="fileInput" class="btn-add-prod btn btn-primary open-modal"
+                           onclick="openFilePickerAndUpload('add-excel')">Nhập kho</label>
                 </form>
 
                 <script>
@@ -182,13 +184,15 @@
 
                                 </div>
 
-                                <table id="prod-mn" class="table table-striped">
+                                <table id="repo-mn" class="table table-striped display" style="width: 100%">
                                     <thead>
                                     <tr>
                                         <th>Mã sản phẩm</th>
                                         <th>Tên sản phẩm</th>
+                                        <th>Ngày nhập</th>
+                                        <th>Giá nhập</th>
                                         <th>Số lượng trong kho</th>
-                                        <th>Hành động</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                 </table>

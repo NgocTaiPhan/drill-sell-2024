@@ -73,7 +73,7 @@
 
                     <form class="outer-top-xs" id="login-form" role="form"
                     <%--Gọi function js để gửi dữ liệu form bằng ajax--%>
-                          onsubmit="submitFormAndRedirect(event, this, 'login')">
+                          onsubmit="submitFormAndRedirect(event, this, 'ogin')">
 
                     <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
