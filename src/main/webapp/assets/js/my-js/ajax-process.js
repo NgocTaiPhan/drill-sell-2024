@@ -86,3 +86,28 @@ function callServlet(servletUrl, dataSending) {
         }
     });
 }
+
+// callServlet.js
+
+function callServlet(servletUrl, dataSending, reloadTable, onError) {
+    var dataObject = {};
+    dataSending.forEach(function (item) {
+        dataObject[item.name] = item.dataValue;
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: servletUrl,
+        data: dataObject,
+        success: function (response) {
+            if (typeof reloadTable === 'function') {
+                reloadTable(response);
+            }
+        },
+        error: function (xhr, status, error) {
+            if (typeof onError === 'function') {
+                onError(xhr, status, error);
+            }
+        }
+    });
+}
