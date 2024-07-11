@@ -60,7 +60,7 @@ public class UpdateUserInfor extends HttpServlet {
                 Notify.errorNotify(response, "Đã xảy ra lỗi khi cập nhật thông tin người dùng", Page.NULL_PAGE);
             }
         } else {
-            Notify.errorNotify(response, "Vui lòng đăng nhập", Page.NULL_PAGE);
+            Notify.errorNotify(response, "Không tìm thấy id", Page.NULL_PAGE);
         }
     }
 }
