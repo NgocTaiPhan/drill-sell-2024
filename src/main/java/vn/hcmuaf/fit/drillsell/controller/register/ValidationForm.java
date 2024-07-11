@@ -23,6 +23,8 @@ public class ValidationForm {
         if (instance == null) instance = new ValidationForm();
         return instance;
     }
+
+//    validation cập nhật thông tin ngươif dùng
 public boolean validateUserData(
         HttpServletResponse response,
         String fullname,
@@ -94,6 +96,151 @@ public boolean validateUserData(
     }
     return true;
 }
+
+    public boolean validateAddUser(
+            HttpServletResponse response,
+            String fullName,
+            String username,
+            String email,
+            String password,
+            String provinceId,
+            String districtId,
+            String wardId,
+            String phoneNumber,
+            String birthDate
+
+    )
+            throws IOException {
+        // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
+        if (FormUtils.isNullOrEmpty(fullName)) {
+            Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
+            return false;
+        }
+
+        if (FormUtils.isNullOrEmpty(username)) {
+            Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
+            return false;
+        }
+        if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
+            Notify.errorNotify(response, "Tên đăng nhập đã tồn tại!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(email)) {
+            Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidEmail(email)) {
+            Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (UsersDAO.getInstance().isEmailExists(email)) {
+            Notify.errorNotify(response, "Email đã tồn tại!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(password)) {
+            Notify.errorNotify(response, "Hãy nhập mật khẩu!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidPassword(password)) {
+            Notify.errorNotify(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
+
+            return false;
+        }
+        if (FormUtils.isInvalidAddress(provinceId, districtId, wardId)) {
+            Notify.errorNotify(response, "Hãy chọn địa chỉ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(phoneNumber)) {
+            Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidPhoneNumber(phoneNumber)) {
+            Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(birthDate)) {
+            Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidAge(birthDate)) {
+            Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
+            return false;
+        }
+
+        return true;
+
+    }
+//    validation admin chỉnh sửa thông tin người dùng
+    public boolean validateAdminEditUser(
+            HttpServletResponse response,
+            String fullName,
+            String userName,
+            String currentUsername,
+            String passwords,
+            String province,
+            String district,
+            String ward,
+            String phone,
+            String email,
+            String currentEmail,
+            String yearOfBirth
+    ) throws IOException {
+        if (FormUtils.isNullOrEmpty(fullName)) {
+            Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!currentUsername.equals(userName)) {
+            if (FormUtils.isNullOrEmpty(userName)) {
+                Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
+                return false;
+            }
+            if (UsersDAO.getInstance().isUsernameDuplicate(userName)) {
+                Notify.errorNotify(response, "Tên đăng nhập đã tồn tại!", Page.NULL_PAGE);
+                return false;
+            }
+        }
+        if (!FormUtils.isNullOrEmpty(passwords) && !FormUtils.isValidPassword(passwords)) {
+            Notify.errorNotify(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
+            return false;
+        }
+        if (!currentEmail.equals(email)) {
+            if (FormUtils.isNullOrEmpty(email)) {
+                Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
+                return false;
+            }
+            if (!FormUtils.isValidEmail(email)) {
+                Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
+                return false;
+            }
+            if (UsersDAO.getInstance().isEmailExists(email)) {
+                Notify.errorNotify(response, "Email đã tồn tại!", Page.NULL_PAGE);
+                return false;
+            }
+        }
+        if (FormUtils.isInvalidAddress(province, district, ward)) {
+            Notify.errorNotify(response, "Hãy chọn địa chỉ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(phone)) {
+            Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidPhoneNumber(phone)) {
+            Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(yearOfBirth)) {
+            Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidAge(yearOfBirth)) {
+            Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean checkValid(
             HttpServletResponse response,
             String fullName,
@@ -175,78 +322,6 @@ public boolean validateUserData(
             Notify.errorNotify(response, "Hãy đồng ý với điều khoản của chúng tôi!", Page.NULL_PAGE);
             return false;
         }
-        return true;
-
-    }
-    public boolean validateAddUser(
-            HttpServletResponse response,
-            String fullName,
-            String username,
-            String email,
-            String password,
-            String provinceId,
-            String districtId,
-            String wardId,
-            String phoneNumber,
-            String birthDate
-
-    )
-            throws IOException {
-        // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
-        if (FormUtils.isNullOrEmpty(fullName)) {
-            Notify.errorNotify(response, "Hãy nhập họ và tên!", Page.NULL_PAGE);
-            return false;
-        }
-        if (FormUtils.isNullOrEmpty(username)) {
-            Notify.errorNotify(response, "Hãy nhập tên đăng nhập!", Page.NULL_PAGE);
-            return false;
-        }
-        if (UsersDAO.getInstance().isUsernameDuplicate(username)) {
-            Notify.errorNotify(response, "Tên đăng nhập đã tồn tại!", Page.NULL_PAGE);
-            return false;
-        }
-        if (FormUtils.isNullOrEmpty(email)) {
-            Notify.errorNotify(response, "Hãy nhập email!", Page.NULL_PAGE);
-            return false;
-        }
-        if (!FormUtils.isValidEmail(email)) {
-            Notify.errorNotify(response, "Email không hợp lệ!", Page.NULL_PAGE);
-            return false;
-        }
-        if (UsersDAO.getInstance().isEmailExists(email)) {
-            Notify.errorNotify(response, "Email đã tồn tại!", Page.NULL_PAGE);
-            return false;
-        }
-        if (FormUtils.isNullOrEmpty(password)) {
-            Notify.errorNotify(response, "Hãy nhập mật khẩu!", Page.NULL_PAGE);
-            return false;
-        }
-        if (!FormUtils.isValidPassword(password)) {
-            Notify.errorNotify(response, "Mật khẩu không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
-
-            return false;
-        }
-        if (FormUtils.isInvalidAddress(provinceId, districtId, wardId)) {
-            Notify.errorNotify(response, "Hãy chọn địa chỉ!", Page.NULL_PAGE);
-            return false;
-        }
-        if (FormUtils.isNullOrEmpty(phoneNumber)) {
-            Notify.errorNotify(response, "Hãy nhập số điện thoại!", Page.NULL_PAGE);
-            return false;
-        }
-        if (!FormUtils.isValidPhoneNumber(phoneNumber)) {
-            Notify.errorNotify(response, "Số điện thoại không hợp lệ!", Page.NULL_PAGE);
-            return false;
-        }
-        if (FormUtils.isNullOrEmpty(birthDate)) {
-            Notify.errorNotify(response, "Hãy chọn ngày sinh!", Page.NULL_PAGE);
-            return false;
-        }
-        if (!FormUtils.isValidAge(birthDate)) {
-            Notify.errorNotify(response, "Bạn chưa đủ 18 tuổi!", Page.NULL_PAGE);
-            return false;
-        }
-
         return true;
 
     }

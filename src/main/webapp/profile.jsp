@@ -443,6 +443,7 @@
             var sex = $('#sex').val().toLowerCase() === 'nam';
             var yearOfBirth = $('#yearOfBirth').val();
             var address = $('#tinh').val() + ', ' + $('#quan').val() + ', ' + $('#phuong').val();
+
             var phone = $('#phone').val();
             var userData = {
                 id: parseInt(sessionStorage.getItem('userid')),
@@ -453,8 +454,8 @@
                 yearOfBirth: yearOfBirth,
                 phone: phone,
                 address: address
-            };
 
+            };
             console.log(userData);
 
             $.ajax({
