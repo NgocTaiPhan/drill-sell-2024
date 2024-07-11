@@ -137,7 +137,7 @@ public class CartDAO {
                 return false;
             }
         });
-}
+    }
 
 
 
@@ -156,11 +156,12 @@ public class CartDAO {
 //        insertCartItem(2, 95);
 //        System.out.println(getQuantity(3, 2));
         System.out.println(getQuantityRepo(2));
+
     }
 }
 
 
- 
+
 
 
 

@@ -167,6 +167,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                         <%
                                             User u1 = (User) session.getAttribute("auth");
                                             long quantity = 0;
+
                                             if (u1 != null) {
                                                 quantity = CartDAO.countQuantity(u1.getId());
                                             }

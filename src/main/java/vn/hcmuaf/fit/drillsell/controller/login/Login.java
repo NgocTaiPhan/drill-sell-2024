@@ -9,6 +9,7 @@ import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.utils.UserUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,7 +27,6 @@ public class Login {
         String password = request.getParameter("pass-login");
         HttpSession session = request.getSession();
         Log log = new Log();
-
         if (!validInput(username, password)) {
             Notify.errorNotify(response, "Hãy điền đầy đủ thông tin đăng nhập", Page.NULL_PAGE);
             return;
@@ -43,18 +43,35 @@ public class Login {
 
         User auth = UsersDAO.getInstance().getUser(username, userUtils.hashPassword(password));
         if (auth != null) {
-            System.out.println(auth);
-            log.setUserId(auth.getId());
             session.setAttribute("auth", auth);
+            log.setUserId(auth.getId());
             LogDAO.insertLoginTrue(log);
+
+            if (request.getParameter("remember") != null) {
+                Cookie usernameCookie = new Cookie("username", username);
+                Cookie passwordCookie = new Cookie("password", password);
+                usernameCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+                passwordCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+                usernameCookie.setSecure(request.isSecure());
+                passwordCookie.setSecure(request.isSecure());
+                usernameCookie.setHttpOnly(true);
+                passwordCookie.setHttpOnly(true);
+                usernameCookie.setPath("/");
+                passwordCookie.setPath("/");
+
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+            }
+
             Notify.successNotify(response, "Đăng nhập thành công", Page.HOME_PAGE);
         } else {
             log.setUserId(user != null ? user.getId() : 0);
             LogDAO.inserLoginFalse(log);
             LogDAO.checkLogin(log);
-            Notify.errorNotify(response, "Không tìm thấy tài khoản", Page.NULL_PAGE);
+            Notify.errorNotify(response, "Không tìm thấy tài khoản hoặc mật khẩu không chính xác", Page.NULL_PAGE);
         }
     }
+
 
     public static void loginAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -90,6 +107,21 @@ public class Login {
                 log.setUserId(auth.getId());
                 session.setAttribute("auth", auth); // Gửi thông tin tài khoản để frontend xử lý
                 LogDAO.insertLoginTrue(log); // Ghi nhật ký đăng nhập thành công
+                if (request.getParameter("remember") != null) {
+                    Cookie usernameCookie = new Cookie("username", username);
+                    Cookie passwordCookie = new Cookie("password", password);
+                    usernameCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+                    passwordCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+                    usernameCookie.setSecure(request.isSecure());
+                    passwordCookie.setSecure(request.isSecure());
+                    usernameCookie.setHttpOnly(true);
+                    passwordCookie.setHttpOnly(true);
+                    usernameCookie.setPath("/");
+                    passwordCookie.setPath("/");
+
+                    response.addCookie(usernameCookie);
+                    response.addCookie(passwordCookie);
+                }
 
                 // Kiểm tra vai trò người dùng
                 if (auth.isRoleUser()) {
@@ -99,7 +131,7 @@ public class Login {
                         session.removeAttribute("redirectAfterLogin"); // Xóa URL sau khi sử dụng
                         response.sendRedirect(redirectURL); // Điều hướng tới URL ban đầu
                     } else {
-                        response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp"); // Điều hướng mặc định
+                        response.sendRedirect(request.getContextPath() + "/admin/user-manager.jsp"); // Điều hướng mặc định
                     }
                 } else {
                     // Nếu không phải admin, xóa thông tin đăng nhập và thông báo lỗi

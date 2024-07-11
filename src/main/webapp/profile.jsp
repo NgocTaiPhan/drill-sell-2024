@@ -30,7 +30,64 @@
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/js/my-js/notify.js"></script>
+    <style type="text/css">
+        .css_select_div { text-align: center; }
+        .css_select { display: inline-table; width: 25%; padding: 5px; margin: 5px 2%; border: solid 1px #686868; border-radius: 5px; }
+    </style>
+    <script>
+        $(document).ready(function () {
+            // Biến lưu trữ thông tin về tỉnh, quận/huyện và phường/xã
+            var provinces = {};
+            var districts = {};
+            var wards = {};
 
+            // Lấy danh sách tỉnh thành từ API và điền vào dropdown tỉnh
+            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+                if (data_tinh.error == 0) {
+                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                        provinces[val_tinh.full_name] = val_tinh.id; // Lưu tên của tỉnh
+                        $("#tinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
+                    });
+                }
+            });
+
+            // Xử lý sự kiện khi người dùng chọn tỉnh
+            $("#tinh").change(function () {
+                var ten_tinh = $(this).val(); // Lấy tên của tỉnh từ dropdown
+
+                // Xóa các lựa chọn cũ của quận/huyện và phường/xã
+                $("#quan").html('<option value="0">Chọn Quận Huyện</option>');
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách quận/huyện từ API và điền vào dropdown quận/huyện
+                $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinces[ten_tinh] + '.htm', function (data_quan) {
+                    if (data_quan.error == 0) {
+                        $.each(data_quan.data, function (key_quan, val_quan) {
+                            districts[val_quan.full_name] = val_quan.id; // Lưu tên của quận/huyện
+                            $("#quan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+            // Xử lý sự kiện khi người dùng chọn quận/huyện
+            $("#quan").change(function () {
+                var ten_quan = $(this).val(); // Lấy tên của quận/huyện từ dropdown
+
+                // Xóa các lựa chọn cũ của phường/xã
+                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+
+                // Lấy danh sách phường/xã từ API và điền vào dropdown phường/xã
+                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districts[ten_quan] + '.htm', function (data_phuong) {
+                    if (data_phuong.error == 0) {
+                        $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                            wards[val_phuong.full_name] = val_phuong.id; // Lưu tên của phường/xã
+                            $("#phuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -179,7 +236,16 @@
                 <h4 class="title">Thông tin tài khoản</h4>
             </div>
             <div class="content">
-                <form>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+                        integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+                        crossorigin="anonymous"></script>
+                <link rel="stylesheet"
+                      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+                      integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+                <script src="assets/js/my-js/notify.js"></script>
+                <script src="assets/js/my-js/ajax-process.js"></script>
+                <form onsubmit="submitFormAndRedirect(event,this,'showUserInfor')">
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group">
@@ -202,34 +268,69 @@
                     </div>
 
 
-            
+
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Giới tính</label>
-                                <input type="text" class="form-control border-input" id="gender">
+                                <select class="form-control border-input" id="sex">
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Ngày tháng năm sinh</label>
-                                <input type="text" class="form-control border-input" id="yearOfBirth">
+                                <input type="date" class="form-control border-input" id="yearOfBirth">
                             </div>
                         </div>
                     </div>
 
+
+<%--                    <div class="row">--%>
+<%--                        <div class="col-md-12">--%>
+<%--                            <div class="form-group">--%>
+<%--                                <label>Địa chỉ</label>--%>
+<%--&lt;%&ndash;                                <input type="text" class="form-control border-input" id="address" placeholder="Home Address">&ndash;%&gt;--%>
+<%--                                <div id="address">--%>
+<%--                                    <select class="css_select" id="tinh" name="tinh">--%>
+<%--                                        <option value="0">Chọn Tỉnh/Thành phố</option>--%>
+<%--                                        <!-- Các tùy chọn tỉnh/thành phố sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
+<%--                                    </select>--%>
+<%--                                    <select class="css_select" id="quan" name="quan">--%>
+<%--                                        <option value="0">Chọn Quận/Huyện</option>--%>
+<%--                                        <!-- Các tùy chọn quận/huyện sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
+<%--                                    </select>--%>
+<%--                                    <select class="css_select" id="phuong" name="phuong">--%>
+<%--                                        <option value="0">Chọn Phường/Xã</option>--%>
+<%--                                        <!-- Các tùy chọn phường/xã sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
+<%--                                    </select>--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Địa chỉ</label>
-                                <input type="text" class="form-control border-input" id="address" placeholder="Home Address">
+                                <div id="address">
+                                    <select class="css_select" id="tinh" name="tinh">
+                                        <option value="">Chọn Tỉnh/Thành phố</option>
+                                    </select>
+                                    <select class="css_select" id="quan" name="quan">
+                                        <option value="">Chọn Quận/Huyện</option>
+                                    </select>
+                                    <select class="css_select" id="phuong" name="phuong">
+                                        <option value="">Chọn Phường/Xã</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                                  
 
                     <div class="row">
                         <div class="col-md-6">
@@ -241,7 +342,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Loại tài khoản</label>
-                                <input type="text" class="form-control border-input" id="accountType">
+                                <input type="text" class="form-control border-input" id="accountType" disabled>
                             </div>
                         </div>
                     </div>
@@ -258,82 +359,128 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
+        $.ajax({
+            url: "showUserInfor",
+            method: 'GET',
+            success: function(data) {
+                console.log("Received data: ", data);
+                // Cập nhật các input thông tin cá nhân
+                $('#fullname').val(data.fullname);
+                $('#username').val(data.username);
+                $('#emailUser').val(data.email);
+                $('#sex').val(data.sex); // Cập nhật select theo giới tính
+                $('#yearOfBirth').val(data.yearOfBirth);
+                $('#phone').val(data.phone);
+                $('#accountType').val(data.accountType);
+
+                // Cập nhật các select cho địa chỉ
+                updateAddressDropdowns(data.province, data.district, data.ward);
+            },
+            error: function(xhr, status, error) {
+                try {
+                    var errorResponse = JSON.parse(xhr.responseText);
+                    console.log('Error fetching user info:', errorResponse);
+                    alert('Đã xảy ra lỗi: ' + errorResponse.error);
+                } catch (e) {
+                    console.log('Unexpected error format. Response: ', xhr.responseText);
+                    alert('Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.');
+                }
+            }
+        });
+
+        function updateAddressDropdowns(province, district, ward) {
+            $('#tinh').val(province);
+            // Gọi hàm để cập nhật các option cho tỉnh/thành phố
+            updateProvinces(province);
+            // Cập nhật dropdown quận/huyện
+            $('#quan').val(district); // Đặt giá trị của dropdown quận/huyện
+            // Gọi hàm để cập nhật các option cho quận/huyện
+            updateDistricts(province, district);
+
+            // Cập nhật dropdown phường/xã
+            $('#phuong').val(ward); // Đặt giá trị của dropdown phường/xã
+            // Gọi hàm để cập nhật các option cho phường/xã
+            updateWards(province, district, ward);
+        }
+
+        function updateProvinces(selectedProvince) {
+            // Lấy danh sách tỉnh/thành phố từ API
+            var provinces = [selectedProvince]; // Chỉ có một tỉnh/thành phố được chọn
+            var options = '';
+            provinces.forEach(function(province) {
+                options += '<option value="' + province + '" selected>' + province + '</option>';
+            });
+            $('#tinh').html(options);
+        }
+
+        function updateDistricts(selectedProvince, selectedDistrict) {
+            // Lấy danh sách quận/huyện từ API dựa trên tỉnh/thành phố đã chọn
+            var districts = [selectedDistrict]; // Chỉ có một quận/huyện được chọn
+            var options = '';
+            districts.forEach(function(district) {
+                options += '<option value="' + district + '" selected>' + district + '</option>';
+            });
+            $('#quan').html(options);
+        }
+
+        function updateWards(selectedProvince, selectedDistrict, selectedWard) {
+            // Lấy danh sách phường/xã từ API hoặc dữ liệu đã có sẵn dựa trên tỉnh/thành phố và quận/huyện đã chọn
+            var wards = [selectedWard]; // Chỉ có một phường/xã được chọn
+            var options = '';
+            wards.forEach(function(ward) {
+                options += '<option value="' + ward + '" selected>' + ward + '</option>';
+            });
+            $('#phuong').html(options);
+        }
+
+        $('#changeUserInfo').click(function(e) {
+            e.preventDefault();
+
+            var fullname = $('#fullname').val();
+            var username = $('#username').val();
+            var email = $('#emailUser').val();
+            var sex = $('#sex').val().toLowerCase() === 'nam';
+            var yearOfBirth = $('#yearOfBirth').val();
+            var address = $('#tinh').val() + ', ' + $('#quan').val() + ', ' + $('#phuong').val();
+
+            var phone = $('#phone').val();
+            var userData = {
+                id: parseInt(sessionStorage.getItem('userid')),
+                fullname: fullname,
+                username: username,
+                email: email,
+                sex: sex,
+                yearOfBirth: yearOfBirth,
+                phone: phone,
+                address: address
+
+            };
+            console.log(userData);
+
             $.ajax({
-                url: "showUserInfor", // URL của servlet hoặc phương thức controller để lấy thông tin người dùng
-                method: 'GET',
-                success: function(data) {
-                    console.log("Received data: ", data); // Log để kiểm tra dữ liệu nhận được
-                    // Giả sử dữ liệu nhận được từ máy chủ có định dạng JSON và có các thuộc tính: fullname, username, email, sex, yearOfBirth, address, phone, roleUser
-                    $('#fullname').val(data.fullname);
-                    $('#username').val(data.username);
-                    $('#emailUser').val(data.email);
-                    $('#gender').val(data.sex ? 'Nam' : 'Nữ');
-                    $('#yearOfBirth').val(data.yearOfBirth);
-                    $('#address').val(data.address);
-                    $('#phone').val(data.phone);
-                    $('#accountType').val(data.roleUser ? 'Quản trị' : 'Người dùng');
+                url: 'updateUserInfo',
+                method: 'POST',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(userData),
+                success: function(response) {
+                    normalNotify(response.type,response.message);
                 },
-                error: function(error) {
-                    console.log('Error fetching user info:', error);
+                error: function(xhr) {
+                    try {
+                        var errorResponse = JSON.parse(xhr.responseText);
+                        console.log('Error updating user info:', errorResponse);
+                        alert('Đã xảy ra lỗi: ' + errorResponse.error);
+                    } catch (e) {
+                        console.log('Unexpected error format. Response: ', xhr.responseText);
+                        alert('Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.');
+                    }
                 }
             });
-            $('#changeUserInfo').click(function(e) {
-                e.preventDefault(); // Ngăn chặn hành động mặc định của nút submit
-
-                // Lấy dữ liệu từ các input
-                var fullname = $('#fullname').val();
-                var username = $('#username').val();
-                var email = $('#emailUser').val();
-                var gender = $('#gender').val();
-                var yearOfBirth = $('#yearOfBirth').val(); // Kiểm tra xem biến này có giá trị hay không
-                var address = $('#address').val();
-                var phone = $('#phone').val();
-
-                // Tạo đối tượng dữ liệu để gửi lên server
-                var userData = {
-                    id: parseInt(sessionStorage.getItem('userid')),
-                    fullname: fullname,
-                    username: username,
-                    email: email,
-                    gender: gender,
-                    yearOfBirth: yearOfBirth, // Kiểm tra giá trị này
-                    address: address,
-                    phone: phone
-                };
-
-                console.log(userData); // Kiểm tra dữ liệu trước khi gửi
-
-                // Gửi yêu cầu Ajax để cập nhật thông tin người dùng
-                $.ajax({
-                    url: 'updateUserInfo', // URL của servlet hoặc controller xử lý cập nhật
-                    method: 'POST', // Phương thức HTTP
-                    contentType: 'application/json; charset=UTF-8', // Kiểu dữ liệu gửi đi
-                    data: JSON.stringify(userData), // Dữ liệu gửi đi (đã chuyển thành JSON)
-                    success: function(response) {
-                        // Xử lý kết quả từ server
-                        if (response.message === "Update successful") {
-                            // Cập nhật thành công
-                            console.log('Update successful:', response);
-                            // Có thể cập nhật lại giao diện hoặc hiển thị thông báo thành công
-                            alert('Cập nhật thông tin thành công!');
-                        } else {
-                            // Có lỗi xảy ra khi cập nhật
-                            console.log('Error updating user info:', response);
-                            alert(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        // Xử lý lỗi
-                        console.log('Error updating user info:', xhr);
-                        var errorResponse = JSON.parse(xhr.responseText);
-                        alert('Đã xảy ra lỗi: ' + errorResponse.error);
-                    }
-                });
-            });
-
         });
+    });
     </script>
+
 
 
                 </div>

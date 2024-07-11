@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter("/admin/*")
-public class AdminFilter implements Filter {
+public class AdminFilter implements Filter{
     public AdminFilter() {
     }
 

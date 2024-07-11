@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class FormUtils {
@@ -27,5 +28,13 @@ public class FormUtils {
 
     public static boolean isValidPassword(String password) {
         return password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$");
+    }
+
+    public static int assignInput(HttpServletRequest request, String parameter) {
+        String inputParam = request.getParameter(parameter);
+        if (!(inputParam == null || inputParam.equals(""))) {
+            return Integer.parseInt(inputParam);
+        }
+        return 0;
     }
 }

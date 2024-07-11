@@ -48,7 +48,6 @@
 <body>
 <header class="header-style-1 ">
 
-    <!-- ============================================== TOP MENU ============================================== -->
     <div class="top-bar animate-dropdown">
         <div class="container">
             <div class="header-top-inner">
@@ -102,7 +101,6 @@
                     <h1 class="name">MÁY KHOAN</h1>
 
                 </div>
-
                 <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">
                     <!-- /.contact-row -->
                     <!-- ============================================================= SEARCH AREA ============================================================= -->
@@ -134,12 +132,12 @@
                 <!-- /.top-search-holder -->
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
-                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
-
+                    <!-- SHOPPING CART DROPDOWN -->
                     <div class="dropdown dropdown-cart">
-                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                        <div class="lnk-cart">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon"
+                                     onclick="callServletAndRedirect('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -152,54 +150,28 @@
                                         <p><%=quantity%></p>
                                     </div>
                                 </div>
-                                <Style>
-                                    .cart-count {
-                                        width: 20px;
-                                        height: 20px;
-                                        position: absolute;
-                                        top: -10px;
-                                        left: 20px;
-                                        background-color: red;
-                                        color: white;
-                                        padding-left: 3px;
-                                        border-radius: 50%;
-                                        margin-left: 13px;
-                                        font-size: 12px;
-                                    }
-
-                                </Style>
-                                <script>
-                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
-                                    function redirectToCart() {
-
-                                        <% if (!logged) { %>
-                                        Swal.fire({
-                                            title: "Bạn chưa đăng nhập",
-                                            icon: "warning",
-                                            showCancelButton: true,
-                                            confirmButtonText: "Đăng nhập",
-                                            cancelButtonText: `Để sau`
-                                        }).then((result) => {
-                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-                                            if (result.isConfirmed) {
-                                                window.location.href = 'login.jsp';
-                                            }
-                                        });
-                                        <% } else { %>
-                                        window.location.href = 'cart.jsp';
-                                        <% } %>
-                                    }
-                                </script>
-
-
                             </div>
                         </div>
-
                     </div>
                     <!-- /.dropdown-cart -->
-
-                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->
                 </div>
+
+                <Style>
+                    .cart-count {
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        top: -10px;
+                        left: 20px;
+                        background-color: red;
+                        color: white;
+                        padding-left: 3px;
+                        border-radius: 50%;
+                        margin-left: 13px;
+                        font-size: 12px;
+                    }
+
+                </Style>
                 <!-- /.top-cart-row -->
             </div>
             <!-- /.row -->
@@ -214,13 +186,7 @@
     <div class="header-nav animate-dropdown">
         <div class="container">
             <div class="yamm navbar navbar-default" role="navigation">
-                <!--                <div class="navbar-header">-->
-                <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                <!--                            class="navbar-toggle collapsed"-->
-                <!--                            type="button">-->
-                <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                <!--                </div>-->
+
                 <div class="nav-bg-class">
                     <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                     >
@@ -253,7 +219,9 @@
                                     if (logged) {
                                         if (u.isRoleUser()) {
                                 %>
-                                <li class="active yamm-fw"><a href="/admin/dashboard.jsp">Quản lý</a></li>
+                                <li class="active yamm-fw"><a
+                                        href="${pageContext.request.contextPath}/admin/user-manager.jsp">Quản lý</a>
+                                </li>
                                 <%
                                         }
                                     }
@@ -283,7 +251,7 @@
     <div class="container" style="white-space: nowrap">
         <div class="breadcrumb-inner">
             <ul class="list-inline list-unstyled">
-                <li><a href="home.html">Trang chủ</a></li>
+                <li><a href="home.jsp">Trang chủ</a></li>
                 <li class='active'>Liên hệ</li>
             </ul>
         </div><!-- /.breadcrumb-inner -->
@@ -522,7 +490,7 @@
                             <ul class='list-unstyled'>
                                 <li class="first"><a href="#" title="Card">Giỏ hàng</a></li>
                                 <li><a href="#" title="News">Tin tức</a></li>
-                                <li class=" last"><a href="about-us.html" title="About us">Về chúng tôi</a></li>
+                                <li class=" last"><a href="about-us.jsp" title="About us">Về chúng tôi</a></li>
                             </ul>
                         </div>
                         <!-- /.module-body -->

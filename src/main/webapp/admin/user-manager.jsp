@@ -54,43 +54,43 @@
                 if (data_tinh.error == 0) {
                     $.each(data_tinh.data, function (key_tinh, val_tinh) {
                         provinces[val_tinh.full_name] = val_tinh.id; // Lưu tên của tỉnh
-                        $("#tinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
+                        $("#editTinh").append('<option value="' + val_tinh.full_name + '">' + val_tinh.full_name + '</option>');
                     });
                 }
             });
 
             // Xử lý sự kiện khi người dùng chọn tỉnh
-            $("#tinh").change(function () {
+            $("#editTinh").change(function () {
                 var ten_tinh = $(this).val(); // Lấy tên của tỉnh từ dropdown
 
                 // Xóa các lựa chọn cũ của quận/huyện và phường/xã
-                $("#quan").html('<option value="0">Chọn Quận Huyện</option>');
-                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+                $("#editQuan").html('<option value="0">Chọn Quận Huyện</option>');
+                $("#editPhuong").html('<option value="0">Chọn Phường Xã</option>');
 
                 // Lấy danh sách quận/huyện từ API và điền vào dropdown quận/huyện
                 $.getJSON('https://esgoo.net/api-tinhthanh/2/' + provinces[ten_tinh] + '.htm', function (data_quan) {
                     if (data_quan.error == 0) {
                         $.each(data_quan.data, function (key_quan, val_quan) {
                             districts[val_quan.full_name] = val_quan.id; // Lưu tên của quận/huyện
-                            $("#quan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
+                            $("#editQuan").append('<option value="' + val_quan.full_name + '">' + val_quan.full_name + '</option>');
                         });
                     }
                 });
             });
 
             // Xử lý sự kiện khi người dùng chọn quận/huyện
-            $("#quan").change(function () {
+            $("#editQuan").change(function () {
                 var ten_quan = $(this).val(); // Lấy tên của quận/huyện từ dropdown
 
                 // Xóa các lựa chọn cũ của phường/xã
-                $("#phuong").html('<option value="0">Chọn Phường Xã</option>');
+                $("#editPhuong").html('<option value="0">Chọn Phường Xã</option>');
 
                 // Lấy danh sách phường/xã từ API và điền vào dropdown phường/xã
                 $.getJSON('https://esgoo.net/api-tinhthanh/3/' + districts[ten_quan] + '.htm', function (data_phuong) {
                     if (data_phuong.error == 0) {
                         $.each(data_phuong.data, function (key_phuong, val_phuong) {
                             wards[val_phuong.full_name] = val_phuong.id; // Lưu tên của phường/xã
-                            $("#phuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
+                            $("#editPhuong").append('<option value="' + val_phuong.full_name + '">' + val_phuong.full_name + '</option>');
                         });
                     }
                 });
@@ -184,21 +184,29 @@
                                     <div class="modal-content">
                                         <span class="close">&times;</span>
                                         <h2>Thêm người dùng</h2>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+                                                integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+                                                crossorigin="anonymous"></script>
+                                        <link rel="stylesheet"
+                                              href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+                                              integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+                                      <script src="../assets/js/my-js/notify.js"></script>
+                                        <script src="../assets/js/my-js/ajax-process.js"></script>
                                         <form id="addUserForm">
                                             <label for="fullname">Tên người dùng:</label>
-                                            <input type="text" id="fullname" name="fullname" required><br><br>
+                                            <input type="text" id="fullname" name="fullname"><br><br>
 
                                             <label for="username">Tên đăng nhập:</label>
-                                            <input type="text" id="username" name="username" required><br><br>
+                                            <input type="text" id="username" name="username"><br><br>
 
                                             <label for="email">Email:</label>
-                                            <input type="email" id="email" name="email" required><br><br>
+                                            <input type="email" id="email" name="email"><br><br>
 
                                             <label for="passwords">Mật khẩu:</label>
-                                            <input type="password" id="passwords" name="passwords" required><br><br>
+                                            <input type="password" id="passwords" name="passwords"><br><br>
 
                                             <div class="form-group">
-                                                <label class="info-title"  for="address" id="address">Địa chỉ <span>*</span></label>
+                                                <label class="info-title"  for="address" id="address"><span>Địa chỉ:</span></label>
 
                                                 <div class="css_select_div">
                                                     <select class="css_select" id="tinh" name="tinh">
@@ -235,6 +243,74 @@
                                             </select><br><br>
 
                                             <button type="submit">Thêm người dùng</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Modal form chỉnh sửa người dùng -->
+                                <div id="editUserModal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <h2>Chỉnh sửa người dùng</h2>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+                                                integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+                                                crossorigin="anonymous"></script>
+                                        <link rel="stylesheet"
+                                              href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+                                              integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+                                        <script src="../assets/js/my-js/notify.js"></script>
+                                        <script src="../assets/js/my-js/ajax-process.js"></script>
+                                        <form id="editUserForm">
+                                            <!-- Thêm input ẩn để lưu ID của người dùng -->
+                                            <input type="hidden" id="editUserId" name="editUserId">
+
+                                            <label for="editFullname">Tên người dùng:</label>
+                                            <input type="text" id="editFullname" name="editFullname"><br><br>
+
+                                            <label for="editUsername">Tên đăng nhập:</label>
+                                            <input type="text" id="editUsername" name="editUsername"><br><br>
+
+                                            <label for="editEmail">Email:</label>
+                                            <input type="email" id="editEmail" name="editEmail"><br><br>
+
+                                            <label for="editPasswords">Mật khẩu:</label>
+                                            <input type="password" id="editPasswords" name="editPasswords"><br><br>
+
+                                            <div class="form-group">
+                                                <label class="info-title" for="editAddress" id="editAddress"><span>Địa chỉ:</span></label>
+                                                <div class="css_select_div">
+                                                    <select class="css_select" id="editTinh" name="editTinh">
+                                                        <option value="0">Chọn Tỉnh</option>
+                                                        <!-- Thêm các tùy chọn cho tỉnh -->
+                                                    </select>
+                                                    <select class="css_select" id="editQuan" name="editQuan">
+                                                        <option value="0">Chọn Quận Huyện</option>
+                                                    </select>
+                                                    <select class="css_select" id="editPhuong" name="editPhuong">
+                                                        <option value="0">Chọn Phường Xã</option>
+                                                        <!-- Thêm các tùy chọn cho xã -->
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <label for="editPhone">Số điện thoại:</label>
+                                            <input type="text" id="editPhone" name="editPhone"><br><br>
+
+                                            <label for="editSex">Giới tính:</label>
+                                            <select id="editSex" name="editSex">
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
+                                            </select><br><br>
+
+                                            <label for="editYearOfBirth">Năm sinh:</label>
+                                            <input type="date" id="editYearOfBirth" name="editYearOfBirth"><br><br>
+
+                                            <label for="editRoleUser">Chức vụ:</label>
+                                            <select id="editRoleUser" name="editRoleUser">
+                                                <option value="User">User</option>
+                                                <option value="Admin">Admin</option>
+                                            </select><br><br>
+
+                                            <button type="submit">Cập nhật người dùng</button>
                                         </form>
                                     </div>
                                 </div>
@@ -276,18 +352,133 @@
                                             ],
                                         });
 
+                                        // Xử lý sự kiện click nút chỉnh sửa
+                                        // Handle modal open and populate form data
+                                        $('#user-mn tbody').on('click', '.btn-warning', function () {
+                                            var data = table.row($(this).parents('tr')).data();
+                                            var id = data.id;
+                                            var fullname = data.fullname;
+                                            var username = data.username;
+                                            var email = data.email;
+                                            var address = data.address;
+                                            var phone = data.phone;
+                                            var sex = data.sex ===  true? 'Nam' : 'Nữ';
+                                            var yearOfBirth = data.yearOfBirth;
+                                            var roleUser = data.roleUser === true ? 'Admin' : 'User';
 
+
+                                            // Split address into parts: province, district, ward
+                                            var addressParts = address.split(',');
+                                            console.log("Address Parts:", addressParts);
+                                            var province = addressParts[0].trim();
+                                            var district = addressParts[1] ? addressParts[1].trim() : ' ';
+                                            var ward = addressParts[2] ? addressParts[2].trim() : ' ';
+                                            console.log("Province:", province, "District:", district, "Ward:", ward);
+
+                                            // Populate data into edit form
+                                            $('#editUserId').val(id);
+                                            $('#editFullname').val(fullname);
+                                            $('#editUsername').val(username);
+                                            $('#editEmail').val(email);
+                                            $('#editPasswords').val('');
+                                            $('#editTinh').val(province);
+                                            // cập nhật quận và phường tương ứng trong user session
+                                            $('#editQuan').html('<option value="' + district + '">' + district + '</option>');
+                                            $('#editPhuong').html('<option value="' + ward + '">' + ward + '</option>');
+
+                                            $('#editPhone').val(phone);
+                                            $('#editSex').val(sex);
+                                            $('#editYearOfBirth').val(yearOfBirth);
+                                            $('#editRoleUser').val(roleUser);
+
+                                            // Show edit user modal
+                                            $('#editUserModal').show();
+                                            $('#editUserModal').append('<div class="overlay"></div>');
+                                        });
+
+                                        // Handle modal close
+                                        $('.close').click(function () {
+                                            $('#editUserModal').hide();
+                                            $('.overlay').remove();
+                                        });
+
+                                        // Handle form submission
+                                        $('#editUserForm').submit(function (e) {
+                                            e.preventDefault();
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "editUser", // Replace with your backend endpoint
+                                                data: $('#editUserForm').serialize(),
+                                                success: function (response) {
+                                                    if (response.type === 'validation_error') {
+                                                        // Nếu có lỗi validation, hiển thị thông báo validation
+                                                        normalNotify(response.type, response.message);
+                                                    } else if (response.type === 'success') {
+                                                        // Nếu thành công, hiển thị thông báo xác nhận
+                                                        Swal.fire({
+                                                            title: "Bạn có chắc chắn muốn cập nhật thông tin?",
+                                                            text: "Hãy kiểm tra lại thông tin trước khi xác nhận!",
+                                                            icon: "warning",
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: "#3085d6",
+                                                            cancelButtonColor: "#d33",
+                                                            confirmButtonText: "Đồng ý cập nhật!",
+                                                            cancelButtonText: "Hủy"
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                // Nếu người dùng xác nhận, hiển thị thông báo thành công và reload data
+                                                                Swal.fire({
+                                                                    title: "Thành công!",
+                                                                    text: response.message,
+                                                                    icon: "success"
+                                                                });
+                                                                $('#editUserModal').hide();
+                                                                table.ajax.reload(); // Assuming 'table' is your DataTable instance, reload data if needed
+                                                            } else {
+                                                                // Nếu người dùng hủy, không làm gì cả
+                                                                Swal.fire({
+                                                                    title: "Hủy",
+                                                                    text: "Thông tin của bạn vẫn chưa thay đổi :)",
+                                                                    icon: "info"
+                                                                });
+                                                            }
+                                                        });
+                                                    } else {
+                                                        // Nếu có lỗi khác, hiển thị thông báo lỗi
+                                                        Swal.fire({
+                                                            title: "Lỗi!",
+                                                            text: response.message,
+                                                            icon: "error"
+                                                        });
+                                                    }
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    var errorMessage = xhr.responseText || "An error occurred: " + error;
+                                                    Swal.fire({
+                                                        title: "Lỗi!",
+                                                        text: errorMessage,
+                                                        icon: "error"
+                                                    });
+                                                }
+                                            });
+                                        });
+
+
+
+                                        // thêm người dùng
                                         $("#openModalBtn").click(function() {
                                             $("#addUserModal").css("display", "block");
                                             $('#openModalBtn').append('<div class="overlay"></div>');
                                         });
 
-                                        // Đóng modal khi nhấn nút đóng hoặc nút đóng modal
+// Đóng modal khi nhấn nút đóng hoặc nút đóng modal
                                         $(".close").click(function() {
                                             $("#addUserModal").css("display", "none");
                                             $('.overlay').remove();
                                         });
-                                        // Xử lý khi submit form thêm người dùng
+
+// Xử lý khi submit form thêm người dùng
                                         $("#addUserForm").submit(function(e) {
                                             e.preventDefault();
 
@@ -296,21 +487,26 @@
                                                 url: "addUser",
                                                 data: $(this).serialize(),
                                                 success: function(response) {
-                                                    alert("Thêm người dùng thành công!");
-                                                    // Tải lại bảng dữ liệu nếu cần thiết
-
-                                                    // Đóng modal sau khi thêm thành công
-                                                    $("#addUserModal").css("display", "none");
-                                                    $('.overlay').remove();
-                                                    // Reset form sau khi thêm thành công
-                                                    $("#addUserForm")[0].reset();
-                                                    table.ajax.reload();
+                                                    if (response.type === "success") {
+                                                        normalNotify(response.type, response.message, function() {
+                                                            // Đóng modal sau khi thêm thành công
+                                                            $("#addUserModal").css("display", "none");
+                                                            $('.overlay').remove();
+                                                            // Reset form sau khi thêm thành công
+                                                            $("#addUserForm")[0].reset();
+                                                            table.ajax.reload();
+                                                        });
+                                                    } else {
+                                                        // Hiển thị thông báo lỗi
+                                                        normalNotify(response.type, response.message);
+                                                    }
                                                 },
                                                 error: function(xhr, status, error) {
-                                                    alert("Lỗi khi thêm người dùng: " + error);
+                                                    normalNotify("error", "Lỗi khi thêm người dùng: " + error);
                                                 }
                                             });
                                         });
+
                                         $('#user-mn tbody').on('click', '.btn-danger', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -411,99 +607,7 @@
                                             })
                                         })
 
-                                        $('#user-mn tbody').on('click', '.btn-warning', function () {
-                                            var data = table.row($(this).parents('tr')).data();
-                                            var id = data.id;
-                                            var fullname = data.fullname;
-                                            var username = data.username;
-                                            var email = data.email;
-                                            var address = data.address;
-                                            var phone = data.phone;
-                                            var sex = data.sex ? 'Nam' : 'Nữ'; // Chuyển đổi thành giá trị Boolean dưới dạng chuỗi
-                                            var yearOfBirth = data.yearOfBirth;
-                                            var roleUser = data.roleUser ? 'Admin' : 'User'; // Chuyển đổi thành chuỗi 'admin' hoặc 'user'
 
-                                            var popupContent = '<div id="userPopup">' +
-                                                '<button id="closePopup1" class="closeButton1">&#x2716;</button>' +
-                                                '<h1>Chỉnh sửa Thông Tin Khách Hàng</h1>' +
-                                                '<form id="editUserForm">' +
-                                                '<input type="hidden" name="id" value="' + id + '">' +
-                                                '<p><label>Tên Khách Hàng:</label> <input type="text" name="fullname" value="' + fullname + '"></p>' +
-                                                '<p><label>Tên Đăng Nhập:</label> <input type="text" name="username" value="' + username + '"></p>' +
-                                                '<p><label>Email:</label> <input type="text" name="email" value="' + email + '"></p>' +
-                                                '<p><label>Mật khẩu:</label> <input type="text" name="passwords" value=""></p>' +
-                                                '<p><label>Địa Chỉ:</label> <input type="text" name="address" value="' + address + '"></p>' +
-                                                '<p><label>Số Điện Thoại :</label> <input type="text" name="phone" value="' + phone + '"></p>' +
-                                                '<p><label>Giới Tính:</label> <select name="sex" id="sex">' +
-                                                '<option value="Nam"' + (sex === 'Nam' ? ' selected' : '') + '>Nam</option>' +
-                                                '<option value="Nữ"' + (sex === 'Nữ' ? ' selected' : '') + '>Nữ</option>' +
-                                                '</select></p>' +
-                                                 '<p><label>Ngày Sinh:</label> <input type="text" name="yearOfBirth" value="' + yearOfBirth + '"></p>' +
-                                                '<p><label>Chức Vụ:</label> <select name="roleUser" id="roleUser">' +
-                                                '<option value="Admin"' + (roleUser === 'Admin' ? ' selected' : '') + '>Admin</option>' +
-                                                '<option value="User"' + (roleUser === 'User' ? ' selected' : '') + '>User</option>' +
-                                                '</select></p>' +
-                                                '<button type="submit">Cập nhật</button>' +
-                                                '</form>' +
-                                                '</div>';
-                                            $('body').append('<div class="overlay"></div>');
-                                            $('body').append(popupContent);
-
-                                            $('#closePopup1').click(function () {
-                                                $('#userPopup').remove();
-                                                $('.overlay').remove();
-                                            });
-
-                                            $('#editUserForm').submit(function (e) {
-                                                e.preventDefault();
-                                                Swal.fire({
-                                                    title: "Bạn có chắc chắn muốn cập nhật thông tin?",
-                                                    text: "Hãy kiểm tra lại thông tin trước khi xác nhận!",
-                                                    icon: "warning",
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: "#3085d6",
-                                                    cancelButtonColor: "#d33",
-                                                    confirmButtonText: "Đồng ý cập nhật!",
-                                                    cancelButtonText: "Hủy"
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        // Nếu người dùng chọn "OK", thực hiện cập nhật
-                                                        $.ajax({
-                                                            type: "POST",
-                                                            url: "editUser",
-                                                            data: $('#editUserForm').serialize(),
-                                                            success: function (response) {
-                                                                Swal.fire({
-                                                                    title: "Thành công!",
-                                                                    text: response,
-                                                                    icon: "success"
-                                                                });
-                                                                $('#userPopup').remove();
-                                                                $('.overlay').remove();
-                                                                // Cập nhật lại bảng dữ liệu nếu cần thiết
-                                                                table.ajax.reload();
-                                                            },
-                                                            error: function (xhr, status, error) {
-                                                                var errorMessage = xhr.responseText || "An error occurred: " + error;
-                                                                Swal.fire({
-                                                                    title: "Lỗi!",
-                                                                    text: errorMessage,
-                                                                    icon: "error"
-                                                                });
-                                                            }
-                                                        });
-                                                    } else {
-                                                        // Nếu người dùng chọn "Cancel", không thực hiện hành động nào
-                                                        Swal.fire({
-                                                            title: "Hủy",
-                                                            text: "Thông tin của bạn vẫn chưa thay đổi :)",
-                                                            icon: "info"
-                                                        });
-                                                    }
-                                                });
-                                            });
-
-                                        });
 
 
                                     })
@@ -523,4 +627,5 @@
 
 
 </body>
+<script src="../assets/js/my-js/login.js"></script>
 </html>
