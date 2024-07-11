@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet("/updateOrderQuantity")
 public class updateQuantity extends HttpServlet {
@@ -24,7 +25,8 @@ public class updateQuantity extends HttpServlet {
             return;
         }
         int orderId = Integer.parseInt(orderIdParam);
-        Order order = OrderDAO.getOrderId(orderId);
+        List<Order> order = OrderDAO.showItemOrder(orderId);
+        System.out.println(order);
         request.setAttribute("order", order);
         request.getRequestDispatcher("/admin/UpdateQuantity.jsp").forward(request, response);
     }

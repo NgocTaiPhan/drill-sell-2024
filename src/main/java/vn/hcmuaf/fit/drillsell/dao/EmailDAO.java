@@ -14,7 +14,7 @@ import static javax.mail.Transport.send;
 
 public class EmailDAO {
     //Lấy link từ CONFIRM_CODE_PAGE trong Page
-    public final String LINK = "http://localhost:8080/drillsell_war" + Page.CONFIRM_CODE_PAGE.getPageUrl();
+    public final String LINK = "http://localhost:8080//drillsell_war" + Page.CONFIRM_CODE_PAGE.getPageUrl();
     private Properties prop = new Properties();
     private static EmailDAO instance;
 

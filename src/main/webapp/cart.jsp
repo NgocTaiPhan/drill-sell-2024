@@ -143,7 +143,8 @@
                     <div class="search-area">
                         <form action="seachProduct" method="get">
                             <div class="control-group dropdown">
-                                <input style="height: 44.5px;" id="searchInput" class="search-field dropdown-toggle" data-toggle="dropdown"
+                                <input style="height: 44.5px;" id="searchInput" class="search-field dropdown-toggle"
+                                       data-toggle="dropdown"
                                        name="name" placeholder="Tìm kiếm...">
                                 <a style="height: 44.5px;" class="search-button" href="#"
                                    onclick="searchProduct(event)"></a>
@@ -167,47 +168,47 @@
                 </div>
                 <!-- /.top-search-holder -->
 
-<%--                <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">--%>
-<%--                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->--%>
+                <%--                <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">--%>
+                <%--                    <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->--%>
 
-<%--                    <div class="dropdown dropdown-cart">--%>
-<%--                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">--%>
-<%--                            <div class="items-cart-inner">--%>
-<%--                                <div class="basket" id="basketIcon" onclick="redirectToCart()">--%>
-<%--                                    <i class="glyphicon glyphicon-shopping-cart"></i>--%>
-<%--                                </div>--%>
-<%--                                <script>--%>
-<%--                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo--%>
-<%--                                    function redirectToCart() {--%>
+                <%--                    <div class="dropdown dropdown-cart">--%>
+                <%--                        <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">--%>
+                <%--                            <div class="items-cart-inner">--%>
+                <%--                                <div class="basket" id="basketIcon" onclick="redirectToCart()">--%>
+                <%--                                    <i class="glyphicon glyphicon-shopping-cart"></i>--%>
+                <%--                                </div>--%>
+                <%--                                <script>--%>
+                <%--                                    //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo--%>
+                <%--                                    function redirectToCart() {--%>
 
-<%--                                        <% if (!logged) { %>--%>
-<%--                                        Swal.fire({--%>
-<%--                                            title: "Bạn chưa đăng nhập",--%>
-<%--                                            icon: "warning",--%>
-<%--                                            showCancelButton: true,--%>
-<%--                                            confirmButtonText: "Đăng nhập",--%>
-<%--                                            cancelButtonText: `Để sau`--%>
-<%--                                        }).then((result) => {--%>
-<%--                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập--%>
-<%--                                            if (result.isConfirmed) {--%>
-<%--                                                window.location.href = 'login.jsp';--%>
-<%--                                            }--%>
-<%--                                        });--%>
-<%--                                        <% } else { %>--%>
-<%--                                        window.location.href = 'cart.jsp';--%>
-<%--                                        <% } %>--%>
-<%--                                    }--%>
-<%--                                </script>--%>
+                <%--                                        <% if (!logged) { %>--%>
+                <%--                                        Swal.fire({--%>
+                <%--                                            title: "Bạn chưa đăng nhập",--%>
+                <%--                                            icon: "warning",--%>
+                <%--                                            showCancelButton: true,--%>
+                <%--                                            confirmButtonText: "Đăng nhập",--%>
+                <%--                                            cancelButtonText: `Để sau`--%>
+                <%--                                        }).then((result) => {--%>
+                <%--                                            //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập--%>
+                <%--                                            if (result.isConfirmed) {--%>
+                <%--                                                window.location.href = 'login.jsp';--%>
+                <%--                                            }--%>
+                <%--                                        });--%>
+                <%--                                        <% } else { %>--%>
+                <%--                                        window.location.href = 'cart.jsp';--%>
+                <%--                                        <% } %>--%>
+                <%--                                    }--%>
+                <%--                                </script>--%>
 
 
-<%--                            </div>--%>
-<%--                        </div>--%>
+                <%--                            </div>--%>
+                <%--                        </div>--%>
 
-<%--                    </div>--%>
-<%--                    <!-- /.dropdown-cart -->--%>
+                <%--                    </div>--%>
+                <%--                    <!-- /.dropdown-cart -->--%>
 
-<%--                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->--%>
-<%--                </div>--%>
+                <%--                    <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= -->--%>
+                <%--                </div>--%>
                 <!-- /.top-cart-row -->
             </div>
             <!-- /.row -->
@@ -306,159 +307,166 @@
             <div class="col-12">
 
                 <form action="checkOut" method="get">
-
-                    <div class="table-content table-responsive">
-
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th class="li-product-remove">Xóa</th>
-                                <th class="li-product-sub">Chọn</th>
-                                <th class="li-product-thumbnail">Hình ảnh</th>
-                                <th class="cart-product-name">Thông tin</th>
-                                <th class="li-product-price">Đơn Gía</th>
-                                <th class="li-product-quantity">Số lượng</th>
-                                <th class="li-product-subtotal">Thành tiền</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <%
-                                for (Cart p : listCartItem) {
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
-                                    String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
-                            %>
-                            <tr>
-                                <td style="display: none"><input class="cartId" name="cartId" value="<%=p.getCartId()%>"></td>
-
-                                <td class="li-product-remove"><a
-                                                                 onclick="deleteCartProduct(<%= p.getProductId()%>)"><i
-                                        class="fa fa-times"></i></a></td>
-                                <td class="sub">
-                                    <input type="checkbox" name="selectedProducts" value="<%= p.getProductId()%>">
-                                </td>
-
-                                <td class="li-product-thumbnail"><a href="#"><img height="100px" width="100px"
-                                                                                  src="<%= p.getImage()%>"
-                                                                                  alt="Li's Product Image"></a></td>
-                                <td class="li-product-name"><input name="productName" value="<%= p.getProductName()%>">
-                                </td>
-                                <td class="li-product-price">
-                                    <input name="amount" class="amount" value="<%= formattedPrice%>">
-                                </td>
-                                <div id="errorMessage" style="color: red;"></div>
-                                <td class="quantity">
-                                    <button class="minus-button" type="button"
-                                            onclick="reduceQuantity(<%= p.getProductId()%>)">-
-                                    </button>
-                                    <div class="cart-plus-minus">
-                                        <input name="quantityInput" id="quantityInput" class="cart-plus-minus-box"
-                                               value="<%= p.getQuantity()%>">
-
-                                    </div>
-                                    <button class="plus-button" type="button"
-                                            onclick="increaseQuantity(<%= p.getProductId()%>)">+
-                                    </button>
-                                    <script>
-                                        function increaseQuantity(productId) {
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "UpdateQuantityHight",
-                                                data: {productId: productId},
-                                                success: function (response) {
-                                                    location.reload();
-                                                },
-                                                error: function (xhr, status, error) {
-                                                    console.error("Lỗi: " + error);
-                                                }
-                                            });
-                                        }
-
-
-                                        function reduceQuantity(productId) {
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "updateQuantityLow",
-                                                data: {productId: productId},
-                                                success: function (response) {
-                                                    location.reload();
-                                                },
-                                                error: function (xhr, status, error) {
-                                                    console.error("Lỗi: " + error);
-                                                }
-                                            });
-                                        }
-
-                                        function deleteCartProduct(productId) {
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "deleteCartProduct",
-                                                data: {productId: productId},
-                                                success: function (response) {
-                                                    location.reload();
-                                                },
-                                                error: function (xhr, status, error) {
-                                                    console.error("Lỗi: " + error);
-                                                }
-                                            });
-                                        }
-
-
-                                    </script>
-                                </td>
-
-                                <style>
-                                    .quantity {
-                                        display: flex;
-                                    }
-
-                                    .quantity button,
-                                    .quantity .cart-plus-minus-box,
-                                    .quantity .plus-button {
-                                        display: inline-block;
-                                        text-align: center;
-                                    }
-
-                                    .quantity .cart-plus-minus-box {
-                                        margin-left: 10px;
-                                    }
-
-                                </style>
-
-
-                                <td class="product-subtotal">
-                                    <input id="subtotal" class="amount" value="<%= formattedAmount%>">
-                                </td>
-
-                            </tr>
-                            <%}%>
-
-                            </tbody>
-                        </table>
-
+                    <div class="err"></div>
+                        <% String err = (String) request.getAttribute("err");
+                        if (err != null) {
+                    %>
+                    <div class="alert alert-danger"><%= err %>
                     </div>
-
-                    <div class="cart-page-total">
-                        <%--                        <a class="checkOut" href="checkOut?p=<%%>">Thanh toán</a>--%>
-                        <button class="checkOut" type="submit">Thanh toán</button>
+                        <% } %>
 
 
-                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="li-product-remove">Xóa</th>
+                            <th class="li-product-sub">Chọn</th>
+                            <th class="li-product-thumbnail">Hình ảnh</th>
+                            <th class="cart-product-name">Thông tin</th>
+                            <th class="li-product-price">Đơn Gía</th>
+                            <th class="li-product-quantity">Số lượng</th>
+                            <th class="li-product-subtotal">Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            for (Cart p : listCartItem) {
+                                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
+                                String formattedAmount = currencyFormat.format(p.getTotalPrice() * 1000);
+                        %>
+                        <tr>
+                            <td style="display: none"><input class="cartId" name="cartId" value="<%=p.getCartId()%>">
+                            </td>
 
-                </form>
+                            <td class="li-product-remove"><a
+                                    onclick="deleteCartProduct(<%= p.getProductId()%>)"><i
+                                    class="fa fa-times"></i></a></td>
+                            <td class="sub">
+                                <input type="checkbox" name="selectedProducts" value="<%= p.getProductId()%>">
+                            </td>
+
+                            <td class="li-product-thumbnail"><a href="#"><img height="100px" width="100px"
+                                                                              src="<%= p.getImage()%>"
+                                                                              alt="Li's Product Image"></a></td>
+                            <td class="li-product-name"><input name="productName" value="<%= p.getProductName()%>">
+                            </td>
+                            <td class="li-product-price">
+                                <input name="amount" class="amount" value="<%= formattedPrice%>">
+                            </td>
+                            <div id="errorMessage" style="color: red;"></div>
+                            <td class="quantity">
+                                <button class="minus-button" type="button"
+                                        onclick="reduceQuantity(<%= p.getProductId()%>)">-
+                                </button>
+                                <div class="cart-plus-minus">
+                                    <input name="quantityInput" id="quantityInput" class="cart-plus-minus-box"
+                                           value="<%= p.getQuantity()%>">
+
+                                </div>
+                                <button class="plus-button" type="button"
+                                        onclick="increaseQuantity(<%= p.getProductId()%>)">+
+                                </button>
+                                <script>
+                                    function increaseQuantity(productId) {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "UpdateQuantityHight",
+                                            data: {productId: productId},
+                                            success: function (response) {
+                                                location.reload();
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Lỗi: " + error);
+                                            }
+                                        });
+                                    }
+
+
+                                    function reduceQuantity(productId) {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "updateQuantityLow",
+                                            data: {productId: productId},
+                                            success: function (response) {
+                                                location.reload();
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Lỗi: " + error);
+                                            }
+                                        });
+                                    }
+
+                                    function deleteCartProduct(productId) {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "deleteCartProduct",
+                                            data: {productId: productId},
+                                            success: function (response) {
+                                                location.reload();
+                                            },
+                                            error: function (xhr, status, error) {
+                                                console.error("Lỗi: " + error);
+                                            }
+                                        });
+                                    }
+
+
+                                </script>
+                            </td>
+
+                            <style>
+                                .quantity {
+                                    display: flex;
+                                }
+
+                                .quantity button,
+                                .quantity .cart-plus-minus-box,
+                                .quantity .plus-button {
+                                    display: inline-block;
+                                    text-align: center;
+                                }
+
+                                .quantity .cart-plus-minus-box {
+                                    margin-left: 10px;
+                                }
+
+                            </style>
+
+
+                            <td class="product-subtotal">
+                                <input id="subtotal" class="amount" value="<%= formattedAmount%>">
+                            </td>
+
+                        </tr>
+                        <%}%>
+
+                        </tbody>
+                    </table>
 
             </div>
+
+            <div class="cart-page-total">
+                <%--                        <a class="checkOut" href="checkOut?p=<%%>">Thanh toán</a>--%>
+                <button class="checkOut" type="submit">Thanh toán</button>
+
+
+            </div>
+
+            </form>
+
         </div>
     </div>
+</div>
 
 </div>
 
 <style>
-input{
-    border: none;
-    background: #f3f3f3;
-    color: black;
-}
+    input {
+        border: none;
+        background: #f3f3f3;
+        color: black;
+    }
 </style>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <div class="social-button">

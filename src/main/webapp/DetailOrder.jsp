@@ -162,8 +162,8 @@
                     <div class="container">
                         <h3>Xem chi tiết đơn hàng</h3>
                         <div class="orderId">
-                            <label>Mã khách hàng:</label>
-                            <input name="" value="<%= order.getUserId() %>">
+                            <label>Mã đơn hàng:</label>
+                            <input name="" value="<%= order.getOrderId() %>">
                         </div>
                         <div class="nameCustomer">
                             <label>Tên khách hàng:</label>
@@ -173,16 +173,13 @@
                             <label>Số điện thoại:</label>
                             <input name="" value="<%= order.getPhone() %>">
                         </div>
-                        <div class="address">
+                        <div class="address" style="display: flex">
                             <label>Địa chỉ:</label>
-                            <input name="" value="<%= order.getAddress() %>">
+                            <div style="width: 500px; margin-left: 5px" ><%=order.getAddress()%></div>
                         </div>
                         <div class="status">
                             <label>Trạng thái:</label>
-                            <input type="text" name="statuss" value="<%= order.getStauss() %>" list="status">
-                            <datalist id="status">
-                                <option value="Đã hủy">Đã hủy</option>
-                            </datalist>
+                            <input type="text" name="statuss" value="<%= order.getStauss() %>" >
                         </div>
 
                         <h5>Sản phẩm</h5>
@@ -190,20 +187,24 @@
 
                             for (OrderItem item : order.getOrderItems()) {
                                 double totalPrice = item.getTotalPrice() * 1000;
-                                totalAmount += totalPrice ; // Cộng dồn tổng tiền
+                                totalAmount += totalPrice; // Cộng dồn tổng tiền
                                 String formattedAmount = currencyFormat.format(totalPrice);
-                              s = totalAmount + shipping;
+                                s = totalAmount + shipping;
                         %>
 
                         <div class="detail">
                             <div class="nameProduct">
-                                <input style="border: none" name="" value="<%= item.getProductName() %>">
+                                <div>
+                                    <%=item.getProductName()%>
+                                </div>
                             </div>
-                            <div class="quantity">
-                                <input style="border: none" name="" value="<%= item.getQuantity() %>">
-                            </div>
-                            <div class="totalPrice">
-                                <input style="border: none" name="" value="<%= formattedAmount %>">
+                            <div class="h">
+                                <div class="quantity">
+                                    <input style="border: none ; width: 100px" name="" value=" x <%= item.getQuantity() %>">
+                                </div>
+                                <div class="totalPrice">
+                                    <input style="border: none" name="" value="<%= formattedAmount %>">
+                                </div>
                             </div>
                         </div>
                         <%
@@ -248,34 +249,32 @@
     }
 
     .main {
-        width: 600px;
-        height: 800px;
+        width: 700px;
+        /*height: 800px;*/
         border: 1px solid black;
         border-radius: 30px;
         margin-left: 420px;
         margin-top: 30px;
         background: white;
+        margin-bottom: 50px;
 
     }
 
     .main .container {
-        width: 500px;
-        height: 650px;
-        margin: auto;
+        width: 700px;
+        /*height: 650px;*/
+        margin-left: 50px;
+        margin-top: 10px;
+        margin-bottom: 50px;
+
     }
 
     input {
-        height: 40px;
-        float: right;
+        border: none;
     }
-
-    .detail {
-        display: flex;
-    }
-
-    .nameProduct input {
-        width: 300px;
-    }
+.h{
+    display: flex;
+}
 
     .quantity input {
         width: 20px;
@@ -286,13 +285,16 @@
         width: 120px;
         margin-left: 15px;
     }
-    .amount{
+
+    .amount {
         margin-top: 20px;
     }
-    .shipping input{
+
+    .shipping input {
         margin-top: -35px;
     }
-    .expectedDate{
+
+    .expectedDate {
         margin-top: 15px;
     }
 

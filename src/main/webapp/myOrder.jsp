@@ -54,13 +54,13 @@
             </div>
 
             <ul class="nav">
-                <li class="active">
+                <li>
                     <a href="profile.jsp">
                         <i class="ti-panel"></i>
                         <p>Tài khoản</p>
                     </a>
                 </li>
-                <li>
+                <li  class="active">
                     <a href="<%= request.getContextPath()%>/viewOrderCustomer">
                         <i class="ti-check-box"></i>
                         <p>Đơn hàng của tôi</p>

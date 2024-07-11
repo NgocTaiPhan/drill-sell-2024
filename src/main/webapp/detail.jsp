@@ -440,8 +440,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                                         <div class="col-sm-7">
-                                            <a href="" class="btn btn-danger" style="margin-bottom: 10px"><i
-                                                    class="fa fa-check inner-right-vs"></i> Mua ngay</a>
+
 <%--                                            onclick="callServlet('cart',{name: 'productId', dataValue: '<%=product.getProductId()%>'})"--%>
                                             <a href="<%= request.getContextPath()%>/cart?productId=<%=product.getProductId()%>"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
