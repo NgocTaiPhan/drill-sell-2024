@@ -70,27 +70,41 @@
                 <div class="col-md-6 col-sm-6 sign-in">
                     <h3 class="">Đăng nhập</h3>
                     <p class=""></p>
-
+                    <%
+                        Cookie[] cookies = request.getCookies();
+                        String usernameCookie = "";
+                        String passwordCookie = "";
+                        if (cookies != null) {
+                            for (Cookie cookie : cookies) {
+                                if (cookie.getName().equals("username")) {
+                                    usernameCookie = cookie.getValue();
+                                }
+                                if (cookie.getName().equals("password")) {
+                                    passwordCookie = cookie.getValue();
+                                }
+                            }
+                        }
+                    %>
                     <form class="outer-top-xs" id="login-form" role="form"
                     <%--Gọi function js để gửi dữ liệu form bằng ajax--%>
-                          onsubmit="submitFormAndRedirect(event, this, 'ogin')">
+                          onsubmit="submitFormAndRedirect(event, this, 'login')">
 
                     <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
                             <div class="error-email-login"></div>
                             <input class="form-control unicase-form-control text-input" id="username-login" type="text"
-                                   name="username-login" value="">
+                                   name="username-login" value="<%=usernameCookie%>">
                         </div>
                         <div class="form-group">
                             <label class="info-title" for="password-login">Mật khẩu <span>*</span>
                                 <div class="error-password-login"></div>
                             </label>
                             <input class="form-control unicase-form-control text-input" id="password-login"
-                                   type="password" name="pass-login" value="">
+                                   type="password" name="pass-login" value="<%=passwordCookie%>">
                         </div>
                         <div class="radio outer-xs">
                             <label>
-                                <input id="optionsRadios2" name="optionsRadios" type="radio" value="">Lưu đăng
+                                <input id="remember" name="remember" type="radio" value="remember">Lưu đăng
                                 nhập
                             </label>
                             <a href="#" class="pull-right " data-toggle="modal" data-target="#forgot-pass">

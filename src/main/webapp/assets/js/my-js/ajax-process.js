@@ -1,21 +1,22 @@
-function submitFormAndNotify(formId, urlServlet) {
-    $(formId).submit(function (event) {
+function submitFormAndNotify(form, urlServlet) {
+    $(form).submit(function (event) {
         event.preventDefault();
-
+        console.log(form)
         $.ajax({
             type: 'POST',
             url: urlServlet,
-            data: $(this).serialize(),
+            data: $(form).serialize(),
             success: function (response) {
                 normalNotify(response);
-                $(formId)[0].reset();
             },
             error: function (xhr, status, error) {
+                // Xử lý lỗi và hiển thị thông báo lỗi
                 var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
                 errorNotify(errorMessage);
             }
         });
     });
+    $(form).submit();
 }
 
 function submitFormAndRedirect(event, form, urlServlet) {
@@ -26,7 +27,6 @@ function submitFormAndRedirect(event, form, urlServlet) {
         url: urlServlet,
         data: $(form).serialize(),
         success: function (response) {
-            console.log(response);
             notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);
             },
             error: function (xhr, status, error) {

@@ -71,6 +71,7 @@
         </button>
     </a>
 </div>
+
 <div class="body-content">
     <div class="container">
         <div class="sign-in-page-admin">
@@ -83,20 +84,35 @@
                     </style>
                     <h3 class="">Admin Đăng Nhập</h3>
                     <p class=""></p>
+                    <%
+                        Cookie[] cookies = request.getCookies();
+                        String usernameCookie = "";
+                        String passwordCookie = "";
+                        if (cookies != null) {
+                            for (Cookie cookie : cookies) {
+                                if (cookie.getName().equals("username")) {
+                                    usernameCookie = cookie.getValue();
+                                }
+                                if (cookie.getName().equals("password")) {
+                                    passwordCookie = cookie.getValue();
+                                }
+                            }
+                        }
+                    %>
                     <form class="outer-top-xs" id="login-form" role="form"
                           action="loginAdmin" method="POST">
                         <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
                             <div class="error-email-login"></div>
                             <input class="form-control unicase-form-control text-input" id="username-login" type="text"
-                                   name="username-login" value="">
+                                   name="username-login" value="<%=usernameCookie%>">
                         </div>
                         <div class="form-group">
                             <label class="info-title" for="password-login">Mật khẩu <span>*</span>
                                 <div class="error-password-login"></div>
                             </label>
                             <input class="form-control unicase-form-control text-input" id="password-login"
-                                   type="password" name="pass-login" value="">
+                                   type="password" name="pass-login" value="<%=passwordCookie%>">
                         </div>
                         <div class="radio outer-xs">
                             <label>

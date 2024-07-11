@@ -110,58 +110,8 @@
                 <form id="uploadForm" enctype="multipart/form-data">
                     <input type="file" id="fileInput" name="excelFile" accept=".xlsx, .xls" style="display: none;" />
                     <label for="fileInput" class="btn-add-prod btn btn-primary open-modal"
-                           onclick="openFilePickerAndUpload('add-excel')">Nhập kho</label>
+                    >Nhập kho</label>
                 </form>
-
-                <script>
-                    function openFilePickerAndUpload(servletUrl) {
-                        const fileInput = document.getElementById('fileInput');
-                        fileInput.addEventListener('change', function(event) {
-                            const file = event.target.files[0];
-                            if (file) {
-                                importProductsFromExcel(servletUrl, file);
-                            }
-                        });
-                        fileInput.click();
-                    }
-
-                    function importProductsFromExcel(servletUrl, file) {
-                        const formData = new FormData();
-                        formData.append('excelFile', file);
-
-                        // Gửi AJAX request tới servlet
-                        $.ajax({
-                            type: 'POST',
-                            url: servletUrl,
-                            data: formData,
-                            contentType: false,
-                            processData: false,
-                            success: function(response) {
-                                console.log('Đã gửi thành công:', response);
-                                Toast.fire({
-                                    icon: "success",
-                                    title: response,
-                                });
-                            },
-                            error: function(xhr, status, error) {
-                                var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
-                                var data;
-                                try {
-                                    data = JSON.parse(xhr.responseText);
-                                } catch (e) {
-                                    data = {
-                                        message: errorMessage,
-                                        namePage: "OK",
-                                        pageUrl: "home.jsp"
-                                    };
-                                }
-                                // normalNotify()
-                            }
-                        });
-                    }
-                </script>
-
-
             </div>
         </div>
         <div class="content">
@@ -207,161 +157,13 @@
             </div>
         </div>
 
-        <%--Modal thêm sản phẩm--%>
 
-        <div id="addProdModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h4>Thêm sản phẩm</h4>
-                <div class="container">
-                    <div class="center-block">
-
-                        <form class="col-lg-6 center-block" id="formAddProd"
-                              onsubmit="submitFormAndNotify(this,'add-prod')">
-                            <div class="form-group center-block">
-                                <img width="200px" height="200px" src="" class=" loadProdsImg img-thumbnail"
-                                     alt="Ảnh sản phẩm" style="margin-left: 45%">
-                            </div>
-                            <div class="form-group">
-                                <label for="imageUrlInput">Ảnh sản phẩm (URL hoặc tệp):</label>
-                                <input type="text" id="imageUrlInput" class="form-control imageUrlInput" name="imageUrl"
-                                       placeholder="Nhập URL ảnh">
-                                <input type="button" class="btn btn-default" onclick="openCKFinder()" value="Chọn ảnh">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="productName">Tên sản phẩm</label>
-                                <input type="text" class="form-control" id="productName" name="productName">
-                            </div>
-                            <div class="form-group">
-                                <label for="describle">Mô tả</label>
-                                <textarea class="form-control" id="describle" name="describle"
-                                          rows="3"
-                                ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="specifions">Thông số kỹ thuật</label>
-                                <textarea class="form-control" id="specifions" name="specifions"
-                                          rows="3"
-                                ></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nameProducer">Nhà sản xuất</label>
-                                <select class="form-control" id="nameProducer" name="nameProducer">
-                                    <option value="">Chọn nhà sản xuất</option>
-                                    <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
-                                    <option value="<%=pdName%>"><%=pdName%>
-                                    </option>
-                                    <%}%>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="unitPrice">Giá bán</label>
-                                <input type="number" class="form-control" id="unitPrice" name="unitPrice">
-                                <div class="form-group">
-                                    <label for="categoryId">Danh mục sản phẩm</label>
-                                    <select class="form-control" id="categoryId" name="categoryId">
-                                        <option value="">Chọn danh mục sản phẩm</option>
-                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
-                                        <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
-                                        </option>
-                                        <%}%>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Thêm</button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <%--        Modal xem chi tiết và update sản phẩm--%>
-        <div id="modalDetailProd" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h4>Chi tiết sản phẩm</h4>
-                <div class="container">
-                    <div class="center-block">
-
-                        <form class="col-lg-6 center-block" id="formUpdateProd">
-                            <div class="form-group center-block">
-                                <img width="200px" height="200px" src="" class="loadProdsImg img-thumbnail"
-                                     alt="Ảnh sản phẩm">
-                            </div>
-                            <div class="form-group">
-                                <label for="imageUrlInputU">Ảnh sản phẩm (URL hoặc tệp):</label>
-                                <input disabled type="text" id="imageUrlInputU" class="imageUrlInput form-control"
-                                       name="imageUrl"
-                                       placeholder="Nhập URL ảnh">
-                                <input disabled type="button" class="btn btn-default" onclick="openCKFinder()"
-                                       value="Chọn ảnh">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="productNameU">Tên sản phẩm</label>
-                                <input disabled type="text" class="form-control" id="productNameU" name="productName">
-                            </div>
-                            <div class="form-group">
-                                <label for="describleU">Mô tả</label>
-                                <textarea disabled class="form-control" id="describleU" name="describle"
-                                          rows="3"
-                                ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="specifionsU">Thông số kỹ thuật</label>
-                                <textarea disabled class="form-control" id="specifionsU" name="specifions"
-                                          rows="3"
-                                ></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nameProducerU">Nhà sản xuất</label>
-                                <select class="form-control" id="nameProducerU" name="nameProducer" disabled>
-                                    <option id="nameProducerUI" value="">Chọn nhà sản xuất</option>
-                                    <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
-                                    <option value="<%=pdName%>"><%=pdName%>
-                                    </option>
-                                    <%}%>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="unitPriceU">Giá bán</label>
-                                <input type="number" class="form-control" id="unitPriceU" name="unitPrice" disabled>
-                                <div class="form-group">
-                                    <label for="categoryIdU">Danh mục sản phẩm</label>
-                                    <select class="form-control" id="categoryIdU" name="categoryId" disabled>
-                                        <option value="">Chọn danh mục sản phẩm</option>
-                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
-                                        <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
-                                        </option>
-                                        <%}%>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Thay đổi thông tin sản phẩm</button>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
     </div>
 
 </div>
 </body>
 <script !src="">
 
-
-    $(document).ready(() => {
-
-
-        submitFormAndNotify('#formAddProd', 'add-prod');
-        submitFormAndNotify('#formUpdateProd', 'update-prod');
-    })
 </script>
 
 <script src="../assets/js/my-js/prod-management/my-modal.js"></script>
