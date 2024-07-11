@@ -52,7 +52,7 @@ public class RepoDAO {
     public List<Map<String, Object>> getRepo() { // Thay đổi kiểu trả về thành List<Map<String, Object>>
         String sql = "   SELECT repo.repoId, repo.userId, repo.productId,repo.importQuantity, repo.importDate, repo.importPrice, repo.price, products.productName\n" +
                 "                    FROM repo \n" +
-                "                    JOIN products ON repo.productId = products.productId";
+                "                    JOIN products ON repo.productId = products.productId WHERE products.productStatus = 0";
 
         return DbConnector.me().get().withHandle(handle -> handle.createQuery(sql)
                 .map((row, result) -> {

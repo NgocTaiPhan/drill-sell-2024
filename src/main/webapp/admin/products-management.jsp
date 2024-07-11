@@ -163,7 +163,8 @@
                 <div class="container">
                     <div class="center-block">
 
-                        <form class="col-lg-6 center-block" id="formAddProd">
+                        <form class="col-lg-6 center-block" id="formAddProd"
+                              onsubmit="submitFormAndNotify(this,'add-prod')">
                             <div class="form-group center-block">
                                 <img width="200px" height="200px" src="" class=" loadProdsImg img-thumbnail"
                                      alt="Ảnh sản phẩm" style="margin-left: 45%">
@@ -232,7 +233,8 @@
                 <div class="container">
                     <div class="center-block">
 
-                        <form class="col-lg-6 center-block" id="formUpdateProd">
+                        <form class="col-lg-6 center-block" id="formUpdateProd"
+                              onsubmit="submitFormAndNotify(this,'update-prod')">
                             <div class="form-group center-block">
                                 <img width="200px" height="200px" src="" class="loadProdsImg img-thumbnail"
                                      alt="Ảnh sản phẩm">
@@ -299,16 +301,6 @@
 
 </div>
 </body>
-<script !src="">
-
-
-    $(document).ready(() => {
-
-
-        submitFormAndNotify('#formAddProd', 'add-prod');
-        submitFormAndNotify('#formUpdateProd', 'update-prod');
-    })
-</script>
 
 <script src="../assets/js/my-js/prod-management/my-modal.js"></script>
 <script src="../assets/js/my-js/notify.js"></script>
