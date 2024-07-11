@@ -19,6 +19,26 @@ public class CartDAO {
                     .list();
         });
     }
+
+    public static int getQuantity(int userId, int productId){
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT cart.quantity  FROM cart WHERE userId = :userId AND productId= :productId")
+                    .bind("userId", userId)
+                    .bind("productId", productId)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .orElse(0); // Nếu không có giá trị thì trả về 0
+        });
+    }
+    public static int getQuantityRepo(int productId){
+        return DbConnector.me().get().withHandle(handle -> {
+            return handle.createQuery("SELECT repo.importQuantity  FROM repo WHERE productId = :productId")
+                    .bind("productId", productId)
+                    .mapTo(Integer.class)
+                    .findOne()
+                    .orElse(0); // Nếu không có giá trị thì trả về 0
+        });
+    }
     public static boolean updateQuantityHight(int userId, int productId) {
         try {
             return DbConnector.me().get().inTransaction(handle -> {
@@ -134,7 +154,9 @@ public class CartDAO {
 //        System.out.println(getProductCart());
 //            System.out.println(getCartByUserId(1));
 //        insertCartItem(2, 95);
-        System.out.println(countQuantity(2));
+//        System.out.println(getQuantity(3, 2));
+        System.out.println(getQuantityRepo(2));
+
     }
 }
 

@@ -213,7 +213,7 @@ public class CheckOutDAO {
                             "    OR o.address LIKE '%Quảng Trị%' " +
                             "    OR o.address LIKE '%Thanh Hóa%' " +
                             "    OR o.address LIKE '%Nghệ An%' " +
-                            "    OR o.address LIKE '%Hà Tĩnh%' THEN DATE_ADD(oi.timeOrder, INTERVAL 5 DAY) " +
+                            "    OR o.address LIKE '%Hà Tĩnh%' THEN DATE_ADD(o.timeOrder, INTERVAL 5 DAY) " +
 
                             // Miền Nam
                             "    WHEN o.address LIKE '%TP.HCM%' " +
@@ -235,7 +235,7 @@ public class CheckOutDAO {
                             "    OR o.address LIKE '%An Giang%' " +
                             "    OR o.address LIKE '%Kiên Giang%' " +
                             "    OR o.address LIKE '%Cần Thơ%' " +
-                            "    OR o.address LIKE '%Hậu Giang%' THEN DATE_ADD(oi.timeOrder, INTERVAL 3 DAY) " +
+                            "    OR o.address LIKE '%Hậu Giang%' THEN DATE_ADD(o.timeOrder, INTERVAL 3 DAY) " +
 
                             // Miền Bắc
                             "    WHEN o.address LIKE '%Hà Nội%' " +
@@ -263,7 +263,7 @@ public class CheckOutDAO {
                             "    OR o.address LIKE '%Yên Bái%' " +
                             "    OR o.address LIKE '%Hòa Bình%' " +
                             "    OR o.address LIKE '%Vĩnh Phúc%' " +
-                            "    OR o.address LIKE '%Hà Đông%' THEN DATE_ADD(oi.timeOrder, INTERVAL 7 DAY) " +
+                            "    OR o.address LIKE '%Hà Đông%' THEN DATE_ADD(o.timeOrder, INTERVAL 7 DAY) " +
 
                             "    ELSE o.expectedDate " + // Giữ nguyên ngày dự kiến giao hàng nếu không thuộc các nhóm trên
                             "END " +

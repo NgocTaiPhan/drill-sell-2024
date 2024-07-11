@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,9 +50,9 @@ public class update extends HttpServlet {
         // Lấy ngày dự kiến hiện tại từ cơ sở dữ liệu
         Order previousOrder = OrderDAO.getOrderById(orderId);
         Date currentExpectedDate = (Date) previousOrder.getExpectedDate(); // Lấy ngày dự kiến hiện tại từ cơ sở dữ liệu
-
+        LocalDate expectedDate = Date.valueOf(expectedDateStr).toLocalDate();
         // Kiểm tra ngày dự kiến mới phải lớn hơn ngày dự kiến hiện tại
-        if (Date.valueOf(expectedDateStr).toLocalDate().isBefore(currentExpectedDate.toLocalDate()) || Date.valueOf(expectedDateStr).toLocalDate().isEqual(currentExpectedDate.toLocalDate())) {
+        if (expectedDate.isBefore(currentExpectedDate.toLocalDate())) {
             PrintWriter out = response.getWriter();
             out.println("<script>alert('Ngày dự kiến phải lớn hơn ngày hiện tại trong cơ sở dữ liệu');window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "'</script>");
             return;

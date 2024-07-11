@@ -15,21 +15,18 @@
         <p>Cập nhật số lượng đơn hàng</p>
         <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
         <input type="hidden" name="userId" value="<%= order.getUserId() %>">
-        <input style="width: 20px"  name="orderId" value="<%=order.getOrderId()%>">
-        <input style="width: 320px" list="status" name="status" value="<%= order.getStauss()%>">
-        <datalist id="status">
+        <input style="width: 40px; text-align: center"  name="orderId" value="<%=order.getOrderId()%>">
+        <select style="height: 30px; border-radius: 5px" class="status" name="status" id="status" >
+            <option value=""><%=order.getStauss()%></option>
             <option value="Đang xử lý">Đang xử lý</option>
             <option value="Đã xác nhận">Đã xác nhận</option>
             <option value="Người bán đang chuẩn bị hàng">Người bán đang chuẩn bị hàng</option>
-            <option value="Đã hủy">Đã hủy</option>
-            <option value="Đã bàn giao cho đơn vị vận chuyển GHTK">Đã bàn giao cho đơn vị vận
-                chuyển
-                GHTK
-            </option>
+            <option value="Đã bàn giao cho đơn vị vận chuyển GHTK">Đã bàn giao cho đơn vị vận chuyển GHTK</option>
             <option value="Đang giao hàng">Đang giao hàng</option>
             <option value="Đã giao hàng">Đã giao hàng</option>
             <option value="Đã hoàn trả">Đã hoàn trả</option>
-        </datalist>
+            <option value="Đã hủy">Đã hủy</option>
+        </select>
         <div>
             <button type="submit" class="btn"> Lưu </button>
         </div>
@@ -49,7 +46,7 @@
         font-size: 20px;
     }
     .back{
-        margin-left: 300px;
+        margin-left: 380px;
         text-decoration: none;
         color: #801e00;
         margin-top: 10px;

@@ -34,6 +34,13 @@
     </div>
     <div class="row">
         <div class="col-md-3 ">
+            <h2>Số đơn hàng được đặt hôm nay</h2>
+            <%
+               long quantity = OrderDAO.getCountOrder();
+            %>
+            <p><%= quantity%></p>
+        </div>
+        <div class="col-md-3 ">
             <h2>Doanh thu hôm nay</h2>
             <%
                 Order list = OrderDAO.getDaily();
@@ -100,7 +107,8 @@
 
     .row {
         display: flex;
-        margin: auto;
+        /*margin: auto;*/
+        margin-left: -250px;
     }
 
     .col-md-3 {

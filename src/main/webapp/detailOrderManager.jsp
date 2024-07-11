@@ -118,7 +118,6 @@
                     }
                 %>
 
-
                 <div class="content">
                     <table>
                         <h3>Chỉnh sửa đơn hàng</h3>
@@ -210,7 +209,6 @@
                 <% }
  %>
             </form>
-
         </div>
 
         <style>

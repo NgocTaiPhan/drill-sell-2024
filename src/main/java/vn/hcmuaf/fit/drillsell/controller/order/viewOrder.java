@@ -6,9 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
-import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
 import vn.hcmuaf.fit.drillsell.model.User;
 
@@ -21,14 +19,15 @@ public class viewOrder extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] selectedProducts = request.getParameterValues("selectedProducts");
+
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
+
         // Kiểm tra xem user có null hay không
         if (user == null) {
-            // Nếu user là null, chuyển hướng đến trang đăng nhập hoặc hiển thị thông báo lỗi
-            // Ví dụ: response.sendRedirect("login.jsp");
-            response.getWriter().write("Vui lòng đăng nhập để thực hiện thanh toán!");
+            request.setAttribute("err", "Vui lòng đăng nhập để tiếp tục.");
+            request.getRequestDispatcher("cart.jsp").forward(request, response);
             return;
         }
 
@@ -36,13 +35,20 @@ public class viewOrder extends HttpServlet {
         int userId = user.getId();
         List<OrderItem> checkOuts = new ArrayList<>();
 
-        if (selectedProducts != null) {
-            for (String productId : selectedProducts) {
-                checkOuts.addAll(CheckOutDAO.showProducts(userId, Integer.parseInt(productId)));
-            }
+        // Kiểm tra nếu selectedProducts là null hoặc rỗng
+        if (selectedProducts == null || selectedProducts.length == 0) {
+            // Hiển thị thông báo lỗi hoặc giữ lại trang hiện tại
+            request.setAttribute("err", "Vui lòng chọn ít nhất một sản phẩm để tiếp tục!");
+            request.getRequestDispatcher("cart.jsp").forward(request, response);
+            return;
         }
+
+        // Xử lý các sản phẩm đã chọn
+        for (String productId : selectedProducts) {
+            checkOuts.addAll(CheckOutDAO.showProducts(userId, Integer.parseInt(productId)));
+        }
+
         session.setAttribute("checkOuts", checkOuts);
         request.getRequestDispatcher("order.jsp").forward(request, response);
     }
-
 }

@@ -20,6 +20,46 @@ public class OrderDAO {
                         .orElse(null)
         );
     }
+    public static List<Order> showItemOrder(int orderId) {
+        return DbConnector.me().get().inTransaction(handle -> {
+            String query = "SELECT products.productId, orderitem.orderId, orderitem.idItem, orders.userId, " +
+                    "  products.productName, orderitem.quantity " +
+                    "FROM products " +
+                    "JOIN orderitem ON products.productId = orderitem.productId " +
+                    "JOIN orders ON orderitem.orderId = orders.orderId " +
+                    "WHERE orderitem.orderId = :orderId";
+
+            return handle.createQuery(query)
+                    .bind("orderId", orderId)
+                    .map((rs, ctx) -> {
+                        Order order = new Order();
+                        order.setOrderId(rs.getInt("orderId"));
+                        order.setUserId(rs.getInt("userId"));
+
+                        OrderItem item = new OrderItem();
+                        item.setOrderId(rs.getInt("orderId"));
+                        item.setIdItem(rs.getInt("idItem"));
+                        item.setProductName(rs.getString("productName"));
+                        item.setQuantity(rs.getInt("quantity"));
+                        item.setProductId(rs.getInt("productId"));
+
+
+                        order.setOrderItems(new ArrayList<>()); // Initialize the list of order items
+                        order.getOrderItems().add(item); // Add the item to the order's item list
+
+                        return order;
+                    })
+                    .reduce(new HashMap<Integer, Order>(), (map, order) -> {
+                        if (map.containsKey(order.getOrderId())) {
+                            map.get(order.getOrderId()).getOrderItems().addAll(order.getOrderItems());
+                        } else {
+                            map.put(order.getOrderId(), order);
+                        }
+                        return map;
+                    })
+                    .values().stream().collect(Collectors.toList());
+        });
+    }
     public static Order getStatuss(int orderId) {
         return DbConnector.me().get().withHandle(handle ->
                 handle.createQuery("SELECT stauss, orderId, userId  FROM orders WHERE orderId = :orderId")
@@ -200,23 +240,34 @@ public class OrderDAO {
                             "FROM orders " +
                             "JOIN orderitem ON orders.orderId = orderitem.orderId " +
                             "JOIN products ON orderitem.productId = products.productId" +
-                            " WHERE orders.stauss NOT IN ( 'Đã hủy', 'Đã hoàn trả') AND DATE(orderitem.timeOrder) = CURDATE()")
+                            " WHERE orders.stauss  IN ( 'Đã giao hàng') AND DATE(orders.timeOrder) = CURDATE()")
                     .mapTo(Order.class)
+                    .one();
+        });
+    }
+
+    public static int getCountOrder() {
+        return DbConnector.me().get().withHandle(handle -> {
+            handle.registerRowMapper(BeanMapper.factory(Order.class));
+            return handle.createQuery("SELECT COUNT(orders.orderId) AS quantity\n" +
+                            "FROM orders\n" +
+                            "WHERE DATE(orders.timeOrder) = CURDATE();")
+                    .mapTo(Integer.class)
                     .one();
         });
     }
 
     public static List<MonthlyRevenue> getMonthlyRevenue() {
         return DbConnector.me().get().withHandle(handle -> {
-            return handle.createQuery("SELECT YEAR(orderitem.timeOrder) AS year, " +
-                            "       MONTH(orderitem.timeOrder) AS month, " +
+            return handle.createQuery("SELECT YEAR(orders.timeOrder) AS year, " +
+                            "       MONTH(orders.timeOrder) AS month, " +
                             "       SUM(products.unitPrice * orderitem.quantity) AS totalRevenue " +
                             "FROM orders " +
                             "JOIN orderitem ON orders.orderId = orderitem.orderId " +
                             "JOIN products ON orderitem.productId = products.productId " +
                             "WHERE orders.stauss = 'Đã giao hàng' " +
-                            "GROUP BY YEAR(orderitem.timeOrder), MONTH(orderitem.timeOrder) " +
-                            "ORDER BY YEAR(orderitem.timeOrder), MONTH(orderitem.timeOrder)")
+                            "GROUP BY YEAR(orders.timeOrder), MONTH(orders.timeOrder) " +
+                            "ORDER BY YEAR(orders.timeOrder), MONTH(orders.timeOrder)")
                     .map((rs, ctx) -> {
                         MonthlyRevenue revenue = new MonthlyRevenue();
                         revenue.setYear(rs.getInt("year"));
@@ -235,8 +286,8 @@ public class OrderDAO {
                                 "JOIN orderitem oi ON o.orderId = oi.orderId " +
                                 "JOIN products p ON oi.productId = p.productId " +
                                 "WHERE o.stauss = 'Đã giao hàng' " +
-                                "AND MONTH(oi.timeOrder) = MONTH(CURRENT_DATE()) " +
-                                "AND YEAR(oi.timeOrder) = YEAR(CURRENT_DATE());")
+                                "AND MONTH(o.timeOrder) = MONTH(CURRENT_DATE()) " +
+                                "AND YEAR(o.timeOrder) = YEAR(CURRENT_DATE());")
                         .mapTo(Long.class) // Map kết quả tới Long
                         .findOne() // Sử dụng findOne() thay vì one()
                         .orElse(0L) // Trả về 0 nếu không có kết quả
@@ -287,7 +338,7 @@ public class OrderDAO {
 //        item1.setOrderId(30);
 //        item1.setProductId(7);
 //        item1.setQuantity(2);
-        System.out.println(getStatuss(4));
+        System.out.println(getCountOrder());
 
     }
 }
