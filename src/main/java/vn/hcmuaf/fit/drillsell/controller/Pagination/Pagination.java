@@ -2,6 +2,7 @@ package vn.hcmuaf.fit.drillsell.controller.Pagination;
 
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +31,7 @@ public class Pagination extends HttpServlet {
             System.out.println(e.getMessage());
         }
 
-        int totalProducts = pDAO.getAllCategory().size();
+        int totalProducts = ProductCategoryUtils.getAllCategory().size();
         int totalPages = (int) Math.ceil((double) totalProducts / PRODUCTS_PER_PAGE);
 
         // Đảm bảo trang hiện tại hợp lệ

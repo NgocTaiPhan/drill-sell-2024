@@ -33,22 +33,22 @@ public class Confirm extends HttpServlet {
             Notify.errorNotify(response, "Hãy đăng nhập!", Page.LOGIN_PAGE);
 
         } else {
-        if (confirmationCode != null && confirmationCode.equals(code) && userRegister != null) {
-            // Thêm user vào cơ sở dữ liệu
-            UsersDAO.getInstance().addUser(userRegister,confirmationCode);
+            if (confirmationCode != null && confirmationCode.equals(code) && userRegister != null) {
+                // Thêm user vào cơ sở dữ liệu
+                UsersDAO.getInstance().addUser(userRegister,confirmationCode);
 
-            // Xóa user khỏi session sau khi thêm vào cơ sở dữ liệu
-            session.removeAttribute("user-register");
-            session.removeAttribute("confirmationCode");
+                // Xóa user khỏi session sau khi thêm vào cơ sở dữ liệu
+                session.removeAttribute("user-register");
+                session.removeAttribute("confirmationCode");
 
-            // Chuyển hướng đến trang đăng nhập
-            Notify.successNotify(response, "Tài khoản đã được xác nhận!", Page.LOGIN_PAGE);
-        } else if (!code.equals(confirmationCode)) {
-            // Mã xác nhận không hợp lệ hoặc hết hạn
-            Notify.errorNotify(response, "Mã xác nhận không hợp lệ!", Page.NULL_PAGE);
-        } else {
-            Notify.errorNotify(response, "Có lỗi trong quá trình xử lý!", Page.NULL_PAGE);
-        }
+                // Chuyển hướng đến trang đăng nhập
+                Notify.successNotify(response, "Tài khoản đã được xác nhận!", Page.LOGIN_PAGE);
+            } else if (!code.equals(confirmationCode)) {
+                // Mã xác nhận không hợp lệ hoặc hết hạn
+                Notify.errorNotify(response, "Mã xác nhận không hợp lệ!", Page.NULL_PAGE);
+            } else {
+                Notify.errorNotify(response, "Có lỗi trong quá trình xử lý!", Page.NULL_PAGE);
+            }
         }
     }
 

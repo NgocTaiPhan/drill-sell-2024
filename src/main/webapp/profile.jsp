@@ -1,6 +1,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -28,7 +29,12 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet"/>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script src="assets/js/my-js/notify.js"></script>
     <style type="text/css">
         .css_select_div { text-align: center; }
@@ -158,7 +164,7 @@
                                                 <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
                                                     phẩm</a>
                                                 <ul class="dropdown-menu ">
-                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                                    <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                                     <li>
                                                         <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                            methods="post">
@@ -348,7 +354,9 @@
                     </div>
 
                     <div class="text-center">
-                        <a class="btn btn-warning btn-fill btn-wd">Đổi mật khẩu</a>
+                        <a class="btn btn-warning btn-fill btn-wd"
+                           onclick="callServletAndRedirect('reset-password')">Đổi
+                            mật khẩu</a>
                         <a class="btn btn-info btn-fill btn-wd" id="changeUserInfo">Thay đổi thông tin</a>
                     </div>
                     <div class="clearfix"></div>
@@ -493,26 +501,14 @@
 </body>
 
 <!--   Core JS Files   -->
-<script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
-<!--  Checkbox, Radio & Switch Plugins -->
-<script src="assets/js/bootstrap-checkbox-radio.js"></script>
 
-<!--  Charts Plugin -->
-<script src="assets/js/chartist.min.js"></script>
-
-<!--  Notifications Plugin    -->
-<script src="assets/js/bootstrap-notify.js"></script>
-
-<!--  Google Maps Plugin    -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 
 <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-<script src="assets/js/paper-dashboard.js"></script>
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-<script src="assets/js/demo.js"></script>
 <script src="assets/js/my-js/notify.js"></script>
 <script src="assets/js/my-js/ajax-process.js"></script>
 
