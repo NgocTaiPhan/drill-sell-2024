@@ -144,13 +144,7 @@
                 <div class="header-nav animate-dropdown">
                     <div class="container">
                         <div class="yamm navbar navbar-default" role="navigation">
-                            <!--                <div class="navbar-header">-->
-                            <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                            <!--                            class="navbar-toggle collapsed"-->
-                            <!--                            type="button">-->
-                            <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                            <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                            <!--                </div>-->
+
                             <div class="nav-bg-class">
                                 <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                                 >
@@ -217,25 +211,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-<%--                    <div class="col-lg-4 col-md-5">--%>
-<%--                        <div class="card card-user">--%>
-<%--                            <div class="image">--%>
-<%--                                <img src="assets/img/background.jpg" alt="..."/>--%>
-<%--                            </div>--%>
-<%--                            <div class="content">--%>
-<%--                                <div class="author">--%>
-<%--                                    <img class="avatar border-white" src="../assets/img/faces/face-2.jpg" alt="..."/>--%>
-<%--                                    <h4 class="title"><%=u.getFullname()%><br/>--%>
-<%--                                        <a href="#"><small><%=u.getEmail()%>--%>
-<%--                                        </small></a>--%>
-<%--                                    </h4>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <hr>--%>
 
-<%--                        </div>--%>
-
-<%--                    </div>--%>
     <div class="col-lg-8 col-md-7">
         <div class="card">
             <div class="header">
@@ -295,28 +271,7 @@
                     </div>
 
 
-<%--                    <div class="row">--%>
-<%--                        <div class="col-md-12">--%>
-<%--                            <div class="form-group">--%>
-<%--                                <label>Địa chỉ</label>--%>
-<%--&lt;%&ndash;                                <input type="text" class="form-control border-input" id="address" placeholder="Home Address">&ndash;%&gt;--%>
-<%--                                <div id="address">--%>
-<%--                                    <select class="css_select" id="tinh" name="tinh">--%>
-<%--                                        <option value="0">Chọn Tỉnh/Thành phố</option>--%>
-<%--                                        <!-- Các tùy chọn tỉnh/thành phố sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                    <select class="css_select" id="quan" name="quan">--%>
-<%--                                        <option value="0">Chọn Quận/Huyện</option>--%>
-<%--                                        <!-- Các tùy chọn quận/huyện sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                    <select class="css_select" id="phuong" name="phuong">--%>
-<%--                                        <option value="0">Chọn Phường/Xã</option>--%>
-<%--                                        <!-- Các tùy chọn phường/xã sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
+
 
                     <div class="row">
                         <div class="col-md-12">
@@ -354,9 +309,9 @@
                     </div>
 
                     <div class="text-center">
-                        <a class="btn btn-warning btn-fill btn-wd"
-                           onclick="callServletAndRedirect('reset-password')">Đổi
-                            mật khẩu</a>
+
+                        <a class="btn btn-warning btn-fill btn-wd" id="changePasswordBtn" href="change-pass.jsp?forgot-pass=0">Đổi mật khẩu</a>
+
                         <a class="btn btn-info btn-fill btn-wd" id="changeUserInfo">Thay đổi thông tin</a>
                     </div>
                     <div class="clearfix"></div>
@@ -441,6 +396,7 @@
             });
             $('#phuong').html(options);
         }
+
 
         $('#changeUserInfo').click(function(e) {
             e.preventDefault();

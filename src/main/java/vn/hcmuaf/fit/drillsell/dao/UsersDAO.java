@@ -79,33 +79,11 @@ public class UsersDAO implements IUserDAO{
 
 
 
-//     public boolean addUser(User newUser) {
-//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-//         Jdbi jdbi = DbConnector.me().get();
-//         try (Handle handle = jdbi.open()) {
-//             handle.createUpdate(insertQuery)
-//                     .bind(0, newUser.getFullname())
-//                     .bind(1, newUser.getAddress())
-//                     .bind(2, newUser.getPhone())
-//                     .bind(3, newUser.getEmail())
-//                     .bind(4, newUser.getUsername())
-//                    .bind(5, hashPassword(newUser.getPasswords()))
-//                     .bind(6, newUser.getSex())
-//                     .bind(7, newUser.getYearOfBirth())
-//                     .bind(8, newUser.getVerificationCode())
-//                     .execute();
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//             return false;
-//         }
-//         return true;
-//     }
+// đổi mật khẩu(mã hóa trước khi cập nhật)
+public static boolean changePassword(String username, String newPassword) {
+    String hashedPassword = UserUtils.hashPassword(newPassword);
+    String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
-
-    // đổi mật khẩu(mã hóa trước khi cập nhật)
-    public boolean changePassword(String username, String newPassword) {
-        String hashedPassword = UserUtils.hashPassword(newPassword);
-        String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
@@ -120,12 +98,7 @@ public class UsersDAO implements IUserDAO{
         return true;
     }
 
-//    public boolean changeInfoUser(User user) {
-//        deleteUserById(user.getId());
-//        addUser(user);
-//        return true;
-//
-//    }
+
 
     public void deleteUserById(int userId) {
         String deleteQuery = "DELETE FROM users WHERE id = ?";
@@ -265,33 +238,35 @@ public class UsersDAO implements IUserDAO{
 
     }
 
-    public static long getCountCustomer() {
-        return DbConnector.me().get().withHandle(handle ->
-                handle.createQuery("SELECT COUNT(users.id) AS countCustomer FROM users")
-                        .mapTo(Long.class) // Map the count to a Long
-                        .one()
-        );
-    }
-    // cập nhật người dùng
-    public void adminupdateUser(User user) {
-        int id = user.getId();
-        String hashedPassword = user.getPasswords() != null ? UserUtils.hashPassword(user.getPasswords()) : null;
-        DbConnector.me().get().useHandle(handle -> {
-            handle.createUpdate(
-                            "UPDATE users SET fullname = ?, username = ?, email = ?, passwords = COALESCE(?, passwords), address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
-                    .bind(0, user.getFullname())
-                    .bind(1, user.getUsername())
-                    .bind(2, user.getEmail())
-                    .bind(3, hashedPassword)  // Bind hashedPassword only if not null
-                    .bind(4, user.getAddress())
-                    .bind(5, user.getPhone())
-                    .bind(6, user.getSex())
-                    .bind(7, user.getYearOfBirth())
-                    .bind(8, user.isRoleUser() ? 1 : 0)
-                    .bind(9, id)
-                    .execute();
-        });
-    }
+
+public static long getCountCustomer() {
+    return DbConnector.me().get().withHandle(handle ->
+            handle.createQuery("SELECT COUNT(users.id) AS countCustomer FROM users")
+                    .mapTo(Long.class) // Map the count to a Long
+                    .one()
+    );
+}
+//admmin cập nhật người dùng
+public void adminupdateUser(User user) {
+    int id = user.getId();
+    String hashedPassword = user.getPasswords() != null ? UserUtils.hashPassword(user.getPasswords()) : null;
+    DbConnector.me().get().useHandle(handle -> {
+        handle.createUpdate(
+                        "UPDATE users SET fullname = ?, username = ?, email = ?, passwords = COALESCE(?, passwords), address = ?, phone = ?, sex = ?, yearOfBirth = ?, roleUser = ? WHERE id = ?")
+                .bind(0, user.getFullname())
+                .bind(1, user.getUsername())
+                .bind(2, user.getEmail())
+                .bind(3, hashedPassword)  // Bind hashedPassword only if not null
+                .bind(4, user.getAddress())
+                .bind(5, user.getPhone())
+                .bind(6, user.getSex())
+                .bind(7, user.getYearOfBirth())
+                .bind(8, user.isRoleUser() ? 1 : 0)
+                .bind(9, id)
+                .execute();
+    });
+}
+
 
 
 
@@ -325,6 +300,7 @@ public class UsersDAO implements IUserDAO{
         });
 
     }
+//    đăng ký
     public boolean addUser(User newUser,String confirmationCode) {
 
         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
