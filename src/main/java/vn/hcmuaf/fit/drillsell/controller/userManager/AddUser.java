@@ -94,7 +94,7 @@ public class AddUser extends HttpServlet {
         User addUser = UsersDAO.getUsers(userId);
         String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         session.setAttribute("confirmationCode", confirmationCode);
-        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser);
+        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser, confirmationCode);
         if (addUserResult) {
 
             Notify.successNotify(resp, "Người dùng đã được thêm thành công!", Page.NULL_PAGE);
