@@ -78,10 +78,12 @@ public class UsersDAO implements IUserDAO{
 
 
 
+
 // đổi mật khẩu(mã hóa trước khi cập nhật)
 public static boolean changePassword(String username, String newPassword) {
     String hashedPassword = UserUtils.hashPassword(newPassword);
     String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
+
 
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
@@ -94,7 +96,7 @@ public static boolean changePassword(String username, String newPassword) {
             return false;
         }
         return true;
-}
+    }
 
 
 
@@ -122,7 +124,7 @@ public static boolean changePassword(String username, String newPassword) {
             return count > 0;
         }
     }
-//    kiểm tra sự tồn tại của email khi đăng ký
+    //    kiểm tra sự tồn tại của email khi đăng ký
     public boolean isEmailExists(String email) {
         String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -199,13 +201,13 @@ public static boolean changePassword(String username, String newPassword) {
                 .createQuery(sql)
                 .mapToBean(User.class).list());
     }
-//    Xóa người dùng theo id người dùng
+    //    Xóa người dùng theo id người dùng
     public boolean deleteUser(int id, int status) {
 
         final boolean[]  deleted = {false};
 
         DbConnector.me().get().useHandle(handle -> {
-        int rowCount = handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser != 1")
+            int rowCount = handle.createUpdate("UPDATE users SET userStatus = :userStatus WHERE id = :id AND roleUser != 1")
                     .bind("userStatus", status)
                     .bind("id", id)
                     .execute();
@@ -225,7 +227,7 @@ public static boolean changePassword(String username, String newPassword) {
         return user;
 
     }
-//    lấy thông tin chi tiết người dùng
+    //    lấy thông tin chi tiết người dùng
     public User getDetailUserById() {
         String sqll ="SELECT users.id,users.username,users.email FROM users ";
         return DbConnector.me().get().withHandle(handle ->
@@ -235,6 +237,7 @@ public static boolean changePassword(String username, String newPassword) {
                         .orElse(null));
 
     }
+
 
 public static long getCountCustomer() {
     return DbConnector.me().get().withHandle(handle ->
@@ -263,6 +266,7 @@ public void adminupdateUser(User user) {
                 .execute();
     });
 }
+
 
 
 

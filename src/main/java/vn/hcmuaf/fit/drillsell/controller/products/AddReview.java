@@ -1,11 +1,13 @@
 package vn.hcmuaf.fit.drillsell.controller.products;
 
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Review;
+import vn.hcmuaf.fit.drillsell.utils.ReviewUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "AddReview", value = "/add-review")
@@ -23,7 +25,7 @@ public class AddReview extends HttpServlet {
         String mess = request.getParameter("mess");
         System.out.println(ratingStar + mess);
 
-        ProductDAO.getInstance().insertReview(new Review(userId, prodId, ratingStar, mess));
+        ReviewUtils.addReview(new Review(userId, prodId, ratingStar, mess));
         response.sendRedirect("load-detail?productId=" + prodId);
     }
 }

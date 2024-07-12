@@ -2,6 +2,7 @@ package vn.hcmuaf.fit.drillsell.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -28,5 +29,11 @@ public class UserUtils {
     }
 
 
+    public static Instant setTimeTo(int time) {
+        return Instant.now().plusSeconds(time);
+    }
 
+    public static boolean isAfterNow(Instant expiryTime) {
+        return Instant.now().isAfter(expiryTime);
+    }
 }

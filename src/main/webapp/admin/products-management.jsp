@@ -1,5 +1,9 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProducerUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -197,7 +201,9 @@
                                 <label for="nameProducer">Nhà sản xuất</label>
                                 <select class="form-control" id="nameProducer" name="nameProducer">
                                     <option value="">Chọn nhà sản xuất</option>
-                                    <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
+                                    <%
+                                        List<String> producerList = ProducerUtils.getAllProducer();
+                                        for (String pdName : producerList) {%>
                                     <option value="<%=pdName%>"><%=pdName%>
                                     </option>
                                     <%}%>
@@ -210,7 +216,7 @@
                                     <label for="categoryId">Danh mục sản phẩm</label>
                                     <select class="form-control" id="categoryId" name="categoryId">
                                         <option value="">Chọn danh mục sản phẩm</option>
-                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys ct :  ProductCategoryUtils.getAllCategory()) {%>
                                         <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
                                         </option>
                                         <%}%>
@@ -269,7 +275,7 @@
                                 <label for="nameProducerU">Nhà sản xuất</label>
                                 <select class="form-control" id="nameProducerU" name="nameProducer" disabled>
                                     <option id="nameProducerUI" value="">Chọn nhà sản xuất</option>
-                                    <%for (String pdName : ProductDAO.getInstance().getAllProducers()) {%>
+                                    <%for (String pdName : producerList) {%>
                                     <option value="<%=pdName%>"><%=pdName%>
                                     </option>
                                     <%}%>
@@ -282,7 +288,7 @@
                                     <label for="categoryIdU">Danh mục sản phẩm</label>
                                     <select class="form-control" id="categoryIdU" name="categoryId" disabled>
                                         <option value="">Chọn danh mục sản phẩm</option>
-                                        <%for (ProductCategorys ct : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys ct :  ProductCategoryUtils.getAllCategory()) {%>
                                         <option value="<%=ct.getId()%>"><%=ct.getNameCategory()%>
                                         </option>
                                         <%}%>

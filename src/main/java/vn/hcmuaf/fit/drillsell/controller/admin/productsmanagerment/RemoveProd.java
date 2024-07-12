@@ -3,10 +3,10 @@ package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.utils.ProductUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,9 +27,8 @@ public class RemoveProd {
         }
 
         int userId = auth.getId();
-        Products productId = ProductDAO.getInstance().getProdById(id);
-        ProductDAO productDAO = new ProductDAO();
-        productDAO.removeProduct(id);
+        Products productId = ProductUtils.getProductById(id);
+        ProductUtils.removeProduct(id);
         Notify.successNotify(response, "Xóa sản phẩm thành công!", Page.NULL_PAGE);
         Log log = new Log();
         log.setStatuss("Đã xóa sản phẩm có mã : " + productId.getProductId());
