@@ -17,6 +17,11 @@ public class UserUtils {
             throw new RuntimeException(e);
         }
     }
+    // Phương thức kiểm tra mật khẩu
+    public static boolean checkPassword(String rawPassword, String hashedPassword) {
+        String hashedRawPassword = hashPassword(rawPassword);
+        return hashedRawPassword.equals(hashedPassword);
+    }
 
     public static String generateVerifyCode(int length) {
         return UUID.randomUUID().toString().substring(0, length);

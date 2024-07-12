@@ -78,32 +78,8 @@ public class UsersDAO implements IUserDAO{
 
 
 
-
-//     public boolean addUser(User newUser) {
-//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
-//         Jdbi jdbi = DbConnector.me().get();
-//         try (Handle handle = jdbi.open()) {
-//             handle.createUpdate(insertQuery)
-//                     .bind(0, newUser.getFullname())
-//                     .bind(1, newUser.getAddress())
-//                     .bind(2, newUser.getPhone())
-//                     .bind(3, newUser.getEmail())
-//                     .bind(4, newUser.getUsername())
-//                    .bind(5, hashPassword(newUser.getPasswords()))
-//                     .bind(6, newUser.getSex())
-//                     .bind(7, newUser.getYearOfBirth())
-//                     .bind(8, newUser.getVerificationCode())
-//                     .execute();
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//             return false;
-//         }
-//         return true;
-//     }
-
-
 // đổi mật khẩu(mã hóa trước khi cập nhật)
-public boolean changePassword(String username, String newPassword) {
+public static boolean changePassword(String username, String newPassword) {
     String hashedPassword = UserUtils.hashPassword(newPassword);
     String queryUpdatePass = "UPDATE users SET passwords = ? WHERE username = ?";
 
@@ -120,12 +96,7 @@ public boolean changePassword(String username, String newPassword) {
         return true;
 }
 
-//    public boolean changeInfoUser(User user) {
-//        deleteUserById(user.getId());
-//        addUser(user);
-//        return true;
-//
-//    }
+
 
     public void deleteUserById(int userId) {
         String deleteQuery = "DELETE FROM users WHERE id = ?";
@@ -272,7 +243,7 @@ public static long getCountCustomer() {
                     .one()
     );
 }
-// cập nhật người dùng
+//admmin cập nhật người dùng
 public void adminupdateUser(User user) {
     int id = user.getId();
     String hashedPassword = user.getPasswords() != null ? UserUtils.hashPassword(user.getPasswords()) : null;
@@ -325,6 +296,7 @@ public void adminupdateUser(User user) {
         });
 
     }
+//    đăng ký
     public boolean addUser(User newUser,String confirmationCode) {
 
         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
