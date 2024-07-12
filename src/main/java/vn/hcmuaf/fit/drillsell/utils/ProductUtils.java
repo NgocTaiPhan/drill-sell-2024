@@ -5,15 +5,37 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class ProductUtils {
+
+    public static class ProductStatus {
+        public static final int NORMAL = 0;
+        public static final int REMOVED = 1;
+        public static final int HIDDEN = 2;
+    }
+
+    public static class Category {
+        public static final int BATTERY_DRILL = 1; // Máy khoan pin
+        public static final int CONCRETE_DRILL = 2; // Máy khoan bê tông, Máy khoan búa
+        public static final int IMPACT_DRILL = 3; // Máy khoan động lực
+        public static final int HANDHELD_DRILL = 4; // Máy khoan cầm tay gia đình
+        public static final int MINI_DRILL = 5; // Máy khoan mini
+        public static final int DRILL_BATTERY = 6; // Pin máy khoan
+        public static final int DRILL_CHARGER = 7; // Sạc pin máy khoan
+        public static final int DRILL_BIT = 8; // Mũi khoan
+
+        //        Phụ kiện máy khoan
+        public static final Set<Integer> ACCESSORY = Set.of(DRILL_BATTERY, DRILL_CHARGER, DRILL_BIT);
+    }
     public static List<Products> readExcel(String excelFilePath) {
         List<Products> products = new ArrayList<>();
 
@@ -90,12 +112,76 @@ public class ProductUtils {
         return products;
     }
 
+    public static String getFormattedUnitPrice(Products product) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormat.format(product.getUnitPrice() * 1000);
+    }
 
+    public static List<Products> getAllProducts() {
+        return ProductDAO.getInstance().getAllProds(ProductStatus.NORMAL);
+    }
+
+    public static List<Products> getRemovedProducts() {
+        return ProductDAO.getInstance().getAllProds(ProductStatus.REMOVED);
+    }
+
+    public static List<Products> getHiddenProducts() {
+        return ProductDAO.getInstance().getAllProds(ProductStatus.HIDDEN);
+    }
+
+    public static void removeProduct(int productId) {
+        ProductDAO.getInstance().changeProductStatus(productId, ProductStatus.REMOVED);
+    }
+
+    public static void hideProduct(int productId) {
+        ProductDAO.getInstance().changeProductStatus(productId, ProductStatus.HIDDEN);
+    }
+
+    public static void addProduct(Products product) {
+        ProductDAO.getInstance().addProduct(product);
+    }
+
+    public static void updateProduct(Products prod) {
+        ProductDAO.getInstance().updateProd(prod);
+    }
+
+    public static Products getProductByName(String productName) {
+        return ProductDAO.getInstance().getProductByName(productName);
+    }
+
+    public static List<Products> getAccessory() {
+        return ProductDAO.getInstance().getProductByCategory(Category.ACCESSORY, ProductStatus.NORMAL);
+    }
+
+    public static List<Products> getProductByCategory(int categoryId) {
+        return ProductDAO.getInstance().getProductByCategory(Set.of(categoryId), ProductStatus.NORMAL);
+    }
+
+    public static List<Products> getProductByProducer(String producerName) {
+        return ProductDAO.getInstance().getProductByProducer(producerName, ProductStatus.NORMAL);
+
+    }
+
+    public static Products getProductById(int productId) {
+        return ProductDAO.getInstance().getProdById(productId);
+    }
+
+    public static List<Products> getProductsByPage(int limit, int offset) {
+        return ProductDAO.getInstance().getProductsByPage(limit, offset);
+    }
+
+    public static boolean isExistProdName(String productName) {
+        Products product = ProductDAO.getInstance().getProductByName(productName);
+        return product != null;
+
+    }
     public static void main(String[] args) {
         String excelFilePath = "D:\\WorkSpace\\PraticeWebPrograming\\database\\drill-sell.xlsx";
         List<Products> products = readExcels(excelFilePath);
 
-        System.out.println(products.size());
+//        System.out.println(ProductUtils.getAccessory());
 
     }
+
+
 }

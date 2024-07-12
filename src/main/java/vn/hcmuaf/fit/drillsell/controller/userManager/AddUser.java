@@ -3,13 +3,11 @@ package vn.hcmuaf.fit.drillsell.controller.userManager;
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.controller.register.ValidationForm;
-import vn.hcmuaf.fit.drillsell.dao.EmailDAO;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
-import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 @WebServlet("/admin/addUser")
 public class AddUser extends HttpServlet {
@@ -97,7 +94,7 @@ public class AddUser extends HttpServlet {
         User addUser = UsersDAO.getUsers(userId);
         String confirmationCode = UUID.randomUUID().toString().substring(0, 6);
         session.setAttribute("confirmationCode", confirmationCode);
-        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser, confirmationCode);
+        boolean addUserResult = UsersDAO.getInstance().AdminaddUser(newUser);
         if (addUserResult) {
 
             Notify.successNotify(resp, "Người dùng đã được thêm thành công!", Page.NULL_PAGE);

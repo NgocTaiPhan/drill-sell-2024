@@ -6,6 +6,9 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProducerUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -249,7 +252,7 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -321,7 +324,7 @@
                         <ul class="nav">
 
                             <%
-                                List<ProductCategorys> allCate = ProductDAO.getInstance().getAllCategory();
+                                List<ProductCategorys> allCate =  ProductCategoryUtils.getAllCategory();
                                 for (ProductCategorys pc : allCate) {%>
                             <li class="nav-bg-class">
                                 <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>">
@@ -347,7 +350,7 @@
                         <div class="tag-list">
                             <!-- JSP Code -->
 
-                            <%for (String producerName : ProductDAO.getInstance().getAllProducers()) {%>
+                            <%for (String producerName :   ProducerUtils.getAllProducer()) {%>
                             <a class="item" style="text-transform: uppercase"
                                href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
                             </a>
@@ -415,7 +418,7 @@
 
                         <%--                        Load products by category--%>
                         <%
-                            List<Products> products = ProductDAO.getInstance().showProd();
+                            List<Products> products = ProductUtils.getAllProducts();
                             int productsPerRow = 4;
                             if (products != null && !products.isEmpty()) {
                                 for (int i = 0; i < products.size(); i++) {

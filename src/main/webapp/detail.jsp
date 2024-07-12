@@ -8,6 +8,8 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.UsersDAO" %>
 <%@ page import="java.sql.Timestamp" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%
     Products product = (Products) request.getAttribute("prods");
     List<Review> reviewList = (List<Review>) request.getAttribute("reviews");
@@ -199,7 +201,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <div class="dropdown dropdown-cart">
                         <div class="lnk-cart">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="callServletAndRedirect('logged','cart.jsp')">
+                                <div class="basket" id="basketIcon"
+                                     onclick="callServletAndRedirectTo('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -259,7 +262,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -408,7 +411,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
                                         <div class="col-sm-6">
                                             <div class="price-box">
-                                                <span class="price"><%= ProductDAO.getInstance().getFormattedUnitPrice(product) %></span>
+                                                <span class="price"><%= ProductUtils.getFormattedUnitPrice(product) %></span>
                                             </div>
                                         </div>
 

@@ -22,7 +22,7 @@ public class UsersDAO implements IUserDAO{
     }
 
     public User getUser(String username, String password) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth,roleUser FROM users WHERE username = ? AND passwords = ? AND userStatus = 0";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -61,7 +61,7 @@ public class UsersDAO implements IUserDAO{
 
     public User getUserByUserNameAndEmail(String username, String email) {
 
-        String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND email = ? ";
+        String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth,roleUser FROM users WHERE username = ? AND email = ? ";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -80,7 +80,7 @@ public class UsersDAO implements IUserDAO{
 
 
 //     public boolean addUser(User newUser) {
-//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+//         String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth) VALUES (?, ?,?,?,?,?,?,?,?)";
 //         Jdbi jdbi = DbConnector.me().get();
 //         try (Handle handle = jdbi.open()) {
 //             handle.createUpdate(insertQuery)
@@ -152,8 +152,8 @@ public boolean changePassword(String username, String newPassword) {
         }
     }
 //    kiểm tra sự tồn tại của email khi đăng ký
-    public boolean isEmailExists(String email) {
-        String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
+public boolean isEmailExists(String email) {
+    String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
         Jdbi jdbi = DbConnector.me().get();
 
         try (Handle handle = jdbi.open()) {
@@ -162,6 +162,21 @@ public boolean changePassword(String username, String newPassword) {
                     .mapTo(Integer.class)
                     .one();
 
+            // Nếu count > 0, tức là email đã tồn tại và là trùng lặp
+            return count > 0;
+        }
+    }
+
+    public boolean isEmailExistsWithUsername(String email, String username) {
+        String selectQuery = "SELECT COUNT(*) FROM users WHERE email = ? AND username =?";
+        Jdbi jdbi = DbConnector.me().get();
+
+        try (Handle handle = jdbi.open()) {
+            int count = handle.createQuery(selectQuery)
+                    .bind(0, email)
+                    .bind(1, username)
+                    .mapTo(Integer.class)
+                    .one();
             // Nếu count > 0, tức là email đã tồn tại và là trùng lặp
             return count > 0;
         }
@@ -181,14 +196,14 @@ public boolean changePassword(String username, String newPassword) {
     }
 
     public List<User> showAll() {
-        return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
+        return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth,  roleUser, userStatus FROM users")
                 .mapToBean(User.class)
                 .list());
     }
 
 
     public static User getUserById(int id) {
-        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE id=?";
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth,roleUser FROM users WHERE id=?";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             return handle.createQuery(query)
@@ -223,7 +238,7 @@ public boolean changePassword(String username, String newPassword) {
     }
     //   show toàn bộ người dùng trong quản lý người dùng
     public List<User> showUser() {
-        String sql = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users  WHERE userStatus = 0 ";
+        String sql = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth,  roleUser, userStatus FROM users  WHERE userStatus = 0 ";
         return DbConnector.me().get().withHandle(handle -> handle
                 .createQuery(sql)
                 .mapToBean(User.class).list());
@@ -325,9 +340,10 @@ public void adminupdateUser(User user) {
         });
 
     }
-    public boolean addUser(User newUser,String confirmationCode) {
 
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?)";
+    public boolean addUser(User newUser) {
+
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth) VALUES (?, ?,?,?,?,?,?,?)";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             handle.createUpdate(insertQuery)
@@ -339,7 +355,6 @@ public void adminupdateUser(User user) {
                     .bind(5, UserUtils.hashPassword(newUser.getPasswords()))
                     .bind(6, newUser.getSex())
                     .bind(7, newUser.getYearOfBirth())
-                    .bind(8, confirmationCode)
                     .execute();
         } catch (Exception e) {
 
@@ -348,9 +363,10 @@ public void adminupdateUser(User user) {
         }
         return true;
     }
-    public boolean AdminaddUser(User newUser,String confirmationCode) {
 
-        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, roleUser, verificationCode) VALUES (?, ?,?,?,?,?,?,?,?,?)";
+    public boolean AdminaddUser(User newUser) {
+
+        String insertQuery = "INSERT INTO users (fullname, address, phone, email, username, passwords, sex, yearOfBirth, roleUser) VALUES (?, ?,?,?,?,?,?,?,?)";
         Jdbi jdbi = DbConnector.me().get();
         try (Handle handle = jdbi.open()) {
             handle.createUpdate(insertQuery)
@@ -363,7 +379,6 @@ public void adminupdateUser(User user) {
                     .bind(6, newUser.getSex())
                     .bind(7, newUser.getYearOfBirth())
                     .bind(8,newUser.isRoleUser())
-                    .bind(9, confirmationCode)
                     .execute();
         } catch (Exception e) {
 
