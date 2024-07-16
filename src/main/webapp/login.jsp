@@ -89,7 +89,7 @@
                     <%--Gọi function js để gửi dữ liệu form bằng ajax--%>
                           onsubmit="submitFormAndRedirect(event, this, 'login')">
 
-                    <div class="form-group">
+                        <div class="form-group">
                             <label class="info-title" for="username-login">Tên đăng nhập <span>*</span></label>
                             <div class="error-email-login"></div>
                             <input class="form-control unicase-form-control text-input" id="username-login" type="text"
@@ -102,6 +102,29 @@
                             <input class="form-control unicase-form-control text-input" id="password-login"
                                    type="password" name="pass-login" value="<%=passwordCookie%>">
                         </div>
+                        <div class="form-group">
+                            <label class="info-title">Captcha<span>*</span></label>
+                            <img src="captcha-image">
+                            <br>
+                            <style>
+                                #captcha-input::placeholder {
+                                    color: rgba(0, 0, 0, 0.4);
+                                    font-style: italic;
+                                    opacity: 0.8;
+                                }
+                            </style>
+                            <input type="text" name="captcha" id="captcha-input" required
+                                   placeholder="Nhập mã Captcha"
+                                   style="margin-left: 12%; width: 37%; margin-top: 2%">
+                        </div>
+                        <script>
+                            // Lắng nghe sự kiện khi người dùng bắt đầu nhập vào ô captcha thì mất chữ
+                            document.getElementById('captcha-input').addEventListener('input', function() {
+                                if (this.value.trim() !== '') {
+                                    this.removeAttribute('placeholder');
+                                }
+                            });
+                        </script>
                         <div class="radio outer-xs">
                             <label>
                                 <input id="remember" name="remember" type="radio" value="remember">Lưu đăng
@@ -111,6 +134,20 @@
                                 Quên mật khẩu
                             </a>
                         </div>
+<%--                        <div class="form-group">--%>
+<%--                            <label class="info-title" >Captcha<span>*</span></label>--%>
+<%--&lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
+<%--&lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
+<%--                            <img src="captcha-image">--%>
+<%--                            <br>--%>
+<%--                            <input type="text" name ="captcha">--%>
+<%--                        </div>--%>
+<%--                        <div class="form-group">--%>
+<%--                            <label class="info-title" >&nbsp;<span>*</span></label>--%>
+<%--                            &lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
+<%--                            &lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
+<%--                            <input type="submit" value="Save">--%>
+<%--                        </div>--%>
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"

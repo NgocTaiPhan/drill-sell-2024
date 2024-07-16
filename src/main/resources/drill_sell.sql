@@ -50,6 +50,7 @@ CREATE TABLE users
     userStatus       TINYINT(1) DEFAULT 0  -- Trạng thái của tài khoản: 0 - Đã xác thực(Bình thường), 1 - Đã xóa, 2 - Ẩn, 3 - Khóa, 4 - Chưa xác thực
 
 );
+ALTER TABLE users DROP COLUMN verificationCode;
 
 CREATE TABLE repo
 (

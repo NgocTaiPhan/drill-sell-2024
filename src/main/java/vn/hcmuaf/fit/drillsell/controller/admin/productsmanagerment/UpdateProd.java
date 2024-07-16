@@ -2,8 +2,8 @@ package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
+import vn.hcmuaf.fit.drillsell.utils.ProductUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +21,7 @@ public class UpdateProd {
         String specifions = request.getParameter("specifions");
         try {
             Products prod = new Products(id, image, prodName, unitPrice, categoryId, nameProducer, describle, specifions);
-            ProductDAO productDAO = new ProductDAO();
-            productDAO.updateProd(prod);
+            ProductUtils.updateProduct(prod);
             Notify.successNotify(response, "Sửa thông tin sản phẩm thành công", Page.NULL_PAGE);
         } catch (Exception e) {
             Notify.errorNotify(response, "Có lỗi trong quá trình thực hiện", Page.NULL_PAGE);

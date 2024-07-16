@@ -14,8 +14,7 @@ import vn.hcmuaf.fit.drillsell.model.User;
 import java.io.IOException;
 
 
-
-@WebServlet(name = "ForgotPassController", value = "/forgot-pas")
+@WebServlet(name = "ForgotPassController", value = "/forgot-pass")
 public class ForgotPassController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

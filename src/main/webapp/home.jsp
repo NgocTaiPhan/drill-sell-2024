@@ -7,6 +7,9 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProducerUtils" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 
 
 <%
@@ -161,7 +164,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                     <div class="dropdown dropdown-cart">
                         <div class="lnk-cart">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="callServletAndRedirect('logged','cart.jsp')">
+                                <div class="basket" id="basketIcon"
+                                     onclick="callServletAndRedirectTo('logged','cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -223,7 +227,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>
@@ -286,7 +290,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <div class="tag-list">
                             <!-- JSP Code -->
 
-                            <%for (String producerName : ProductDAO.getInstance().getAllProducers()) {%>
+                            <%for (String producerName : ProducerUtils.getAllProducer()) {%>
                             <a class="item" style="text-transform: uppercase"
                                href="<%=request.getContextPath()%>/load-by-category?producer-name=<%=producerName%>"><%=producerName%>
                             </a>
@@ -412,9 +416,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                         <%
-                            List<Products> listProds = prodsService.showProd();
+                            List<Products> listProds = ProductUtils.getAllProducts();
                             for (Products p : listProds) {
-                                String formattedPrice = prodsService.getFormattedUnitPrice(p);
+                                String formattedPrice = ProductUtils.getFormattedUnitPrice(p);
 
                         %>
 
@@ -468,9 +472,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         kiện</a></h3>
                     <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
                         <%
-                            List<Products> accessory = prodsService.getAccessory();
+                            List<Products> accessory = ProductUtils.getAccessory();
                             for (Products a : accessory) {
-                                String formattedPrice = prodsService.getFormattedUnitPrice(a);
+                                String formattedPrice = ProductUtils.getFormattedUnitPrice(a);
                         %>
                         <div class="item item-carousel">
                             <div class="products">

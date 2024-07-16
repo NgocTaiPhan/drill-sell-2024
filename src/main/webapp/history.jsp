@@ -7,6 +7,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
@@ -244,7 +245,7 @@
                                 <li class="dropdown active  ">
                                     <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản phẩm</a>
                                     <ul class="dropdown-menu ">
-                                        <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                        <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                         <li>
                                             <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                methods="post"></i>

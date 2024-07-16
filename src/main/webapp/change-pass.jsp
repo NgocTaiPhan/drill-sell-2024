@@ -1,15 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: DELL
-  Date: 25/04/2024
-  Time: 3:10 SA
-  To change this template use File | Settings | File Templates.
---%>
+
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
 
+    <!-- Bootstrap CSS and JS CDN links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -21,48 +17,78 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.all.min.js"
+            integrity="sha256-73rO2g7JSErG8isZXCse39Kf5yGuePgjyvot/8cRCNQ="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10/dist/sweetalert2.min.css"
+          integrity="sha256-h2Gkn+H33lnKlQTNntQyLXMWq7/9XI2rlPCsLsVcUBs=" crossorigin="anonymous">
+    <script src="assets/js/my-js/notify.js"></script>
+    <script src="assets/js/my-js/ajax-process.js"></script>
+
 </head>
 <body>
 
-<%--Giao diện sẽ hiển thị dựa vào nơi truy cập của người dùng dựa trên giá trị "forgot-pass" :--%>
-<%--    + forgot-pass= 1. Nếu người dùng truy cập từ trang Đăng nhập và bấm quên mật khẩu.--%>
-<%--        - Thì sau khi thực hiện các bước quên mật khẩu, giao diện sẽ hiển thị ô nhập mật khẩu và nhập lại--%>
-<%--    + forgot-pass = 0. Nếu người dùng đã đăng nhập và muốn thay đổi mật khẩu thì giao diện sẽ là gồm: Nhập mật khẩu hiện tại, Mật khẩu mới va nhập lại--%>
-
 <div class="container w-25 center m-t-20">
-    <form onsubmit="submitFormAndRedirect(event,this,'change-pass')">
+    <form onsubmit="submitFormAndRedirect(event,this,'change-password')">
         <%
             String forgotPass = (String) request.getParameter("forgot-pass");
             if (forgotPass.equals("0")) {
-
-
         %>
         <div class="mb-3">
             <label for="oldPass" class="form-label">Nhập mật khẩu hiện tại</label>
-            <input name="old-pass" type="text" class="form-control" id="oldPass">
+            <input name="old-pass" type="password" class="form-control" id="oldPass" required>
         </div>
         <div class="mb-3">
             <label for="newPass" class="form-label">Nhập mật khẩu mới</label>
-            <input name="pass" type="text" class="form-control" id="newPass">
+            <input name="pass" type="password" class="form-control" id="newPass" required>
         </div>
         <div class="mb-3">
             <label for="cfNewPass" class="form-label">Nhập lại mật khẩu mới</label>
-            <input name="cf-pass" type="text" class="form-control" id="cfNewPass">
+            <input name="cf-pass" type="password" class="form-control" id="cfNewPass" required>
         </div>
-        <%} else {%>
-
+        <% } else { %>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Nhập mật khẩu</label>
-            <input name="pass" type="text" class="form-control" id="exampleInputPassword1">
+            <input name="pass" type="password" class="form-control" id="exampleInputPassword1" required>
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword2" class="form-label">Nhập lại</label>
-            <input name="cf-pass" type="text" class="form-control" id="exampleInputPassword2">
+            <input name="cf-pass" type="password" class="form-control" id="exampleInputPassword2" required>
         </div>
-        <%}%>
-
+        <% } %>
         <button type="submit" class="btn btn-primary">Xác nhận</button>
     </form>
 </div>
+
+<%--<script>--%>
+<%--    $(document).ready(function() {--%>
+<%--        // $('#changePasswordForm').submit(function(event) {--%>
+<%--            event.preventDefault();--%>
+
+<%--            // var form = $(this);--%>
+<%--            // var urlServlet = 'change-password';  // Your servlet URL--%>
+
+<%--            $.ajax({--%>
+<%--                type: 'POST',--%>
+<%--                url: urlServlet,--%>
+<%--                data: form.serialize(),--%>
+<%--                success: function(response) {--%>
+<%--                    // Handle success response--%>
+<%--                    // notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);--%>
+<%--                    normalNotify(response.type, response.message);--%>
+<%--                },--%>
+<%--                error: function(xhr, status, error) {--%>
+<%--                    // Handle error response--%>
+<%--                    // var errorMessage = xhr.responseText || 'Đã xảy ra lỗi: ' + error;--%>
+<%--                    // errorNotify(errorMessage);--%>
+<%--                    normalNotify("error", "Lỗi khi thêm người dùng: " + error);--%>
+<%--                }--%>
+<%--            // });--%>
+<%--        });--%>
+<%--    });--%>
+<%--</script>--%>
+
 </body>
 </html>
