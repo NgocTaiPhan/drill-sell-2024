@@ -32,23 +32,13 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3 ">
+    <div class="row" >
+        <div class="col-md-3" style="margin-left: 200px">
             <h2>Số đơn hàng được đặt hôm nay</h2>
             <%
                long quantity = OrderDAO.getCountOrder();
             %>
             <p><%= quantity%></p>
-        </div>
-        <div class="col-md-3 ">
-            <h2>Doanh thu hôm nay</h2>
-            <%
-                Order list = OrderDAO.getDaily();
-                if (list != null) {
-                    String formattedAmount = currencyFormat.format(list.getSumTotalDay() * 1000);
-            %>
-            <p><%= formattedAmount%></p>
-            <%}%>
         </div>
         <div class="col-md-3 ">
             <h2>Doanh thu tháng này</h2>

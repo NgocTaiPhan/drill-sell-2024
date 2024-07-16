@@ -232,18 +232,12 @@ public class OrderDAO {
         });
     }
 
-    public static Order getDaily() {
-        return DbConnector.me().get().withHandle(handle -> {
-            handle.registerRowMapper(BeanMapper.factory(Order.class));
-            return handle.createQuery("SELECT COUNT(orders.orderId) AS numberOfOrders, " +
-                            "SUM(products.unitPrice * orderitem.quantity) AS sumTotalDay " +
-                            "FROM orders " +
-                            "JOIN orderitem ON orders.orderId = orderitem.orderId " +
-                            "JOIN products ON orderitem.productId = products.productId" +
-                            " WHERE orders.stauss  IN ( 'Đã giao hàng') AND DATE(orders.timeOrder) = CURDATE()")
-                    .mapTo(Order.class)
-                    .one();
-        });
+    public static String formatAddress(String provinceId, String districtId, String wardId) {
+        String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
+        String districtName = GHNDistricFetcher.getDistrictNameById(districtId);
+        String wardName = GHNWardFetcher.getWardNameById(districtId, wardId);
+
+        return provinceName + ", " + districtName + ", " + wardName;
     }
 
     public static int getCountOrder() {
@@ -251,7 +245,7 @@ public class OrderDAO {
             handle.registerRowMapper(BeanMapper.factory(Order.class));
             return handle.createQuery("SELECT COUNT(orders.orderId) AS quantity\n" +
                             "FROM orders\n" +
-                            "WHERE DATE(orders.timeOrder) = CURDATE();")
+                            "WHERE orders.stauss NOT IN ('Đã hủy') AND  DATE(orders.timeOrder) = CURDATE();")
                     .mapTo(Integer.class)
                     .one();
         });

@@ -393,36 +393,21 @@
             </div>
             <p>Địa chỉ nhận hàng</p>
             <div class="information">
-                <input value="<%= request.getParameter("nameCustomer") != null ? request.getParameter("nameCustomer") : "" %>" type="text" id="informations" name="nameCustomer" placeholder="Tên">
-<%--                <input style="width: 200px" value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>" type="text" id="address" name="address" placeholder="Địa chỉ của bạn">--%>
-<%--                <select class="css_select" id="tinh" name="tinh">--%>
-<%--                    <option value="0">Chọn Tỉnh</option>--%>
-<%--                    <!-- Thêm các tùy chọn cho tỉnh -->--%>
-<%--                </select>--%>
-<%--                <select class="css_select" id="quan" name="quan">--%>
-<%--                    <option value="0">Chọn Quận Huyện</option>--%>
-<%--                </select>--%>
-<%--                <select class="css_select" id="phuong" name="phuong">--%>
-<%--                    <option value="0">Chọn Phường Xã</option>--%>
-<%--                    <!-- Thêm các tùy chọn cho xã -->--%>
-<%--                </select>--%>
 
-
-                <div class="css_select_div">
-                    <label class="info-title"  for="address" id="address">Địa chỉ </label>
-                    <select class="css_select" id="tinh" name="tinh">
-                        <option value="0">Chọn Tỉnh</option>
-                        <!-- Thêm các tùy chọn cho tỉnh -->
+                <input style="background: none" value="<%= request.getParameter("nameCustomer") != null ? request.getParameter("nameCustomer") : "" %>" type="text" id="informations" name="nameCustomer" placeholder="Tên">
+                <input style="background: none" value="" type="text" id="phone" name="phone" placeholder="Số điện thoại">
+                <div class="css_select_div" style="display: flex">
+                    <select   id="province" class="form-control" name="tinh">
+                        <option value="">Chọn Tỉnh / Thành Phố</option>
                     </select>
-                    <select class="css_select" id="quan" name="quan">
-                        <option value="0">Chọn Quận Huyện</option>
-                    </select>
-                    <select class="css_select" id="phuong" name="phuong">
-                        <option value="0">Chọn Phường Xã</option>
-                        <!-- Thêm các tùy chọn cho xã -->
+                    <select style="margin-left: 20px" class="form-control" id="district" name="quan">
+                        <option value="">Chọn Quận/Huyện</option>
+                    </select >
+                    <select style="margin-left: 20px" class="form-control" id="ward" name="phuong">
+                        <option value="">Chọn Phường/Xã</option>
                     </select>
                 </div>
-                <input value="" type="text" id="phone" name="phone" placeholder="Số điện thoại">
+
             </div>
         </div>
         <div class="product">
@@ -538,6 +523,7 @@
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="assets/js/my-js/address.js"></script>
 <script>
     function f() {
         Swal.fire({
