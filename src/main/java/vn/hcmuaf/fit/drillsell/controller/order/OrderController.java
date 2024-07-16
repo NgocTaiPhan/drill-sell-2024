@@ -2,6 +2,7 @@ package vn.hcmuaf.fit.drillsell.controller.order;
 
 import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
+import vn.hcmuaf.fit.drillsell.model.DataRespone;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
 import vn.hcmuaf.fit.drillsell.model.User;
@@ -28,7 +29,7 @@ public class OrderController extends HttpServlet {
         String provinceId = request.getParameter("tinh");
         String districtId = request.getParameter("quan");
         String wardId = request.getParameter("phuong");
-        String address = provinceId + "," + districtId + ", " + wardId;
+        String address = provinceId + "," + districtId + "," + wardId;
         String phone = request.getParameter("phone");
         String[] quantities = request.getParameterValues("quantityInput");
         String[] cartIds = request.getParameterValues("cartId");
@@ -54,23 +55,24 @@ public class OrderController extends HttpServlet {
                 orderItem.setProductId(Integer.parseInt(productIds[i]));
                 orderItems.add(orderItem);
             }
+            DataRespone dataRespone = ApiGHN.getData(address, districtId, wardId);
             order.setOrderItems(orderItems);
+            order.setShippingFee(dataRespone.getDeliveryFee());
+            order.setExpectedDate(dataRespone.getDeliveryDate());
             orders.add(order);
 
+
+
             boolean insert = CheckOutDAO.insertOrders(orders);
-            int idOrder = CheckOutDAO.getOrderId();
-            boolean updateEx = CheckOutDAO.updateEx(idOrder);
 
             if (insert) {
-                if(updateEx){
                     response.sendRedirect("viewOrderCustomer?orderSuccess=true");
-                }
-
             } else {
                 response.getWriter().write("Có lỗi xảy ra khi tạo đơn hàng.");
             }
         }
     }
+
 }
 
 

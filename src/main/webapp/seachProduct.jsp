@@ -171,7 +171,7 @@
                                         top: -10px;
                                         left: 20px;
                                         background-color: red;
-                                        color: white;
+                                       color: white;
                                         padding-left: 3px;
                                         border-radius: 50%;
                                         margin-left: 13px;
@@ -435,9 +435,9 @@
                         <div class="product">
                             <div class="product-image">
                                 <div class="image"><a href="load-detail?productId=<%= p.getProductId()%>"><img height="189px"
-                                                                                                         width="189px"
-                                                                                                         src="<%=p.getImage()%>"
-                                                                                                         alt="Ảnh sản phẩm"></a>
+                                                                                                               width="189px"
+                                                                                                               src="<%=p.getImage()%>"
+                                                                                                               alt="Ảnh sản phẩm"></a>
                                 </div>
                                 <!-- /.image -->
                             </div>
@@ -472,6 +472,7 @@
                 </section>
 
             </div>
+
 
 
         </div>
@@ -622,6 +623,9 @@
         </a>
     </div>
 </div>
+<script src="assets/js/my-js/backtop.js"></script>
+<link rel="stylesheet" href="assets/css/my-css/backtop.css">
+<button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 

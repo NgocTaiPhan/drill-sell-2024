@@ -389,80 +389,73 @@
                     </div>
                 </div>
 
-
-                <div class="clearfix filters-container m-t-10">
+                <div class="product" style="background: white">
+                    <h3 class="section-title" style="padding: 10px">Tất cả sản phẩm</h3>
                     <div class="row">
-                        <div class="col col-sm-6 col-md-2">
-                            <div class="filter-tabs">
-                                <ul id="filter-tabs" class="nav nav-tabs nav-tab-box nav-tab-fa-icon">
-
-                                </ul>
-                            </div>
-                            <!-- /.filter-tabs -->
-                        </div>
-                        <!-- /.col -->
-
-
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-
-                <section class="section featured-product wow fadeInUp">
-                    <h3 class="section-title">Tất cả sản phẩm
-                    </h3>
-                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
-
-                        <%--                        Load products by category--%>
                         <%
                             List<Products> products = ProductDAO.getInstance().showProd();
-                            int productsPerRow = 4;
-                            if (products != null && !products.isEmpty()) {
-                                for (int i = 0; i < products.size(); i++) {
-                                    Products p = products.get(i);
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-                                    String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
+                            int productsPerPage = 16;
+                            int currentPage = 1;
+                            if (request.getParameter("page") != null) {
+                                currentPage = Integer.parseInt(request.getParameter("page"));
+                            }
+                            int totalProducts = products.size();
+                            int totalPages = (int) Math.ceil((double) totalProducts / productsPerPage);
+
+                            int startProductIndex = (currentPage - 1) * productsPerPage;
+                            int endProductIndex = Math.min(startProductIndex + productsPerPage, totalProducts);
+
+                            for (int i = startProductIndex; i < endProductIndex; i++) {
+                                Products p = products.get(i);
+                                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                String formattedPrice = currencyFormat.format(p.getUnitPrice() * 1000);
+                                if (i % 4 == 0 && i != startProductIndex) {
                         %>
-                        <div class="product">
+                    </div>
+                    <div class="row">
+                        <%
+                            }
+                        %>
+                        <div class="col-xl-3 col-md-3 col-sm-6">
                             <div class="product-image">
                                 <div class="image"><a href="load-detail?productId=<%= p.getProductId()%>"><img height="189px"
-                                                                                                         width="189px"
-                                                                                                         src="<%=p.getImage()%>"
-                                                                                                         alt="Ảnh sản phẩm"></a>
+                                                                                                               width="189px"
+                                                                                                               src="<%=p.getImage()%>"
+                                                                                                               alt="Ảnh sản phẩm"></a>
                                 </div>
-                                <!-- /.image -->
                             </div>
-                            <!-- /.product-image -->
 
                             <div class="product-info text-left">
-                                <h3 class="name"><a
-                                        href="load-detail?productId=<%= p.getProductId()%>"><%=p.getProductName()%>
+                                <h3 class="name"><a href="load-detail?productId=<%= p.getProductId()%>"><%=p.getProductName()%>
                                 </a></h3>
                                 <div class="rating rateit-small"></div>
                                 <div class="description"></div>
                                 <div class="product-price">
                                     <span class="price"> <%=formattedPrice%></span>
                                 </div>
-                                <!-- /.product-price -->
                             </div>
-                            <!-- /.product-info -->
                         </div>
-
                         <%
-                            // Tăng biến đếm, nếu đạt đến số sản phẩm trên mỗi hàng, bắt đầu hàng mới
-                            if ((i + 1) % productsPerRow == 0) {
-                        %>
-                    </div>
-                    <div class="owl-carousel home-owl-carousel custom-carousel owl-theme outer-top-xs mb-10">
-                        <%
-                                    }
-                                }
                             }
                         %>
                     </div>
-                </section>
 
-                <!-- /.search-result-container -->
+                </div>
+                <div class="pagination">
+                    <nav aria-label="Page navigation" style="margin: auto">
+                        <ul class="pagination">
+                            <%
+                                for (int i = 1; i <= totalPages; i++) {
+                            %>
+                            <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                            <%
+                                }
+                            %>
+                        </ul>
+                    </nav>
+                </div>
 
             </div>
 

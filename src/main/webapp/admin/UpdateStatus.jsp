@@ -12,7 +12,7 @@
             if (order != null) {
         %>
         <a class="back" href="showUpdateOrder?orderId=<%= order.getOrderId() %>">x</a>
-        <p>Cập nhật số lượng đơn hàng</p>
+        <p>Cập nhật trạng thái đơn hàng</p>
         <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
         <input type="hidden" name="userId" value="<%= order.getUserId() %>">
         <input style="width: 40px; text-align: center"  name="orderId" value="<%=order.getOrderId()%>">
