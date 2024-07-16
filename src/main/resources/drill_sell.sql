@@ -95,7 +95,6 @@ CREATE TABLE log
 )
 
 
-
 CREATE TABLE orders(
                        orderId INT AUTO_INCREMENT PRIMARY KEY,
                        userId INT,
@@ -2511,7 +2510,7 @@ VALUES (76, 2, 16, 8, '2023-10-2', 900, 17);
 
 
 
-SELECT cart.productId,
+drill_selldrill_sellSELECT cart.productId,
        products.productName,
        products.unitPrice,
        cart.quantity,

@@ -1,6 +1,8 @@
 package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.utils.ProductUtils;
 
@@ -12,14 +14,24 @@ import java.util.List;
 public class LoadProdInAdmin {
     static void loadAllProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Products> products = ProductUtils.getAllProducts();
-        Gson gson = new Gson();
-//Chuyển danh sách sản phẩm sang json để gửi đến client
-        String json = gson.toJson(products);
+
+        JsonArray jsonArray = new JsonArray();
+        for (Products product : products) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("productId", product.getProductId());
+            jsonObject.addProperty("productName", product.getProductName());
+            jsonObject.addProperty("unitPrice", product.getUnitPrice());
+            jsonObject.addProperty("productsSold", ProductUtils.getProductSold(product.getProductId()));
+            jsonObject.addProperty("productInStock", ProductUtils.getQuantityProductInStock(product.getProductId()));
+            jsonArray.add(jsonObject);
+        }
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(json);
+        response.getWriter().print(jsonArray);
         response.getWriter().flush();
     }
+
 
     static void loadHideProd(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Products> products = ProductUtils.getHiddenProducts();

@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import vn.hcmuaf.fit.drillsell.dao.OrderDAO;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
@@ -16,6 +17,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class ProductUtils {
+
 
     public static class ProductStatus {
         public static final int NORMAL = 0;
@@ -121,6 +123,7 @@ public class ProductUtils {
         return ProductDAO.getInstance().getAllProds(ProductStatus.NORMAL);
     }
 
+
     public static List<Products> getRemovedProducts() {
         return ProductDAO.getInstance().getAllProds(ProductStatus.REMOVED);
     }
@@ -175,10 +178,20 @@ public class ProductUtils {
         return product != null;
 
     }
-    public static void main(String[] args) {
-        String excelFilePath = "D:\\WorkSpace\\PraticeWebPrograming\\database\\drill-sell.xlsx";
-        List<Products> products = readExcels(excelFilePath);
 
+    public static int getProductSold(int productId) {
+        return OrderDAO.getAllQuantityFromOrderByProductId(productId);
+    }
+
+
+    public static int getQuantityProductInStock(int productId) {
+        return RepoUtils.getAllQuantityFromRepoByProductId(productId) - getProductSold(productId);
+    }
+
+    public static void main(String[] args) {
+//        String excelFilePath = "D:\\WorkSpace\\PraticeWebPrograming\\database\\drill-sell.xlsx";
+//        List<Products> products = readExcels(excelFilePath);
+//        System.out.println(ProductUtils.getAllProductsManagement());
 //        System.out.println(ProductUtils.getAccessory());
 
     }
