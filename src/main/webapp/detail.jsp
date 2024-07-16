@@ -390,13 +390,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                                 <div class="stock-container info-container m-t-10">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            <div class="stock-box">
-                                                <span class="label">Tình trạng :</span>
-                                            </div>
                                         </div>
                                         <div class="col-sm-9">
-                                            <div class="stock-box">
-                                                <span class="value"> Còn:</span>
+                                            <div class="stock-box " style="margin-left: 16%">
+                                                <span class="value"> Số lượng trong kho: <%=ProductUtils.getQuantityProductInStock(product.getProductId())%></span>
                                             </div>
                                         </div>
                                     </div>

@@ -44,7 +44,7 @@ $(document).ready(function () {
                 title: response.message,
             });
 
-            // Reload DataTable sau khi thành công
+            // load bảng sau khi thành công
             table.ajax.reload();
         }, function onError(xhr, status, error) {
             errorNotify("Xảy ra lỗi trong quá trình xử lý!");

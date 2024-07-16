@@ -95,31 +95,28 @@ CREATE TABLE log
 )
 
 
-
-CREATE TABLE orders
-(
-    orderId      INT AUTO_INCREMENT PRIMARY KEY,
-    userId       INT,
-    stauss       VARCHAR(300),
-    nameCustomer VARCHAR(100),
-    address      VARCHAR(100),
-    phone        VARCHAR(10),
-    shippingFee  DECIMAL(10, 2),
-    FOREIGN KEY (userId) REFERENCES users (id)
+CREATE TABLE orders(
+                       orderId INT AUTO_INCREMENT PRIMARY KEY,
+                       userId INT,
+                       stauss VARCHAR(300),
+                       nameCustomer VARCHAR(100),
+                       address VARCHAR(100),
+                       phone VARCHAR(10),
+                       shippingFee DECIMAL(10, 2),
+                       expectedDate DATE,
+                       timeOrder TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       FOREIGN KEY (userId) REFERENCES users(id)
 )
 
 
 
-CREATE TABLE orderItem
-(
-    idItem       INT AUTO_INCREMENT PRIMARY KEY,
-    orderId      INT,
-    quantity     INT,
-    productId    INT,
-    expectedDate DATE,
-    timeOrder    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (productId) REFERENCES products (productId),
-    FOREIGN KEY (orderId) REFERENCES orders (orderId)
+CREATE TABLE orderItem(
+                          idItem INT AUTO_INCREMENT PRIMARY KEY,
+                          orderId INT,
+                          quantity INT,
+                          productId INT,
+                          FOREIGN KEY (productId) REFERENCES products(productId),
+                          FOREIGN KEY (orderId) REFERENCES orders(orderId)
 )
 
 -- Bảng đánh gía sản phẩm
@@ -2513,7 +2510,7 @@ VALUES (76, 2, 16, 8, '2023-10-2', 900, 17);
 
 
 
-SELECT cart.productId,
+drill_selldrill_sellSELECT cart.productId,
        products.productName,
        products.unitPrice,
        cart.quantity,

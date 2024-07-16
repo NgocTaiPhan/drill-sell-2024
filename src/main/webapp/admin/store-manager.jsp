@@ -74,7 +74,7 @@
                 <li>
                     <a href="products-management.jsp">
                         <i class="ti-check-box"></i>
-                        <p>Quản lý kho</p>
+                        <p>Quản lý sản phẩm</p>
                     </a>
                 </li>
                 <li>
