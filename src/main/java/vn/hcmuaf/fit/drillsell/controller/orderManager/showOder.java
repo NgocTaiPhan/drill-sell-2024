@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.controller.order;
+package vn.hcmuaf.fit.drillsell.controller.orderManager;
 
 import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
 import vn.hcmuaf.fit.drillsell.dao.GHNDistricFetcher;
@@ -15,27 +15,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-
-@WebServlet("/detailOrder")
-public class DetailOrder extends HttpServlet {
+@WebServlet("/admin/viewOrderMa")
+public class showOder extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int orderId = Integer.parseInt(request.getParameter("orderId"));
-
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
 
         if (user != null) {
-            List<Order> list = CheckOutDAO.showItemOrder(orderId);
+            int userId = user.getId();
+
+            List<Order> list = CheckOutDAO.showOrder(userId);
             list.forEach(order -> {
                 String[] addressIds = order.getAddress().split(",");
                 order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2]));
             });
 
-            request.setAttribute("detailOrder", list);
-            request.getRequestDispatcher("DetailOrder.jsp").forward(request, response); // Điều hướng đến trang JSP
+            request.setAttribute("viewOrderMa", list);
+            request.getRequestDispatcher( "/admin/order-management.jsp").forward(request, response); // Điều hướng đến trang JSP
         }
-
     }
     private String formatAddress(String provinceId, String districtId, String wardId) {
         String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
@@ -44,11 +42,4 @@ public class DetailOrder extends HttpServlet {
 
         return provinceName + ", " + districtName + ", " + wardName;
     }
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }
-
-
-

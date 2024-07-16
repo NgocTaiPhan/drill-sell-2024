@@ -71,7 +71,7 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="order-management.jsp">
+                    <a href="viewOrderMa">
                         <i class="ti-shopping-cart"></i>
                         <p>Quản lý đơn hàng</p>
                     </a>
@@ -151,8 +151,9 @@
             </thead>
             <tbody>
 
+
             <%
-                List<Order> showView = OrderDAO.showOrder();
+                List<Order> showView = (List<Order>) request.getAttribute("viewOrderMa");
                 if (showView != null) {
                     for (Order p : showView) {
             %>
@@ -165,10 +166,14 @@
 
 
                 <td>
+                    <a href="<%=request.getContextPath()%>/updateStatus?orderId=<%=p.getOrderId()%>" methods="post" class="btn btn-warning">
+                        Trạng thái
+                    </a>
                     <a href="<%= request.getContextPath()%>/showUpdateOrder?orderId=<%=p.getOrderId()%>"
                        class="btn btn-info">
                         Chi tiết
                     </a>
+
                 </td>
             </tr>
 

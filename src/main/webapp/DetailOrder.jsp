@@ -58,13 +58,13 @@
             </div>
 
             <ul class="nav">
-                <li class="active">
+                <li>
                     <a href="profile.jsp">
                         <i class="ti-panel"></i>
                         <p>Tài khoản</p>
                     </a>
                 </li>
-                <li>
+                <li  class="active">
                     <a href="<%= request.getContextPath()%>/viewOrderCustomer">
                         <i class="ti-check-box"></i>
                         <p>Đơn hàng của tôi</p>
@@ -106,23 +106,6 @@
 
                                                 </ul>
                                             </li>
-                                            <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
-
-                                            <%
-
-                                                User u = (User) session.getAttribute("auth");
-                                                boolean logged = u != null;
-                                                //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
-                                                if (logged) {
-                                                    if (u.isRoleUser()) {
-                                            %>
-                                            <li class="active yamm-fw"><a href="admin/dashboard.jsp">Quản lý</a>
-                                            </li>
-                                            <%
-                                                    }
-                                                }
-                                            %>
-
                                         </ul>
                                         <!-- /.navbar-nav -->
                                         <div class="clearfix"></div>
@@ -150,7 +133,7 @@
                     if (orders != null && !orders.isEmpty()) {
                         Order order = orders.get(0); // Lấy đơn hàng đầu tiên
                         double totalAmount = 0.0; // Biến để lưu tổng tiền của đơn hàng
-                        double shipping = order.getShippingFee() * 1000;
+                        double shipping = order.getShippingFee();
                         double s = 0.0;
                         String shippings = currencyFormat.format(shipping);
                         // Lấy ngày dự kiến giao hàng từ phần tử đầu tiên trong orderItems
@@ -214,7 +197,7 @@
                         %>
                         <div class="expectedDate">
                             <label>Ngày dự kiến:</label>
-                            <input style="border: none" name="expectedDate" value="<%=expectedDate %>">
+                            <input style="border: none" name="expectedDate" value="<%=order.getExpectedDate() %>">
                         </div>
                         <div class="shipping">
                             <label>Phí vận chuyển:</label>

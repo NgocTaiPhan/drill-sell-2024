@@ -116,7 +116,7 @@
                         </div>
                         <div class="radio outer-xs">
                             <label>
-                                <input id="optionsRadios2" name="optionsRadios" type="radio" value="">Lưu đăng
+                                <input id="remember" name="remember" type="radio" value="remember">Lưu đăng
                                 nhập
                             </label>
                             <a href="#" class="pull-right " data-toggle="modal" data-target="#forgot-pass">
