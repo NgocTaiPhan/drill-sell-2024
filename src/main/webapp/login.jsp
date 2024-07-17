@@ -140,6 +140,9 @@
                         <a class="btn btn-primary"
                            href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
+                        <a class="btn btn-danger"
+                           href="https://www.facebook.com/v20.0/dialog/oauth?client_id=1499060807366356&redirect_uri=http://localhost:8080/drillsell_war/login-facebook">Đăng
+                            nhập với Facebook</a>
 
 
                     </form>
@@ -380,5 +383,6 @@
 <script src="./assets/js/my-js/notify.js"></script>
 <script src="./assets/js/my-js/ajax-process.js"></script>
 <script src="assets/js/my-js/login.js"></script>
+<script src="assets/js/my-js/login-facebook.js"></script>
 </html>
 

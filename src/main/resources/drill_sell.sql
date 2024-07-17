@@ -40,8 +40,8 @@ CREATE TABLE users
     fullname         VARCHAR(100) NOT NULL,
     address          VARCHAR(200),
     phone            VARCHAR(10),
-    email            VARCHAR(100) NOT NULL UNIQUE,
-    username         VARCHAR(100) NOT NULL UNIQUE,
+    email            VARCHAR(100) NOT NULL,
+    username         VARCHAR(100) NOT NULL,
     passwords        VARCHAR(100) NOT NULL,
     sex              TINYINT(1) DEFAULT 0,
     yearOfBirth      DATE,
@@ -50,6 +50,10 @@ CREATE TABLE users
     userStatus       TINYINT(1) DEFAULT 0  -- Trạng thái của tài khoản: 0 - Đã xác thực(Bình thường), 1 - Đã xóa, 2 - Ẩn, 3 - Khóa, 4 - Chưa xác thực
 
 );
+ALTER TABLE users DROP INDEX email;
+ALTER TABLE users DROP INDEX username;
+
+SHOW INDEX FROM users;
 ALTER TABLE users DROP COLUMN verificationCode;
 
 CREATE TABLE repo
@@ -2521,3 +2525,11 @@ WHERE cart.productId = 2
 
 SELECT productId
 FROM products products
+
+
+
+
+repoSELECT p.productName, oi.productId, SUM(oi.quantity) AS totalQuantity
+FROM orderItem oi
+JOIN products p ON oi.productId = p.productId
+GROUP BY oi.productId, p.productName;
