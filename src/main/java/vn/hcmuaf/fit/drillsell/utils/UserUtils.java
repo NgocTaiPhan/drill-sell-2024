@@ -1,5 +1,8 @@
 package vn.hcmuaf.fit.drillsell.utils;
 
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.User;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -35,5 +38,18 @@ public class UserUtils {
 
     public static boolean isAfterNow(Instant expiryTime) {
         return Instant.now().isAfter(expiryTime);
+    }
+
+    public static User getUserByEmail(String email) {
+        return UsersDAO.getUserByEmail(email);
+    }
+
+    public static void addUser(User user) {
+        UsersDAO.getInstance().addUserGoogleOrFacebook(user);
+    }
+
+
+    public static boolean checkExistEmail(String email) {
+        return UsersDAO.getInstance().checkExistEmail(email);
     }
 }

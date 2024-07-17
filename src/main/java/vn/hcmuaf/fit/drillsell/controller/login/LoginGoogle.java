@@ -2,11 +2,12 @@ package vn.hcmuaf.fit.drillsell.controller.login;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
-import vn.hcmuaf.fit.drillsell.GoogleLogin.Constants;
+import vn.hcmuaf.fit.drillsell.Login.Constants;
 import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.utils.LoginUtils;
+import vn.hcmuaf.fit.drillsell.utils.UserUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,28 +22,40 @@ public class LoginGoogle {
             throws ServletException, IOException {
         // Lấy mã xác thực từ request
         String code = request.getParameter("code");
-        boolean logged = false;
-
-        // Lấy access token từ mã xác thực
-        String accessToken = getToken(code);
-
-        // Lấy thông tin người dùng từ access token sau đó lưu vào user
-        UserGoogleDto userGoogleDto = getUserInfo(accessToken);
-        User user = new User(userGoogleDto.getId(), userGoogleDto.getName(), userGoogleDto.getEmail());
-        System.out.println(userGoogleDto.toString() + "/n" + user.toString());
-        // Lưu thông tin người dùng vào session
         HttpSession session = request.getSession();
-        session.setAttribute("auth", user);
 
-        // Chuyển hướng đến trang chính sau khi đăng nhập thành công
-        response.sendRedirect("home.jsp");
+        try {
+            // Lấy access token từ mã xác thực
+            String accessToken = getToken(code);
+
+            // Lấy thông tin người dùng từ access token sau đó lưu vào user
+            LoginUtils.UserGoogleDTO userGoogleDTO = getUserInfo(accessToken);
+            User user = UserUtils.getUserByEmail(userGoogleDTO.getEmail());
+
+            if (user == null) {
+                UserUtils.addUser(new User(userGoogleDTO.getId(), userGoogleDTO.getName(), userGoogleDTO.getEmail()));
+                user = UserUtils.getUserByEmail(userGoogleDTO.getEmail());
+            }
+
+            // Lưu thông tin người dùng vào session
+            session.setAttribute("auth", user);
+
+            // Chuyển hướng đến trang chính sau khi đăng nhập thành công
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+
+        } catch (IOException | ServletException e) {
+            // Xử lý các exception có thể xảy ra
+            e.printStackTrace();
+            throw new ServletException("Error processing Google login", e);
+        }
     }
 
     // Phương thức lấy access token từ mã xác thực
-    public static String getToken(String code) throws ClientProtocolException, IOException {
+    public static String getToken(String code) throws IOException {
         // Gọi API để lấy token từ mã xác thực
         String response = Request.Post(Constants.getLinkToken())
-                .bodyForm(Form.form().add("client_id", Constants.getClientID())
+                .bodyForm(Form.form()
+                        .add("client_id", Constants.getClientID())
                         .add("client_secret", Constants.getClientSecret())
                         .add("redirect_uri", Constants.getRedirectURI())
                         .add("code", code)
@@ -52,117 +65,16 @@ public class LoginGoogle {
 
         // Chuyển đổi phản hồi từ API thành access token
         JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
-        return jobj.get("access_token").toString().replaceAll("\"", "");
+        return jobj.get("access_token").getAsString();
     }
 
     // Phương thức lấy thông tin người dùng từ access token
-    public static UserGoogleDto getUserInfo(final String accessToken) throws ClientProtocolException, IOException {
+    public static LoginUtils.UserGoogleDTO getUserInfo(final String accessToken) throws IOException {
         // Gọi API để lấy thông tin người dùng từ access token
         String link = Constants.getUserInfor() + accessToken;
         String response = Request.Get(link).execute().returnContent().asString();
 
         // Chuyển đổi phản hồi từ API thành đối tượng UserGoogleDto
-
-        return new Gson().fromJson(response, UserGoogleDto.class);
-    }
-
-    //Inner class để lưu thông tin người dùng khi đăng nhập bằng google
-    public class UserGoogleDto {
-
-        private String id;
-
-        private String email;
-
-        private boolean verifiedEmail;
-
-        private String name;
-
-        private String givenName;
-
-        private String familyName;
-
-        private String picture;
-
-        public UserGoogleDto() {
-        }
-
-        public UserGoogleDto(String id, String email, boolean verifiedEmail, String name, String givenName, String familyName, String picture) {
-            this.id = id;
-            this.email = email;
-            this.verifiedEmail = verifiedEmail;
-            this.name = name;
-            this.givenName = givenName;
-            this.familyName = familyName;
-            this.picture = picture;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public boolean isVerifiedEmail() {
-            return verifiedEmail;
-        }
-
-        public void setVerifiedEmail(boolean verified_email) {
-            this.verifiedEmail = verified_email;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getGivenName() {
-            return givenName;
-        }
-
-        public void setGivenName(String given_name) {
-            this.givenName = given_name;
-        }
-
-        public String getFamilyName() {
-            return familyName;
-        }
-
-        public void setFamilyName(String family_name) {
-            this.familyName = family_name;
-        }
-
-        public String getPicture() {
-            return picture;
-        }
-
-        public void setPicture(String picture) {
-            this.picture = picture;
-        }
-
-        @Override
-        public String toString() {
-            return "UserGoogleDto{" +
-                    "id='" + id + '\'' +
-                    ", email='" + email + '\'' +
-                    ", verifiedEmail=" + verifiedEmail +
-                    ", name='" + name + '\'' +
-                    ", givenName='" + givenName + '\'' +
-                    ", familyName='" + familyName + '\'' +
-                    ", picture='" + picture + '\'' +
-                    '}';
-        }
+        return new Gson().fromJson(response, LoginUtils.UserGoogleDTO.class);
     }
 }

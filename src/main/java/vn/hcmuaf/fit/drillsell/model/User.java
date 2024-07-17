@@ -25,7 +25,7 @@ User {
     }
 
     public User(String id, String name, String email) {
-//        this.id = Integer.parseInt(id);
+//        this.id = id;
         this.fullname = name;
         this.email = email;
     }
