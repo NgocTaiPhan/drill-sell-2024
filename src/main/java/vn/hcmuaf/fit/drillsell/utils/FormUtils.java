@@ -29,7 +29,10 @@ public class FormUtils {
     public static boolean isValidPassword(String password) {
         return password.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$");
     }
-
+    public static boolean checkPassword(String rawPassword, String hashedPassword) {
+        String hashedRawPassword = UserUtils.hashPassword(rawPassword);
+        return hashedRawPassword.equals(hashedPassword);
+    }
     public static int assignInput(HttpServletRequest request, String parameter) {
         String inputParam = request.getParameter(parameter);
         if (!(inputParam == null || inputParam.equals(""))) {

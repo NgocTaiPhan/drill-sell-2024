@@ -3,6 +3,7 @@ package vn.hcmuaf.fit.drillsell.controller.account;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
+import vn.hcmuaf.fit.drillsell.controller.register.ValidationForm;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
 import vn.hcmuaf.fit.drillsell.utils.UserUtils;
@@ -19,27 +20,38 @@ import java.io.IOException;
 public class ChangePass extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String forgotPass = request.getParameter("forgot-pass");
 
-        if ("1".equals(forgotPass)) {
-            // Handle forgotten password scenario
-            handleForgotPassword(request, response, session);
-        } else {
-            // Handle change password scenario
-            handleChangePassword(request, response, session);
-        }
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    String forgotPass = request.getParameter("forgot-pass");
+
+    if ("1".equals(forgotPass)) {
+        handleForgotPassword(request, response, session);
+    } else {
+        handleChangePassword(request, response, session);
     }
+}
 
     private void handleForgotPassword(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+        User u = (User) session.getAttribute("user-forgot-pass");
+        if (u == null) {
+            Notify.errorNotify(response, "Không tìm thấy tài khoản!", Page.NULL_PAGE);
+            return;
+        }
+
         String pass = request.getParameter("pass");
         String cfPass = request.getParameter("cf-pass");
+        ValidationForm validationForm = ValidationForm.getInstance();
+        boolean isValid = validationForm.isValidForgotPassword(response, pass, cfPass);
+        if (!isValid) {
+            return;
+        }
         if (pass.equals(cfPass)) {
-            User u = (User) session.getAttribute("user-forgot-pass");
-          UsersDAO.getInstance().changePassword(u.getUsername(),pass);
-            response.sendRedirect("login.jsp");
+            UsersDAO.getInstance().changePassword(u.getUsername(), pass);
+            Notify.successNotify(response, "Đổi mật khẩu thành công!", Page.LOGIN_PAGE);
+        } else {
+            Notify.errorNotify(response, "Mật khẩu không khớp!", Page.NULL_PAGE);
         }
     }
 
@@ -55,13 +67,9 @@ public class ChangePass extends HttpServlet {
         String newPassword = request.getParameter("pass");
         String confirmPassword = request.getParameter("cf-pass");
 
-        if (!UserUtils.checkPassword(oldPassword, currentUser.getPasswords())) {
-            Notify.warningNotify(response, "Mật khẩu hiện tại không đúng", Page.NULL_PAGE);
-            return;
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            Notify.warningNotify(response, "Mật khẩu nhập lại không khớp", Page.NULL_PAGE);
+        ValidationForm validationForm = ValidationForm.getInstance();
+        boolean isValid = validationForm.isValidChangePassword(response, oldPassword, currentUser.getPasswords(), newPassword, confirmPassword);
+        if (!isValid) {
             return;
         }
 

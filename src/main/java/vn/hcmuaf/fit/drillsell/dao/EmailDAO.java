@@ -32,6 +32,46 @@ public static EmailDAO getInstance(){
         return instance;
 }
 
+
+
+public boolean sendMailWelcome(String to, String subject,String confirmationCode) {
+    Properties props = new Properties();
+    props.put("mail.smtp.host", MailProperties.getHost());
+    props.put("mail.smtp.port", MailProperties.getPort());
+    props.put("mail.smtp.auth", MailProperties.getAuth());
+    props.put("mail.smtp.ssl.trust", MailProperties.getSsl());
+    props.put("mail.smtp.starttls.enable", MailProperties.getTls());
+
+    String username = MailProperties.getUsername();
+    String password = MailProperties.getPassword();
+
+    Authenticator auth = new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(username, password);
+        }
+    };
+
+    Session session = Session.getInstance(props, auth);
+
+    try {
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(MailProperties.getUsername()));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+        message.setSubject(subject);
+
+        String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode);
+
+        message.setContent(fullEmailContent, "text/html; charset=utf-8");
+
+        send(message);
+        System.out.println("Done");
+    } catch (MessagingException e) {
+        throw new RuntimeException(e);
+    }
+
+    return true;
+}
     public boolean sendMailOTP(String to, String subject, String confirmationCode) {
         System.out.println( MailProperties.getUsername());
         Properties props = new Properties();
@@ -80,46 +120,6 @@ public static EmailDAO getInstance(){
 
         return true;
     }
-
-public boolean sendMailWelcome(String to, String subject,String confirmationCode) {
-    Properties props = new Properties();
-    props.put("mail.smtp.host", MailProperties.getHost());
-    props.put("mail.smtp.port", MailProperties.getPort());
-    props.put("mail.smtp.auth", MailProperties.getAuth());
-    props.put("mail.smtp.ssl.trust", MailProperties.getSsl());
-    props.put("mail.smtp.starttls.enable", MailProperties.getTls());
-
-    String username = MailProperties.getUsername();
-    String password = MailProperties.getPassword();
-
-    Authenticator auth = new Authenticator() {
-        @Override
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(username, password);
-        }
-    };
-
-    Session session = Session.getInstance(props, auth);
-
-    try {
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(MailProperties.getUsername()));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-        message.setSubject(subject);
-
-        String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode);
-
-        message.setContent(fullEmailContent, "text/html; charset=utf-8");
-
-        send(message);
-        System.out.println("Done");
-    } catch (MessagingException e) {
-        throw new RuntimeException(e);
-    }
-
-    return true;
-}
-
     public static void main(String[] args) {
         EmailDAO.getInstance().sendMailOTP("ngoctaiphan.cv@gmail.com","Test mail","fdgfdgd");
     }
