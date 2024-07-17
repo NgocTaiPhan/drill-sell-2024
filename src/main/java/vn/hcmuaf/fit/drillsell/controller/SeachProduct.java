@@ -5,6 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.dao.SearchDAO;
 
@@ -35,8 +37,21 @@ public class SeachProduct extends HttpServlet {
         request.getRequestDispatcher("seachProduct.jsp").forward(request, response);
 
     }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String keyword = request.getParameter("name");
+        List<Products> products = searchDAO.searchProductByName(keyword);
 
+        Gson gson = new Gson();
+        String jsonProducts = gson.toJson(products);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonProducts);
     }
+
+
+}
 
 
 

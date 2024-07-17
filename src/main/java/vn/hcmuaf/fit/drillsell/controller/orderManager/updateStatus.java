@@ -55,7 +55,7 @@ public class updateStatus extends HttpServlet {
             return;
         }
         PrintWriter out = response.getWriter();
-        out.println("<script>window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
+        out.println("<script>window.location.href='" + request.getContextPath() + "/admin/viewOrderMa"  + "';</script>");
         Log log = new Log();
         log.setUserId(auth.getId());
         String logDetails = "Order ID: " + orderId + ", Status: " + statuss ;

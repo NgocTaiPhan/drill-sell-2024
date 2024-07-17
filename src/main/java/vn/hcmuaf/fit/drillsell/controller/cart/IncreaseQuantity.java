@@ -18,25 +18,17 @@ public class IncreaseQuantity extends HttpServlet {
         // Lấy productId từ request
         String productIdParam = request.getParameter("productId");
         int productId = Integer.parseInt(productIdParam);
-
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
         int userId = user.getId();
-
-        // Kiểm tra nếu số lượng trong giỏ hàng vượt quá giới hạn
-        if (CartDAO.getQuantity(userId, productId) >= CartDAO.getQuantityRepo(productId)) {
-            // Thiết lập thông báo lỗi
-            request.setAttribute("errQuantity", "Số lượng đã đạt mức giới hạn.");
-            request.getRequestDispatcher("cart.jsp").forward(request, response);
-            return;
-        }
-
-        // Gọi phương thức updateQuantityHight nếu số lượng trong giỏ hàng nhỏ hơn số lượng trong kho
-        boolean success = CartDAO.updateQuantityHight(userId, productId);
-
-        // Gửi phản hồi về trình duyệt
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(String.valueOf(success));
+            if(CartDAO.getQuantity(userId, productId) >= CartDAO.getQuantityRepo(productId)){
+                return;
+            }
+            else {
+                boolean success = CartDAO.updateQuantityHight(userId, productId);
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(String.valueOf(success));
+            }
     }
 }

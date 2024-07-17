@@ -6,6 +6,9 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.GHNProvinceFetcher" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.GHNDistricFetcher" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.dao.GHNWardFetcher" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
 <% List<Order> list = (List<Order>) request.getAttribute("showUpdateOrder");%>
@@ -106,7 +109,7 @@
         <div id="container" style="margin-top: 50px; margin-bottom: 400px">
             <form action="showUpdateOrder" method="post">
 
-                <a href="<%= request.getContextPath() + "/admin/order-management.jsp"%>"
+                <a href="<%= request.getContextPath() + "/admin/viewOrderMa"%>"
                    style="float: right; margin-right: 30px; text-decoration: none; margin-top: 20px; font-weight: bold; color: #772222">x</a>
                 <% if (list != null && !list.isEmpty()) {
                     Order p = list.get(0);
@@ -138,7 +141,41 @@
                         </tr>
                         <tr>
                             <td>Địa chỉ:</td>
-                            <td><input style="width: 500px" name="address" value="<%= p.getAddress() %>"></td>
+                            <td>
+                            <input type="hidden" style="width: 500px" name="address" value="<%= p.getAddress() %>">
+                            <div class="css_select_div" style="display: flex">
+                                <select id="province" class="form-control" name="tinh">
+                                    <%
+                                        String provinceId = (String) request.getAttribute("provinceId");
+                                        if (provinceId != null && !provinceId.isEmpty()) {
+                                            // Hiển thị tùy chỉnh với thông tin tỉnh từ attribute request
+                                            String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId); // Thay thế bằng phương thức lấy tên tỉnh từ ID
+                                    %>
+                                    <option value="<%= provinceId %>"><%= provinceName %></option>
+                                    <% } %>
+                                </select>
+                                <select style="margin-left: 20px" class="form-control" id="district" name="quan">
+                                    <%
+                                        String dictricId = (String) request.getAttribute("dictricId");
+                                        if (dictricId != null && !dictricId.isEmpty()) {
+                                            // Hiển thị tùy chỉnh với thông tin tỉnh từ attribute request
+                                            String dictricName = GHNDistricFetcher.getDistrictNameById(dictricId); // Thay thế bằng phương thức lấy tên tỉnh từ ID
+                                    %>
+                                    <option value="<%= dictricId %>"><%= dictricName %></option>
+                                    <% } %>
+                                </select >
+                                <select style="margin-left: 20px" class="form-control" id="ward" name="phuong">
+                                    <%
+                                        String wardId = (String) request.getAttribute("wardId");
+                                        if (wardId != null && !wardId.isEmpty()) {
+                                            // Hiển thị tùy chỉnh với thông tin tỉnh từ attribute request
+                                            String wardName = GHNWardFetcher.getWardNameById(dictricId, wardId); // Thay thế bằng phương thức lấy tên tỉnh từ ID
+                                    %>
+                                    <option value="<%= wardId %>"><%= wardName %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            </td>
                         </tr>
                         <tr>
                             <td>Trạng thái:</td>
@@ -194,9 +231,7 @@
                             <a href="updateOrderQuantity?orderId=<%=p.getOrderId()%>"  class="btn btn-info">
                                 Cập nhật số lượng
                             </a>
-                            <a href="updateStatus?orderId=<%=p.getOrderId()%>" methods="post" class="btn btn-warning">
-                                Cập nhật trạng thái
-                            </a>
+
 
                             <button type="submit" class="btn btn-danger">
                                 Lưu
@@ -311,6 +346,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
+<script src="assets/js/my-js/address.js"></script>
 
 </html>

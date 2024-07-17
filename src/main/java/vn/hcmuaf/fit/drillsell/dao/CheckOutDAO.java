@@ -36,15 +36,16 @@ public class CheckOutDAO {
             for (Order order : orders) {
                 if (orderId == -1) {
                     // Tính toán phí vận chuyển
-                    double shippingFee = calculateShippingFee(order.getAddress());
+//                    double shippingFee = calculateShippingFee(order.getAddress());
 
-                    orderId = handle.createUpdate("INSERT INTO orders(userId, stauss, nameCustomer, address, phone, shippingFee) " +
-                                    "VALUES (:userId, 'Đang xử lý', :nameCustomer, :address, :phone, :shippingFee)")
+                    orderId = handle.createUpdate("INSERT INTO orders(userId, stauss, nameCustomer, address, phone, shippingFee, expectedDate) " +
+                                    "VALUES (:userId, 'Đang xử lý', :nameCustomer, :address, :phone, :shippingFee, :expectedDate)")
                             .bind("userId", order.getUserId())
                             .bind("nameCustomer", order.getNameCustomer())
                             .bind("phone", order.getPhone())
                             .bind("address", order.getAddress())
-                            .bind("shippingFee", shippingFee)
+                            .bind("shippingFee", order.getShippingFee())
+                            .bind("expectedDate", order.getExpectedDate())
                             .executeAndReturnGeneratedKeys("orderId")
                             .mapTo(int.class)
                             .one();
@@ -276,6 +277,8 @@ public class CheckOutDAO {
 
 
 
+
+
     public static int getOrderId() {
         return DbConnector.me().get().withHandle(handle -> {
             return handle.createQuery("SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1")
@@ -287,7 +290,7 @@ public class CheckOutDAO {
 
 
     public static void main(String[] args) {
-//        // Tạo danh sách các đối tượng Order với danh sách OrderItem
+        // Tạo danh sách các đối tượng Order với danh sách OrderItem
 //        OrderItem orderItem1 = new OrderItem(1, 120, 3, 3);
 //        OrderItem orderItem2 = new OrderItem(1, 142, 4, 6);
 //        OrderItem orderItem3 = new OrderItem(1, 163, 5, 2);
@@ -297,7 +300,7 @@ public class CheckOutDAO {
 //        boolean areOrdersInserted = CheckOutDAO.insertOrders(orders);
 //        System.out.println("Orders inserted: " + areOrdersInserted);
 ////        deleteCart(3);
-        System.out.println(showItemOrder(4));
+        System.out.println(showItemOrder(25));
     }
 
 }

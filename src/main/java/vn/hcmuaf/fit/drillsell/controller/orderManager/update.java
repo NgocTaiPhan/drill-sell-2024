@@ -1,8 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.orderManager;
 
-import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
-import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-import vn.hcmuaf.fit.drillsell.dao.OrderDAO;
+import vn.hcmuaf.fit.drillsell.dao.*;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
@@ -26,6 +24,13 @@ public class update extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         List<Order> list = CheckOutDAO.showItemOrder(orderId);
+        list.forEach(order -> {
+            String[] addressIds = order.getAddress().split(",");
+            order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2]));
+            request.setAttribute("provinceId", addressIds[0]);
+            request.setAttribute("dictricId", addressIds[1]);
+            request.setAttribute("wardId", addressIds[2]);
+        });
         request.setAttribute("showUpdateOrder", list);
         request.getRequestDispatcher("/detailOrderManager.jsp").forward(request, response);
     }
@@ -34,19 +39,18 @@ public class update extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         Order order = new Order();
-
         String statuss = request.getParameter("statuss");
         String orderIdItemStr = request.getParameter("OrderIdItem");
         String quantityStr = request.getParameter("quantity");
         String expectedDateStr = request.getParameter("expectedDate"); // Sử dụng chuỗi ngày tháng trực tiếp
-
-        String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        String tinh = request.getParameter("tinh");
+        String quan = request.getParameter("quan");
+        String phuong = request.getParameter("phuong");
+        String address = tinh + "," + quan +"," +phuong;
         int userId = Integer.parseInt(request.getParameter("userId"));
-
         // Lấy ngày dự kiến hiện tại từ cơ sở dữ liệu
         Order previousOrder = OrderDAO.getOrderById(orderId);
         Date currentExpectedDate = (Date) previousOrder.getExpectedDate(); // Lấy ngày dự kiến hiện tại từ cơ sở dữ liệu
@@ -58,7 +62,11 @@ public class update extends HttpServlet {
             return;
         }
 
-        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + previousOrder.getAddress() + ", Phone: " + previousOrder.getPhone();
+        String[] addressIds = previousOrder.getAddress().split(",");
+        String provinceId = addressIds[0];
+        String districtId = addressIds[1];
+        String wardId = addressIds[2];
+        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + formatAddress(provinceId, districtId, wardId) + ", Phone: " + previousOrder.getPhone();
         previousInfo += ", Expected Date: " + previousOrder.getExpectedDate();
         boolean update = false;
         order.setOrderId(orderId);
@@ -77,7 +85,7 @@ public class update extends HttpServlet {
             out.println("<script>alert('Cập nhật thông tin đơn hàng thành công');window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
             Log log = new Log();
             log.setUserId(userId);
-            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + address + ", Phone: " + phone  + ", Expected Date: " + expectedDateStr;
+            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + formatAddress(tinh, quan, phuong) + ", Phone: " + phone  + ", Expected Date: " + expectedDateStr;
             log.setValuess(logDetails);
             String status = "Cập nhật thông tin đơn hàng";
             log.setStatuss(status);
@@ -86,5 +94,12 @@ public class update extends HttpServlet {
             PrintWriter out = response.getWriter();
             out.println("<script>alert('Cập nhật thông tin đơn hàng không thành công');window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
         }
+    }
+    private String formatAddress(String provinceId, String districtId, String wardId) {
+        String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
+        String districtName = GHNDistricFetcher.getDistrictNameById(districtId);
+        String wardName = GHNWardFetcher.getWardNameById(districtId, wardId);
+
+        return provinceName + ", " + districtName + ", " + wardName;
     }
 }

@@ -111,22 +111,6 @@
 
                                                 </ul>
                                             </li>
-                                            <li class="active  yamm-fw"><a href="contact.jsp">Liên hệ</a></li>
-
-                                            <%
-
-                                                User u = (User) session.getAttribute("auth");
-                                                boolean logged = u != null;
-                                                //Kiểm tra quyền người dùng, nếu là admin thì hiển thị thẻ Quản lý
-                                                if (logged) {
-                                                    if (u.isRoleUser()) {
-                                            %>
-                                            <li class="active yamm-fw"><a href="admin/dashboard.jsp">Quản lý</a>
-                                            </li>
-                                            <%
-                                                    }
-                                                }
-                                            %>
 
                                         </ul>
                                         <!-- /.navbar-nav -->

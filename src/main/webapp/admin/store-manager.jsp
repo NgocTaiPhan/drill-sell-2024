@@ -78,7 +78,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="order-management.jsp">
+                    <a href="viewOrderMa">
                         <i class="ti-shopping-cart"></i>
                         <p>Quản lý đơn hàng</p>
                     </a>
