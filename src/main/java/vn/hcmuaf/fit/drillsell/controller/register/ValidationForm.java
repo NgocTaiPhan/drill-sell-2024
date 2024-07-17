@@ -325,4 +325,71 @@ public boolean validateUserData(
         return true;
 
     }
+    public boolean isValidChangePassword(
+            HttpServletResponse response,
+            String oldPassword,
+            String currentPassword,
+            String newPassword,
+            String confirmPassword
+    )
+            throws IOException {
+        // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
+        // Kiểm tra mật khẩu hiện tại
+        if (FormUtils.isNullOrEmpty(oldPassword)) {
+            Notify.errorNotify(response, "Hãy nhập mật khẩu hiện tại!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.checkPassword(oldPassword, currentPassword)) {
+            Notify.warningNotify(response, "Mật khẩu hiện tại không đúng", Page.NULL_PAGE);
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(newPassword)) {
+            Notify.errorNotify(response, "Hãy nhập mật khẩu mới!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidPassword(newPassword)) {
+            Notify.errorNotify(response, "Mật khẩu mới không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
+
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(confirmPassword)) {
+            Notify.errorNotify(response, "Hãy nhập lại mật khẩu!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            Notify.errorNotify(response, "Mật khẩu không trùng khớp!", Page.NULL_PAGE);
+            return false;
+        }
+        return true;
+
+    }
+//    validation cho quên mật khẩu
+    public boolean isValidForgotPassword(
+            HttpServletResponse response,
+            String newPassword,
+            String confirmPassword
+    )
+            throws IOException {
+        // Kiểm tra từng điều kiện xác thực và gửi phản hồi lỗi nếu có
+        // Kiểm tra mật khẩu hiện tại
+        if (FormUtils.isNullOrEmpty(newPassword)) {
+            Notify.errorNotify(response, "Hãy nhập mật khẩu mới!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!FormUtils.isValidPassword(newPassword)) {
+            Notify.errorNotify(response, "Mật khẩu mới không hợp lệ! (Phải chứa chữ hoa, chữ thường, số và ít nhất 8 ký tự)", Page.NULL_PAGE);
+
+            return false;
+        }
+        if (FormUtils.isNullOrEmpty(confirmPassword)) {
+            Notify.errorNotify(response, "Hãy nhập lại mật khẩu!", Page.NULL_PAGE);
+            return false;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            Notify.errorNotify(response, "Mật khẩu không trùng khớp!", Page.NULL_PAGE);
+            return false;
+        }
+        return true;
+
+    }
 }

@@ -134,20 +134,7 @@
                                 Quên mật khẩu
                             </a>
                         </div>
-<%--                        <div class="form-group">--%>
-<%--                            <label class="info-title" >Captcha<span>*</span></label>--%>
-<%--&lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
-<%--                            <img src="captcha-image">--%>
-<%--                            <br>--%>
-<%--                            <input type="text" name ="captcha">--%>
-<%--                        </div>--%>
-<%--                        <div class="form-group">--%>
-<%--                            <label class="info-title" >&nbsp;<span>*</span></label>--%>
-<%--                            &lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
-<%--                            &lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
-<%--                            <input type="submit" value="Save">--%>
-<%--                        </div>--%>
+
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
@@ -329,8 +316,42 @@
 
 
 <!-- The modal -->
-<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall"
-     aria-hidden="true">
+<%--<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall"--%>
+<%--     aria-hidden="true">--%>
+<%--    <div class="modal-dialog modal-sm">--%>
+<%--        <div class="modal-content">--%>
+
+<%--            <div class="modal-header">--%>
+<%--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">--%>
+<%--                    <span aria-hidden="true">&times;</span>--%>
+<%--                </button>--%>
+<%--                <h5 class="modal-title" id="modalLabelSmall">Điền thông tin để lấy lại mật khẩu</h5>--%>
+<%--            </div>--%>
+
+<%--            <div class="modal-body">--%>
+<%--                <form onsubmit="submitFormAndRedirect(event, this,'forgot-pass')">--%>
+
+
+<%--                    <label for="input-email">Email</label>--%>
+<%--                    <input name="input-email" type="text" id="input-email" class="form-control"--%>
+<%--                           aria-describedby="help-input-email" placeholder="Nhập email">--%>
+
+<%--                    <label for="input-username">Tên đăng nhập</label>--%>
+<%--                    <input name="input-username" type="text" id="input-username" class="form-control"--%>
+<%--                           aria-describedby="help-input-username" placeholder="Nhập tên đăng nhập">--%>
+
+<%--                    <label for="submit-forgot-pass"></label>--%>
+<%--                    <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"--%>
+<%--                           aria-describedby="help-input-username"--%>
+<%--                           value="Gửi ">--%>
+<%--                </form>--%>
+
+<%--            </div>--%>
+
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</div>--%>
+<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
 
@@ -342,23 +363,15 @@
             </div>
 
             <div class="modal-body">
-                <form onsubmit="submitFormAndRedirect(event, this,'forgot-pass')">
-
-
+                <form action="forgot-pass" method="post">
                     <label for="input-email">Email</label>
-                    <input name="input-email" type="text" id="input-email" class="form-control"
-                           aria-describedby="help-input-email" placeholder="Nhập email">
+                    <input name="input-email" type="text" id="input-email" class="form-control" placeholder="Nhập email" required>
 
                     <label for="input-username">Tên đăng nhập</label>
-                    <input name="input-username" type="text" id="input-username" class="form-control"
-                           aria-describedby="help-input-username" placeholder="Nhập tên đăng nhập">
+                    <input name="input-username" type="text" id="input-username" class="form-control" placeholder="Nhập tên đăng nhập" required>
 
-                    <label for="submit-forgot-pass"></label>
-                    <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"
-                           aria-describedby="help-input-username"
-                           value="Gửi ">
+                    <button type="submit" class="btn btn-primary form-control mt-3">Gửi</button>
                 </form>
-
             </div>
 
         </div>

@@ -39,26 +39,6 @@
 
 
 
-    <filter>
-        <filter-name>LoginFilter</filter-name>
-        <filter-class>myfilter.LoginFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/cart/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/checkout/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/profile/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>LoginFilter</filter-name>
-        <url-pattern>/view/*</url-pattern>
-    </filter-mapping>
     <servlet>
         <servlet-name>AddExcel</servlet-name>
         <servlet-class>vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment.AddExcel</servlet-class>
