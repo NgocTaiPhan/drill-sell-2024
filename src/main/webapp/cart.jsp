@@ -307,7 +307,7 @@
             <div class="col-12">
 
                 <form action="checkOut" method="get">
-                    <div class="err"></div>
+
                         <% String err = (String) request.getAttribute("err");
                         if (err != null) {
                     %>

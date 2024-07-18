@@ -386,6 +386,7 @@
 </div>
 <div class="address">
     <form action="order" method="post">
+        <input type="hidden" value="NCB" name="bankCode">
         <div class="receive">
             <div id="err" style="color: red; <% if (request.getAttribute("err") == null) { %>display: none;<% } %>">
                 <%= request.getAttribute("err") %>
@@ -406,6 +407,7 @@
                         <option value="">Chọn Phường/Xã</option>
                     </select>
                 </div>
+                <input style="margin-left: 10px" value="" type="text" id="soNha"  name="soNha" placeholder="Nhập rõ địa chỉ ...">
 
             </div>
         </div>

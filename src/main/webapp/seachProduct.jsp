@@ -11,7 +11,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.CartDAO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%List<Products> searchResults = (List<Products>) request.getAttribute("loadProduct");%>
+<%List<Products> searchResults = (List<Products>) session.getAttribute("loadProduct");%>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -478,8 +478,6 @@
         </div>
 
     </div>
-
-
     <footer id="footer" class="footer color-bg">
         <div class="footer-bottom">
             <div class="container">

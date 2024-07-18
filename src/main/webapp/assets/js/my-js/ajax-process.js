@@ -28,12 +28,16 @@ function submitFormAndRedirect(event, form, urlServlet) {
         data: $(form).serialize(),
         success: function (response) {
             notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);
-            },
+            setTimeout(function() {
+                location.reload();
+            }, 50);
+        },
             error: function (xhr, status, error) {
                 var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
                 errorNotify(errorMessage);
             }
         });
+
 }
 
 function callServletAndRedirect(servletUrl, pageUrl) {

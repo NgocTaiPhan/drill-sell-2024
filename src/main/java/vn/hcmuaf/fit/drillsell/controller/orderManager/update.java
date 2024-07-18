@@ -26,10 +26,13 @@ public class update extends HttpServlet {
         List<Order> list = CheckOutDAO.showItemOrder(orderId);
         list.forEach(order -> {
             String[] addressIds = order.getAddress().split(",");
-            order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2]));
+            order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2])+ "," + addressIds[3]);
             request.setAttribute("provinceId", addressIds[0]);
             request.setAttribute("dictricId", addressIds[1]);
             request.setAttribute("wardId", addressIds[2]);
+            request.setAttribute("soNha", addressIds[3]);
+            String getStatus = OrderDAO.getUpdateStatus(order.getStauss());
+            order.setStauss(getStatus);
         });
         request.setAttribute("showUpdateOrder", list);
         request.getRequestDispatcher("/detailOrderManager.jsp").forward(request, response);
@@ -48,8 +51,10 @@ public class update extends HttpServlet {
         String phone = request.getParameter("phone");
         String tinh = request.getParameter("tinh");
         String quan = request.getParameter("quan");
+        String soNha = request.getParameter("soNha");
+
         String phuong = request.getParameter("phuong");
-        String address = tinh + "," + quan +"," +phuong;
+        String address = tinh + "," + quan +"," +phuong+","+soNha;
         int userId = Integer.parseInt(request.getParameter("userId"));
         // Lấy ngày dự kiến hiện tại từ cơ sở dữ liệu
         Order previousOrder = OrderDAO.getOrderById(orderId);
@@ -66,7 +71,8 @@ public class update extends HttpServlet {
         String provinceId = addressIds[0];
         String districtId = addressIds[1];
         String wardId = addressIds[2];
-        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + previousOrder.getStauss() + ", Address: " + formatAddress(provinceId, districtId, wardId) + ", Phone: " + previousOrder.getPhone();
+        String soNhas = addressIds[3];
+        String previousInfo = "Order ID: " + previousOrder.getOrderId() + ", Status: " + OrderDAO.getUpdateStatus(previousOrder.getStauss()) + ", Address: " + formatAddress(provinceId, districtId, wardId) +","+ soNhas + ", Phone: " + previousOrder.getPhone();
         previousInfo += ", Expected Date: " + previousOrder.getExpectedDate();
         boolean update = false;
         order.setOrderId(orderId);
@@ -85,7 +91,7 @@ public class update extends HttpServlet {
             out.println("<script>alert('Cập nhật thông tin đơn hàng thành công');window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
             Log log = new Log();
             log.setUserId(userId);
-            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + formatAddress(tinh, quan, phuong) + ", Phone: " + phone  + ", Expected Date: " + expectedDateStr;
+            String logDetails = "Order ID: " + orderId + ", Status: " + statuss + ", Address: " + formatAddress(tinh, quan, phuong)+","+soNha + ", Phone: " + phone  + ", Expected Date: " + expectedDateStr;
             log.setValuess(logDetails);
             String status = "Cập nhật thông tin đơn hàng";
             log.setStatuss(status);

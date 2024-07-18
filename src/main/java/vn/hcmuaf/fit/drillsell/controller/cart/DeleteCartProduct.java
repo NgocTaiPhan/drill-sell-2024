@@ -20,7 +20,7 @@ public class DeleteCartProduct extends HttpServlet {
        int productId = Integer.parseInt(productParama);
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
-        String userIdParam = String.valueOf(user.getId()); // Lấy userId từ thông tin người dùng trong session
+        String userIdParam = String.valueOf(user.getId());
         int userId = Integer.parseInt(userIdParam);
        boolean deleteProduct = CartDAO.delete(userId, productId);
        response.setContentType("text/plain");

@@ -34,7 +34,7 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-    <%   NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
+    <% NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN")); %>
 </head>
 <body>
 
@@ -60,7 +60,7 @@
                         <p>Tài khoản</p>
                     </a>
                 </li>
-                <li  class="active">
+                <li class="active">
                     <a href="<%= request.getContextPath()%>/viewOrderCustomer">
                         <i class="ti-check-box"></i>
                         <p>Đơn hàng của tôi</p>
@@ -132,7 +132,18 @@
         </nav>
 
         <div class="content">
+            <%--            <div class="err" style="font-size: 20px; color: #ffffff; background: #366ddb; height: 50px; width: 200px; margin-left: 50px; ">--%>
+            <%--                <c:if test="${not empty sessionScope.notificationMessage}">--%>
+            <%--                    ${sessionScope.notificationMessage}--%>
+            <%--                </c:if></div>--%>
+
             <div class="container-fluid">
+                <% String err = (String) request.getAttribute("notificationMessage");
+                    if (err != null) {
+                %>
+                <div class="alert alert-danger" style="color: white; font-size: 18px"><%= err %>
+                </div>
+                <% } %>
                 <table id="myOrder" class="table table-bordered table-striped">
                     <thead style="text-align: center">
                     <tr>
@@ -146,25 +157,34 @@
                     </thead>
                     <tbody>
                     <%
-                        List<Order> orders = (List<Order>) request.getAttribute("viewOrderCustomer");
+                        List<Order> orders = (List<Order>) request.getAttribute("viewOrderCustomers");
                         if (orders != null) {
                             for (Order order : orders) {
                     %>
                     <tr>
-                        <td><%= order.getOrderId() %></td>
-                        <td><%= order.getStauss() %></td>
-                        <td><%= order.getNameCustomer() %></td>
-                        <td><%= order.getPhone() %></td>
-                        <td><%= order.getAddress() %></td>
                         <td>
-                            <a href="<%= request.getContextPath() %>/detailOrder?orderId=<%= order.getOrderId() %>" class="btn btn-info">
+                            <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
+                            <%= order.getOrderId() %>
+                        </td>
+                        <td>
+                            <input type="hidden" name="status" value="<%= order.getStauss() %>">
+                            <%= order.getStauss() %>
+                        </td>
+                        <td><%= order.getNameCustomer() %>
+                        </td>
+                        <td><%= order.getPhone() %>
+                        </td>
+                        <td><%= order.getAddress() %>
+                        </td>
+                        <td>
+                            <a href="<%= request.getContextPath() %>/detailOrder?orderId=<%= order.getOrderId() %>"
+                               class="btn btn-info">
                                 Xem chi tiết
                             </a>
-                            <button onclick="callServlet('viewOrderCustomer',{name:'orderId',dataValue:'<%=order.getOrderId()%>'})"
-                                    type="submit"
-                                    class="btn btn-danger">
-                                    Hủy đơn
-                                </button>
+                            <a href="<%=request.getContextPath()%>/Cancel?orderId=<%= order.getOrderId() %>"
+                               class="btn btn-danger">
+                                Hủy đơn
+                            </a>
                         </td>
                     </tr>
                     <%
@@ -177,6 +197,8 @@
                     <%
                         }
                     %>
+
+
                     </tbody>
                 </table>
             </div>
@@ -184,52 +206,50 @@
 
 
     </div>
+</div>
+<style>
+    input {
+        border: none;
+        width: 200px;
+    }
+</style>
+
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="pull-left">
+            <ul>
+
+                <li>
+                    <a href="http://www.creative-tim.com">
+                        Creative Tim
+                    </a>
+                </li>
+                <li>
+                    <a href="http://blog.creative-tim.com">
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.creative-tim.com/license">
+                        Licenses
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="copyright pull-right">
+            &copy;
+            <script>document.write(new Date().getFullYear())</script>
+            , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
+            Tim</a>
         </div>
-        <style>
-            input{
-                border: none;
-                width: 200px;
-            }
-        </style>
-
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-
-                        <li>
-                            <a href="http://www.creative-tim.com">
-                                Creative Tim
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://blog.creative-tim.com">
-                                Blog
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.creative-tim.com/license">
-                                Licenses
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright pull-right">
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script>
-                    , made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative
-                    Tim</a>
-                </div>
-            </div>
-        </footer>
-
     </div>
+</footer>
+
+</div>
 </div>
 
 
 </body>
-
-
 
 
 <!--   Core JS Files   -->
@@ -258,13 +278,6 @@
 <script>
     let toolbar = document.createElement('div');
     toolbar.innerHTML = '<b></b>';
-    // let addProdBtn = document.createElement('div')
-    // Tạo nút thêm sản phẩm để khi nhấp vào sẽ xuất hiện cửa sổ pop-up
-
-    addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="my-modal.js" data-target="#add-product">Thêm sản phẩm </button>'
-
-    // addProdBtn.innerHTML = ' <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add-product">Thêm sản phẩm </button>'
-
     $(document).ready(function () {
 
         new DataTable('#myOrder', {
@@ -277,12 +290,7 @@
         });
     });
 
-    $(document).ready((e) => {
 
-
-
-
-    })
 </script>
 
 </html>

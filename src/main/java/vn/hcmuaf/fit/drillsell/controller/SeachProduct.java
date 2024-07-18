@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import vn.hcmuaf.fit.drillsell.model.Products;
@@ -28,8 +29,8 @@ public class SeachProduct extends HttpServlet {
         // Simulate product search (replace this with your actual search logic)
         List<Products> products = searchDAO.searchProductByName(keyword);
         // Chuyển danh sách sản phẩm thành JSON
-
-        request.setAttribute("loadProduct", products);
+        HttpSession session = request.getSession();
+        session.setAttribute("loadProduct", products);
 
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("UTF-8");

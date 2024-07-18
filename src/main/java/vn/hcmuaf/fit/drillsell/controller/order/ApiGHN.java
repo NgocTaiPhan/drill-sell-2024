@@ -130,6 +130,6 @@ public class ApiGHN {
     }
 
     public static void main(String[] args) {
-        System.out.println(getData("250,3445, 640308", "1966", "190213").toString());
+        System.out.println(getData("202,1463,21809", "1463", "21809").toString());
     }
 }

@@ -108,17 +108,19 @@
                             <!--                </div>-->
 
 
-
                             <div class="nav-bg-class">
                                 <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                                 >
                                     <div class="nav-outer">
                                         <ul class="nav navbar-nav">
-                                            <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
+                                            <li class="active  yamm-fw"><a
+                                                    href="<%= request.getContextPath() %>/home.jsp">Trang chủ</a></li>
                                             <li class="active  yamm-fw"><a
                                                     href="<%= request.getContextPath() %>/product.jsp"
                                             >Sản phẩm</a></li>
-                                            <li class="active  yamm-fw"><a href="<%= request.getContextPath() %>/revenueChart">Xem thống kê</a></li>
+                                            <li class="active  yamm-fw"><a
+                                                    href="<%= request.getContextPath() %>/revenueChart">Xem thống kê</a>
+                                            </li>
                                         </ul>
                                         <!-- /.navbar-nav -->
                                         <div class="clearfix"></div>
@@ -138,7 +140,9 @@
 
             </div>
         </nav>
+
         <table id="order" style="margin-top: 30px" class="table">
+
             <thead>
             <tr>
                 <th>Mã đơn hàng</th>
@@ -146,7 +150,7 @@
                 <th>Địa chỉ</th>
                 <th>Số điện thoại</th>
                 <th>Trạng thái</th>
-                <th>Hành động</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -157,18 +161,49 @@
                 if (showView != null) {
                     for (Order p : showView) {
             %>
+
             <tr>
-                <td><%=p.getOrderId()%></td>
-                <td><%= p.getNameCustomer()%></td>
-                <td><%= p.getAddress()%></td>
-                <td><%= p.getPhone()%></td>
-                <td><%= p.getStauss()%></td>
-
-
+                <td><%=p.getOrderId()%>
+                </td>
+                <td><%= p.getNameCustomer()%>
+                </td>
+                <td><%= p.getAddress()%>
+                </td>
+                <td><%= p.getPhone()%>
+                </td>
+                <%--                <td><%= p.getStauss()%></td>--%>
                 <td>
-                    <a href="<%=request.getContextPath()%>/updateStatus?orderId=<%=p.getOrderId()%>" methods="post" class="btn btn-warning">
-                        Trạng thái
-                    </a>
+                    <form action="<%=request.getContextPath()%>/updateStatus" method="post">
+                        <%--                            <%--%>
+                        <%--                                Order order = (Order) request.getAttribute("updateStatus");--%>
+                        <%--                                if (order != null) {--%>
+                        <%--                            %>--%>
+                        <%--                            <a class="back" href="<%= request.getContextPath()%>/admin/viewOrderMa">x</a>--%>
+                        <%--                            <p style="font-size: 20px ; font-weight: bold">Cập nhật trạng thái đơn hàng</p>--%>
+                        <input type="hidden" name="orderId" value="<%= p.getOrderId() %>">
+                        <input type="hidden" name="userId" value="<%= p.getUserId() %>">
+                        <%--                            <input style="width: 40px; text-align: center"  name="orderId" value="<%=order.getOrderId()%>">--%>
+                        <select style="height: 30px; border-radius: 5px" class="status" name="status" id="status">
+                            <option value=""><%=p.getStauss()%>
+                            </option>
+                            <option value="1">Đang xử lý</option>
+                            <option value="2">Đã xác nhận</option>
+                            <option value="3">Người bán đang chuẩn bị hàng</option>
+                            <option value="4">Đã bàn giao cho đơn vị vận chuyển GHTK</option>
+                            <option value="5">Đang giao hàng</option>
+                            <option value="6">Đã giao hàng</option>
+                            <option value="7">Đã hoàn trả</option>
+                            <option value="8">Đã hủy</option>
+                        </select>
+                        <button style="float: right" type="submit"
+                           class="btn btn-warning">
+                            Lưu
+                        </button>
+                    </form>
+                </td>
+                <td>
+
+                    <input type="hidden" name="status" value="<%= p.getStauss()%>">
                     <a href="<%= request.getContextPath()%>/showUpdateOrder?orderId=<%=p.getOrderId()%>"
                        class="btn btn-info">
                         Chi tiết
@@ -204,30 +239,6 @@
         background: none;
     }
 </Style>
-<footer class="footer">
-    <div class="container-fluid">
-        <nav class="pull-left">
-            <ul>
-
-                <li>
-                    <a href="http://www.creative-tim.com">
-                        Creative Tim
-                    </a>
-                </li>
-                <li>
-                    <a href="http://blog.creative-tim.com">
-                        Blog
-                    </a>
-                </li>
-                <li>
-                    <a href="http://www.creative-tim.com/license">
-                        Licenses
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</footer>
 
 
 </div>
@@ -239,6 +250,22 @@
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script src="../assets/js/my-js/admin.js">
+
+</script>
+<script>
+    function updateQuantity(orderId){
+        $.ajax({
+            type: "POST",
+            url: "updateStatus",
+            data: {orderId: orderId},
+            success: function (response) {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi: " + error);
+            }
+        });
+    }
 
 </script>
 

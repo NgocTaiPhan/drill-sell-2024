@@ -143,8 +143,8 @@
                             <td>Địa chỉ:</td>
                             <td>
                             <input type="hidden" style="width: 500px" name="address" value="<%= p.getAddress() %>">
-                            <div class="css_select_div" style="display: flex">
-                                <select id="province" class="form-control" name="tinh">
+                            <div class="css_select_div" style="display: flex; padding: 5px">
+                                <select style="margin-left: -30px; background: none; width: 200px; font-size: 15px; border: 1px solid black"  id="province" class="form-control" name="tinh">
                                     <%
                                         String provinceId = (String) request.getAttribute("provinceId");
                                         if (provinceId != null && !provinceId.isEmpty()) {
@@ -154,7 +154,7 @@
                                     <option value="<%= provinceId %>"><%= provinceName %></option>
                                     <% } %>
                                 </select>
-                                <select style="margin-left: 20px" class="form-control" id="district" name="quan">
+                                <select style="margin-left: 10px;width: 200px; background: none; font-size: 15px; border: 1px solid black" class="form-control" id="district" name="quan">
                                     <%
                                         String dictricId = (String) request.getAttribute("dictricId");
                                         if (dictricId != null && !dictricId.isEmpty()) {
@@ -164,7 +164,7 @@
                                     <option value="<%= dictricId %>"><%= dictricName %></option>
                                     <% } %>
                                 </select >
-                                <select style="margin-left: 20px" class="form-control" id="ward" name="phuong">
+                                <select style="width: 200px;margin-left: 10px;background: none; font-size: 15px; border: 1px solid black" class="form-control" id="ward" name="phuong">
                                     <%
                                         String wardId = (String) request.getAttribute("wardId");
                                         if (wardId != null && !wardId.isEmpty()) {
@@ -174,6 +174,10 @@
                                     <option value="<%= wardId %>"><%= wardName %></option>
                                     <% } %>
                                 </select>
+                                <%
+                                    String soNha = (String) request.getAttribute("soNha");
+                                %>
+                                <input  style="width: 200px;background: none; border-radius: 5px; margin-left: 10px; border: 1px solid grey; " value="<%=soNha%>" type="text" id="soNha"  name="soNha" placeholder="Nhập rõ địa chỉ ...">
                             </div>
                             </td>
                         </tr>
@@ -187,7 +191,6 @@
                         </tr>
                         <table style="margin-top: 20px; margin-bottom: 20px">
                             <tr>
-                                <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>
                                 <th style="text-align: center">Số lượng</th>
                                 <th>Tổng giá</th>
@@ -196,7 +199,6 @@
                                 double price = s.getTotalPrice() * 1000;
                                 String unitPrice = currencyFormat.format(price); %>
                             <tr>
-                                <td><%=s.getProductId() %>
                                 </td>
 
                                 <input type="hidden" name="OrderIdItem" value="<%= s.getOrderId() %>">
@@ -251,13 +253,13 @@
             #container {
                 background: white;
                 margin: auto;
-                width: 700px;
+                width: 1100px;
                 border: 1px solid black;
                 border-radius: 20px;
             }
 
             .content {
-                width: 650px;
+                width: 1000px;
                 margin: auto;
 
             }
