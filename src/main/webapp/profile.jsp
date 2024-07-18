@@ -1,6 +1,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.User" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.model.ProductCategorys" %>
 <%@ page import="vn.hcmuaf.fit.drillsell.dao.ProductDAO" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -28,7 +29,12 @@
     <!--  Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css" rel="stylesheet"/>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script src="assets/js/my-js/notify.js"></script>
     <style type="text/css">
         .css_select_div { text-align: center; }
@@ -138,13 +144,7 @@
                 <div class="header-nav animate-dropdown">
                     <div class="container">
                         <div class="yamm navbar navbar-default" role="navigation">
-                            <!--                <div class="navbar-header">-->
-                            <!--                    <button data-target="#mc-horizontal-menu-collapse" data-toggle="collapse"-->
-                            <!--                            class="navbar-toggle collapsed"-->
-                            <!--                            type="button">-->
-                            <!--                        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span-->
-                            <!--                            class="icon-bar"></span> <span class="icon-bar"></span></button>-->
-                            <!--                </div>-->
+
                             <div class="nav-bg-class">
                                 <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse"
                                 >
@@ -158,7 +158,7 @@
                                                 <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
                                                     phẩm</a>
                                                 <ul class="dropdown-menu ">
-                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                                    <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                                     <li>
                                                         <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                            methods="post">
@@ -211,25 +211,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-<%--                    <div class="col-lg-4 col-md-5">--%>
-<%--                        <div class="card card-user">--%>
-<%--                            <div class="image">--%>
-<%--                                <img src="assets/img/background.jpg" alt="..."/>--%>
-<%--                            </div>--%>
-<%--                            <div class="content">--%>
-<%--                                <div class="author">--%>
-<%--                                    <img class="avatar border-white" src="../assets/img/faces/face-2.jpg" alt="..."/>--%>
-<%--                                    <h4 class="title"><%=u.getFullname()%><br/>--%>
-<%--                                        <a href="#"><small><%=u.getEmail()%>--%>
-<%--                                        </small></a>--%>
-<%--                                    </h4>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                            <hr>--%>
 
-<%--                        </div>--%>
-
-<%--                    </div>--%>
     <div class="col-lg-8 col-md-7">
         <div class="card">
             <div class="header">
@@ -289,28 +271,7 @@
                     </div>
 
 
-<%--                    <div class="row">--%>
-<%--                        <div class="col-md-12">--%>
-<%--                            <div class="form-group">--%>
-<%--                                <label>Địa chỉ</label>--%>
-<%--&lt;%&ndash;                                <input type="text" class="form-control border-input" id="address" placeholder="Home Address">&ndash;%&gt;--%>
-<%--                                <div id="address">--%>
-<%--                                    <select class="css_select" id="tinh" name="tinh">--%>
-<%--                                        <option value="0">Chọn Tỉnh/Thành phố</option>--%>
-<%--                                        <!-- Các tùy chọn tỉnh/thành phố sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                    <select class="css_select" id="quan" name="quan">--%>
-<%--                                        <option value="0">Chọn Quận/Huyện</option>--%>
-<%--                                        <!-- Các tùy chọn quận/huyện sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                    <select class="css_select" id="phuong" name="phuong">--%>
-<%--                                        <option value="0">Chọn Phường/Xã</option>--%>
-<%--                                        <!-- Các tùy chọn phường/xã sẽ được thêm vào đây từ dữ liệu nhận được -->--%>
-<%--                                    </select>--%>
-<%--                                </div>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
+
 
                     <div class="row">
                         <div class="col-md-12">
@@ -348,7 +309,9 @@
                     </div>
 
                     <div class="text-center">
-                        <a class="btn btn-warning btn-fill btn-wd">Đổi mật khẩu</a>
+
+                        <a class="btn btn-warning btn-fill btn-wd" id="changePasswordBtn" href="change-pass.jsp?forgot-pass=0">Đổi mật khẩu</a>
+
                         <a class="btn btn-info btn-fill btn-wd" id="changeUserInfo">Thay đổi thông tin</a>
                     </div>
                     <div class="clearfix"></div>
@@ -434,6 +397,7 @@
             $('#phuong').html(options);
         }
 
+
         $('#changeUserInfo').click(function(e) {
             e.preventDefault();
 
@@ -493,26 +457,14 @@
 </body>
 
 <!--   Core JS Files   -->
-<script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
-<!--  Checkbox, Radio & Switch Plugins -->
-<script src="assets/js/bootstrap-checkbox-radio.js"></script>
 
-<!--  Charts Plugin -->
-<script src="assets/js/chartist.min.js"></script>
-
-<!--  Notifications Plugin    -->
-<script src="assets/js/bootstrap-notify.js"></script>
-
-<!--  Google Maps Plugin    -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 
 <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-<script src="assets/js/paper-dashboard.js"></script>
 
 <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-<script src="assets/js/demo.js"></script>
 <script src="assets/js/my-js/notify.js"></script>
 <script src="assets/js/my-js/ajax-process.js"></script>
 

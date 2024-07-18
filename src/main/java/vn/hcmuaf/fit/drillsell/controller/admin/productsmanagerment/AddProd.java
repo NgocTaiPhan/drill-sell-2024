@@ -3,10 +3,10 @@ package vn.hcmuaf.fit.drillsell.controller.admin.productsmanagerment;
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
-import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.Products;
 import vn.hcmuaf.fit.drillsell.model.User;
+import vn.hcmuaf.fit.drillsell.utils.ProductUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +61,7 @@ public class AddProd {
             Notify.errorNotify(response, "Hãy chọn nhà sản xuất", Page.NULL_PAGE);
             return;
         }
-        if (ProductDAO.getInstance().isExistProdName(prodName)) {
+        if (ProductUtils.isExistProdName(prodName)) {
             Notify.errorNotify(response, "Tên sản phẩm đã tồn tại", Page.NULL_PAGE);
             return;
         }
@@ -85,10 +85,10 @@ public class AddProd {
 
         try {
             Products product = new Products(image, prodName, unitPrice, cateId, nameProducer, describle, specifions);
-            ProductDAO.getInstance().addProduct(product);
+            ProductUtils.addProduct(product);
 
             // Lấy sản phẩm vừa được thêm từ cơ sở dữ liệu
-            Products addedProduct = ProductDAO.getInstance().getProductByName(prodName);
+            Products addedProduct = ProductUtils.getProductByName(prodName);
 
             Notify.successNotify(response, "Thêm sản phẩm thành công!", Page.NULL_PAGE);
 

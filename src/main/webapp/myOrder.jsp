@@ -7,6 +7,7 @@
 <%@ page import="vn.hcmuaf.fit.drillsell.model.Order" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="vn.hcmuaf.fit.drillsell.utils.ProductCategoryUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -98,7 +99,7 @@
                                                 <a class="dropdown-menu-left" data-hover="dropdown">Danh mục sản
                                                     phẩm</a>
                                                 <ul class="dropdown-menu ">
-                                                    <%for (ProductCategorys pc : ProductDAO.getInstance().getAllCategory()) {%>
+                                                    <%for (ProductCategorys pc :  ProductCategoryUtils.getAllCategory()) {%>
                                                     <li>
                                                         <a href="<%= request.getContextPath() %>/load-by-category?category-id=<%=pc.getId()%>"
                                                            methods="post">
