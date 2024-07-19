@@ -43,7 +43,7 @@ public class updateStatus extends HttpServlet {
 //         Check if status update is valid
         if (!OrderDAO.isValidStatuss(currentStatuss, statuss)) {
             PrintWriter out = response.getWriter();
-            out.println("<script>alert('Cập nhật trạng thái đơn hàng không thành công'); window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
+            out.println("<script>alert('Cập nhật trạng thái đơn hàng không thành công'); window.location.href='" + request.getContextPath() + "/admin/viewOrderMa" + "';</script>");
             return;
         }
 
@@ -51,7 +51,7 @@ public class updateStatus extends HttpServlet {
         order.setStauss(statuss);
         if (!OrderDAO.updateStatuss(orderId, statuss)) {
             PrintWriter out = response.getWriter();
-            out.println("<script>alert('Cập nhật trạng thái đơn hàng không thành công'); window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
+            out.println("<script>alert('Cập nhật trạng thái đơn hàng không thành công'); window.location.href='" + request.getContextPath() + "/admin/viewOrderMa" + "';</script>");
             return;
         }
         PrintWriter out = response.getWriter();

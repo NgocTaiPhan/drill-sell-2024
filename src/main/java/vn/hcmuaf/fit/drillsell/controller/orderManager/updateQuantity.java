@@ -1,5 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.orderManager;
 
+import vn.hcmuaf.fit.drillsell.dao.CartDAO;
 import vn.hcmuaf.fit.drillsell.dao.LogDAO;
 import vn.hcmuaf.fit.drillsell.dao.OrderDAO;
 import vn.hcmuaf.fit.drillsell.model.Log;
@@ -40,11 +41,9 @@ public class updateQuantity extends HttpServlet {
         String quantityParam = request.getParameter("quantity");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
-
         if (productIdParam == null || productIdParam.isEmpty() ||
                 orderIdParam == null || orderIdParam.isEmpty() ||
-                quantityParam == null || quantityParam.isEmpty() )
-                 {
+                quantityParam == null || quantityParam.isEmpty()) {
             PrintWriter out = response.getWriter();
             out.println("<script>alert('All fields are required.'); window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderIdParam + "';</script>");
             return;
@@ -64,6 +63,16 @@ public class updateQuantity extends HttpServlet {
         String previousInfo = "";
         if (previousOrderItem != null) {
             previousInfo = "Order ID: " + orderId + ", Product ID: " + productId + ", Previous Quantity: " + previousOrderItem.getQuantity();
+        }
+
+        // Lấy số lượng tồn kho hiện tại
+        int stockQuantity = CartDAO.getQuantityRepo(productId);
+
+        // Kiểm tra xem số lượng cập nhật có lớn hơn số lượng tồn kho không
+        if (quantity > stockQuantity) {
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('Số lượng hiện tại lớn hơn số lượng trong kho'); window.location.href='" + request.getContextPath() + "/showUpdateOrder?orderId=" + orderId + "';</script>");
+            return;
         }
 
         OrderItem item = new OrderItem();
@@ -91,7 +100,7 @@ public class updateQuantity extends HttpServlet {
         }
 
         Log log = new Log();
-        String logDetails =  updatedInfo;
+        String logDetails = updatedInfo;
         log.setValuess(logDetails);
         log.setUserId(userId);
         String status = "Cập nhật số lượng sản phẩm trong đơn hàng";

@@ -387,6 +387,7 @@
 </div>
 <div class="address">
     <form action="order" method="post">
+        <input type="hidden" value="NCB" name="bankCode">
         <div class="receive">
             <div id="err" style="color: red; <% if (request.getAttribute("err") == null) { %>display: none;<% } %>">
                 <%= request.getAttribute("err") %>
@@ -407,6 +408,7 @@
                         <option value="">Chọn Phường/Xã</option>
                     </select>
                 </div>
+                <input style="margin-left: 10px" value="" type="text" id="soNha"  name="soNha" placeholder="Nhập rõ địa chỉ ...">
 
             </div>
         </div>
@@ -469,7 +471,7 @@
                             <td><input id="totalAmount" name="totalAmount" style="padding-left: 5px" value="<%= formattedTotalAmount %>" readonly></td>
                         </tr>
                     </table>
-                    <button type="submit" class="order">Đặt hàng</button>
+                    <button type="submit" class="order" href="/VNP?orderInfor<%=111%>&amount=<%=100000%>">Đặt hàng</button>
                 </div>
             </div>
         </div>

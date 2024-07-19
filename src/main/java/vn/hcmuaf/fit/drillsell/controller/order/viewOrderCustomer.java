@@ -2,10 +2,7 @@ package vn.hcmuaf.fit.drillsell.controller.order;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
-import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
-import vn.hcmuaf.fit.drillsell.dao.GHNDistricFetcher;
-import vn.hcmuaf.fit.drillsell.dao.GHNProvinceFetcher;
-import vn.hcmuaf.fit.drillsell.dao.GHNWardFetcher;
+import vn.hcmuaf.fit.drillsell.dao.*;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
 
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/viewOrderCustomer")
@@ -32,35 +30,22 @@ public class viewOrderCustomer extends HttpServlet {
             List<Order> list = CheckOutDAO.showOrder(userId);
             list.forEach(order -> {
                 String[] addressIds = order.getAddress().split(",");
-                order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2]));
+                order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2] , addressIds[3]) );
+                String getStatus = OrderDAO.getUpdateStatus(order.getStauss());
+                order.setStauss(getStatus);
             });
 
-            request.setAttribute("viewOrderCustomer", list);
-            request.getRequestDispatcher("myOrder.jsp").forward(request, response); // Điều hướng đến trang JSP
+            request.setAttribute("viewOrderCustomers", list);
+            request.getRequestDispatcher("myOrder.jsp").forward(request, response);
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-
-        int orderId = Integer.parseInt(request.getParameter("orderId"));
-        boolean updateStatus = CheckOutDAO.update(orderId);
-
-        if (updateStatus) {
-            Notify.successNotify(response, "Hủy đơn hàng thành công!", Page.NULL_PAGE);
-        } else {
-            Notify.errorNotify(response, "Hủy đơn hàng thất bại!", Page.NULL_PAGE);
-        }
-    }
-
-    private String formatAddress(String provinceId, String districtId, String wardId) {
+    private String formatAddress(String provinceId, String districtId, String wardId, String street) {
         String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
         String districtName = GHNDistricFetcher.getDistrictNameById(districtId);
         String wardName = GHNWardFetcher.getWardNameById(districtId, wardId);
 
-        return provinceName + ", " + districtName + ", " + wardName;
+        return street + ", " + wardName + ", " + districtName + ", " + provinceName;
     }
 
 

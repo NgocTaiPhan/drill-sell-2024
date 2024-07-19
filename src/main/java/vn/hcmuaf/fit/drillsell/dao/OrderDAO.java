@@ -158,7 +158,7 @@ public class OrderDAO {
 
     public static boolean updates(Order order) {
         return DbConnector.me().get().inTransaction(handle -> {
-            int rows = handle.createUpdate("UPDATE orders SET address = :address, phone = :phone, expectedDate = :expectedDate WHERE orderId = :orderId AND stauss IN ('Đang xử lý', 'Đã xác nhận', 'Người bán đang chuẩn bị hàng')")
+            int rows = handle.createUpdate("UPDATE orders SET address = :address, phone = :phone, expectedDate = :expectedDate  WHERE orderId = :orderId AND stauss IN ('1', '2', '3')")
                     .bind("address", order.getAddress())
                     .bind("phone", order.getPhone())
                     .bind("expectedDate", order.getExpectedDate())
@@ -168,28 +168,50 @@ public class OrderDAO {
         });
     }
 
+    public static String getUpdateStatus(String status) {
+        switch (status) {
+            case "1":
+                return "Đang xử lý";
+            case "2":
+                return "Đã xác nhận";
+            case "3":
+                return "Người bán đang chuẩn bị hàng";
+            case "4":
+                return "Đã bàn giao cho đơn vị vận chuyển GHTK";
+            case "5":
+                return "Đang giao hàng";
+            case "6":
+                return "Đã giao hàng";
+            case "7":
+                return "Đã hoàn trả";
+            case "8":
+                return "Đã hủy";
+            default:
+                return status;
+        }
+    }
+
+
 
 
 
     public static boolean isValidStatuss(String currentStatuss, String newStatuss) {
         // Kiểm tra tính hợp lệ của trạng thái mới
         switch (currentStatuss) {
-            case "Đang xử lý":
-                return newStatuss.equals("Đã xác nhận") || newStatuss.equals("Đang xử lý") || newStatuss.equals("Đã hủy");
-            case "Đã xác nhận":
-                return newStatuss.equals("Người bán đang chuẩn bị hàng") || newStatuss.equals("Đã xác nhận") || newStatuss.equals("Đã hủy");
-            case "Người bán đang chuẩn bị hàng":
-                return newStatuss.equals("Đã bàn giao cho đơn vị vận chuyển GHTK") || newStatuss.equals("Người bán đang chuẩn bị hàng") || newStatuss.equals("Đã hủy");
-            case "Đã bàn giao cho đơn vị vận chuyển GHTK":
-                return newStatuss.equals("Đang giao hàng") || newStatuss.equals("Đã bàn giao cho đơn vị vận chuyển GHTK") || newStatuss.equals("Đã hủy");
-            case "Đang giao hàng":
-                return newStatuss.equals("Đã giao hàng") || newStatuss.equals("Đang giao hàng") || newStatuss.equals("Đã hủy");
-            case "Đã giao hàng":
-                return newStatuss.equals("Đã hoàn trả") || newStatuss.equals("Đã giao hàng");
-            case "Đã hoàn trả":
-                return newStatuss.equals("Đã hoàn trả") || newStatuss.equals("Đã hoàn trả");
-            case "Đã hủy":
-                return newStatuss.equals("Đã hủy");
+            case "1":
+                return newStatuss.equals("2")  || newStatuss.equals("8");
+            case "2":
+                return newStatuss.equals("3")  || newStatuss.equals("8");
+            case "3":
+                return newStatuss.equals("4")  || newStatuss.equals("8");
+            case "4":
+                return newStatuss.equals("5")  || newStatuss.equals("8");
+            case "5":
+                return newStatuss.equals("6")  || newStatuss.equals("8");
+            case "6":
+                return newStatuss.equals("7") ;
+            case "7":
+                return  newStatuss.equals("8");
         }
         return false;
     }
@@ -234,20 +256,12 @@ public class OrderDAO {
         });
     }
 
-    public static String formatAddress(String provinceId, String districtId, String wardId) {
-        String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
-        String districtName = GHNDistricFetcher.getDistrictNameById(districtId);
-        String wardName = GHNWardFetcher.getWardNameById(districtId, wardId);
-
-        return provinceName + ", " + districtName + ", " + wardName;
-    }
-
     public static int getCountOrder() {
         return DbConnector.me().get().withHandle(handle -> {
             handle.registerRowMapper(BeanMapper.factory(Order.class));
             return handle.createQuery("SELECT COUNT(orders.orderId) AS quantity\n" +
                             "FROM orders\n" +
-                            "WHERE orders.stauss NOT IN ('Đã hủy') AND  DATE(orders.timeOrder) = CURDATE();")
+                            "WHERE orders.stauss NOT IN ('8') AND  DATE(orders.timeOrder) = CURDATE();")
                     .mapTo(Integer.class)
                     .one();
         });
@@ -261,7 +275,7 @@ public class OrderDAO {
                             "FROM orders " +
                             "JOIN orderitem ON orders.orderId = orderitem.orderId " +
                             "JOIN products ON orderitem.productId = products.productId " +
-                            "WHERE orders.stauss = 'Đã giao hàng' " +
+                            "WHERE orders.stauss = '6' " +
                             "GROUP BY YEAR(orders.timeOrder), MONTH(orders.timeOrder) " +
                             "ORDER BY YEAR(orders.timeOrder), MONTH(orders.timeOrder)")
                     .map((rs, ctx) -> {
@@ -281,7 +295,7 @@ public class OrderDAO {
                                 "FROM orders o " +
                                 "JOIN orderitem oi ON o.orderId = oi.orderId " +
                                 "JOIN products p ON oi.productId = p.productId " +
-                                "WHERE o.stauss = 'Đã giao hàng' " +
+                                "WHERE o.stauss = '6' " +
                                 "AND MONTH(o.timeOrder) = MONTH(CURRENT_DATE()) " +
                                 "AND YEAR(o.timeOrder) = YEAR(CURRENT_DATE());")
                         .mapTo(Long.class) // Map kết quả tới Long
@@ -296,7 +310,7 @@ public class OrderDAO {
                             "JOIN orders o ON oi.orderId = o.orderId " +
                             "SET oi.quantity = :quantity " +
                             "WHERE oi.orderId = :orderId AND oi.productId = :productId " +
-                            "AND o.stauss NOT IN ('Đã bàn giao cho đơn vị vận chuyển GHTK', 'Đang giao hàng', 'Đã giao hàng', 'Đã hoàn trả', 'Đã hủy')")
+                            "AND o.stauss NOT IN ('4', '5', '6', '7', '8')")
                     .bind("quantity", item.getQuantity())
                     .bind("orderId", item.getOrderId())
                     .bind("productId", item.getProductId())
@@ -345,7 +359,6 @@ public class OrderDAO {
 //        item1.setOrderId(30);
 //        item1.setProductId(7);
 //        item1.setQuantity(2);
-        System.out.println(getAllQuantityFromOrderByProductId(1));
 
     }
 }
