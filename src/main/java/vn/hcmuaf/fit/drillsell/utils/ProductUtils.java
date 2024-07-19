@@ -9,10 +9,7 @@ import vn.hcmuaf.fit.drillsell.dao.OrderDAO;
 import vn.hcmuaf.fit.drillsell.dao.ProductDAO;
 import vn.hcmuaf.fit.drillsell.model.Products;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -148,7 +145,7 @@ public class ProductUtils {
         ProductDAO.getInstance().updateProd(prod);
     }
 
-    public static Products getProductByName(String productName) {
+    public static Optional<Products> getProductByName(String productName) {
         return ProductDAO.getInstance().getProductByName(productName);
     }
 
@@ -174,8 +171,8 @@ public class ProductUtils {
     }
 
     public static boolean isExistProdName(String productName) {
-        Products product = ProductDAO.getInstance().getProductByName(productName);
-        return product != null;
+        Optional<Products> product = ProductDAO.getInstance().getProductByName(productName);
+        return product.isPresent();
 
     }
 
@@ -185,14 +182,56 @@ public class ProductUtils {
 
 
     public static int getQuantityProductInStock(int productId) {
-        return RepoUtils.getAllQuantityFromRepoByProductId(productId) - getProductSold(productId);
+        return RepoUtils.getAllQuantityFromRepoByProductId(productId);
+    }
+
+    public static void exportExcel() {
+        List<Products> products = ProductUtils.getAllProducts(); // Lấy danh sách sản phẩm từ cơ sở dữ liệu
+
+        // Đường dẫn lưu file
+        String filePath = "D:\\Downloads\\products.xlsx";
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Products");
+
+            // Tạo dòng tiêu đề
+            Row headerRow = sheet.createRow(0);
+            String[] headers = {"Product ID", "Product Name", "Unit Price", "Category ID", "Name Producer", "Description", "Specifications"};
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+            }
+
+            // Điền dữ liệu
+            int rowNum = 1;
+            for (Products product : products) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(product.getProductId());
+                row.createCell(1).setCellValue(product.getProductName());
+                row.createCell(2).setCellValue(product.getUnitPrice());
+                row.createCell(3).setCellValue(product.getCategoryId());  // Cần đảm bảo phương thức này tồn tại trong lớp Products
+                row.createCell(4).setCellValue(product.getNameProducer());  // Cần đảm bảo phương thức này tồn tại trong lớp Products
+                row.createCell(5).setCellValue(product.getDescrible());  // Cần đảm bảo phương thức này tồn tại trong lớp Products
+                row.createCell(6).setCellValue(product.getSpecifions());  // Cần đảm bảo phương thức này tồn tại trong lớp Products
+            }
+
+            // Ghi vào file
+            try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+                workbook.write(fileOut);
+            }
+
+            // In thông báo thành công
+            System.out.println("File has been successfully saved to " + filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("An error occurred while creating the Excel file.");
+        }
     }
 
     public static void main(String[] args) {
 //        String excelFilePath = "D:\\WorkSpace\\PraticeWebPrograming\\database\\drill-sell.xlsx";
 //        List<Products> products = readExcels(excelFilePath);
 //        System.out.println(ProductUtils.getAllProductsManagement());
-//        System.out.println(ProductUtils.getAccessory());
+        ProductUtils.exportExcel();
 
     }
 

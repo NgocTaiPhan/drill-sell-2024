@@ -101,6 +101,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
     <link href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 " rel="stylesheet">
+    <script src="./assets/js/my-js/check-login.js"></script>
 
 </head>
 <body>
@@ -202,7 +203,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <div class="lnk-cart">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon"
-                                     onclick="callServletAndRedirectTo('logged','cart.jsp')">
+                                     onclick="checkLogin(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -440,9 +441,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 
 
                                         <div class="col-sm-7">
-
-<%--                                            onclick="callServlet('cart',{name: 'productId', dataValue: '<%=product.getProductId()%>'})"--%>
-                                            <a href="<%= request.getContextPath()%>/cart?productId=<%=product.getProductId()%>"
+    <a onclick="checkLogin(<%=logged%>,'<%= request.getContextPath()%>/cart?productId=<%=product.getProductId()%>')"
                                                  class="btn btn-primary" style="margin-bottom: 10px ">
                                                 <i class=" fa fa-shopping-cart inner-right-vs "></i> Thêm vào giỏ hàng
                                             </a>

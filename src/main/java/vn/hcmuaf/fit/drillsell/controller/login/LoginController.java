@@ -35,7 +35,7 @@ public class LoginController extends HttpServlet {
             String captcha = (String) session.getAttribute("captcha_security");
             String verifyCaptcha = request.getParameter("captcha");
             if (!captcha.equals(verifyCaptcha)) {
-                Notify.warningNotify(response, "Mã captcha không chính xác", Page.LOGIN_PAGE);
+                Notify.warningNotify(response, "Mã captcha không chính xác", Page.NULL_PAGE);
                 return; // Dừng lại nếu captcha sai
             }
         }

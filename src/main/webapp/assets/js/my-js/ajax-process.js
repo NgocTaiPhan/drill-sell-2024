@@ -1,23 +1,22 @@
-function submitFormAndNotify(form, urlServlet) {
-    $(form).submit(function (event) {
+function submitFormAndNotify(formId, urlServlet) {
+    $(document).on('submit', formId, function (event) {
         event.preventDefault();
-        console.log(form)
+        var $form = $(this);
         $.ajax({
             type: 'POST',
             url: urlServlet,
-            data: $(form).serialize(),
+            data: $form.serialize(),
             success: function (response) {
-                normalNotify(response);
+                normalNotify(response.type, response.message);
             },
             error: function (xhr, status, error) {
-                // Xử lý lỗi và hiển thị thông báo lỗi
                 var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
                 errorNotify(errorMessage);
             }
         });
     });
-    $(form).submit();
 }
+
 
 function submitFormAndRedirect(event, form, urlServlet) {
     event.preventDefault();
@@ -40,38 +39,16 @@ function submitFormAndRedirect(event, form, urlServlet) {
 
 }
 
-function callServletAndRedirect(servletUrl, pageUrl) {
-    $.ajax({
-        type: 'GET',
-        url: servletUrl,
-        success: function (response) {
-            console.log(response)
-            if (response.type === 'success') {
-                window.location.href = pageUrl;
-            } else if (response.type === 'error') {
-                notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);
-            } else {
-                notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);
-            }
-        },
-        error: function (xhr, status, error) {
-            var errorMessage = xhr.responseText || "Đã xảy ra lỗi: " + error;
-            errorNotify(errorMessage);
 
-
-        }
-    });
-}
-
-function callServlet(servletUrl, dataSending) {
+function callServletTo(servletUrl, dataSending) {
     $.ajax({
         type: 'POST',
         url: servletUrl,
         data: {[dataSending.name]: dataSending.dataValue},
         success: function (response) {
             Toast.fire({
-                icon: "success",
-                title: response,
+                icon: response.type,
+                title: response.message,
             });
         },
         error: function (xhr, status, error) {
@@ -86,7 +63,6 @@ function callServlet(servletUrl, dataSending) {
                     pageUrl: "home.jsp"
                 };
             }
-            notifyRedirect(data.message, data.namePage, data.pageUrl);
         }
     });
 }

@@ -319,16 +319,18 @@ public class OrderDAO {
         });
     }
 
-    public static int getAllQuantityFromOrderByProductId(int productId) {
+    public static int getAllQuantityFromOrderByProductId(final int productId) {
         return DbConnector.me().get().withHandle(handle ->
                 handle.createQuery("SELECT SUM(quantity) " +
-                                "FROM orderItem " +
-                                "WHERE productId = :productId")
+                                "FROM orderitem " +
+                                "JOIN orders ON orders.orderId = orderitem.orderId " +
+                                "WHERE productId = :productId " +
+                                "AND orders.stauss NOT IN ('Đang xử lý')")
                         .bind("productId", productId)
                         .mapTo(Integer.class)
                         .findOne()
-                        .orElse(0));
-
+                        .orElse(0)
+        );
     }
 
 

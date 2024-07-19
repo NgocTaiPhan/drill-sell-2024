@@ -45,6 +45,15 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <script src="./assets/js/my-js/check-login.js"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
+"></script>
+    <link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
+" rel="stylesheet">
+    <script src="./assets/js/my-js/check-login.js"></script>
+
 </head>
 <body>
 <header class="header-style-1 ">
@@ -138,7 +147,7 @@
                         <div class="lnk-cart">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon"
-                                     onclick="callServletAndRedirectTo('logged','cart.jsp')">
+                                     onclick="checkLogin(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%

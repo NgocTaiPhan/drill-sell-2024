@@ -107,11 +107,9 @@
             </div>
             <div class="right-main-header ">
 
-                <form id="uploadForm" enctype="multipart/form-data">
-                    <input type="file" id="fileInput" name="excelFile" accept=".xlsx, .xls" style="display: none;" />
-                    <label for="fileInput" class="btn-add-prod btn btn-primary open-modal"
-                    >Nhập kho</label>
-                </form>
+                <div class="btn btn btn-primary " onclick="callServletTo('exportRepoExcel',{name:'',dataValue:''})">Xuất
+                    file excel
+                </div>
             </div>
         </div>
         <div class="content">
@@ -126,12 +124,6 @@
                                             Sản phẩm đã ẩn
                                         </button>
                                     </div>
-                                    <div class="nav-item">
-                                        <button class=" btn-add-prod  open-modal">
-                                            Sản phẩm đã xóa
-                                        </button>
-                                    </div>
-
                                 </div>
 
                                 <table id="repo-mn" class="table table-striped display" style="width: 100%">
@@ -162,9 +154,7 @@
 
 </div>
 </body>
-<script !src="">
 
-</script>
 
 <script src="../assets/js/my-js/prod-management/my-modal.js"></script>
 <script src="../assets/js/my-js/notify.js"></script>
