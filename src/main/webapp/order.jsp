@@ -471,7 +471,7 @@
                             <td><input id="totalAmount" name="totalAmount" style="padding-left: 5px" value="<%= formattedTotalAmount %>" readonly></td>
                         </tr>
                     </table>
-                    <button type="submit" class="order">Đặt hàng</button>
+                    <button type="submit" class="order" href="/VNP?orderInfor<%=111%>&amount=<%=100000%>">Đặt hàng</button>
                 </div>
             </div>
         </div>
