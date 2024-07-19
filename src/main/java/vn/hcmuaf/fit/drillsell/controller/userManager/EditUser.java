@@ -69,7 +69,18 @@ public class EditUser extends HttpServlet {
         }
         if (idStr != null && !idStr.isEmpty()) {
             try {
+
                 int id = Integer.parseInt(idStr); // Convert string to integer
+                User previousUser = UsersDAO.getInstance().getUser(id);
+                String previousInfo = "user ID: " + previousUser.getId()
+                        + ", fullName: " + previousUser.getFullname()
+                        + ", address: " + previousUser.getAddress()
+                        + ", phone: " + previousUser.getPhone()
+                        + ", email: " + previousUser.getEmail()
+                        + ", username: " + previousUser.getUsername()
+                        + ", sex: " + setGender(previousUser.getSex())
+                        + ", yearOfBirth: " + previousUser.getYearOfBirth()
+                        + ", role: " + setRole(previousUser.isRoleUser());
                 IUserDAO userDao = new UsersDAO();
                 User user = new User();
                 user.setId(id);
@@ -102,16 +113,7 @@ public class EditUser extends HttpServlet {
                 Notify.successNotify(resp,"Cập nhật thông tin thành công", Page.NULL_PAGE);
 
                 // Log the update
-                User previousUser = UsersDAO.getInstance().getUserById(id);
-                String previousInfo = "user ID: " + previousUser.getId()
-                        + ", fullName: " + previousUser.getFullname()
-                        + ", address: " + previousUser.getAddress()
-                        + ", phone: " + previousUser.getPhone()
-                        + ", email: " + previousUser.getEmail()
-                        + ", username: " + previousUser.getUsername()
-                        + ", sex: " + setGender(previousUser.getSex())
-                        + ", yearOfBirth: " + previousUser.getYearOfBirth()
-                        + ", role: " + setRole(previousUser.isRoleUser());
+
 
                 Log log = new Log();
                 log.setUserId(id);

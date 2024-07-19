@@ -35,8 +35,7 @@ public class showDetailUser extends HttpServlet {
         String sex = req.getParameter("sex");
         String yearOfBirth = req.getParameter("yearOfBirth");
         if (idStr != null) {
-            int id = Integer.parseInt(idStr); // Chuyển đổi chuỗi thành số nguyên
-            IUserDAO userDao = new UsersDAO();
+            int id = Integer.parseInt(idStr);
             User user = new User();
             user.setId(id);
             user.setFullname(fullname);
@@ -46,12 +45,13 @@ public class showDetailUser extends HttpServlet {
             user.setPhone(phone);
             user.setSex(Boolean.parseBoolean(sex));
             user.setYearOfBirth(yearOfBirth);
-            User getUserByID = userDao.getUserById(user);
             Gson gson = new Gson();
             String json = gson.toJson(user);
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             resp.getWriter().write(json);
+
+
             Log log = new Log();
             log.setUserId(Integer.parseInt(idStr));
             String previousInfo = "user ID: " + idStr + ", fullname: " + fullname + ", address: " + address + ", phone: " + phone + ", email: " + email + ", username: " + userName + ", sex: " + sex + ", yearOfBirth: " + yearOfBirth;

@@ -18,7 +18,7 @@ public class LogDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             try {
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thành công', 'INFO')")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thành công', '1')")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
                         .execute();
@@ -35,7 +35,7 @@ public class LogDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             try {
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thất bại', 'ERROR')")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập thất bại', '2')")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
                         .execute();
@@ -79,7 +79,7 @@ public class LogDAO {
 
                     // Kiểm tra số lần đăng nhập sai để quyết định trạng thái
                     if (re.get().getSL() >= 5) {
-                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 5 lần tài khoản bị khóa 10p', 'DANGER')")
+                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 5 lần tài khoản bị khóa 10p', '4')")
                                 .bind("userId", log.getUserId())
                                 .bind("ip", ipAddress)
                                 .execute();
@@ -89,7 +89,7 @@ public class LogDAO {
                                 .bind("id", log.getUserId())
                                 .execute();
                     } else if (re.get().getSL() >= 3) {
-                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 3 lần', 'WARNING')")
+                        row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels) VALUES (:userId, :ip, 'Đăng nhập sai quá 3 lần', '3')")
                                 .bind("userId", log.getUserId())
                                 .bind("ip", ipAddress)
                                 .execute();
@@ -125,7 +125,7 @@ public class LogDAO {
         return DbConnector.me().get().inTransaction(handle -> {
             try {
                 String ipAddress = InetAddress.getLocalHost().getHostAddress();
-                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels, valuess, previousInfo) VALUES (:userId, :ip, :statuss, 'INFO', :valuess, :previousInfo)")
+                int row = handle.createUpdate("INSERT INTO log(userId, ip, statuss, levels, valuess, previousInfo) VALUES (:userId, :ip, :statuss, '1', :valuess, :previousInfo)")
                         .bind("userId", log.getUserId())
                         .bind("ip", ipAddress)
                         .bind("statuss", log.getStatuss())
@@ -138,6 +138,21 @@ public class LogDAO {
                 return false;
             }
         });
+    }
+
+    public static String getLevelLog(String level){
+        switch (level){
+            case "1":
+                return "INFO";
+            case "2":
+                return "ERROR";
+            case "3":
+                return "WARNING";
+            case "4":
+                return "DANGER";
+
+        }
+        return level;
     }
 
 

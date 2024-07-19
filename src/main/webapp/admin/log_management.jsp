@@ -139,6 +139,8 @@
                         <% List<Log> log = LogDAO.showLog();
                             if (log != null) {
                                 for (Log l : log) {
+                                    String logs = LogDAO.getLevelLog(l.getLevels());
+
                         %>
                         <tr>
                             <td><%= l.getId()%></td>
@@ -146,12 +148,12 @@
                             <td><%=l.getIp()%></td>
                             <td>
                                 <div style="<%
-                                if (l.getLevels().equals("INFO")) { %> background: #48a1da;
-                                    <% } else if (l.getLevels().equals("WARNING")) { %> background: orange;
-                                    <% } else if (l.getLevels().equals("DANGER")) { %> background: red;
-                                    <% } else if (l.getLevels().equals("ERROR")) { %> background: yellow;
+                                if (logs.equals("INFO")) { %> background: #48a1da;
+                                    <% } else if (logs.equals("WARNING")) { %> background: orange;
+                                    <% } else if (logs.equals("DANGER")) { %> background: red;
+                                    <% } else if (logs.equals("ERROR")) { %> background: yellow;
                                     <% } %> width: 70px; height: 20px;" class="con">
-                                    <%= l.getLevels() %>
+                                    <%= logs %>
                                 </div>
                             </td>
                             <td><%=l.getStatuss()%></td>

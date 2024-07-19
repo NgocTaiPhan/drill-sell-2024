@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Notify {
-
     public static void successNotify(HttpServletResponse response, String message, Page page) throws IOException {
         sendNotify(response, Type.SUCCESS, message, page);
     }

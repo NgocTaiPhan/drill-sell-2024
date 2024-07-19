@@ -1,9 +1,6 @@
 package vn.hcmuaf.fit.drillsell.controller.order;
 
-import vn.hcmuaf.fit.drillsell.dao.CheckOutDAO;
-import vn.hcmuaf.fit.drillsell.dao.GHNDistricFetcher;
-import vn.hcmuaf.fit.drillsell.dao.GHNProvinceFetcher;
-import vn.hcmuaf.fit.drillsell.dao.GHNWardFetcher;
+import vn.hcmuaf.fit.drillsell.dao.*;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.User;
 
@@ -29,7 +26,10 @@ public class DetailOrder extends HttpServlet {
             List<Order> list = CheckOutDAO.showItemOrder(orderId);
             list.forEach(order -> {
                 String[] addressIds = order.getAddress().split(",");
-                order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2]));
+                order.setAddress(formatAddress(addressIds[0], addressIds[1], addressIds[2], addressIds[3]));
+                String getStatus = OrderDAO.getUpdateStatus(order.getStauss());
+                order.setStauss(getStatus);
+
             });
 
             request.setAttribute("detailOrder", list);
@@ -37,12 +37,12 @@ public class DetailOrder extends HttpServlet {
         }
 
     }
-    private String formatAddress(String provinceId, String districtId, String wardId) {
+    private String formatAddress(String provinceId, String districtId, String wardId, String street) {
         String provinceName = GHNProvinceFetcher.getProvinceNameById(provinceId);
         String districtName = GHNDistricFetcher.getDistrictNameById(districtId);
         String wardName = GHNWardFetcher.getWardNameById(districtId, wardId);
 
-        return provinceName + ", " + districtName + ", " + wardName;
+        return street + ", " + wardName + ", " + districtName + ", " + provinceName;
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

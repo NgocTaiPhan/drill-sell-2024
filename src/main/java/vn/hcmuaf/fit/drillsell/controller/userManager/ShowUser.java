@@ -1,4 +1,5 @@
 package vn.hcmuaf.fit.drillsell.controller.userManager;
+
 import com.google.gson.Gson;
 import vn.hcmuaf.fit.drillsell.dao.IUserDAO;
 import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+
 @WebServlet("/admin/ShowUser")
 public class ShowUser extends HttpServlet {
     @Override
@@ -24,9 +26,10 @@ public class ShowUser extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(json);
     }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req,resp);
+        doPost(req, resp);
 
     }
 }

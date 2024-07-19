@@ -2,6 +2,10 @@ package vn.hcmuaf.fit.drillsell.controller.admin.repo_management;
 
 import vn.hcmuaf.fit.drillsell.controller.notify.Notify;
 import vn.hcmuaf.fit.drillsell.controller.notify.Page;
+import vn.hcmuaf.fit.drillsell.dao.CartDAO;
+import vn.hcmuaf.fit.drillsell.dao.LogDAO;
+import vn.hcmuaf.fit.drillsell.dao.repo.RepoDAO;
+import vn.hcmuaf.fit.drillsell.model.Log;
 import vn.hcmuaf.fit.drillsell.model.User;
 import vn.hcmuaf.fit.drillsell.utils.FormUtils;
 import vn.hcmuaf.fit.drillsell.utils.RepoUtils;
@@ -18,7 +22,7 @@ public class UpdateQuantity {
         int productId = FormUtils.assignInput(request, "productId");
         int quantity = FormUtils.assignInput(request, "quantity");
         if (checkValid(productId, quantity, response)) {
-            updateQuantityProcess(productId, quantity, user.getId(), response);
+            updateQuantityProcess(productId, quantity, user.getId() , response,request);
         } else {
 //            Notify.errorNotify(response, "Lỗi trong quá trình thực hiện!", Page.NULL_PAGE);
         }
@@ -42,10 +46,19 @@ public class UpdateQuantity {
         }
         return true;
     }
-
-    public static void updateQuantityProcess(int productId, int quantity, int userId, HttpServletResponse response) throws
+    public static void updateQuantityProcess(int productId, int quantity, HttpServletResponse response, HttpServletRequest request) throws
             IOException {
+        HttpSession session = request.getSession();
+        User auth = (User) session.getAttribute("auth");
+        String previousInfo = "Mã sản phẩm: " + productId + ", Số lượng: " + CartDAO.getQuantityRepo(productId) ;
+
         RepoUtils.addQuantity(productId, quantity, userId);
+        Log log = new Log();
+        log.setUserId(auth.getId());
+        String values = "Mã sản phẩm: " + productId + ", Số lượng: " + CartDAO.getQuantityRepo(productId);
+        log.setValuess(values);
+        log.setStatuss("Cập nhật kho hàng");
+        LogDAO.insertUpdateOrderInLog(log, previousInfo);
         Notify.successNotify(response, "Thay đổi số lượng thành công", Page.NULL_PAGE);
 
     }
