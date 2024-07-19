@@ -70,7 +70,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js
     <link href="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
 " rel="stylesheet">
-
+    <script src="./assets/js/my-js/ajax-process.js"></script>
+    <script src="./assets/js/my-js/notify.js"></script>
 </head>
 
 <body class="cnt-home">
@@ -165,7 +166,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
                         <div class="lnk-cart">
                             <div class="items-cart-inner">
                                 <div class="basket" id="basketIcon"
-                                     onclick="callServletAndRedirectTo('logged','cart.jsp')">
+                                     onclick="checkLogin(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -709,38 +710,14 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css
         <div class="animated alo-circle-fill"></div>
     </a>
 </div>
-
+<script src="./assets/js/my-js/ajax-process.js"></script>
+<script src="./assets/js/my-js/notify.js"></script>
+<script src="./assets/js/my-js/check-login.js"></script>
 <!-- ============================================================= FOOTER : MENU============================================================= -->
 <!-- ============================================================= Backtop ============================================================= -->
 <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class=" icon fa    fa-arrow-up"></i></button>
 <link rel="stylesheet" href="assets/css/my-css/backtop.css">
 <script src="assets/js/my-js/backtop.js"></script>
-<script src="./assets/js/my-js/notify.js"></script>
-<script src="./assets/js/my-js/ajax-process.js"></script>
-
-
 </body>
-<script>
-
-    function checkLoginAndRedirect(logged, url) {
-
-        if (!logged) {
-            Swal.fire({
-                title: "Bạn chưa đăng nhập",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Đăng nhập",
-                cancelButtonText: `Để sau`
-            }).then((result) => {
-                //Bấm vào nút Đăng nhập lúc thông báo sẽ chuyển đến trang Đăng nhập
-                if (result.isConfirmed) {
-                    window.location.href = 'login.jsp';
-                }
-            });
-        } else {
-            window.location.href = url;
-        }
-    }
-</script>
 
 </html>

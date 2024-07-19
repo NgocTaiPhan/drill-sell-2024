@@ -61,6 +61,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <script src="./assets/js/my-js/check-login.js"></script>
 </head>
 
 <body class="cnt-home">
@@ -158,7 +159,7 @@
                     <div class="dropdown dropdown-cart">
                         <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon" onclick="checkLogin(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%

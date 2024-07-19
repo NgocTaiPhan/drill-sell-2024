@@ -322,6 +322,28 @@
     </div>
 
     <script>
+        function changeInfoNotify(action) {
+            Swal.fire({
+                title: "Bạn có chắc chắn muốn cập nhật thông tin?",
+                text: "Hãy kiểm tra lại thông tin trước khi xác nhận!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Đồng ý cập nhật!",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    action();
+                } else {
+                    Swal.fire({
+                        title: "Hủy",
+                        text: "Thông tin của bạn vẫn chưa thay đổi :)",
+                        icon: "info"
+                    });
+                }
+            });
+        }
     $(document).ready(function() {
         $.ajax({
             url: "showUserInfor",
@@ -407,8 +429,8 @@
             var sex = $('#sex').val().toLowerCase() === 'nam';
             var yearOfBirth = $('#yearOfBirth').val();
             var address = $('#tinh').val() + ', ' + $('#quan').val() + ', ' + $('#phuong').val();
-
             var phone = $('#phone').val();
+
             var userData = {
                 id: parseInt(sessionStorage.getItem('userid')),
                 fullname: fullname,
@@ -418,31 +440,35 @@
                 yearOfBirth: yearOfBirth,
                 phone: phone,
                 address: address
-
             };
+
             console.log(userData);
 
-            $.ajax({
-                url: 'updateUserInfo',
-                method: 'POST',
-                contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(userData),
-                success: function(response) {
-                    normalNotify(response.type,response.message);
-                },
-                error: function(xhr) {
-                    try {
-                        var errorResponse = JSON.parse(xhr.responseText);
-                        console.log('Error updating user info:', errorResponse);
-                        alert('Đã xảy ra lỗi: ' + errorResponse.error);
-                    } catch (e) {
-                        console.log('Unexpected error format. Response: ', xhr.responseText);
-                        alert('Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.');
+            changeInfoNotify(function() {
+                $.ajax({
+                    url: 'updateUserInfo',
+                    method: 'POST',
+                    contentType: 'application/json; charset=UTF-8',
+                    data: JSON.stringify(userData),
+                    success: function(response) {
+                        normalNotify(response.type, response.message);
+                    },
+                    error: function(xhr) {
+                        try {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            console.log('Error updating user info:', errorResponse);
+                            alert('Đã xảy ra lỗi: ' + errorResponse.error);
+                        } catch (e) {
+                            console.log('Unexpected error format. Response: ', xhr.responseText);
+                            alert('Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.');
+                        }
                     }
-                }
+                });
             });
         });
+
     });
+
     </script>
 
 

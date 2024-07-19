@@ -62,6 +62,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,800'
           rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <script src="./assets/js/my-js/check-login.js"></script>
 </head>
 
 <body class="cnt-home">
@@ -159,7 +160,7 @@
                     <div class="dropdown dropdown-cart">
                         <div class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <div class="basket" id="basketIcon" onclick="redirectToCart()">
+                                <div class="basket" id="basketIcon" onclick="checkLogin(<%=logged%>,'cart.jsp')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                     <div class="cart-count" id="cart-count">
                                         <%
@@ -188,6 +189,9 @@
                                     }
 
                                 </Style>
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
+                                <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.min.css"
+                                      rel="stylesheet"/>
                                 <script>
                                     //Kiểm tra xem nếu chưa đăng nhập thì hiển thị thông báo
                                     function redirectToCart() {
@@ -396,7 +400,7 @@
                     <h3 class="section-title" style="padding: 10px">Tất cả sản phẩm</h3>
                     <div class="row">
                         <%
-                            List<Products> products = ProductDAO.getInstance().showProd();
+                            List<Products> products = ProductUtils.getAllProducts();
                             int productsPerPage = 16;
                             int currentPage = 1;
                             if (request.getParameter("page") != null) {
