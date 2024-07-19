@@ -353,7 +353,6 @@
                                         });
 
                                         // Xử lý sự kiện click nút chỉnh sửa
-                                        // Handle modal open and populate form data
                                         $('#user-mn tbody').on('click', '.btn-warning', function () {
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
@@ -367,7 +366,6 @@
                                             var roleUser = data.roleUser === true ? 'Admin' : 'User';
 
 
-                                            // Split address into parts: province, district, ward
                                             var addressParts = address.split(',');
                                             console.log("Address Parts:", addressParts);
                                             var province = addressParts[0].trim();
@@ -375,7 +373,7 @@
                                             var ward = addressParts[2] ? addressParts[2].trim() : ' ';
                                             console.log("Province:", province, "District:", district, "Ward:", ward);
 
-                                            // Populate data into edit form
+
                                             $('#editUserId').val(id);
                                             $('#editFullname').val(fullname);
                                             $('#editUsername').val(username);
@@ -391,18 +389,18 @@
                                             $('#editYearOfBirth').val(yearOfBirth);
                                             $('#editRoleUser').val(roleUser);
 
-                                            // Show edit user modal
+
                                             $('#editUserModal').show();
                                             $('#editUserModal').append('<div class="overlay"></div>');
                                         });
 
-                                        // Handle modal close
+
                                         $('.close').click(function () {
                                             $('#editUserModal').hide();
                                             $('.overlay').remove();
                                         });
 
-                                        // Handle form submission
+
                                         $('#editUserForm').submit(function (e) {
                                             e.preventDefault();
 
@@ -472,13 +470,16 @@
                                             $('#openModalBtn').append('<div class="overlay"></div>');
                                         });
 
-// Đóng modal khi nhấn nút đóng hoặc nút đóng modal
+                                        // Đóng modal khi nhấn nút đóng hoặc nút đóng modal
                                         $(".close").click(function() {
                                             $("#addUserModal").css("display", "none");
                                             $('.overlay').remove();
                                         });
-
-// Xử lý khi submit form thêm người dùng
+                                        // function closeBtn (){
+                                        //     $("#addUserModal").css("display", "none");
+                                        //     $('.overlay').remove();
+                                        // }
+                                          // Xử lý khi submit form thêm người dùng
                                         $("#addUserForm").submit(function(e) {
                                             e.preventDefault();
 
@@ -488,14 +489,16 @@
                                                 data: $(this).serialize(),
                                                 success: function(response) {
                                                     if (response.type === "success") {
-                                                        normalNotify(response.type, response.message, function() {
-                                                            // Đóng modal sau khi thêm thành công
-                                                            $("#addUserModal").css("display", "none");
-                                                            $('.overlay').remove();
-                                                            // Reset form sau khi thêm thành công
-                                                            $("#addUserForm")[0].reset();
-                                                            table.ajax.reload();
+                                                        Swal.fire({
+                                                            text: response.message,
+                                                            icon: response.type
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                $("#addUserModal").css("display", "none");
+                                                                $('.overlay').remove();
+                                                                };
                                                         });
+
                                                     } else {
                                                         // Hiển thị thông báo lỗi
                                                         normalNotify(response.type, response.message);
@@ -559,8 +562,8 @@
                                             var data = table.row($(this).parents('tr')).data();
                                             var id = data.id;
                                             var fullname = data.fullname;
-                                            var username = data.username; // Lấy tên người dùng từ dữ liệu hàng được chọn
-                                            var email = data.email; // Lấy mật khẩu từ dữ liệu hàng được chọn
+                                            var username = data.username;
+                                            var email = data.email;
                                             var address = data.address;
                                             var phone = data.phone;
                                             var sex = data.sex ? 'Nam' : 'Nữ';
@@ -570,7 +573,7 @@
                                                 url: "showDetailUser",
                                                  data : {id: id,
                                                     fullname: fullname,
-                                                     username: username, // Truyền tên người dùng
+                                                     username: username,
                                                      email: email,
                                                      address: address,
                                                      phone: phone,

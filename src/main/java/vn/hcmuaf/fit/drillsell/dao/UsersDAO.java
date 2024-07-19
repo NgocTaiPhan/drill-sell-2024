@@ -140,18 +140,35 @@ public static boolean changePassword(String username, String newPassword) {
         }
     }
 
-    public String getVerifyCode(String username, String email) {
-        String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
-        Jdbi jdbi = DbConnector.me().get();
+//    public String getVerifyCode(String username, String email) {
+//        String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
+//        Jdbi jdbi = DbConnector.me().get();
+//
+//        try (Handle handle = jdbi.open()) {
+//            return handle.createQuery(selectQuery)
+//                    .bind(0, username)
+//                    .bind(1, email)
+//                    .mapTo(String.class)
+//                    .one();
+//        }
+//    }
+public String getVerifyCode(String username, String email) {
+    String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
+    Jdbi jdbi = DbConnector.me().get();
 
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery(selectQuery)
-                    .bind(0, username)
-                    .bind(1, email)
-                    .mapTo(String.class)
-                    .one();
-        }
+    try (Handle handle = jdbi.open()) {
+        Optional<String> result = handle.createQuery(selectQuery)
+                .bind(0, username)
+                .bind(1, email)
+                .mapTo(String.class)
+                .findOne();
+
+        return result.orElse(null); // Trả về null nếu không tìm thấy mã xác nhận
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null; // Trả về null nếu có lỗi xảy ra
     }
+}
 
     public List<User> showAll() {
         return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")

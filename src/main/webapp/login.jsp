@@ -363,7 +363,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="forgot-pass" method="post">
+                <form onsubmit="submitFormAndRedirect(event,this,'forgot-pass')">
                     <label for="input-email">Email</label>
                     <input name="input-email" type="text" id="input-email" class="form-control" placeholder="Nhập email" required>
 
