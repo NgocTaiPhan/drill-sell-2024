@@ -2,14 +2,9 @@ package vn.hcmuaf.fit.drillsell.dao;
 
 import vn.hcmuaf.fit.drillsell.db.DbConnector;
 import vn.hcmuaf.fit.drillsell.model.Products;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -86,14 +81,16 @@ public class ProductDAO {
                     .findOne().orElse(null);
         });
     }
-    public Products getProductByName(String productName) {
+    public Optional<Products> getProductByName(String productName) {
         return DbConnector.me().get().withHandle(handle ->
                 handle.createQuery("SELECT * FROM products WHERE productName = :productName")
                         .bind("productName", productName)
                         .mapToBean(Products.class)
-                        .findOnly()
+                        .findOne()
         );
     }
+
+
 
 
     public List<Products> getProductsByPage(int limit, int offset) {

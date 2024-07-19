@@ -47,7 +47,15 @@ public class RepoDAO {
 //                .findOne()
 //                .orElse(null));
 //    }
-
+public void updateImportQuantityByProductId(int productId, int newImportQuantity) {
+    String sql = "UPDATE repo SET importQuantity = :newImportQuantity WHERE productId = :productId";
+    DbConnector.me().get().withHandle(handle ->
+            handle.createUpdate(sql)
+                    .bind("newImportQuantity", newImportQuantity)
+                    .bind("productId", productId)
+                    .execute()
+    );
+}
 
     public List<Map<String, Object>> getRepo() { // Thay đổi kiểu trả về thành List<Map<String, Object>>
         String sql = "   SELECT repo.repoId, repo.userId, repo.productId,repo.importQuantity, repo.importDate, repo.importPrice, repo.price, products.productName\n" +
@@ -103,5 +111,10 @@ public class RepoDAO {
                         .orElse(0));
 
     }
+
+    public static void main(String[] args) {
+        System.out.println(RepoDAO.getInstance().getAllQuantityFromRepoByProductId(2));
+    }
+
 }
 

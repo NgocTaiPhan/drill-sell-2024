@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
 
 public class AddProd {
 
     static void addProduct(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+//        System.out.println("Gọi liên tục");
         String prodName = request.getParameter("productName");
         String image = request.getParameter("imageUrl");
         String describle = request.getParameter("describle");
@@ -37,7 +39,6 @@ public class AddProd {
         System.out.println("describle: " + describle);
         System.out.println("specifions: " + specifions);
         System.out.println("nameProducer: " + nameProducer);
-
         double unitPrice = 0.0;
         int cateId = 0;
 
@@ -88,7 +89,7 @@ public class AddProd {
             ProductUtils.addProduct(product);
 
             // Lấy sản phẩm vừa được thêm từ cơ sở dữ liệu
-            Products addedProduct = ProductUtils.getProductByName(prodName);
+            Optional<Products> addedProduct = ProductUtils.getProductByName(prodName);
 
             Notify.successNotify(response, "Thêm sản phẩm thành công!", Page.NULL_PAGE);
 

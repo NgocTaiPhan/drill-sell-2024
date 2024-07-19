@@ -168,7 +168,9 @@
                     <div class="center-block">
 
                         <form class="col-lg-6 center-block" id="formAddProd"
-                              onsubmit="submitFormAndNotify(this,'add-prod')">
+                        <%--                              onsubmit="submitFormAndNotify('#formAddProd','add-prod')"--%>
+                        <%--                              action="add-prod" method="post"--%>
+                        >
                             <div class="form-group center-block">
                                 <img width="200px" height="200px" src="" class=" loadProdsImg img-thumbnail"
                                      alt="Ảnh sản phẩm" style="margin-left: 45%">
@@ -226,6 +228,12 @@
 
                             <button type="submit" class="btn btn-primary">Thêm</button>
                         </form>
+                        <script>
+                            $(document).ready(function () {
+                                submitFormAndNotify('#formAddProd', 'add-prod');
+                            });
+                        </script>
+
                     </div>
 
                 </div>

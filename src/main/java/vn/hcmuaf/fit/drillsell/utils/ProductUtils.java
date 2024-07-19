@@ -148,7 +148,7 @@ public class ProductUtils {
         ProductDAO.getInstance().updateProd(prod);
     }
 
-    public static Products getProductByName(String productName) {
+    public static Optional<Products> getProductByName(String productName) {
         return ProductDAO.getInstance().getProductByName(productName);
     }
 
@@ -174,8 +174,8 @@ public class ProductUtils {
     }
 
     public static boolean isExistProdName(String productName) {
-        Products product = ProductDAO.getInstance().getProductByName(productName);
-        return product != null;
+        Optional<Products> product = ProductDAO.getInstance().getProductByName(productName);
+        return product.isPresent();
 
     }
 
@@ -185,14 +185,14 @@ public class ProductUtils {
 
 
     public static int getQuantityProductInStock(int productId) {
-        return RepoUtils.getAllQuantityFromRepoByProductId(productId) - getProductSold(productId);
+        return RepoUtils.getAllQuantityFromRepoByProductId(productId);
     }
 
     public static void main(String[] args) {
 //        String excelFilePath = "D:\\WorkSpace\\PraticeWebPrograming\\database\\drill-sell.xlsx";
 //        List<Products> products = readExcels(excelFilePath);
 //        System.out.println(ProductUtils.getAllProductsManagement());
-//        System.out.println(ProductUtils.getAccessory());
+        System.out.println(ProductUtils.getQuantityProductInStock(2));
 
     }
 
