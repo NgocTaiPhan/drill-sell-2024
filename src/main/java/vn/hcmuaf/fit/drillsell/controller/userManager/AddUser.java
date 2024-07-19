@@ -72,7 +72,6 @@ public class AddUser extends HttpServlet {
                 System.err.println("Error parsing birthDate: " + e.getMessage());
             }
         }
-
         ValidationForm validationForm = ValidationForm.getInstance();
         boolean isValid = validationForm.validateAddUser(resp, fullName, username, email, password, provinceId, districtId, wardId, phoneNumber, birthDate);
 

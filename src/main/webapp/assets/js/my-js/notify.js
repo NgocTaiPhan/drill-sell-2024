@@ -21,7 +21,7 @@ function normalNotify(type, message) {
     Swal.fire({
         text: message,
         icon: type
-    });
+    })
 }
 
 function errorNotify(message) {

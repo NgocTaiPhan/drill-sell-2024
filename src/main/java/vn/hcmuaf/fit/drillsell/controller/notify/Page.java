@@ -11,7 +11,7 @@ public class Page {
     public static final Page MAIL_PAGE = new Page("email", "Kiểm tra email", "https://mail.google.com/");
     public static final Page CONFIRM_CODE_PAGE = new Page("confirm", "Xác nhận", "confirm.jsp");
     public static final Page NULL_PAGE = new Page("nullPage", "", "");
-
+    public static final Page CHANGE_PASS_PAGE = new Page("changePass", "Đổi mật khẩu", "change-pass.jsp?forgot-pass=1");
     public Page(String key, String namePage, String pageUrl) {
         this.key = key;
         this.namePage = namePage;

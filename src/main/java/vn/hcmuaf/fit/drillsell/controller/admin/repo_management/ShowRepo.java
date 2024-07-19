@@ -1,7 +1,7 @@
 package vn.hcmuaf.fit.drillsell.controller.admin.repo_management;
 
 import com.google.gson.Gson;
-import vn.hcmuaf.fit.drillsell.dao.repo.RepoDAO;
+import vn.hcmuaf.fit.drillsell.utils.RepoUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.util.Map;
 public class ShowRepo {
 
     protected static void showRepo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Map<String, Object>> repoValue = RepoDAO.getInstance().getRepo();
+        List<Map<String, Object>> repoValue = RepoUtils.getRepo();
         Gson gson = new Gson();
 
 //        Chuyển đổi dữ liệu của kho sang json gửi đi

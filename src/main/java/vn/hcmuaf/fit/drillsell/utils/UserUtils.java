@@ -1,5 +1,8 @@
 package vn.hcmuaf.fit.drillsell.utils;
 
+import vn.hcmuaf.fit.drillsell.dao.UsersDAO;
+import vn.hcmuaf.fit.drillsell.model.User;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -18,11 +21,7 @@ public class UserUtils {
             throw new RuntimeException(e);
         }
     }
-    // Phương thức kiểm tra mật khẩu
-    public static boolean checkPassword(String rawPassword, String hashedPassword) {
-        String hashedRawPassword = hashPassword(rawPassword);
-        return hashedRawPassword.equals(hashedPassword);
-    }
+
 
     public static String generateVerifyCode(int length) {
         return UUID.randomUUID().toString().substring(0, length);
@@ -35,5 +34,18 @@ public class UserUtils {
 
     public static boolean isAfterNow(Instant expiryTime) {
         return Instant.now().isAfter(expiryTime);
+    }
+
+    public static User getUserByEmail(String email) {
+        return UsersDAO.getUserByEmail(email);
+    }
+
+    public static void addUser(User user) {
+        UsersDAO.getInstance().addUserGoogleOrFacebook(user);
+    }
+
+
+    public static boolean checkExistEmail(String email) {
+        return UsersDAO.getInstance().checkExistEmail(email);
     }
 }

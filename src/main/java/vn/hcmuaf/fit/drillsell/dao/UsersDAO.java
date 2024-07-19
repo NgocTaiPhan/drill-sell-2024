@@ -21,6 +21,18 @@ public class UsersDAO implements IUserDAO{
         return instance;
     }
 
+    public static User getUserByEmail(String email) {
+        String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE email=?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, email)
+                    .mapToBean(User.class)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
     public User getUser(String username, String password) {
         String query = "SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,roleUser FROM users WHERE username = ? AND passwords = ?";
         Jdbi jdbi = DbConnector.me().get();
@@ -140,18 +152,35 @@ public static boolean changePassword(String username, String newPassword) {
         }
     }
 
-    public String getVerifyCode(String username, String email) {
-        String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
-        Jdbi jdbi = DbConnector.me().get();
+//    public String getVerifyCode(String username, String email) {
+//        String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
+//        Jdbi jdbi = DbConnector.me().get();
+//
+//        try (Handle handle = jdbi.open()) {
+//            return handle.createQuery(selectQuery)
+//                    .bind(0, username)
+//                    .bind(1, email)
+//                    .mapTo(String.class)
+//                    .one();
+//        }
+//    }
+public String getVerifyCode(String username, String email) {
+    String selectQuery = "SELECT verificationCode FROM users WHERE username = ? AND email = ?";
+    Jdbi jdbi = DbConnector.me().get();
 
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery(selectQuery)
-                    .bind(0, username)
-                    .bind(1, email)
-                    .mapTo(String.class)
-                    .one();
-        }
+    try (Handle handle = jdbi.open()) {
+        Optional<String> result = handle.createQuery(selectQuery)
+                .bind(0, username)
+                .bind(1, email)
+                .mapTo(String.class)
+                .findOne();
+
+        return result.orElse(null); // Trả về null nếu không tìm thấy mã xác nhận
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null; // Trả về null nếu có lỗi xảy ra
     }
+}
 
     public List<User> showAll() {
         return DbConnector.me().get().withHandle(handle -> handle.createQuery("SELECT id, fullname, address, phone, email, username, passwords, sex, yearOfBirth, verificationCode,  roleUser, userStatus FROM users")
@@ -171,6 +200,7 @@ public static boolean changePassword(String username, String newPassword) {
                     .orElse(null);
         }
     }
+
 
     public static User getUser(int id) {
         String query = "SELECT id, fullname, address, phone, email, username, sex, yearOfBirth FROM users WHERE id=?";
@@ -350,5 +380,34 @@ public void adminupdateUser(User user) {
     }
     public static void main(String[] args) {
         System.out.println(getCountCustomer());
+    }
+
+    public boolean addUserGoogleOrFacebook(User newUser) {
+
+        String insertQuery = "INSERT INTO users (fullname,email) VALUES (?, ?)";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate(insertQuery)
+                    .bind(0, newUser.getFullname())
+                    .bind(3, newUser.getEmail())
+                    .execute();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkExistEmail(String email) {
+        String query = "SELECT 1 FROM users WHERE email = ?";
+        Jdbi jdbi = DbConnector.me().get();
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery(query)
+                    .bind(0, email)
+                    .mapTo(Integer.class)
+                    .findFirst()
+                    .isPresent();
+        }
     }
 }

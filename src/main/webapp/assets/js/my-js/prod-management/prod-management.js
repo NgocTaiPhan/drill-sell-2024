@@ -7,21 +7,20 @@ $(document).ready(function () {
         },
         "ajax": {
             "url": "load-all-prods",
-            "dataSrc": "",
+            "dataSrc": ""
         },
         "columns": [
             {"data": "productId"},
             {"data": "productName"},
             {"data": "unitPrice"},
-            {"data": null},
-            {"data": null},
+            {"data": "productsSold"},
+            {"data": "productInStock"},
             {
                 "data": null,
                 "render": function (data, type, row) {
-
-                    return ' <button id="hideProd" type="button" class="btn btn-warning">Ẩn</button>' +
-                        ' <button id="removeProd" type="button" class="btn btn-danger">Xóa</button>' +
-                        ' <button onclick="handleModal(`modalDetailProd`)" link-to-modal="modalDetailProd" id="detailProd" type="button" class="btn btn-info fa fa-info"></button>';
+                    return '<button id="hideProd" type="button" class="btn btn-warning">Ẩn</button>' +
+                        '<button id="removeProd" type="button" class="btn btn-danger">Xóa</button>' +
+                        '<button onclick="handleModal(`modalDetailProd`)" link-to-modal="modalDetailProd" id="detailProd" type="button" class="btn btn-info fa fa-info"></button>';
                 }
             }
         ]

@@ -134,25 +134,15 @@
                                 Quên mật khẩu
                             </a>
                         </div>
-<%--                        <div class="form-group">--%>
-<%--                            <label class="info-title" >Captcha<span>*</span></label>--%>
-<%--&lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
-<%--                            <img src="captcha-image">--%>
-<%--                            <br>--%>
-<%--                            <input type="text" name ="captcha">--%>
-<%--                        </div>--%>
-<%--                        <div class="form-group">--%>
-<%--                            <label class="info-title" >&nbsp;<span>*</span></label>--%>
-<%--                            &lt;%&ndash;                            <input class="form-control unicase-form-control text-input" id="captcha-login"&ndash;%&gt;--%>
-<%--                            &lt;%&ndash;                                   type="text" name="captcha-login">&ndash;%&gt;--%>
-<%--                            <input type="submit" value="Save">--%>
-<%--                        </div>--%>
+
                         <input class="btn-upper btn btn-primary checkout-page-button" type="submit" value="Đăng nhập">
 
                         <a class="btn btn-primary"
                            href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&redirect_uri=http://localhost:8080/drillsell_war/login-google&response_type=code&client_id=151385847457-tjenhqtvgt8s3lqfk3jondm5rtft5vae.apps.googleusercontent.com&approval_prompt=force">Đăng
                             nhập với Google</a>
+                        <a class="btn btn-danger"
+                           href="https://www.facebook.com/v20.0/dialog/oauth?client_id=1499060807366356&redirect_uri=http://localhost:8080/drillsell_war/login-facebook">Đăng
+                            nhập với Facebook</a>
 
 
                     </form>
@@ -329,8 +319,42 @@
 
 
 <!-- The modal -->
-<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall"
-     aria-hidden="true">
+<%--<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall"--%>
+<%--     aria-hidden="true">--%>
+<%--    <div class="modal-dialog modal-sm">--%>
+<%--        <div class="modal-content">--%>
+
+<%--            <div class="modal-header">--%>
+<%--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">--%>
+<%--                    <span aria-hidden="true">&times;</span>--%>
+<%--                </button>--%>
+<%--                <h5 class="modal-title" id="modalLabelSmall">Điền thông tin để lấy lại mật khẩu</h5>--%>
+<%--            </div>--%>
+
+<%--            <div class="modal-body">--%>
+<%--                <form onsubmit="submitFormAndRedirect(event, this,'forgot-pass')">--%>
+
+
+<%--                    <label for="input-email">Email</label>--%>
+<%--                    <input name="input-email" type="text" id="input-email" class="form-control"--%>
+<%--                           aria-describedby="help-input-email" placeholder="Nhập email">--%>
+
+<%--                    <label for="input-username">Tên đăng nhập</label>--%>
+<%--                    <input name="input-username" type="text" id="input-username" class="form-control"--%>
+<%--                           aria-describedby="help-input-username" placeholder="Nhập tên đăng nhập">--%>
+
+<%--                    <label for="submit-forgot-pass"></label>--%>
+<%--                    <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"--%>
+<%--                           aria-describedby="help-input-username"--%>
+<%--                           value="Gửi ">--%>
+<%--                </form>--%>
+
+<%--            </div>--%>
+
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</div>--%>
+<div class="modal fade" id="forgot-pass" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
 
@@ -342,23 +366,15 @@
             </div>
 
             <div class="modal-body">
-                <form onsubmit="submitFormAndRedirect(event, this,'forgot-pass')">
-
-
+                <form onsubmit="submitFormAndRedirect(event,this,'forgot-pass')">
                     <label for="input-email">Email</label>
-                    <input name="input-email" type="text" id="input-email" class="form-control"
-                           aria-describedby="help-input-email" placeholder="Nhập email">
+                    <input name="input-email" type="text" id="input-email" class="form-control" placeholder="Nhập email" required>
 
                     <label for="input-username">Tên đăng nhập</label>
-                    <input name="input-username" type="text" id="input-username" class="form-control"
-                           aria-describedby="help-input-username" placeholder="Nhập tên đăng nhập">
+                    <input name="input-username" type="text" id="input-username" class="form-control" placeholder="Nhập tên đăng nhập" required>
 
-                    <label for="submit-forgot-pass"></label>
-                    <input type="submit" id="submit-forgot-pass" class=" btn btn-primary form-control"
-                           aria-describedby="help-input-username"
-                           value="Gửi ">
+                    <button type="submit" class="btn btn-primary form-control mt-3">Gửi</button>
                 </form>
-
             </div>
 
         </div>
@@ -367,5 +383,6 @@
 <script src="./assets/js/my-js/notify.js"></script>
 <script src="./assets/js/my-js/ajax-process.js"></script>
 <script src="assets/js/my-js/login.js"></script>
+<script src="assets/js/my-js/login-facebook.js"></script>
 </html>
 

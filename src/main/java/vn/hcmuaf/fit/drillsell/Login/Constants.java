@@ -1,4 +1,4 @@
-package vn.hcmuaf.fit.drillsell.GoogleLogin;
+package vn.hcmuaf.fit.drillsell.Login;
 
 import java.io.IOException;
 import java.util.Properties;

@@ -1,5 +1,3 @@
-
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,10 +30,20 @@
 
 <div class="container w-25 center m-t-20">
     <form onsubmit="submitFormAndRedirect(event,this,'change-password')">
+        <input type="hidden" name="forgot-pass" value="<%= request.getParameter("forgot-pass") %>">
         <%
-            String forgotPass = (String) request.getParameter("forgot-pass");
-            if (forgotPass.equals("0")) {
+            String forgotPass = request.getParameter("forgot-pass");
+            if ("1".equals(forgotPass)) {
         %>
+        <div class="mb-3">
+            <label for="newPassForgot" class="form-label">Nhập mật khẩu mới</label>
+            <input name="pass" type="password" class="form-control" id="newPassForgot" required>
+        </div>
+        <div class="mb-3">
+            <label for="cfNewPassForgot" class="form-label">Nhập lại mật khẩu mới</label>
+            <input name="cf-pass" type="password" class="form-control" id="cfNewPassForgot" required>
+        </div>
+        <% } else { %>
         <div class="mb-3">
             <label for="oldPass" class="form-label">Nhập mật khẩu hiện tại</label>
             <input name="old-pass" type="password" class="form-control" id="oldPass" required>
@@ -48,47 +56,10 @@
             <label for="cfNewPass" class="form-label">Nhập lại mật khẩu mới</label>
             <input name="cf-pass" type="password" class="form-control" id="cfNewPass" required>
         </div>
-        <% } else { %>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Nhập mật khẩu</label>
-            <input name="pass" type="password" class="form-control" id="exampleInputPassword1" required>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword2" class="form-label">Nhập lại</label>
-            <input name="cf-pass" type="password" class="form-control" id="exampleInputPassword2" required>
-        </div>
         <% } %>
         <button type="submit" class="btn btn-primary">Xác nhận</button>
     </form>
 </div>
-
-<%--<script>--%>
-<%--    $(document).ready(function() {--%>
-<%--        // $('#changePasswordForm').submit(function(event) {--%>
-<%--            event.preventDefault();--%>
-
-<%--            // var form = $(this);--%>
-<%--            // var urlServlet = 'change-password';  // Your servlet URL--%>
-
-<%--            $.ajax({--%>
-<%--                type: 'POST',--%>
-<%--                url: urlServlet,--%>
-<%--                data: form.serialize(),--%>
-<%--                success: function(response) {--%>
-<%--                    // Handle success response--%>
-<%--                    // notifyAndRedirect(response.type, response.message, response.namePage, response.pageUrl);--%>
-<%--                    normalNotify(response.type, response.message);--%>
-<%--                },--%>
-<%--                error: function(xhr, status, error) {--%>
-<%--                    // Handle error response--%>
-<%--                    // var errorMessage = xhr.responseText || 'Đã xảy ra lỗi: ' + error;--%>
-<%--                    // errorNotify(errorMessage);--%>
-<%--                    normalNotify("error", "Lỗi khi thêm người dùng: " + error);--%>
-<%--                }--%>
-<%--            // });--%>
-<%--        });--%>
-<%--    });--%>
-<%--</script>--%>
 
 </body>
 </html>

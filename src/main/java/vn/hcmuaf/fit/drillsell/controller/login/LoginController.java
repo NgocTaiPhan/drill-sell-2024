@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout", "/login-google", "/loginAdmin", "/logged"})
+@WebServlet(name = "LoginController", urlPatterns = {"/login", "/logout", "/login-google", "/loginAdmin", "/logged", "/login-facebook"})
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -49,6 +49,8 @@ public class LoginController extends HttpServlet {
             LoginGoogle.loginGoogle(request,response);
         } else if (servletPath.equals("/logged")) {
             Login.checkLogin(request, response);
+        } else if (servletPath.equals("/login-facebook")) {
+            LoginFacebook.loginFacebook(request, response);
         }
 
     }

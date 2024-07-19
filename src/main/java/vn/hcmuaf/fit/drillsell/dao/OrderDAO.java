@@ -7,7 +7,9 @@ import vn.hcmuaf.fit.drillsell.model.MonthlyRevenue;
 import vn.hcmuaf.fit.drillsell.model.Order;
 import vn.hcmuaf.fit.drillsell.model.OrderItem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class OrderDAO {
@@ -317,12 +319,23 @@ public class OrderDAO {
         });
     }
 
+    public static int getAllQuantityFromOrderByProductId(int productId) {
+        return DbConnector.me().get().withHandle(handle ->
+                handle.createQuery("SELECT SUM(quantity) " +
+                                "FROM orderItem " +
+                                "WHERE productId = :productId")
+                        .bind("productId", productId)
+                        .mapTo(Integer.class)
+                        .findOne()
+                        .orElse(0));
 
+    }
 
 
 
 
     public static void main(String[] args) {
+
 // Khởi tạo các đối tượng cần thiết cho đơn hàng và mục đơn hàng
 //        OrderItem item1 = new OrderItem();
 //        item1.setOrderId(27);
@@ -346,7 +359,6 @@ public class OrderDAO {
 //        item1.setOrderId(30);
 //        item1.setProductId(7);
 //        item1.setQuantity(2);
-        System.out.println(getStatuss(58));
 
     }
 }

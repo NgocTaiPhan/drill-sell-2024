@@ -66,7 +66,7 @@
 
 <div class="container w-25 center-block mt-lg-5">
     <form id="send-otp" onsubmit="submitFormAndRedirect(event, this,'confirm')">
-
+<%--    <form action="confirm" method="get">--%>
         <div class="text-center" style="margin-top: 3%;margin-left: 40%; margin-right: 40%">
             <label for="exampleInputPassword1" class="form-label">Nhập OTP xác nhận</label>
             <input name="code" type="text" class="form-control " style="width: 100%; margin-bottom: 10%"
@@ -85,3 +85,4 @@
 
 </style>
 </html>
+

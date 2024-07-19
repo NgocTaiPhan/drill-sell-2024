@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
 @WebServlet(name = "RegisterController", value = "/register")
 public class RegisterController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -60,10 +59,33 @@ public class RegisterController extends HttpServlet {
             session.setAttribute("confirmationCode", confirmationCode);
 
             // Gửi email xác nhận
-            EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+            EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode,"Để hoàn tất quá trình đăng ký và kích hoạt tài khoản của bạn, vui lòng xác nhận địa chỉ email của bạn bằng cách nhấp vào liên kết dưới đây:");
 
             Notify.successNotify(response, "Đăng kí thành công! Hãy kiểm tra email của bạn để xác nhận tài khoản!", Page.MAIL_PAGE);
         }
 
     }
 }
+//@Override
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        String code = request.getParameter("code");
+//        HttpSession session = request.getSession();
+//        String confirmationCode = (String) session.getAttribute("confirmationCode");
+//        User u = (User) session.getAttribute("user-forgot-pass");
+//        // Kiểm tra mã xác nhận
+//        if (code == null || code.equals("")) {
+//            response.getWriter().write("Hãy nhập mã xác nhận!");
+//        }  else {
+//            if (u != null && code.equals(UsersDAO.getInstance().getVerifyCode(u.getUsername(), u.getEmail()))) {
+//
+//                response.sendRedirect("change-pass.jsp?forgot-pass=1");
+//            } else if (!code.equals(confirmationCode)) {
+//
+//                response.getWriter().write("Mã xác nhận không hợp lệ!");
+//            } else {
+//
+//                response.getWriter().write("Có lỗi trong quá trình xử lý!");
+//            }
+//        }
+//    }
