@@ -161,7 +161,7 @@
                             <a href="<%= request.getContextPath() %>/detailOrder?orderId=<%= order.getOrderId() %>" class="btn btn-info">
                                 Xem chi tiết
                             </a>
-                            <button onclick="callServlet('viewOrderCustomer',{name:'orderId',dataValue:'<%=order.getOrderId()%>'})"
+                            <button onclick="callServletTo('viewOrderCustomer',{name:'orderId',dataValue:'<%=order.getOrderId()%>'})"
                                     type="submit"
                                     class="btn btn-danger">
                                     Hủy đơn

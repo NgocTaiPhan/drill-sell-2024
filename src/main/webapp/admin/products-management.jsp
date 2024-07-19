@@ -128,8 +128,9 @@
                                         </button>
                                     </div>
                                     <div class="nav-item">
-                                        <button class=" btn-add-prod  open-modal">
-                                            Sản phẩm đã xóa
+                                        <button class=" btn-add-prod"
+                                                onclick="callServletTo('exportProductExcel',{name:'',dataValue:''})">
+                                            Xuất file excel
                                         </button>
                                     </div>
 

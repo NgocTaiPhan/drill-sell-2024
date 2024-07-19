@@ -36,15 +36,15 @@ function submitFormAndRedirect(event, form, urlServlet) {
 }
 
 
-function callServlet(servletUrl, dataSending) {
+function callServletTo(servletUrl, dataSending) {
     $.ajax({
         type: 'POST',
         url: servletUrl,
         data: {[dataSending.name]: dataSending.dataValue},
         success: function (response) {
             Toast.fire({
-                icon: "success",
-                title: response,
+                icon: response.type,
+                title: response.message,
             });
         },
         error: function (xhr, status, error) {
@@ -59,7 +59,6 @@ function callServlet(servletUrl, dataSending) {
                     pageUrl: "home.jsp"
                 };
             }
-            notifyRedirect(data.message, data.namePage, data.pageUrl);
         }
     });
 }
