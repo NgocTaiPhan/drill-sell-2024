@@ -1,15 +1,32 @@
 package vn.hcmuaf.fit.drillsell.model;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-public class VNPayConfig {
+@WebServlet("/VNP")
+public class VNPayConfig extends HttpServlet {
     private static String vnp_TmnCode = "P14UJEAQ";
     private static String vnp_HashSecret = "7F7QGKGNFBCDO74PHBONKLII2BURDKOH";
     private static String vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 //    private static String vnp_Returnurl = "https://yourdomain.com/vnpay_return";
+
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
 
     public static String createPaymentUrl(long amount, String orderInfo, String bankCode) throws UnsupportedEncodingException {
         Map<String, String> vnp_Params = new HashMap<>();
