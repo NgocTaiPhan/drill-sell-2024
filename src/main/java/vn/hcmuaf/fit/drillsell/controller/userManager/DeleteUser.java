@@ -32,7 +32,7 @@ public class DeleteUser extends HttpServlet {
             String message;
             if (deleted) {
                 message = "Xóa người dùng thành công";
-                resp.setStatus(HttpServletResponse.SC_OK); // 200
+                resp.setStatus(HttpServletResponse.SC_OK);
                 Log log = new Log();
                 log.setUserId(Integer.parseInt(idStr));
                 String values = null;

@@ -59,7 +59,7 @@ public class RegisterController extends HttpServlet {
             session.setAttribute("confirmationCode", confirmationCode);
 
             // Gửi email xác nhận
-            EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode);
+            EmailDAO.getInstance().sendMailWelcome(email, "Xác thực tài khoản", confirmationCode,"Để hoàn tất quá trình đăng ký và kích hoạt tài khoản của bạn, vui lòng xác nhận địa chỉ email của bạn bằng cách nhấp vào liên kết dưới đây:");
 
             Notify.successNotify(response, "Đăng kí thành công! Hãy kiểm tra email của bạn để xác nhận tài khoản!", Page.MAIL_PAGE);
         }

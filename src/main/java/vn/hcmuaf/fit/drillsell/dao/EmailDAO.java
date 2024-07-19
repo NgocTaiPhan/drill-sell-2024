@@ -34,7 +34,7 @@ public static EmailDAO getInstance(){
 
 
 
-public boolean sendMailWelcome(String to, String subject,String confirmationCode) {
+public boolean sendMailWelcome(String to, String subject,String confirmationCode, String content) {
     Properties props = new Properties();
     props.put("mail.smtp.host", MailProperties.getHost());
     props.put("mail.smtp.port", MailProperties.getPort());
@@ -60,7 +60,7 @@ public boolean sendMailWelcome(String to, String subject,String confirmationCode
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
         message.setSubject(subject);
 
-        String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode);
+        String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode,content);
 
         message.setContent(fullEmailContent, "text/html; charset=utf-8");
 
@@ -72,7 +72,7 @@ public boolean sendMailWelcome(String to, String subject,String confirmationCode
 
     return true;
 }
-    public boolean sendMailOTP(String to, String subject, String confirmationCode) {
+    public boolean sendMailOTP(String to, String subject, String confirmationCode, String content) {
         System.out.println( MailProperties.getUsername());
         Properties props = new Properties();
         props.put("mail.smtp.host", MailProperties.getHost());
@@ -102,7 +102,7 @@ public boolean sendMailWelcome(String to, String subject,String confirmationCode
             message.setSubject(subject);
 
             // Tạo liên kết xác nhận
-            String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode);
+            String fullEmailContent = EmailUtils.emailTemplate("Xác nhận tài khoản", LINK, confirmationCode, content);
 
             message.setContent(fullEmailContent, "text/html; charset=utf-8");
 
@@ -121,7 +121,7 @@ public boolean sendMailWelcome(String to, String subject,String confirmationCode
         return true;
     }
     public static void main(String[] args) {
-        EmailDAO.getInstance().sendMailOTP("ngoctaiphan.cv@gmail.com","Test mail","fdgfdgd");
+        EmailDAO.getInstance().sendMailOTP("ngoctaiphan.cv@gmail.com","Test mail","fdgfdgd","dsh");
     }
 
 }
